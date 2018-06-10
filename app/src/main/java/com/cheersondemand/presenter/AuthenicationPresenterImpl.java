@@ -43,7 +43,7 @@ public class AuthenicationPresenterImpl implements IAutheniticationPresenter,IAu
 
     @Override
     public Context getAPPContext() {
-        return null;
+        return context;
     }
 
     @Override

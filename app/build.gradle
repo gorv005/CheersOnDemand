@@ -46,6 +46,7 @@ dependencies {
     implementation 'br.com.simplepass:loading-button-android:1.14.0'
     compile 'com.makeramen:roundedimageview:2.3.0'
     compile 'com.github.zcweng:switch-button:0.0.3@aar'
+    implementation 'com.facebook.shimmer:shimmer:0.1.0@aar'
 
 
 }

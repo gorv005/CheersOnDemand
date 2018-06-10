@@ -32,5 +32,8 @@
     <color name="profile_item_text_color">#404A58</color>
     <color name="profile_updated_text_color">#829CBD</color>
     <color name="cart_quantity_border_color">#EAF0FB</color>
-
+    <color name="brand_text_color">#4F5F7B</color>
+    <color name="green_light">#43b05c</color>
+    <color name="view_all_color">#51617C</color>
+    <color name="latest_add_color">#929CAD</color>
 </resources>

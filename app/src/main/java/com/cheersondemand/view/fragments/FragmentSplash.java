@@ -71,8 +71,8 @@ public class FragmentSplash extends Fragment {
             public void run() {
                 try {
               startFadeInAnimation();
-                    sleep(10000);
-                } catch (InterruptedException e) {
+
+                } catch (Exception e) {
                     e.printStackTrace();
                 }
             }
@@ -114,15 +114,69 @@ public class FragmentSplash extends Fragment {
 
     public void startFadeInAnimation() {
 
+        ivSplash.setVisibility(View.INVISIBLE);
+        tvCheers.setVisibility(View.INVISIBLE);
+        tvStarted.setVisibility(View.INVISIBLE);
         Animation animation = AnimationUtils.loadAnimation(getActivity(), R.anim.fade_in);
-        ivSplash.setAnimation(animation);
-        animation.start();
-        Animation animation1 = AnimationUtils.loadAnimation(getActivity(), R.anim.fade_out);
+        ivSplash.setVisibility(View.VISIBLE);
+        ivSplash.startAnimation(animation);
+
+        final Animation animation1 = AnimationUtils.loadAnimation(getActivity(), R.anim.fade_out);
+        final   Animation animation2 = AnimationUtils.loadAnimation(getActivity(), R.anim.fade_out);
+
+        animation.setAnimationListener(new Animation.AnimationListener() {
+            @Override
+            public void onAnimationStart(Animation animation) {
+
+            }
+
+            @Override
+            public void onAnimationEnd(Animation animation) {
+                tvCheers.startAnimation(animation1);
+            }
+
+            @Override
+            public void onAnimationRepeat(Animation animation) {
+
+            }
+        });
+        animation1.setAnimationListener(new Animation.AnimationListener() {
+            @Override
+            public void onAnimationStart(Animation animation) {
+            tvCheers.setVisibility(View.VISIBLE);
+            }
+
+            @Override
+            public void onAnimationEnd(Animation animation) {
+                tvStarted.startAnimation(animation2);
+            }
+
+            @Override
+            public void onAnimationRepeat(Animation animation) {
+
+            }
+        });
+        animation2.setAnimationListener(new Animation.AnimationListener() {
+            @Override
+            public void onAnimationStart(Animation animation) {
+                tvStarted.setVisibility(View.VISIBLE);
+            }
+
+            @Override
+            public void onAnimationEnd(Animation animation) {
+            }
+
+            @Override
+            public void onAnimationRepeat(Animation animation) {
+
+            }
+        });
+       /* Animation animation1 = AnimationUtils.loadAnimation(getActivity(), R.anim.fade_out);
         tvCheers.setAnimation(animation1);
         animation1.start();
         Animation animation2 = AnimationUtils.loadAnimation(getActivity(), R.anim.fade_out);
         tvStarted.setAnimation(animation2);
-        animation2.start();
+        animation2.start();*/
     }
 
     private void RequestPermission() {

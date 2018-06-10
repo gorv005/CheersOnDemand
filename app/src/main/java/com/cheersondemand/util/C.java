@@ -1,7 +1,7 @@
 package com.cheersondemand.util;
 
 public interface C {
-    long SPLASH_LOADER_TIME = 300;
+    long SPLASH_LOADER_TIME = 5000;
     String BUNDLE ="bundle" ;
     String FRAGMENT_ACTION ="action" ;
     int FRAGMENT_SPLASH =1 ;

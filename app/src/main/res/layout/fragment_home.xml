@@ -2,6 +2,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:shimmer="http://schemas.android.com/apk/res-auto"
     android:background="@color/white"
     tools:context="com.cheersondemand.view.fragments.FragmentHome">
 
@@ -87,21 +88,54 @@
         </RelativeLayout>
     </RelativeLayout>
 
-
-    <RelativeLayout
+    <com.facebook.shimmer.ShimmerFrameLayout
+        android:id="@+id/shimmerBrands"
         android:layout_below="@id/rl"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:orientation="vertical"
+        shimmer:duration="800">
+    <RelativeLayout
         android:background="@color/brands_back_color"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/rvBrands"
-            android:scrollbars="horizontal"
+
+            android:scrollbars="none"
             android:background="@color/brands_back_color"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:layout_centerHorizontal="true" />
     </RelativeLayout>
+    </com.facebook.shimmer.ShimmerFrameLayout>
+
+    <com.facebook.shimmer.ShimmerFrameLayout
+        android:id="@+id/shimmerProducts"
+        android:layout_below="@id/shimmerBrands"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:orientation="vertical"
+        shimmer:duration="800">
+        <RelativeLayout
+
+            android:background="@color/white"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/rvProducts"
+                android:scrollbars="none"
+                android:background="@color/white"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_centerHorizontal="true" />
+        </RelativeLayout>
+    </com.facebook.shimmer.ShimmerFrameLayout>
 
 </RelativeLayout>
