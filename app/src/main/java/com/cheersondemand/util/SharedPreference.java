@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 
 import com.cheersondemand.model.AuthenticationResponse;
+import com.cheersondemand.model.GuestUserCreateResponse;
 import com.google.gson.Gson;
 
 /**
@@ -70,6 +71,13 @@ public class SharedPreference {
     public void setUser(String key, AuthenticationResponse adminUser) {
         Gson gson = new Gson();
         String json = gson.toJson(adminUser);
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        prefs.edit().putString(key, json).apply();
+
+    }
+    public void seGuestUser(String key, GuestUserCreateResponse guestUserCreateResponse) {
+        Gson gson = new Gson();
+        String json = gson.toJson(guestUserCreateResponse);
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         prefs.edit().putString(key, json).apply();
 

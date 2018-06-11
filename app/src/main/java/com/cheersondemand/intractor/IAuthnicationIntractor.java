@@ -2,6 +2,8 @@ package com.cheersondemand.intractor;
 
 import android.content.Context;
 
+import com.cheersondemand.model.CategoryRequest;
+import com.cheersondemand.model.GuestUserCreateResponse;
 import com.cheersondemand.model.LoginRequest;
 import com.cheersondemand.model.SignUpRequest;
 import com.cheersondemand.model.AuthenticationResponse;
@@ -14,6 +16,8 @@ import com.cheersondemand.model.SocialLoginRequest;
 public interface IAuthnicationIntractor {
     interface OnLoginFinishedListener {
         void onSuccess(AuthenticationResponse signUpResponse);
+        void onSuccessCreateGuestuser(GuestUserCreateResponse signUpResponse);
+
         void onError(String response);
         Context getAPPContext();
     }
@@ -21,5 +25,6 @@ public interface IAuthnicationIntractor {
 
     public void getResponse(SignUpRequest signUpRequest, OnLoginFinishedListener listener);
     public void getResponseSocail(SocialLoginRequest socialLoginRequest, OnLoginFinishedListener listener);
+    public void createGuestUser(CategoryRequest categoryRequest, OnLoginFinishedListener listener);
 
 }

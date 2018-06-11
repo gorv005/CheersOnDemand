@@ -4,6 +4,8 @@ import android.content.Context;
 
 import com.cheersondemand.intractor.AuthniticationIntractorImpl;
 import com.cheersondemand.intractor.IAuthnicationIntractor;
+import com.cheersondemand.model.CategoryRequest;
+import com.cheersondemand.model.GuestUserCreateResponse;
 import com.cheersondemand.model.LoginRequest;
 import com.cheersondemand.model.SignUpRequest;
 import com.cheersondemand.model.AuthenticationResponse;
@@ -30,6 +32,14 @@ public class AuthenicationPresenterImpl implements IAutheniticationPresenter,IAu
         if(mView!=null){
             //mView.hideProgress();
             mView.getResponseSuccess(signUpResponse);
+        }
+    }
+
+    @Override
+    public void onSuccessCreateGuestuser(GuestUserCreateResponse guestUserCreateResponse) {
+        if(mView!=null){
+            //mView.hideProgress();
+            mView.getResponseSuccessOfCreateGuestUser(guestUserCreateResponse);
         }
     }
 
@@ -66,6 +76,14 @@ public class AuthenicationPresenterImpl implements IAutheniticationPresenter,IAu
         if(mView!=null) {
 
             iAuthnicationIntractor.getResponseSocail(signUpSocail, this);
+        }
+    }
+
+    @Override
+    public void createGuestUser(CategoryRequest categoryRequest) {
+        if(mView!=null) {
+
+            iAuthnicationIntractor.createGuestUser(categoryRequest, this);
         }
     }
 

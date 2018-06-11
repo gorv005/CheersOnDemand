@@ -16,6 +16,9 @@ import android.widget.TextView;
 
 import com.cheersondemand.R;
 import com.cheersondemand.model.AuthenticationResponse;
+import com.cheersondemand.model.LogoutRequest;
+import com.cheersondemand.presenter.IProfileViewPresenter;
+import com.cheersondemand.presenter.ProfileViewPresenterImpl;
 import com.cheersondemand.util.C;
 import com.cheersondemand.util.ImageLoader.ImageLoader;
 import com.cheersondemand.util.SharedPreference;
@@ -31,7 +34,7 @@ import butterknife.Unbinder;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class FragmentProfile extends Fragment implements View.OnClickListener {
+public class FragmentProfile extends Fragment implements View.OnClickListener,IProfileViewPresenter.IProfileView {
 
 
     @BindView(R.id.imgProfile)
@@ -74,7 +77,7 @@ public class FragmentProfile extends Fragment implements View.OnClickListener {
     @BindView(R.id.viewChangePassword)
     View viewChangePassword;
     ImageLoader imageLoader;
-
+    IProfileViewPresenter iProfileViewPresenter;
     public FragmentProfile() {
         // Required empty public constructor
     }
@@ -84,6 +87,7 @@ public class FragmentProfile extends Fragment implements View.OnClickListener {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         imageLoader = new ImageLoader(getActivity());
+        iProfileViewPresenter=new ProfileViewPresenterImpl(this,getActivity());
     }
 
     @Override
@@ -121,6 +125,7 @@ public class FragmentProfile extends Fragment implements View.OnClickListener {
 
         btnEdit.setOnClickListener(this);
         llProfileView.setOnClickListener(this);
+        llLogout.setOnClickListener(this);
     }
 
     @Override
@@ -152,6 +157,32 @@ public class FragmentProfile extends Fragment implements View.OnClickListener {
                 intent.putExtra(C.BUNDLE,bundle);
                 startActivity(intent);
                 break;
+            case R.id.llLogout:
+                LogoutRequest logoutRequest=new LogoutRequest();
+                logoutRequest.setToken(SharedPreference.getInstance(getActivity()).getUser(C.AUTH_USER).getData().getToken().getAccessToken());
+                iProfileViewPresenter.logout(logoutRequest);
+                break;
         }
+    }
+
+    @Override
+    public void getResponseSuccess(String response) {
+
+
+    }
+
+    @Override
+    public void getResponseError(String response) {
+
+    }
+
+    @Override
+    public void showProgress() {
+
+    }
+
+    @Override
+    public void hideProgress() {
+
     }
 }

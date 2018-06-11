@@ -26,6 +26,8 @@ import android.widget.Toast;
 
 import com.cheersondemand.R;
 import com.cheersondemand.model.AuthenticationResponse;
+import com.cheersondemand.model.CategoryRequest;
+import com.cheersondemand.model.GuestUserCreateResponse;
 import com.cheersondemand.model.LoginRequest;
 import com.cheersondemand.model.SignUpRequest;
 import com.cheersondemand.model.SocialLoginRequest;
@@ -205,6 +207,8 @@ public class FragmentAuthentication extends Fragment implements IAuthenitication
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
 
+        etEmailLogin.setText("gorv005@gmail.com");
+        etPasswordLogin.setText("Admin@123");
         if(isLoginScreen){
             viewA.setVisibility(View.GONE);
             viewB.setVisibility(View.VISIBLE);
@@ -437,16 +441,22 @@ public class FragmentAuthentication extends Fragment implements IAuthenitication
                 break;
             case R.id.skip_and_continue:
                 if (Util.isNetworkConnectivity(getActivity())) {
-                    Intent intent = new Intent(getActivity(), ActivityHome.class);
+                   /* Intent intent = new Intent(getActivity(), ActivityHome.class);
                     intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                    getActivity().startActivity(intent);
+                    getActivity().startActivity(intent);*/
+                    CategoryRequest categoryRequest=new CategoryRequest();
+                    categoryRequest.setUuid(Util.id(getActivity()));
+                   iAutheniticationPresenter.createGuestUser(categoryRequest);
                 }
                 break;
             case R.id.skip_and_continue_login:
                 if (Util.isNetworkConnectivity(getActivity())) {
-                    Intent intent = new Intent(getActivity(), ActivityHome.class);
+                /*    Intent intent = new Intent(getActivity(), ActivityHome.class);
                     intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                    getActivity().startActivity(intent);
+                    getActivity().startActivity(intent);*/
+                    CategoryRequest categoryRequest=new CategoryRequest();
+                    categoryRequest.setUuid(Util.id(getActivity()));
+                    iAutheniticationPresenter.createGuestUser(categoryRequest);
                 }
                 break;
             case R.id.btnSignUp:
@@ -823,6 +833,22 @@ public class FragmentAuthentication extends Fragment implements IAuthenitication
                 SharedPreference.getInstance(getActivity()).setBoolean(C.IS_LOGIN,true);
 
                 SharedPreference.getInstance(getActivity()).setUser(C.AUTH_USER,response);
+
+                Intent intent = new Intent(getActivity(), ActivityHome.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                getActivity().startActivity(intent);
+            }
+        }
+    }
+
+    @Override
+    public void getResponseSuccessOfCreateGuestUser(GuestUserCreateResponse response) {
+        if(response.getSuccess()){
+            btnLogin.revertAnimation();
+            if (Util.isNetworkConnectivity(getActivity())) {
+                SharedPreference.getInstance(getActivity()).setBoolean(C.IS_LOGIN_GUEST,true);
+
+                SharedPreference.getInstance(getActivity()).seGuestUser(C.GUEST_USER,response);
 
                 Intent intent = new Intent(getActivity(), ActivityHome.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);

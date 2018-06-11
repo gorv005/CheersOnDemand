@@ -53,6 +53,14 @@ public class HomeViewPresenterImpl implements IHomeViewPresenterPresenter, IHome
     }
 
     @Override
+    public void getBrands(String auth,CategoryRequest uuid) {
+        if (mView != null) {
+
+            iHomeViewIntractor.getBrands(auth,uuid, this);
+        }
+    }
+
+    @Override
     public void onDestroy() {
         try {
             mView = null;

@@ -19,6 +19,8 @@ import com.cheersondemand.model.SectionDataModel;
 import com.cheersondemand.model.SingleItemModel;
 import com.cheersondemand.presenter.HomeViewPresenterImpl;
 import com.cheersondemand.presenter.IHomeViewPresenterPresenter;
+import com.cheersondemand.util.C;
+import com.cheersondemand.util.SharedPreference;
 import com.cheersondemand.util.Util;
 import com.cheersondemand.view.adapter.AdapterHomeBrands;
 import com.cheersondemand.view.adapter.AdapterHomeProductsSections;
@@ -87,7 +89,8 @@ public class FragmentHome extends Fragment implements IHomeViewPresenterPresente
         rvProducts.setHasFixedSize(true);
         CategoryRequest categoryRequest=new CategoryRequest();
         categoryRequest.setUuid(Util.id(getActivity()));
-        iHomeViewPresenterPresenter.getCategories(categoryRequest);
+       // iHomeViewPresenterPresenter.getCategories(categoryRequest);
+        iHomeViewPresenterPresenter.getBrands(SharedPreference.getInstance(getActivity()).getUser(C.AUTH_USER).getData().getToken().getAccessToken(),categoryRequest);
         // shimmerBrands.startShimmerAnimation();
 
         adapterHomeBrands = new AdapterHomeBrands(setHomeBrands(), getActivity());
