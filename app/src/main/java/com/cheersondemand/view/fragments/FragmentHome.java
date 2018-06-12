@@ -1,6 +1,7 @@
 package com.cheersondemand.view.fragments;
 
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -11,6 +12,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.RelativeLayout;
 
 import com.cheersondemand.R;
 import com.cheersondemand.model.CategoriesResponse;
@@ -20,8 +22,8 @@ import com.cheersondemand.model.SingleItemModel;
 import com.cheersondemand.presenter.HomeViewPresenterImpl;
 import com.cheersondemand.presenter.IHomeViewPresenterPresenter;
 import com.cheersondemand.util.C;
-import com.cheersondemand.util.SharedPreference;
 import com.cheersondemand.util.Util;
+import com.cheersondemand.view.ActivityContainer;
 import com.cheersondemand.view.adapter.AdapterHomeBrands;
 import com.cheersondemand.view.adapter.AdapterHomeProductsSections;
 import com.facebook.shimmer.ShimmerFrameLayout;
@@ -38,13 +40,13 @@ import static com.facebook.FacebookSdk.getApplicationContext;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class FragmentHome extends Fragment implements IHomeViewPresenterPresenter.IHomeView{
+public class FragmentHome extends Fragment implements IHomeViewPresenterPresenter.IHomeView,View.OnClickListener {
 
 
     @BindView(R.id.rvBrands)
     RecyclerView rvBrands;
     Unbinder unbinder;
-    LinearLayoutManager horizontalLayout,horizontalLayout1;
+    LinearLayoutManager horizontalLayout, horizontalLayout1;
     AdapterHomeBrands adapterHomeBrands;
     AdapterHomeProductsSections adapterHomeProductsSections;
     @BindView(R.id.shimmerBrands)
@@ -53,8 +55,11 @@ public class FragmentHome extends Fragment implements IHomeViewPresenterPresente
     RecyclerView rvProducts;
     @BindView(R.id.shimmerProducts)
     ShimmerFrameLayout shimmerProducts;
-   ArrayList<SectionDataModel> allSampleData;
+    ArrayList<SectionDataModel> allSampleData;
     IHomeViewPresenterPresenter iHomeViewPresenterPresenter;
+    @BindView(R.id.rlNotification)
+    RelativeLayout rlNotification;
+
     public FragmentHome() {
         // Required empty public constructor
     }
@@ -63,7 +68,7 @@ public class FragmentHome extends Fragment implements IHomeViewPresenterPresente
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         allSampleData = new ArrayList<SectionDataModel>();
-        iHomeViewPresenterPresenter=new HomeViewPresenterImpl(this,getActivity());
+        iHomeViewPresenterPresenter = new HomeViewPresenterImpl(this, getActivity());
     }
 
     @Override
@@ -87,18 +92,20 @@ public class FragmentHome extends Fragment implements IHomeViewPresenterPresente
 
         rvProducts.setLayoutManager(horizontalLayout1);
         rvProducts.setHasFixedSize(true);
-        CategoryRequest categoryRequest=new CategoryRequest();
+        CategoryRequest categoryRequest = new CategoryRequest();
         categoryRequest.setUuid(Util.id(getActivity()));
-       // iHomeViewPresenterPresenter.getCategories(categoryRequest);
-        iHomeViewPresenterPresenter.getBrands(SharedPreference.getInstance(getActivity()).getUser(C.AUTH_USER).getData().getToken().getAccessToken(),categoryRequest);
+        // iHomeViewPresenterPresenter.getCategories(categoryRequest);
+        //  iHomeViewPresenterPresenter.getBrands(SharedPreference.getInstance(getActivity()).getUser(C.AUTH_USER).getData().getToken().getAccessToken(),categoryRequest);
         // shimmerBrands.startShimmerAnimation();
-
+        iHomeViewPresenterPresenter.getCategories(Util.id(getActivity()));
         adapterHomeBrands = new AdapterHomeBrands(setHomeBrands(), getActivity());
         rvBrands.setAdapter(adapterHomeBrands);
 
-    //    shimmerBrands.stopShimmerAnimation();
+        //    shimmerBrands.stopShimmerAnimation();
+
+        rlNotification.setOnClickListener(this);
         createDummyData();
-        adapterHomeProductsSections=new AdapterHomeProductsSections(getActivity(),allSampleData);
+        adapterHomeProductsSections = new AdapterHomeProductsSections(getActivity(), allSampleData);
         rvProducts.setAdapter(adapterHomeProductsSections);
     }
 
@@ -141,7 +148,7 @@ public class FragmentHome extends Fragment implements IHomeViewPresenterPresente
 
     @Override
     public void getResponseSuccess(CategoriesResponse response) {
-         Log.e("DEBUG",""+response.getMessage());
+        Log.e("DEBUG", "" + response.getMessage());
 
     }
 
@@ -158,5 +165,18 @@ public class FragmentHome extends Fragment implements IHomeViewPresenterPresente
     @Override
     public void hideProgress() {
 
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()){
+            case R.id.rlNotification:
+                Intent intent = new Intent(getActivity(), ActivityContainer.class);
+                Bundle bundle = new Bundle();
+                intent.putExtra(C.FRAGMENT_ACTION, C.FRAGMENT_NOTIFICATIONS);
+                intent.putExtra(C.BUNDLE,bundle);
+                startActivity(intent);
+                break;
+        }
     }
 }

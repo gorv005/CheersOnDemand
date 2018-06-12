@@ -9,19 +9,22 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
+import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.TextView;
 
 import com.cheersondemand.R;
 import com.cheersondemand.util.C;
+import com.cheersondemand.view.fragments.FragmentChangePassword;
+import com.cheersondemand.view.fragments.FragmentNotification;
 import com.cheersondemand.view.fragments.FragmentProfile;
 import com.cheersondemand.view.fragments.FragmentUpdateProfile;
 
 import butterknife.ButterKnife;
 
 public class ActivityContainer extends AppCompatActivity {
-  public static TextView tvTitle;
+  public static TextView tvTitle,tvClearAll;
     private Fragment fragment;
 
     @Override
@@ -32,6 +35,7 @@ public class ActivityContainer extends AppCompatActivity {
         setContentView(R.layout.activity_container);
         ButterKnife.bind(this);
         tvTitle=(TextView)findViewById(R.id.tvTitle);
+        tvClearAll=(TextView)findViewById(R.id.tvClearAll);
         Bundle bundle = getIntent().getBundleExtra(C.BUNDLE);
         int fragmentAction = getIntent().getIntExtra(C.FRAGMENT_ACTION, 100);
         fragmnetLoader(fragmentAction, bundle);
@@ -49,7 +53,7 @@ public class ActivityContainer extends AppCompatActivity {
     public void fragmnetLoader(int fragmentType, Bundle bundle) {
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-
+        tvClearAll.setVisibility(View.GONE);
         switch (fragmentType) {
             case C.FRAGMENT_UPDATE_PROFILE:
                 fragment = new FragmentUpdateProfile();
@@ -61,7 +65,16 @@ public class ActivityContainer extends AppCompatActivity {
                 fragmentTransaction.replace(R.id.container, fragment);
                 //fragmentTransaction.addToBackStack(C.TAG_FRAGMENT_PRODUCTS_HOME);
                 break;
-
+            case C.FRAGMENT_NOTIFICATIONS:
+                fragment = new FragmentNotification();
+                fragmentTransaction.replace(R.id.container, fragment);
+                //fragmentTransaction.addToBackStack(C.TAG_FRAGMENT_PRODUCTS_HOME);
+                break;
+            case C.FRAGMENT_CHANGE_PASSWORD:
+                fragment = new FragmentChangePassword();
+                fragmentTransaction.replace(R.id.container, fragment);
+                //fragmentTransaction.addToBackStack(C.TAG_FRAGMENT_PRODUCTS_HOME);
+                break;
         }
         fragment.setArguments(bundle);
         fragmentTransaction.commit();

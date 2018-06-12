@@ -10,6 +10,8 @@ import com.cheersondemand.model.CategoryRequest;
 public interface IHomeViewPresenterPresenter {
 
     public void getCategories(CategoryRequest uuid);
+    public void getCategories(String uuid);
+
     public void getBrands(String auth,CategoryRequest uuid);
 
 

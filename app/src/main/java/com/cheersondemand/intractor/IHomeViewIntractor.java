@@ -17,6 +17,8 @@ public interface IHomeViewIntractor {
     }
     public void getCategories(CategoryRequest uuid, OnLoginFinishedListener listener);
 
+    public void getCategories(String uuid, OnLoginFinishedListener listener);
+
     public void getBrands(String auth, CategoryRequest uuid,OnLoginFinishedListener listener);
 
 

@@ -43,6 +43,30 @@ public class HomeViewIntractorImpl implements IHomeViewIntractor {
     }
 
     @Override
+    public void getCategories(String uuid, final OnLoginFinishedListener listener) {
+        try {
+
+            WebServicesWrapper.getInstance().getCategories(new ResponseResolver<CategoriesResponse>() {
+                @Override
+                public void onSuccess(CategoriesResponse signUpResponse, Response response) {
+                    listener.onSuccess(signUpResponse);
+                }
+
+                @Override
+                public void onFailure(RestError error, String msg) {
+                    Log.e("dd","hh");
+                    if(error!=null && error.getError()!=null) {
+                        listener.onError(error.getError());
+                    }
+                }
+            },uuid);
+        }
+        catch (Exception e){
+            e.printStackTrace();
+        }
+    }
+
+    @Override
     public void getBrands(String auth, CategoryRequest uuid,final OnLoginFinishedListener listener) {
         try {
 

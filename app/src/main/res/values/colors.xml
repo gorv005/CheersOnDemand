@@ -9,7 +9,7 @@
     <color name="edit_text_border">#dee3ed</color>
     <color name="editext_hint_color">#7C92A9</color>
     <color name="editext_text_color">#3e454f</color>
-    <color name="red">#c9282f</color>
+    <color name="red">#c9282f</color>ca2b32
     <color name="social_back">#F9FBFD</color>
     <color name="fb_color">#3b5998</color>
     <color name="google_color">#dc4e41</color>
@@ -36,4 +36,5 @@
     <color name="green_light">#43b05c</color>
     <color name="view_all_color">#51617C</color>
     <color name="latest_add_color">#929CAD</color>
+    <color name="red_error_color">#ca2b32</color>
 </resources>

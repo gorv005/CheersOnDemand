@@ -19,7 +19,10 @@ public interface C {
     String IS_LOGIN = "is_login";
     String IS_LOGIN_SCREEN ="is_login_screen" ;
     int FRAGMENT_UPDATE_PROFILE =5 ;
+    int FRAGMENT_NOTIFICATIONS = 7;
+
     int FRAGMENT_CART =6 ;
     String GUEST_USER ="Guest_user" ;
     String IS_LOGIN_GUEST = "is_guest_user";
+    int FRAGMENT_CHANGE_PASSWORD = 8;
 }

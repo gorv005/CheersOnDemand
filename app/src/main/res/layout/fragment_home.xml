@@ -50,6 +50,7 @@
             </LinearLayout>
 
             <RelativeLayout
+                android:id="@+id/rlNotification"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true">

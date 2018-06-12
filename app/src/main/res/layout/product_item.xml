@@ -54,7 +54,7 @@
             android:textSize="14sp"
             android:layout_centerHorizontal="true"
             android:gravity="center"
-            android:text="Napa Valleyndsdj  jksjd  ksdjjdj jdjd  dksdkjskdksdj"
+            android:text="Napa Valley Sauvignon Blanc"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
         <TextView

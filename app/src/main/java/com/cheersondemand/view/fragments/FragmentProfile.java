@@ -16,13 +16,11 @@ import android.widget.TextView;
 
 import com.cheersondemand.R;
 import com.cheersondemand.model.AuthenticationResponse;
-import com.cheersondemand.model.LogoutRequest;
 import com.cheersondemand.presenter.IProfileViewPresenter;
 import com.cheersondemand.presenter.ProfileViewPresenterImpl;
 import com.cheersondemand.util.C;
 import com.cheersondemand.util.ImageLoader.ImageLoader;
 import com.cheersondemand.util.SharedPreference;
-import com.cheersondemand.view.ActivityContainer;
 import com.cheersondemand.view.MainActivity;
 import com.makeramen.roundedimageview.RoundedImageView;
 import com.suke.widget.SwitchButton;
@@ -136,12 +134,13 @@ public class FragmentProfile extends Fragment implements View.OnClickListener,IP
 
     @Override
     public void onClick(View view) {
+        Intent intent = new Intent(getActivity(), MainActivity.class);
+        Bundle bundle = new Bundle();
+
         switch (view.getId()) {
             case R.id.llProfileView:
                 // move to login screen if not login
                 if (!isLogin) {
-                    Intent intent = new Intent(getActivity(), MainActivity.class);
-                    Bundle bundle = new Bundle();
                     intent.putExtra(C.FRAGMENT_ACTION, C.FRAGMENT_AUTHNITICATION);
                     bundle.putBoolean(C.IS_LOGIN_SCREEN, true);
 
@@ -151,16 +150,23 @@ public class FragmentProfile extends Fragment implements View.OnClickListener,IP
                 break;
             case R.id.btnEdit:
 
-                Intent intent = new Intent(getActivity(), ActivityContainer.class);
-                Bundle bundle = new Bundle();
+
                 intent.putExtra(C.FRAGMENT_ACTION, C.FRAGMENT_UPDATE_PROFILE);
                 intent.putExtra(C.BUNDLE,bundle);
                 startActivity(intent);
                 break;
             case R.id.llLogout:
-                LogoutRequest logoutRequest=new LogoutRequest();
+               /* LogoutRequest logoutRequest=new LogoutRequest();
                 logoutRequest.setToken(SharedPreference.getInstance(getActivity()).getUser(C.AUTH_USER).getData().getToken().getAccessToken());
-                iProfileViewPresenter.logout(logoutRequest);
+                iProfileViewPresenter.logout(logoutRequest);*/
+                break;
+
+            case R.id.llChangePassword:
+                if (!isLogin) {
+                    intent.putExtra(C.FRAGMENT_ACTION, C.FRAGMENT_CHANGE_PASSWORD);
+                    intent.putExtra(C.BUNDLE, bundle);
+                    startActivity(intent);
+                }
                 break;
         }
     }
