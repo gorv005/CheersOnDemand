@@ -860,7 +860,6 @@ public class FragmentAuthentication extends Fragment implements IAuthenitication
         else {
             util.setSnackbarMessage(getActivity(), response, LLView, true);
         }
-
     }
 
     @Override
