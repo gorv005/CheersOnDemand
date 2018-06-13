@@ -26,6 +26,7 @@ import android.widget.Toast;
 
 import com.cheersondemand.R;
 import com.cheersondemand.model.AuthenticationResponse;
+import com.cheersondemand.model.CategoryRequest;
 import com.cheersondemand.model.GuestUserCreateResponse;
 import com.cheersondemand.model.LoginRequest;
 import com.cheersondemand.model.SignUpRequest;
@@ -440,19 +441,15 @@ public class FragmentAuthentication extends Fragment implements IAuthenitication
                 break;
             case R.id.skip_and_continue:
                 if (Util.isNetworkConnectivity(getActivity())) {
-                    Intent intent = new Intent(getActivity(), ActivityHome.class);
-                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                    getActivity().startActivity(intent);
-                  /*  CategoryRequest categoryRequest=new CategoryRequest();
+                  //gotoHome();
+                    CategoryRequest categoryRequest=new CategoryRequest();
                     categoryRequest.setUuid(Util.id(getActivity()));
-                   iAutheniticationPresenter.createGuestUser(categoryRequest);*/
+                   iAutheniticationPresenter.createGuestUser(categoryRequest);
                 }
                 break;
             case R.id.skip_and_continue_login:
                 if (Util.isNetworkConnectivity(getActivity())) {
-                    Intent intent = new Intent(getActivity(), ActivityHome.class);
-                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                    getActivity().startActivity(intent);
+                  gotoHome();
                    /* CategoryRequest categoryRequest=new CategoryRequest();
                     categoryRequest.setUuid(Util.id(getActivity()));
                     iAutheniticationPresenter.createGuestUser(categoryRequest);*/
@@ -495,13 +492,13 @@ public class FragmentAuthentication extends Fragment implements IAuthenitication
                         if(!isPasswordVisibleSignUP) {
                             isPasswordVisibleSignUP=true;
                             etPassword.setInputType(TYPE_CLASS_TEXT | TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
-                            etPassword.setCompoundDrawablesWithIntrinsicBounds( R.drawable.ic_password, 0, R.drawable.ic_eye_visible, 0);
+                            etPassword.setCompoundDrawablesWithIntrinsicBounds( R.drawable.password_key, 0, R.drawable.ic_eye_visible, 0);
 
                         }
                         else {
                             isPasswordVisibleSignUP=false;
                             etPassword.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
-                            etPassword.setCompoundDrawablesWithIntrinsicBounds( R.drawable.ic_password, 0, R.drawable.ic_eye, 0);
+                            etPassword.setCompoundDrawablesWithIntrinsicBounds( R.drawable.password_key, 0, R.drawable.ic_eye, 0);
 
                         }
                         break;
@@ -833,9 +830,7 @@ public class FragmentAuthentication extends Fragment implements IAuthenitication
 
                 SharedPreference.getInstance(getActivity()).setUser(C.AUTH_USER,response);
 
-                Intent intent = new Intent(getActivity(), ActivityHome.class);
-                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                getActivity().startActivity(intent);
+              gotoHome();
             }
         }
     }
@@ -849,9 +844,7 @@ public class FragmentAuthentication extends Fragment implements IAuthenitication
 
                 SharedPreference.getInstance(getActivity()).seGuestUser(C.GUEST_USER,response);
 
-                Intent intent = new Intent(getActivity(), ActivityHome.class);
-                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                getActivity().startActivity(intent);
+                gotoHome();
             }
         }
     }
@@ -861,7 +854,12 @@ public class FragmentAuthentication extends Fragment implements IAuthenitication
         Log.e("DEBUG",""+response);
         btnLogin.revertAnimation();
         btnSignUp.revertAnimation();
-        util.setSnackbarMessage(getActivity(),response,LLView,true);
+        if(response.trim().equalsIgnoreCase(C.GUEST_USER_ALLREADY_CREATED)){
+            gotoHome();
+        }
+        else {
+            util.setSnackbarMessage(getActivity(), response, LLView, true);
+        }
 
     }
 
@@ -873,5 +871,11 @@ public class FragmentAuthentication extends Fragment implements IAuthenitication
     @Override
     public void hideProgress() {
 
+    }
+
+    public void gotoHome(){
+        Intent intent = new Intent(getActivity(), ActivityHome.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        getActivity().startActivity(intent);
     }
 }

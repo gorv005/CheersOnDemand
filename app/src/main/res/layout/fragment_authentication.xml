@@ -70,7 +70,7 @@
                     android:layout_height="100dp"
                     android:layout_alignParentTop="true"
                     android:layout_centerHorizontal="true"
-                    android:layout_marginTop="125dp">
+                    android:layout_marginTop="115dp">
 
                     <View
                         android:layout_width="match_parent"
@@ -83,7 +83,7 @@
                         android:layout_width="263dp"
                         android:layout_height="40dp"
                         android:layout_centerHorizontal="true"
-                        android:layout_marginTop="40dp"
+                        android:layout_marginTop="50dp"
                         android:visibility="gone">
 
                         <RelativeLayout
@@ -139,7 +139,7 @@
                         android:layout_width="263dp"
                         android:layout_height="40dp"
                         android:layout_centerHorizontal="true"
-                        android:layout_marginTop="40dp">
+                        android:layout_marginTop="50dp">
 
                         <RelativeLayout
 
@@ -254,7 +254,7 @@
                         android:layout_marginTop="10dp"
 
                         android:background="@drawable/edit_text_back_disable"
-                        android:drawableLeft="@drawable/ic_email"
+                        android:drawableLeft="@drawable/email"
                         android:drawablePadding="20dp"
                         android:fontFamily="@font/sf_ui_display_regular"
                         android:hint="@string/email"
@@ -282,7 +282,7 @@
                         android:layout_marginStart="29.8dp"
                         android:layout_marginTop="10dp"
                         android:background="@drawable/edit_text_back_disable"
-                        android:drawableLeft="@drawable/ic_password"
+                        android:drawableLeft="@drawable/password_key"
                         android:drawablePadding="20dp"
                         android:drawableRight="@drawable/ic_eye"
                         android:fontFamily="@font/sf_ui_display_regular"
@@ -455,7 +455,7 @@
                         android:layout_marginStart="29.8dp"
                         android:layout_marginTop="10dp"
                         android:background="@drawable/edit_text_back_disable"
-                        android:drawableLeft="@drawable/ic_email"
+                        android:drawableLeft="@drawable/email"
                         android:drawablePadding="20dp"
                         android:fontFamily="@font/sf_ui_display_regular"
                         android:hint="@string/email"

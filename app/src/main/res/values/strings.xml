@@ -62,6 +62,13 @@
     <string name="you_can_browse_product">You can now go back and continue browsing products</string>
     <string name="enjoy_shopping">Enjoy Shopping !</string>
     <string name="go_to_profile">Go to Profile</string>
+    <string name="create_new_password">Create New Password</string>
+    <string name="confirm_new_password">Confirm New Password</string>
+    <string name="reset_password">RESET PASSWORD</string>
+    <string name="forgot_password_">Forgot Password</string>
+    <string name="enter_your_register_email">Enter your registered Email and we’ll sent you a link to reset your password</string>
+    <string name="send_link">SEND LINK</string>
+    <string name="continue_to_login">Continue to Login</string>
     <!--
         <string name="default_web_client_id">999387565226-hdnnhm6rhgik5ljvm06shotsi7j9883c.apps.googleusercontent.com</string>
     -->

@@ -32,8 +32,13 @@ public class HomeViewIntractorImpl implements IHomeViewIntractor {
                 public void onFailure(RestError error, String msg) {
                     Log.e("dd","hh");
                     if(error!=null && error.getError()!=null) {
-                        listener.onError(error.getError());
-                    }
+                        if(error.getError()==null){
+                            listener.onError(error.getMessage());
+
+                        }
+                        else {
+                            listener.onError(error.getError());
+                        }                    }
                 }
             },uuid);
         }
@@ -56,8 +61,13 @@ public class HomeViewIntractorImpl implements IHomeViewIntractor {
                 public void onFailure(RestError error, String msg) {
                     Log.e("dd","hh");
                     if(error!=null && error.getError()!=null) {
-                        listener.onError(error.getError());
-                    }
+                        if(error.getError()==null){
+                            listener.onError(error.getMessage());
+
+                        }
+                        else {
+                            listener.onError(error.getError());
+                        }                    }
                 }
             },uuid);
         }
@@ -80,8 +90,13 @@ public class HomeViewIntractorImpl implements IHomeViewIntractor {
                 public void onFailure(RestError error, String msg) {
                     Log.e("dd","hh");
                     if(error!=null && error.getError()!=null) {
-                        listener.onError(error.getError());
-                    }
+                        if(error.getError()==null){
+                            listener.onError(error.getMessage());
+
+                        }
+                        else {
+                            listener.onError(error.getError());
+                        }                    }
                 }
             },auth,uuid);
         }

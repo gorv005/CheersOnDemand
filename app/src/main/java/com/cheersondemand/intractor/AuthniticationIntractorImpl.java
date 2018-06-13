@@ -32,7 +32,13 @@ public class AuthniticationIntractorImpl implements IAuthnicationIntractor {
 
                 @Override
                 public void onFailure(RestError error, String msg) {
-                    listener.onError(error.getError());
+                    if(error.getError()==null){
+                        listener.onError(error.getMessage());
+
+                    }
+                    else {
+                        listener.onError(error.getError());
+                    }
                 }
             },loginRequest);
         }
@@ -53,8 +59,13 @@ public class AuthniticationIntractorImpl implements IAuthnicationIntractor {
 
                 @Override
                 public void onFailure(RestError error, String msg) {
-                    listener.onError(error.getError());
-                }
+                    if(error.getError()==null){
+                        listener.onError(error.getMessage());
+
+                    }
+                    else {
+                        listener.onError(error.getError());
+                    }                }
             },signUpRequest);
         }
 
@@ -76,7 +87,13 @@ public class AuthniticationIntractorImpl implements IAuthnicationIntractor {
                 @Override
                 public void onFailure(RestError error, String msg) {
                     Log.e("dd","hh");
-                    listener.onError(error.getError());
+                    if(error.getError()==null){
+                        listener.onError(error.getMessage());
+
+                    }
+                    else {
+                        listener.onError(error.getError());
+                    }
                 }
             },signUpRequest);
         }
@@ -98,7 +115,13 @@ public class AuthniticationIntractorImpl implements IAuthnicationIntractor {
                 @Override
                 public void onFailure(RestError error, String msg) {
                     Log.e("dd","hh");
-                    listener.onError(error.getError());
+                    if(error.getError()==null){
+                        listener.onError(error.getMessage());
+
+                    }
+                    else {
+                        listener.onError(error.getError());
+                    }
                 }
             },categoryRequest);
         }

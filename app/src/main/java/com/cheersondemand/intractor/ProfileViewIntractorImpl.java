@@ -27,8 +27,13 @@ public class ProfileViewIntractorImpl implements IProfileViewIntractor {
                 @Override
                 public void onFailure(RestError error, String msg) {
                     if(error!=null && error.getError()!=null) {
-                        listener.onError(error.getError());
-                    }
+                        if(error.getError()==null){
+                            listener.onError(error.getMessage());
+
+                        }
+                        else {
+                            listener.onError(error.getError());
+                        }                    }
                 }
             },logoutRequest);
         }

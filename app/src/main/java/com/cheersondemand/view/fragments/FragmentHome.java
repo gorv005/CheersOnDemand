@@ -8,7 +8,6 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -96,11 +95,11 @@ public class FragmentHome extends Fragment implements IHomeViewPresenterPresente
         categoryRequest.setUuid(Util.id(getActivity()));
         // iHomeViewPresenterPresenter.getCategories(categoryRequest);
         //  iHomeViewPresenterPresenter.getBrands(SharedPreference.getInstance(getActivity()).getUser(C.AUTH_USER).getData().getToken().getAccessToken(),categoryRequest);
-        // shimmerBrands.startShimmerAnimation();
-        iHomeViewPresenterPresenter.getCategories(Util.id(getActivity()));
-        adapterHomeBrands = new AdapterHomeBrands(setHomeBrands(), getActivity());
+         shimmerBrands.startShimmerAnimation();
+        iHomeViewPresenterPresenter.getCategories("C5193B5D-75CB-406D-A7D5-513C21D40B02");
+  /*      adapterHomeBrands = new AdapterHomeBrands(setHomeBrands(), getActivity());
         rvBrands.setAdapter(adapterHomeBrands);
-
+*/
         //    shimmerBrands.stopShimmerAnimation();
 
         rlNotification.setOnClickListener(this);
@@ -148,8 +147,12 @@ public class FragmentHome extends Fragment implements IHomeViewPresenterPresente
 
     @Override
     public void getResponseSuccess(CategoriesResponse response) {
-        Log.e("DEBUG", "" + response.getMessage());
-
+       // Log.e("DEBUG", "" + response.getMessage());
+           if(response.getSuccess()){
+               shimmerBrands.stopShimmerAnimation();
+               adapterHomeBrands = new AdapterHomeBrands(response.getData(), getActivity());
+               rvBrands.setAdapter(adapterHomeBrands);
+           }
     }
 
     @Override
