@@ -5,8 +5,8 @@ import java.util.ArrayList;
 
 public class SectionDataModel {
 
-    private String headerTitle;
-    private ArrayList<SingleItemModel> allItemsInSection;
+        private String headerTitle;
+        private ArrayList<SingleItemModel> allItemsInSection;
 
 
     public SectionDataModel() {

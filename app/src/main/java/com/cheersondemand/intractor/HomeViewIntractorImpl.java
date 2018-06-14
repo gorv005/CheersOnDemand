@@ -7,6 +7,7 @@ import com.cheersondemand.frameworks.retrofit.RestError;
 import com.cheersondemand.frameworks.retrofit.WebServicesWrapper;
 import com.cheersondemand.model.CategoriesResponse;
 import com.cheersondemand.model.CategoryRequest;
+import com.cheersondemand.model.ProductsWithCategoryResponse;
 
 import retrofit2.Response;
 
@@ -99,6 +100,35 @@ public class HomeViewIntractorImpl implements IHomeViewIntractor {
                         }                    }
                 }
             },auth,uuid);
+        }
+        catch (Exception e){
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void getProductsWithCategories(String uuid, final OnLoginFinishedListener listener) {
+        try {
+
+            WebServicesWrapper.getInstance().getProductsWithCategories(new ResponseResolver<ProductsWithCategoryResponse>() {
+                @Override
+                public void onSuccess(ProductsWithCategoryResponse productsWithCategoryResponse, Response response) {
+                    listener.onProductWithCategorySuccess(productsWithCategoryResponse);
+                }
+
+                @Override
+                public void onFailure(RestError error, String msg) {
+                    Log.e("dd","hh");
+                    if(error!=null && error.getError()!=null) {
+                        if(error.getError()==null){
+                            listener.onError(error.getMessage());
+
+                        }
+                        else {
+                            listener.onError(error.getError());
+                        }                    }
+                }
+            },uuid);
         }
         catch (Exception e){
             e.printStackTrace();

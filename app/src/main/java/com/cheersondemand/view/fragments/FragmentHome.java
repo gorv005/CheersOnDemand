@@ -16,6 +16,8 @@ import android.widget.RelativeLayout;
 import com.cheersondemand.R;
 import com.cheersondemand.model.CategoriesResponse;
 import com.cheersondemand.model.CategoryRequest;
+import com.cheersondemand.model.HomeCategoriesSectionList;
+import com.cheersondemand.model.ProductsWithCategoryResponse;
 import com.cheersondemand.model.SectionDataModel;
 import com.cheersondemand.model.SingleItemModel;
 import com.cheersondemand.presenter.HomeViewPresenterImpl;
@@ -24,6 +26,7 @@ import com.cheersondemand.util.C;
 import com.cheersondemand.util.Util;
 import com.cheersondemand.view.ActivityContainer;
 import com.cheersondemand.view.adapter.AdapterHomeBrands;
+import com.cheersondemand.view.adapter.AdapterHomeCategoriesSections;
 import com.cheersondemand.view.adapter.AdapterHomeProductsSections;
 import com.facebook.shimmer.ShimmerFrameLayout;
 
@@ -48,6 +51,8 @@ public class FragmentHome extends Fragment implements IHomeViewPresenterPresente
     LinearLayoutManager horizontalLayout, horizontalLayout1;
     AdapterHomeBrands adapterHomeBrands;
     AdapterHomeProductsSections adapterHomeProductsSections;
+    AdapterHomeCategoriesSections adapterHomeCategoriesSections;
+
     @BindView(R.id.shimmerBrands)
     ShimmerFrameLayout shimmerBrands;
     @BindView(R.id.rvProducts)
@@ -96,16 +101,16 @@ public class FragmentHome extends Fragment implements IHomeViewPresenterPresente
         // iHomeViewPresenterPresenter.getCategories(categoryRequest);
         //  iHomeViewPresenterPresenter.getBrands(SharedPreference.getInstance(getActivity()).getUser(C.AUTH_USER).getData().getToken().getAccessToken(),categoryRequest);
          shimmerBrands.startShimmerAnimation();
-        iHomeViewPresenterPresenter.getCategories("C5193B5D-75CB-406D-A7D5-513C21D40B02");
+        iHomeViewPresenterPresenter.getProductWithCategories(Util.id(getActivity()));
   /*      adapterHomeBrands = new AdapterHomeBrands(setHomeBrands(), getActivity());
         rvBrands.setAdapter(adapterHomeBrands);
 */
         //    shimmerBrands.stopShimmerAnimation();
 
         rlNotification.setOnClickListener(this);
-        createDummyData();
+        /*createDummyData();
         adapterHomeProductsSections = new AdapterHomeProductsSections(getActivity(), allSampleData);
-        rvProducts.setAdapter(adapterHomeProductsSections);
+        rvProducts.setAdapter(adapterHomeProductsSections);*/
     }
 
     @Override
@@ -143,6 +148,21 @@ public class FragmentHome extends Fragment implements IHomeViewPresenterPresente
         brandsList.add("Desi daaru");
 
         return brandsList;
+    }
+
+    @Override
+    public void getProductWithCategoriesSuccess(ProductsWithCategoryResponse response) {
+        if(response.getSuccess()){
+            shimmerBrands.stopShimmerAnimation();
+            adapterHomeBrands = new AdapterHomeBrands(response.getData().getCategories(), getActivity());
+            rvBrands.setAdapter(adapterHomeBrands);
+
+            ArrayList<HomeCategoriesSectionList> homeCategoriesSectionList=new ArrayList<>();
+            homeCategoriesSectionList.add(new HomeCategoriesSectionList("ALL Products",response.getData().getAllProducts()));
+
+            adapterHomeCategoriesSections = new AdapterHomeCategoriesSections(getActivity(), homeCategoriesSectionList);
+            rvProducts.setAdapter(adapterHomeCategoriesSections);
+        }
     }
 
     @Override
