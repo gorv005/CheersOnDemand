@@ -40,6 +40,7 @@ import com.cheersondemand.util.DrawableClickListener;
 import com.cheersondemand.util.SharedPreference;
 import com.cheersondemand.util.Util;
 import com.cheersondemand.view.ActivityHome;
+import com.cheersondemand.view.ActivitySearchLocation;
 import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
@@ -843,8 +844,10 @@ public class FragmentAuthentication extends Fragment implements IAuthenitication
                 SharedPreference.getInstance(getActivity()).setBoolean(C.IS_LOGIN_GUEST,true);
 
                 SharedPreference.getInstance(getActivity()).seGuestUser(C.GUEST_USER,response);
-
-                gotoHome();
+                Intent intent = new Intent(getActivity(), ActivitySearchLocation.class);
+       //         intent.putExtra(C.ADDRESS_FOR, C.ADDRESS_SOURCE);
+                startActivityForResult(intent, C.REQUEST_ADDRESS);
+                //gotoHome();
             }
         }
     }
@@ -855,7 +858,10 @@ public class FragmentAuthentication extends Fragment implements IAuthenitication
         btnLogin.revertAnimation();
         btnSignUp.revertAnimation();
         if(response.trim().equalsIgnoreCase(C.GUEST_USER_ALLREADY_CREATED)){
-            gotoHome();
+          //  gotoHome();
+            Intent intent = new Intent(getActivity(), ActivitySearchLocation.class);
+            //         intent.putExtra(C.ADDRESS_FOR, C.ADDRESS_SOURCE);
+            startActivity(intent);
         }
         else {
             util.setSnackbarMessage(getActivity(), response, LLView, true);

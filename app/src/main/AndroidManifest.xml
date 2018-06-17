@@ -6,7 +6,10 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
 
+    <uses-permission android:name="com.google.android.providers.gsf.permission.READ_GSERVICES"/>
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -28,6 +31,14 @@
             android:name="com.facebook.sdk.ApplicationId"
             android:value="@string/facebook_app_id" />
 
+
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyD_xgiNRih-eTocAZFbD2h-fviy3tttZ8s" />
+
+<!--        <meta-data
+            android:name="com.google.android.gms.version"
+            android:value="@integer/google_play_services_version"/>-->
         <activity
             android:name="com.facebook.FacebookActivity"
             android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation"
@@ -44,8 +55,15 @@
                 <data android:scheme="@string/fb_login_protocol_scheme" />
             </intent-filter>
         </activity>
-        <activity android:name=".view.ActivityHome" android:screenOrientation="portrait"/>
-        <activity android:name=".view.ActivityContainer" android:screenOrientation="portrait"></activity>
+        <activity
+            android:name=".view.ActivityHome"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".view.ActivityContainer"
+            android:screenOrientation="portrait" />
+        <activity android:name=".view.ActivitySearchLocation"
+            android:screenOrientation="portrait"
+            ></activity>
     </application>
 
 </manifest>

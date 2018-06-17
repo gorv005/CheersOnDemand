@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:background="@color/profile_back"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    >
+
+
+
+    <LinearLayout
+        android:background="@color/white"
+        android:layout_marginTop="30dp"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:paddingLeft="10dp"
+            android:layout_width="wrap_content"
+            android:src="@drawable/left_arrow_1"
+            android:layout_height="wrap_content" />
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingLeft="15dp"
+                android:orientation="horizontal">
+
+                <EditText
+                    android:layout_marginTop="20dp"
+                    android:id="@+id/etLocation"
+                    android:layout_width="match_parent"
+                    android:layout_height="44dp"
+                    android:layout_marginRight="10dp"
+                    android:fontFamily="@font/sf_ui_display_regular"
+                    android:textSize="21sp"
+                    android:paddingLeft="5dp"
+                    android:background="@color/white"
+                    android:layout_centerHorizontal="true"
+                    android:layout_centerVertical="true"
+                    android:hint="@string/enter_your_location"
+                    android:textColor="@color/editext_text_color"
+                    android:textColorHint="@color/hint_color" />
+
+            </RelativeLayout>
+
+    </LinearLayout>
+
+
+
+    <LinearLayout
+        android:layout_marginTop="10dp"
+        android:id="@+id/rlLocationSearch"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <TextView
+            android:layout_marginTop="5dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="14.4sp"
+            android:textColor="@color/profile_updated_text_color"
+            android:text="@string/search_result"
+            />
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/rvSearchResult"
+            android:background="@color/white"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+        </android.support.v7.widget.RecyclerView>
+
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:visibility="gone"
+        android:layout_marginTop="10dp"
+        android:id="@+id/rlRecentSearch"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <RelativeLayout
+            android:background="@color/white"
+            android:paddingTop="10dp"
+            android:paddingLeft="15dp"
+            android:paddingRight="15dp"
+            android:paddingBottom="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:orientation="vertical"
+                android:layout_height="wrap_content">
+
+                <TextView
+
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/sf_ui_display_regular"
+                    android:text="@string/detect_my_location"
+                    android:textColor="@color/profile_text_color"
+                    android:textSize="14sp" />
+
+                <TextView
+
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/sf_ui_display_regular"
+                    android:text="@string/using_gps"
+                    android:textColor="@color/profile_updated_text_color"
+                    android:textSize="14sp" />
+            </LinearLayout>
+            <ImageView
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_width="wrap_content"
+                android:src="@drawable/compass_2"
+                android:layout_height="wrap_content" />
+        </RelativeLayout>
+        <TextView
+            android:layout_marginTop="5dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="14.4sp"
+            android:textColor="@color/profile_updated_text_color"
+            android:text="@string/recent_searches"
+            />
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/rvRecentSearches"
+            android:background="@color/white"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+        </android.support.v7.widget.RecyclerView>
+
+    </LinearLayout>
+
+
+</LinearLayout>

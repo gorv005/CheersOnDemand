@@ -11,7 +11,7 @@
         android:id="@+id/rl"
 
         android:layout_width="match_parent"
-        android:layout_height="170dp">
+        android:layout_height="160dp">
 
         <ImageView
             android:layout_width="match_parent"
@@ -20,36 +20,39 @@
             android:src="@drawable/top_banner" />
 
         <RelativeLayout
+            android:id="@+id/rlSearch"
             android:layout_width="match_parent"
-            android:layout_height="110dp"
-            android:paddingEnd="30dp"
-            android:paddingStart="30dp">
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:orientation="vertical">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:fontFamily="@font/sf_ui_display_regular"
-                    android:text="@string/location"
-                    android:textColor="@color/white"
-                    android:textSize="14sp" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-
-                    android:layout_height="wrap_content"
-                    android:fontFamily="@font/sf_ui_display_regular"
-                    android:text="@string/select_a_location"
-                    android:textColor="@color/white"
-                    android:textSize="16sp" />
-            </LinearLayout>
+            android:layout_height="wrap_content"
+            android:paddingEnd="10dp"
+            android:layout_marginTop="40dp"
+            android:paddingStart="20dp">
 
             <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:focusable="true"
+
+                android:layout_centerVertical="true"
+                android:layout_marginEnd="40dp"
+                android:focusableInTouchMode="true"
+               >
+
+                <EditText
+                    android:layout_width="match_parent"
+                    android:layout_height="45dp"
+                    android:background="@drawable/search_back"
+                    android:drawableLeft="@drawable/ic_search"
+                    android:drawablePadding="15dp"
+                    android:enabled="false"
+                    android:hint="@string/search_hint"
+                    android:paddingLeft="15dp"
+                    android:textColorHint="@color/hint_color"
+                    android:textSize="14.5sp" />
+            </RelativeLayout>
+
+            <RelativeLayout
+
+                android:visibility="visible"
                 android:id="@+id/rlNotification"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -66,27 +69,77 @@
 
         </RelativeLayout>
 
-        <RelativeLayout
+        <LinearLayout
+            android:paddingEnd="20dp"
+            android:paddingStart="20dp"
+            android:layout_marginTop="20dp"
+            android:layout_below="@id/rlSearch"
+            android:orientation="horizontal"
+            android:weightSum="2"
             android:layout_width="match_parent"
+            android:layout_height="match_parent">
+        <LinearLayout
+            android:id="@+id/llLocationSelect"
+            android:layout_weight="1"
+            android:visibility="visible"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="100dp"
-            android:focusable="true"
-            android:focusableInTouchMode="true"
-            android:paddingEnd="30dp"
-            android:paddingStart="30dp">
+            android:layout_centerVertical="true"
+            android:orientation="vertical">
 
-            <EditText
-                android:layout_width="match_parent"
-                android:layout_height="45dp"
-                android:background="@drawable/search_back"
-                android:drawableLeft="@drawable/ic_search"
-                android:drawablePadding="15dp"
-                android:enabled="false"
-                android:hint="@string/search_hint"
-                android:paddingLeft="15dp"
-                android:textColorHint="@color/hint_color"
-                android:textSize="14.5sp" />
-        </RelativeLayout>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/sf_ui_display_regular"
+                android:text="@string/location"
+                android:textColor="@color/white"
+                android:textSize="14sp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:id="@+id/tvLocationName"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/sf_ui_display_regular"
+                android:text="@string/select_a_location"
+                android:textColor="@color/white"
+                android:textSize="16sp" />
+        </LinearLayout>
+            <View
+                android:layout_marginRight="20dp"
+                android:layout_marginLeft="20dp"
+                android:layout_marginBottom="20dp"
+                android:layout_marginTop="10dp"
+                android:background="@color/latest_add_color"
+                android:layout_width="2dp"
+                android:layout_height="wrap_content"/>
+            <LinearLayout
+                android:id="@+id/llStoreSelect"
+                android:layout_weight="1"
+                android:visibility="visible"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/sf_ui_display_regular"
+                    android:text="@string/Select_store"
+                    android:textColor="@color/white"
+                    android:textSize="14sp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:id="@+id/tvStoreName"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/sf_ui_display_regular"
+                    android:text="@string/select_a_location"
+                    android:textColor="@color/white"
+                    android:textSize="16sp" />
+            </LinearLayout>
+
+        </LinearLayout>
     </RelativeLayout>
 
     <com.facebook.shimmer.ShimmerFrameLayout

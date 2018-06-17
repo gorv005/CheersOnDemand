@@ -26,4 +26,10 @@ public interface C {
     String IS_LOGIN_GUEST = "is_guest_user";
     int FRAGMENT_CHANGE_PASSWORD = 8;
     String GUEST_USER_ALLREADY_CREATED ="Guest user already created" ;
+    int REQUEST_ADDRESS =01 ;
+    int FRAGMENT_STORE_LIST =9 ;
+    String SELECTED_STORE = "selected_store";
+    int HOME = 1;
+    int SEARCH =2 ;
+    String FROM ="from" ;
 }

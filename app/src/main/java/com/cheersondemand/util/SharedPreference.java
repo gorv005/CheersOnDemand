@@ -6,6 +6,7 @@ import android.preference.PreferenceManager;
 
 import com.cheersondemand.model.AuthenticationResponse;
 import com.cheersondemand.model.GuestUserCreateResponse;
+import com.cheersondemand.model.store.StoreList;
 import com.google.gson.Gson;
 
 /**
@@ -82,6 +83,25 @@ public class SharedPreference {
         prefs.edit().putString(key, json).apply();
 
     }
+    public GuestUserCreateResponse geGuestUser(String key) {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        String data = prefs.getString(key, null);
+        Gson gson = new Gson();
+        return gson.fromJson(data, GuestUserCreateResponse.class);
 
+    }
+    public void setStore(String key, StoreList storeList) {
+        Gson gson = new Gson();
+        String json = gson.toJson(storeList);
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        prefs.edit().putString(key, json).apply();
 
+    }
+    public StoreList getStore(String key) {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        String data = prefs.getString(key, null);
+        Gson gson = new Gson();
+        return gson.fromJson(data, StoreList.class);
+
+    }
 }

@@ -38,6 +38,7 @@
     <color name="latest_add_color">#929CAD</color>
     <color name="red_error_color">#ca2b32</color>
     <color name="dark_grey">#242f41</color>
+    <color name="devider">#889AB4</color>
 
 
 </resources>

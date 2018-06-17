@@ -22,7 +22,7 @@
     <string name="skip_continue"><![CDATA[Skip & Continue]]></string>
     <string name="term_cond"><![CDATA[Terms & Conditions  & Privacy Policy]]></string>
     <string name="forgot_password">Forgot Password ?</string>
-    <string name="location">Location</string>
+    <string name="location">Change Location</string>
     <string name="select_a_location">Select  a Location</string>
     <string name="add_to_cart">Add to Cart</string>
     <string name="search_hint">Search for Brand, Type …</string>
@@ -71,6 +71,16 @@
     <string name="enter_your_register_email">Enter your registered Email and we’ll sent you a link to reset your password</string>
     <string name="send_link">SEND LINK</string>
     <string name="continue_to_login">Continue to Login</string>
+    <string name="Select_store">Select Store</string>
+    <string name="enter_your_location">Enter a Location</string>
+    <string name="detect_my_location">Detect my Location</string>
+    <string name="using_gps">Using GPS</string>
+    <string name="recent_searches">Recent Searches</string>
+    <string name="search_result">Search Results</string>
+    <string name="select_store">Select Store</string>
+    <string name="back">Back</string>
+    <string name="submit">Submit</string>
+    <string name="plz_select_store">Please select a store</string>
     <!--
         <string name="default_web_client_id">999387565226-hdnnhm6rhgik5ljvm06shotsi7j9883c.apps.googleusercontent.com</string>
     -->

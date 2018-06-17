@@ -19,6 +19,7 @@ import com.cheersondemand.util.C;
 import com.cheersondemand.view.fragments.FragmentChangePassword;
 import com.cheersondemand.view.fragments.FragmentNotification;
 import com.cheersondemand.view.fragments.FragmentProfile;
+import com.cheersondemand.view.fragments.FragmentStoreSelection;
 import com.cheersondemand.view.fragments.FragmentUpdateProfile;
 
 import butterknife.ButterKnife;
@@ -36,9 +37,7 @@ public class ActivityContainer extends AppCompatActivity {
         ButterKnife.bind(this);
         tvTitle=(TextView)findViewById(R.id.tvTitle);
         tvClearAll=(TextView)findViewById(R.id.tvClearAll);
-        Bundle bundle = getIntent().getBundleExtra(C.BUNDLE);
-        int fragmentAction = getIntent().getIntExtra(C.FRAGMENT_ACTION, 100);
-        fragmnetLoader(fragmentAction, bundle);
+
         final Drawable upArrow = getResources().getDrawable(R.drawable.left_arrow_1);
         upArrow.setColorFilter(getResources().getColor(R.color.profile_text_color), PorterDuff.Mode.SRC_ATOP);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -46,7 +45,9 @@ public class ActivityContainer extends AppCompatActivity {
         getSupportActionBar().setDisplayShowTitleEnabled(false);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeAsUpIndicator(upArrow);
-
+        Bundle bundle = getIntent().getBundleExtra(C.BUNDLE);
+        int fragmentAction = getIntent().getIntExtra(C.FRAGMENT_ACTION, 100);
+        fragmnetLoader(fragmentAction, bundle);
     }
 
 
@@ -72,6 +73,13 @@ public class ActivityContainer extends AppCompatActivity {
                 break;
             case C.FRAGMENT_CHANGE_PASSWORD:
                 fragment = new FragmentChangePassword();
+                fragmentTransaction.replace(R.id.container, fragment);
+                //fragmentTransaction.addToBackStack(C.TAG_FRAGMENT_PRODUCTS_HOME);
+                break;
+
+            case C.FRAGMENT_STORE_LIST:
+                getSupportActionBar().hide();
+                fragment = new FragmentStoreSelection();
                 fragmentTransaction.replace(R.id.container, fragment);
                 //fragmentTransaction.addToBackStack(C.TAG_FRAGMENT_PRODUCTS_HOME);
                 break;
