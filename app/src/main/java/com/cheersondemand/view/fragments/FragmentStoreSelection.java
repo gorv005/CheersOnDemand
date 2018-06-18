@@ -171,7 +171,7 @@ public class FragmentStoreSelection extends Fragment implements IStoreViewPresen
                     if (SharedPreference.getInstance(getActivity()).getBoolean(C.IS_LOGIN_GUEST)) {
 
                         iStoreViewPresenter.updateStore("" + SharedPreference.getInstance(getActivity()).
-                                geGuestUser(C.GUEST_USER).getData().getId(), updateStore);
+                                geGuestUser(C.GUEST_USER).getId(), updateStore);
                     }
                 }
                 else {

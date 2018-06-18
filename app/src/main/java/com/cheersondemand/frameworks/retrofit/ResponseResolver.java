@@ -64,7 +64,7 @@ public abstract class ResponseResolver<T> implements Callback<T> {
             try {
                 Gson gson=new Gson();
                 RestError restError= gson.fromJson(response.errorBody().string(),RestError.class);
-                onFailure(restError, body.getMessage());
+                    onFailure(restError, body.getMessage());
 
             } catch (IOException e) {
                 e.printStackTrace();

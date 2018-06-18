@@ -32,4 +32,5 @@ public interface C {
     int HOME = 1;
     int SEARCH =2 ;
     String FROM ="from" ;
+    String LOCATION_SELECTED ="selected_loc" ;
 }

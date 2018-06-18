@@ -96,6 +96,9 @@
                 android:textSize="14sp" />
 
             <TextView
+                android:maxLines="1"
+                android:ellipsize="end"
+                android:singleLine="true"
                 android:layout_width="wrap_content"
                 android:id="@+id/tvLocationName"
                 android:layout_height="wrap_content"
@@ -130,6 +133,9 @@
                     android:textSize="14sp" />
 
                 <TextView
+                    android:maxLines="1"
+                    android:ellipsize="end"
+                    android:singleLine="true"
                     android:layout_width="wrap_content"
                     android:id="@+id/tvStoreName"
                     android:layout_height="wrap_content"

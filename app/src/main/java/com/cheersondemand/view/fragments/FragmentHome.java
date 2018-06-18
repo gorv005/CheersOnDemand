@@ -21,6 +21,7 @@ import com.cheersondemand.model.HomeCategoriesSectionList;
 import com.cheersondemand.model.ProductsWithCategoryResponse;
 import com.cheersondemand.model.SectionDataModel;
 import com.cheersondemand.model.SingleItemModel;
+import com.cheersondemand.model.location.SelectedLocation;
 import com.cheersondemand.model.store.StoreList;
 import com.cheersondemand.presenter.HomeViewPresenterImpl;
 import com.cheersondemand.presenter.IHomeViewPresenterPresenter;
@@ -28,6 +29,7 @@ import com.cheersondemand.util.C;
 import com.cheersondemand.util.SharedPreference;
 import com.cheersondemand.util.Util;
 import com.cheersondemand.view.ActivityContainer;
+import com.cheersondemand.view.ActivitySearchLocation;
 import com.cheersondemand.view.adapter.AdapterHomeBrands;
 import com.cheersondemand.view.adapter.AdapterHomeCategoriesSections;
 import com.cheersondemand.view.adapter.AdapterHomeProductsSections;
@@ -67,6 +69,7 @@ public class FragmentHome extends Fragment implements IHomeViewPresenterPresente
     @BindView(R.id.rlNotification)
     RelativeLayout rlNotification;
     StoreList store;
+    List<SelectedLocation> selectedLocation;
     @BindView(R.id.rlSearch)
     RelativeLayout rlSearch;
     @BindView(R.id.tvLocationName)
@@ -107,6 +110,10 @@ public class FragmentHome extends Fragment implements IHomeViewPresenterPresente
         if (store != null) {
             tvStoreName.setText(store.getName());
 
+        }
+        selectedLocation = SharedPreference.getInstance(getActivity()).getRecentLocations(C.LOCATION_SELECTED);
+        if (selectedLocation != null && selectedLocation.size()>0) {
+            tvLocationName.setText(selectedLocation.get(selectedLocation.size()-1).getName());
         }
        /* CategoryRequest categoryRequest = new CategoryRequest();
         categoryRequest.setUuid(Util.id(getActivity()));*/
@@ -234,6 +241,7 @@ public class FragmentHome extends Fragment implements IHomeViewPresenterPresente
                 break;
 
             case R.id.llLocationSelect:
+                gotoLocation();
                 break;
         }
     }
@@ -246,6 +254,13 @@ public class FragmentHome extends Fragment implements IHomeViewPresenterPresente
         bundle.putInt(C.FROM,C.HOME);
 
         intent.putExtra(C.BUNDLE,bundle);
+        startActivity(intent);
+    }
+    void gotoLocation(){
+        Intent intent=new Intent(getActivity(),ActivitySearchLocation.class);
+
+        intent.putExtra(C.FRAGMENT_ACTION,C.FRAGMENT_STORE_LIST);
+        intent.putExtra(C.FROM,C.HOME);
         startActivity(intent);
     }
 }

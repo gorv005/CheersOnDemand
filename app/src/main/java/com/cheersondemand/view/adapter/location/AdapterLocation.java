@@ -148,7 +148,10 @@ public class AdapterLocation extends RecyclerView.Adapter<AdapterLocation.Predic
 
     @Override
     public void onBindViewHolder(PredictionHolder mPredictionHolder, final int i) {
-        mPredictionHolder.mPrediction.setText(mResultList.get(i).description);
+        String a[]=mResultList.get(i).description.toString().split(",",2);
+        mPredictionHolder.mPrediction.setText(a[0].trim());
+        mPredictionHolder.mSubAddress.setText(a[1].trim());
+
         /*mPredictionHolder.mRow.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -171,10 +174,14 @@ public class AdapterLocation extends RecyclerView.Adapter<AdapterLocation.Predic
 
     public class PredictionHolder extends RecyclerView.ViewHolder {
         private TextView mPrediction;
+        private TextView mSubAddress;
+
         public PredictionHolder(View itemView) {
 
             super(itemView);
             mPrediction = (TextView) itemView.findViewById(R.id.tvMainAddress);
+            mSubAddress = (TextView) itemView.findViewById(R.id.tvSubAddress);
+
         }
 
     }

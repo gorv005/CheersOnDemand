@@ -1,7 +1,8 @@
  package com.cheersondemand.frameworks.retrofit;
 
-import com.google.gson.annotations.Expose;
-import com.google.gson.annotations.SerializedName;
+ import com.cheersondemand.model.GuestUser;
+ import com.google.gson.annotations.Expose;
+ import com.google.gson.annotations.SerializedName;
 
  public class RestError {
 
@@ -24,7 +25,9 @@ import com.google.gson.annotations.SerializedName;
      @SerializedName("error")
      @Expose
      private String error;
-
+     @SerializedName("data")
+     @Expose
+     private GuestUser data;
      @SerializedName("error_description")
      @Expose
      private String errorDescription;
@@ -74,5 +77,13 @@ import com.google.gson.annotations.SerializedName;
 
      public void setErrorDescription(String errorDescription) {
          this.errorDescription = errorDescription;
+     }
+
+     public GuestUser getData() {
+         return data;
+     }
+
+     public void setData(GuestUser data) {
+         this.data = data;
      }
  }

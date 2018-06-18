@@ -11,6 +11,7 @@ import com.cheersondemand.model.GuestUserCreateResponse;
 import com.cheersondemand.model.LoginRequest;
 import com.cheersondemand.model.SignUpRequest;
 import com.cheersondemand.model.SocialLoginRequest;
+import com.cheersondemand.util.C;
 
 import retrofit2.Response;
 
@@ -115,13 +116,25 @@ public class AuthniticationIntractorImpl implements IAuthnicationIntractor {
                 @Override
                 public void onFailure(RestError error, String msg) {
                     Log.e("dd","hh");
+
+
+
+
+                        if(error!=null &&error.getMessage()!=null &&error.getMessage().trim().equalsIgnoreCase(C.GUEST_USER_ALLREADY_CREATED)) {
+                            GuestUserCreateResponse guestUserCreateResponse = new GuestUserCreateResponse();
+                            guestUserCreateResponse.setSuccess(true);
+                            guestUserCreateResponse.setMessage(error.getMessage().trim());
+                            guestUserCreateResponse.setData(error.getData());
+                            onSuccess(guestUserCreateResponse, null);
+                        }
                     if(error.getError()==null){
                         listener.onError(error.getMessage());
 
                     }
-                    else {
-                        listener.onError(error.getError());
-                    }
+                        else {
+                            listener.onError(error.getError());
+                        }
+
                 }
             },categoryRequest);
         }

@@ -36,6 +36,14 @@ List<StoreList> filterList;
         this.filterList=sideMenuItems;
     }
 
+
+
+
+    @Override
+    public int getItemViewType(int position) {
+        return position;
+    }
+
     @Override
     public int getCount() {
         return Items.size();

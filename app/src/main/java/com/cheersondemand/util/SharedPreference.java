@@ -5,9 +5,14 @@ import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 
 import com.cheersondemand.model.AuthenticationResponse;
-import com.cheersondemand.model.GuestUserCreateResponse;
+import com.cheersondemand.model.GuestUser;
+import com.cheersondemand.model.location.SelectedLocation;
 import com.cheersondemand.model.store.StoreList;
 import com.google.gson.Gson;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * Created by gaurav.garg on 08-09-2016.
@@ -76,18 +81,18 @@ public class SharedPreference {
         prefs.edit().putString(key, json).apply();
 
     }
-    public void seGuestUser(String key, GuestUserCreateResponse guestUserCreateResponse) {
+    public void seGuestUser(String key, GuestUser guestUserCreateResponse) {
         Gson gson = new Gson();
         String json = gson.toJson(guestUserCreateResponse);
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         prefs.edit().putString(key, json).apply();
 
     }
-    public GuestUserCreateResponse geGuestUser(String key) {
+    public GuestUser geGuestUser(String key) {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         String data = prefs.getString(key, null);
         Gson gson = new Gson();
-        return gson.fromJson(data, GuestUserCreateResponse.class);
+        return gson.fromJson(data, GuestUser.class);
 
     }
     public void setStore(String key, StoreList storeList) {
@@ -104,4 +109,80 @@ public class SharedPreference {
         return gson.fromJson(data, StoreList.class);
 
     }
+
+    public void setLocation(String key, List<SelectedLocation> storeList) {
+        Gson gson = new Gson();
+        String json = gson.toJson(storeList);
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        prefs.edit().putString(key, json).apply();
+
+    }
+
+    public void addRecentSearch(String key,SelectedLocation location) {
+        boolean isFavAlready=false;
+        SelectedLocation location1=null;
+        List<SelectedLocation> recentLocations = getRecentLocations(key);
+        if (recentLocations == null) {
+            recentLocations = new ArrayList<SelectedLocation>();
+            recentLocations.add(location);
+            setLocation(key, recentLocations);
+        }
+        else {
+            for (int i = 0; i < recentLocations.size(); i++) {
+                location1=recentLocations.get(i);
+                if (location.getName().equalsIgnoreCase(location1.getName())) {
+                    isFavAlready = true;
+                    break;
+                }
+            }
+            if(isFavAlready){
+                removeRecentLocation(key,location1);
+            }
+            else {
+                recentLocations.add(location);
+                setLocation(key, recentLocations);
+            }
+        }
+
+    }
+    public void removeRecentLocation(String key, SelectedLocation selectedLocation) {
+   List<SelectedLocation> selectedLocationList = getRecentLocations(key);
+        if (selectedLocationList != null) {
+            for(int i=0;i<selectedLocationList.size();i++){
+                if (selectedLocation.getName().trim().equalsIgnoreCase(selectedLocationList.get(i).getName().trim())) {
+
+                    selectedLocationList.remove(selectedLocationList.remove(i));
+                    setLocation(key, selectedLocationList);
+
+                }
+            }
+            addRecentSearch(key, selectedLocation);
+        }
+    }
+    public List<SelectedLocation> getRecentLocations(String key) {
+        List<SelectedLocation> recentSearches;
+
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+
+
+        if (prefs.contains(key)) {
+            String jsonFavorites = prefs.getString(key, null);
+            Gson gson = new Gson();
+            SelectedLocation[] recent = gson.fromJson(jsonFavorites,
+                    SelectedLocation[].class);
+
+            recentSearches = Arrays.asList(recent);
+            recentSearches = new ArrayList<SelectedLocation>(recentSearches);
+        } else
+            return null;
+
+        return (List<SelectedLocation>) recentSearches;
+    }
+   /* public SelectedLocation getLocation(String key) {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        String data = prefs.getString(key, null);
+        Gson gson = new Gson();
+        return gson.fromJson(data, SelectedLocation.class);
+
+    }*/
 }
