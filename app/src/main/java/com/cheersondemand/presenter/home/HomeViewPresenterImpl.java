@@ -1,9 +1,9 @@
-package com.cheersondemand.presenter;
+package com.cheersondemand.presenter.home;
 
 import android.content.Context;
 
-import com.cheersondemand.intractor.HomeViewIntractorImpl;
-import com.cheersondemand.intractor.IHomeViewIntractor;
+import com.cheersondemand.intractor.home.HomeViewIntractorImpl;
+import com.cheersondemand.intractor.home.IHomeViewIntractor;
 import com.cheersondemand.model.CategoriesResponse;
 import com.cheersondemand.model.CategoryRequest;
 import com.cheersondemand.model.ProductsWithCategoryResponse;
@@ -74,6 +74,14 @@ public class HomeViewPresenterImpl implements IHomeViewPresenterPresenter, IHome
         if (mView != null) {
 
             iHomeViewIntractor.getProductsWithCategories(uuid, this);
+        }
+    }
+
+    @Override
+    public void getProductWithCategories(String token, String uuid) {
+        if (mView != null) {
+
+            iHomeViewIntractor.getProductsWithCategories(token,uuid, this);
         }
     }
 

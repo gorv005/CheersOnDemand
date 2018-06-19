@@ -6,12 +6,14 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 
 import com.cheersondemand.R;
 import com.cheersondemand.util.C;
 import com.cheersondemand.view.fragments.FragmentAuthentication;
 import com.cheersondemand.view.fragments.FragmentSplash;
+import com.google.firebase.iid.FirebaseInstanceId;
 
 import java.util.List;
 
@@ -30,6 +32,13 @@ public class    MainActivity extends AppCompatActivity {
         bundle = getIntent().getBundleExtra(C.BUNDLE);
         fragmentAction = getIntent().getIntExtra(C.FRAGMENT_ACTION, C.FRAGMENT_SPLASH);
         fragmnetLoader(fragmentAction, bundle);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        Log.d("Firebase", "token "+ FirebaseInstanceId.getInstance().getToken());
+
     }
 
     public void fragmnetLoader(int fragmentType, Bundle bundle) {

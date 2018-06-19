@@ -16,6 +16,7 @@ public interface ILocationViewIntractor {
         Context getAPPContext();
     }
     public void saveLocation(String id, SaveLocation saveLocation, OnLoginFinishedListener listener);
+    public void saveLocation(String token,String id, SaveLocation saveLocation, OnLoginFinishedListener listener);
 
 
 

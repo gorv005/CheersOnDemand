@@ -373,6 +373,11 @@ public class FragmentAuthentication extends Fragment implements IAuthenitication
         socialLoginRequest.setGrantType("password");
         socialLoginRequest.setProvider(provider);
         socialLoginRequest.setUuid(Util.id(getActivity()));
+        if(SharedPreference.getInstance(getActivity()).getString(C.DEVICE_TOKEN)!=null){
+            socialLoginRequest.setDeviceToken(SharedPreference.getInstance(getActivity()).getString(C.DEVICE_TOKEN));
+
+        }
+
         iAutheniticationPresenter.setSignUpSocail(socialLoginRequest);
     }
     //this method is called on click
@@ -458,28 +463,43 @@ public class FragmentAuthentication extends Fragment implements IAuthenitication
                 break;
             case R.id.btnSignUp:
                 btnSignUp.startAnimation();
-                SignUpRequest signUpRequest=new SignUpRequest();
-                User user=new User();
-                user.setName(etName.getText().toString());
-                user.setEmail(etEmail.getText().toString());
-                user.setPassword(etPassword.getText().toString());
-                signUpRequest.setUser(user);
-                iAutheniticationPresenter.setSignUp(signUpRequest);
+              signUp();
                 break;
             case R.id.btnLogin:
                 btnLogin.startAnimation();
-                LoginRequest loginRequest=new LoginRequest();
-                loginRequest.setEmail(etEmailLogin.getText().toString());
-                loginRequest.setGrantType("password");
-                loginRequest.setLoginType(1);
-                loginRequest.setUuid(Util.id(getActivity()));
-                loginRequest.setPassword(etPasswordLogin.getText().toString());
-                iAutheniticationPresenter.setLoginUsingEmail(loginRequest);
+               login();
                 break;
         }
     }
 
 
+
+    void  login(){
+        LoginRequest loginRequest=new LoginRequest();
+        loginRequest.setEmail(etEmailLogin.getText().toString());
+        loginRequest.setGrantType("password");
+        loginRequest.setLoginType(1);
+        loginRequest.setUuid(Util.id(getActivity()));
+        loginRequest.setPassword(etPasswordLogin.getText().toString());
+        if(SharedPreference.getInstance(getActivity()).getString(C.DEVICE_TOKEN)!=null){
+            loginRequest.setDeviceToken(SharedPreference.getInstance(getActivity()).getString(C.DEVICE_TOKEN));
+
+        }
+        iAutheniticationPresenter.setLoginUsingEmail(loginRequest);
+    }
+    void signUp(){
+        SignUpRequest signUpRequest=new SignUpRequest();
+        User user=new User();
+        user.setName(etName.getText().toString());
+        user.setEmail(etEmail.getText().toString());
+        user.setPassword(etPassword.getText().toString());
+        if(SharedPreference.getInstance(getActivity()).getString(C.DEVICE_TOKEN)!=null){
+            user.setDeviceToken(SharedPreference.getInstance(getActivity()).getString(C.DEVICE_TOKEN));
+
+        }
+        signUpRequest.setUser(user);
+        iAutheniticationPresenter.setSignUp(signUpRequest);
+    }
     private void initSignUp() {
         btnSignUp.setEnabled(false);
 
@@ -827,11 +847,11 @@ public class FragmentAuthentication extends Fragment implements IAuthenitication
         if(response.getSuccess()){
             btnLogin.revertAnimation();
             if (Util.isNetworkConnectivity(getActivity())) {
-                SharedPreference.getInstance(getActivity()).setBoolean(C.IS_LOGIN,true);
+                SharedPreference.getInstance(getActivity()).setBoolean(C.IS_LOGIN_GUEST,false);
 
                 SharedPreference.getInstance(getActivity()).setUser(C.AUTH_USER,response);
 
-              gotoHome();
+                gotoSearchLocation();
             }
         }
     }
@@ -844,14 +864,18 @@ public class FragmentAuthentication extends Fragment implements IAuthenitication
                 SharedPreference.getInstance(getActivity()).setBoolean(C.IS_LOGIN_GUEST,true);
 
                 SharedPreference.getInstance(getActivity()).seGuestUser(C.GUEST_USER,response.getData());
-                Intent intent = new Intent(getActivity(), ActivitySearchLocation.class);
-               intent.putExtra(C.FROM, C.SEARCH);
-                startActivityForResult(intent, C.REQUEST_ADDRESS);
+                gotoSearchLocation();
                 //gotoHome();
             }
         }
     }
 
+
+    void gotoSearchLocation(){
+        Intent intent = new Intent(getActivity(), ActivitySearchLocation.class);
+        intent.putExtra(C.FROM, C.SEARCH);
+        startActivityForResult(intent, C.REQUEST_ADDRESS);
+    }
     @Override
     public void getResponseError(String response) {
         Log.e("DEBUG",""+response);

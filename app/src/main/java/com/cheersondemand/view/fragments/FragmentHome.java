@@ -23,8 +23,8 @@ import com.cheersondemand.model.SectionDataModel;
 import com.cheersondemand.model.SingleItemModel;
 import com.cheersondemand.model.location.SelectedLocation;
 import com.cheersondemand.model.store.StoreList;
-import com.cheersondemand.presenter.HomeViewPresenterImpl;
-import com.cheersondemand.presenter.IHomeViewPresenterPresenter;
+import com.cheersondemand.presenter.home.HomeViewPresenterImpl;
+import com.cheersondemand.presenter.home.IHomeViewPresenterPresenter;
 import com.cheersondemand.util.C;
 import com.cheersondemand.util.SharedPreference;
 import com.cheersondemand.util.Util;
@@ -120,7 +120,13 @@ public class FragmentHome extends Fragment implements IHomeViewPresenterPresente
         // iHomeViewPresenterPresenter.getCategories(categoryRequest);
         //  iHomeViewPresenterPresenter.getBrands(SharedPreference.getInstance(getActivity()).getUser(C.AUTH_USER).getData().getToken().getAccessToken(),categoryRequest);
         shimmerBrands.startShimmerAnimation();
-        iHomeViewPresenterPresenter.getProductWithCategories(Util.id(getActivity()));
+        if (SharedPreference.getInstance(getActivity()).getBoolean(C.IS_LOGIN_GUEST)) {
+            iHomeViewPresenterPresenter.getProductWithCategories(Util.id(getActivity()));
+        }
+        else {
+            String token="bearer "+SharedPreference.getInstance(getActivity()).getUser(C.AUTH_USER).getData().getToken().getAccessToken();
+            iHomeViewPresenterPresenter.getProductWithCategories(token,Util.id(getActivity()));
+        }
     }
 
     @Override

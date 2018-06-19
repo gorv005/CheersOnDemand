@@ -46,7 +46,7 @@ import butterknife.ButterKnife;
 
 public class ActivitySearchLocation extends AppCompatActivity implements
         GoogleApiClient.OnConnectionFailedListener,
-        GoogleApiClient.ConnectionCallbacks, ILocationViewPresenter.ILocationView,View.OnClickListener {
+        GoogleApiClient.ConnectionCallbacks, ILocationViewPresenter.ILocationView, View.OnClickListener {
     private static final String LOG_TAG = "ActivitySearchLocation";
     private static final int GOOGLE_API_CLIENT_ID = 0;
     @BindView(R.id.rvSearchResult)
@@ -86,28 +86,28 @@ public class ActivitySearchLocation extends AppCompatActivity implements
     }
 
 
-    void setRecentSearches(){
+    void setRecentSearches() {
         rlRecentSearch.setVisibility(View.VISIBLE);
         rlLocationSearch.setVisibility(View.GONE);
-        List<SelectedLocation> selectedLocations=SharedPreference.getInstance(ActivitySearchLocation.this).getRecentLocations(C.LOCATION_SELECTED);
-        if(selectedLocations!=null && selectedLocations.size()>0) {
+        List<SelectedLocation> selectedLocations = SharedPreference.getInstance(ActivitySearchLocation.this).getRecentLocations(C.LOCATION_SELECTED);
+        if (selectedLocations != null && selectedLocations.size() > 0) {
 
-            adapterRecentSearches = new AdapterRecentSearches(selectedLocations,ActivitySearchLocation.this);
+            adapterRecentSearches = new AdapterRecentSearches(selectedLocations, ActivitySearchLocation.this);
             mLinearLayoutManager = new LinearLayoutManager(this);
             rvRecentSearches.setLayoutManager(mLinearLayoutManager);
             rvRecentSearches.setAdapter(adapterRecentSearches);
         }
     }
+
     void init() {
         autoCompleteTextView.addTextChangedListener(new TextWatcher() {
 
             public void onTextChanged(CharSequence s, int start, int before,
                                       int count) {
-                if(autoCompleteTextView.getText().toString().length()==0){
+                if (autoCompleteTextView.getText().toString().length() == 0) {
                     rlRecentSearch.setVisibility(View.VISIBLE);
                     rlLocationSearch.setVisibility(View.GONE);
-                }
-                else {
+                } else {
                     rlRecentSearch.setVisibility(View.GONE);
                     rlLocationSearch.setVisibility(View.VISIBLE);
                 }
@@ -193,17 +193,23 @@ public class ActivitySearchLocation extends AppCompatActivity implements
     }
 
 
-   public void saveLocation(SelectedLocation selectedLocation){
+    public void saveLocation(SelectedLocation selectedLocation) {
         SaveLocation saveLocation = new SaveLocation();
         saveLocation.setLatitude(selectedLocation.getLatitude());
-
         saveLocation.setLongitude(selectedLocation.getLongitude());
-        //      saveLocation.setLongitude("-122.4317498");
         saveLocation.setUuid(Util.id(ActivitySearchLocation.this));
         if (SharedPreference.getInstance(ActivitySearchLocation.this).getBoolean(C.IS_LOGIN_GUEST)) {
             iLocationViewPresenter.saveLocation(saveLocation, "" + SharedPreference.getInstance(ActivitySearchLocation.this).geGuestUser(C.GUEST_USER).getId());
         }
+        else {
+            String token="bearer "+SharedPreference.getInstance(ActivitySearchLocation.this).getUser(C.AUTH_USER).getData().getToken().getAccessToken();
+            String id=""+SharedPreference.getInstance(ActivitySearchLocation.this).getUser(C.AUTH_USER).getData().getUser().getId();
+
+            iLocationViewPresenter.saveLocation(token,saveLocation, id);
+
+        }
     }
+
     void buildAPIClient() {
         mGoogleApiClient = new GoogleApiClient.Builder(ActivitySearchLocation.this)
                 .addApi(Places.GEO_DATA_API)
@@ -286,7 +292,7 @@ public class ActivitySearchLocation extends AppCompatActivity implements
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()){
+        switch (v.getId()) {
             case R.id.imgBack:
                 onBackPressed();
                 break;

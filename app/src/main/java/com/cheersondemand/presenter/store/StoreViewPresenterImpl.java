@@ -65,10 +65,26 @@ public class StoreViewPresenterImpl implements IStoreViewPresenter, IStoreViewIn
     }
 
     @Override
+    public void getStoreList(String token, String uuid) {
+        if (mView != null) {
+
+            iStoreViewIntractor.getStoreList(token,uuid, this);
+        }
+    }
+
+    @Override
     public void updateStore(String id, UpdateStore updateStore) {
         if (mView != null) {
 
             iStoreViewIntractor.updateStore(id,updateStore, this);
+        }
+    }
+
+    @Override
+    public void updateStore(String token, String id, UpdateStore updateStore) {
+        if (mView != null) {
+
+            iStoreViewIntractor.updateStore(token,id,updateStore, this);
         }
     }
 

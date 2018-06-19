@@ -45,6 +45,34 @@ public class StoreViewIntractorImpl implements IStoreViewIntractor {
     }
 
     @Override
+    public void getStoreList(String token, String uuid,final OnLoginFinishedListener listener) {
+        try {
+
+            WebServicesWrapper.getInstance().getStoreList(new ResponseResolver<StoreListResponse>() {
+                @Override
+                public void onSuccess(StoreListResponse r, Response response) {
+                    listener.onStoreListSuccess(r);
+                }
+
+                @Override
+                public void onFailure(RestError error, String msg) {
+                    if(error!=null && error.getError()!=null) {
+                        if(error.getError()==null){
+                            listener.onError(error.getMessage());
+
+                        }
+                        else {
+                            listener.onError(error.getError());
+                        }                    }
+                }
+            },token,uuid);
+        }
+        catch (Exception e){
+            e.printStackTrace();
+        }
+    }
+
+    @Override
     public void updateStore(String id, UpdateStore updateStore, final OnLoginFinishedListener listener) {
         try {
 
@@ -66,6 +94,34 @@ public class StoreViewIntractorImpl implements IStoreViewIntractor {
                         }                    }
                 }
             },updateStore,id);
+        }
+        catch (Exception e){
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void updateStore(String token, String id, UpdateStore updateStore, final OnLoginFinishedListener listener) {
+        try {
+
+            WebServicesWrapper.getInstance().updateStore(new ResponseResolver<UpdateStoreResponse>() {
+                @Override
+                public void onSuccess(UpdateStoreResponse r, Response response) {
+                    listener.onUpdateStoreSuccess(r);
+                }
+
+                @Override
+                public void onFailure(RestError error, String msg) {
+                    if(error!=null && error.getError()!=null) {
+                        if(error.getError()==null){
+                            listener.onError(error.getMessage());
+
+                        }
+                        else {
+                            listener.onError(error.getError());
+                        }                    }
+                }
+            },token,updateStore,id);
         }
         catch (Exception e){
             e.printStackTrace();

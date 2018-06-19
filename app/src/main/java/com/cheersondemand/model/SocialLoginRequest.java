@@ -23,7 +23,9 @@ public class SocialLoginRequest {
     @SerializedName("uuid")
     @Expose
     private String uuid;
-
+    @SerializedName("device_token")
+    @Expose
+    private String deviceToken;
     public String getAccessToken() {
         return accessToken;
     }
@@ -62,5 +64,13 @@ public class SocialLoginRequest {
 
     public void setUuid(String uuid) {
         this.uuid = uuid;
+    }
+
+    public String getDeviceToken() {
+        return deviceToken;
+    }
+
+    public void setDeviceToken(String deviceToken) {
+        this.deviceToken = deviceToken;
     }
 }

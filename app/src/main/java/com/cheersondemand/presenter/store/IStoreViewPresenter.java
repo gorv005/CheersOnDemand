@@ -11,8 +11,10 @@ import com.cheersondemand.model.store.UpdateStoreResponse;
 public interface IStoreViewPresenter {
 
     public void getStoreList(String uuid);
+    public void getStoreList(String token,String uuid);
 
     public void updateStore(String id, UpdateStore updateStore);
+    public void updateStore(String token,String id, UpdateStore updateStore);
 
     void onDestroy();
 

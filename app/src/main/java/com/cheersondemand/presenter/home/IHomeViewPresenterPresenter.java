@@ -1,4 +1,4 @@
-package com.cheersondemand.presenter;
+package com.cheersondemand.presenter.home;
 
 import com.cheersondemand.model.CategoriesResponse;
 import com.cheersondemand.model.CategoryRequest;
@@ -16,6 +16,7 @@ public interface IHomeViewPresenterPresenter {
 
     //LANDING SCREEN
     public void getProductWithCategories(String uuid);
+    public void getProductWithCategories(String token,String uuid);
 
 
     public void getBrands(String auth,CategoryRequest uuid);

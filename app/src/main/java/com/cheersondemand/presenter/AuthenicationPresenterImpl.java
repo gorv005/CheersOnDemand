@@ -2,8 +2,8 @@ package com.cheersondemand.presenter;
 
 import android.content.Context;
 
-import com.cheersondemand.intractor.AuthniticationIntractorImpl;
-import com.cheersondemand.intractor.IAuthnicationIntractor;
+import com.cheersondemand.intractor.authentication.AuthniticationIntractorImpl;
+import com.cheersondemand.intractor.authentication.IAuthnicationIntractor;
 import com.cheersondemand.model.CategoryRequest;
 import com.cheersondemand.model.GuestUserCreateResponse;
 import com.cheersondemand.model.LoginRequest;

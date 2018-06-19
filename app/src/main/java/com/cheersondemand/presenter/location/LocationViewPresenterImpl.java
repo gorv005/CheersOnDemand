@@ -57,6 +57,14 @@ public class LocationViewPresenterImpl implements ILocationViewPresenter, ILocat
     }
 
     @Override
+    public void saveLocation(String token, SaveLocation saveLocation, String id) {
+        if (mView != null) {
+
+            iLocationViewIntractor.saveLocation(token,id,saveLocation ,this);
+        }
+    }
+
+    @Override
     public void onDestroy() {
         try {
             mView = null;

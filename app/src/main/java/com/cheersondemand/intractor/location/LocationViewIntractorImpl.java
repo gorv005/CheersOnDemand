@@ -41,4 +41,32 @@ public class LocationViewIntractorImpl implements ILocationViewIntractor {
             e.printStackTrace();
         }
     }
+
+    @Override
+    public void saveLocation(String token, String id, SaveLocation saveLocation, final OnLoginFinishedListener listener) {
+        try {
+
+            WebServicesWrapper.getInstance().saveLocation(new ResponseResolver<SaveLocationResponse>() {
+                @Override
+                public void onSuccess(SaveLocationResponse r, Response response) {
+                    listener.onLocationSavedSuccess(r);
+                }
+
+                @Override
+                public void onFailure(RestError error, String msg) {
+                    if(error!=null && error.getError()!=null) {
+                        if(error.getError()==null){
+                            listener.onError(error.getMessage());
+
+                        }
+                        else {
+                            listener.onError(error.getError());
+                        }                    }
+                }
+            },token,saveLocation,id);
+        }
+        catch (Exception e){
+            e.printStackTrace();
+        }
+    }
 }

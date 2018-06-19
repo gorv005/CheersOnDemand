@@ -88,7 +88,16 @@ public class FragmentStoreSelection extends Fragment implements IStoreViewPresen
         imgBack.setOnClickListener(this);
         btnBack.setOnClickListener(this);
         btnSubmit.setOnClickListener(this);
-        iStoreViewPresenter.getStoreList(Util.id(getActivity()));
+        if(SharedPreference.getInstance(getActivity()).getBoolean(C.IS_LOGIN_GUEST)) {
+            iStoreViewPresenter.getStoreList(Util.id(getActivity()));
+        }
+        else {
+
+            String token="bearer "+SharedPreference.getInstance(getActivity()).getUser(C.AUTH_USER).getData().getToken().getAccessToken();
+
+            iStoreViewPresenter.getStoreList(token,Util.id(getActivity()));
+
+        }
         etStoreName.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -172,6 +181,12 @@ public class FragmentStoreSelection extends Fragment implements IStoreViewPresen
 
                         iStoreViewPresenter.updateStore("" + SharedPreference.getInstance(getActivity()).
                                 geGuestUser(C.GUEST_USER).getId(), updateStore);
+                    }
+                    else {
+                        String token="bearer "+SharedPreference.getInstance(getActivity()).getUser(C.AUTH_USER).getData().getToken().getAccessToken();
+                        String id=""+SharedPreference.getInstance(getActivity()).getUser(C.AUTH_USER).getData().getUser().getId();
+
+                        iStoreViewPresenter.updateStore(token,id, updateStore);
                     }
                 }
                 else {

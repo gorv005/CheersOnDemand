@@ -19,8 +19,11 @@ public interface IStoreViewIntractor {
         Context getAPPContext();
     }
     public void getStoreList(String uuid, OnLoginFinishedListener listener);
+    public void getStoreList(String token,String uuid, OnLoginFinishedListener listener);
+
     public void updateStore(String id, UpdateStore updateStore, OnLoginFinishedListener listener);
 
+    public void updateStore(String token,String id, UpdateStore updateStore, OnLoginFinishedListener listener);
 
 
 }

@@ -23,7 +23,9 @@ public class LoginRequest {
     @SerializedName("uuid")
     @Expose
     private String uuid;
-
+    @SerializedName("device_token")
+    @Expose
+    private String deviceToken;
     public String getEmail() {
         return email;
     }
@@ -62,5 +64,13 @@ public class LoginRequest {
 
     public void setUuid(String uuid) {
         this.uuid = uuid;
+    }
+
+    public String getDeviceToken() {
+        return deviceToken;
+    }
+
+    public void setDeviceToken(String deviceToken) {
+        this.deviceToken = deviceToken;
     }
 }

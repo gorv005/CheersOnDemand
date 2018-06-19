@@ -17,7 +17,9 @@ public class User {
     @SerializedName("password")
     @Expose
     private String password;
-
+    @SerializedName("device_token")
+    @Expose
+    private String deviceToken;
     public String getName() {
         return name;
     }
@@ -42,4 +44,11 @@ public class User {
         this.password = password;
     }
 
+    public String getDeviceToken() {
+        return deviceToken;
+    }
+
+    public void setDeviceToken(String deviceToken) {
+        this.deviceToken = deviceToken;
+    }
 }

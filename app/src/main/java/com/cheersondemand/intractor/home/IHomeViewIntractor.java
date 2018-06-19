@@ -1,4 +1,4 @@
-package com.cheersondemand.intractor;
+package com.cheersondemand.intractor.home;
 
 import android.content.Context;
 
@@ -26,6 +26,7 @@ public interface IHomeViewIntractor {
 
     //LANDING SCREEN
     public void getProductsWithCategories(String uuid, OnLoginFinishedListener listener);
+    public void getProductsWithCategories(String token,String uuid, OnLoginFinishedListener listener);
 
 
 }

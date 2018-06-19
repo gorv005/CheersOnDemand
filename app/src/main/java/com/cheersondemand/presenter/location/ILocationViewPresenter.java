@@ -11,6 +11,7 @@ public interface ILocationViewPresenter {
 
     public void saveLocation(SaveLocation saveLocation,String id);
 
+    public void saveLocation(String token,SaveLocation saveLocation,String id);
 
     void onDestroy();
 

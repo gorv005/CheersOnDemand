@@ -33,4 +33,6 @@ public interface C {
     int SEARCH =2 ;
     String FROM ="from" ;
     String LOCATION_SELECTED ="selected_loc" ;
+    String DEVICE_TOKEN ="device_token" ;
+    String IS_AUTH_USER ="is_auth_user" ;
 }
