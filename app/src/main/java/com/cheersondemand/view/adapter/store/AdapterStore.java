@@ -1,6 +1,7 @@
 package com.cheersondemand.view.adapter.store;
 
 import android.app.Activity;
+import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -94,23 +95,28 @@ List<StoreList> filterList;
         ((ItemViewHolder)holder).name.setText(model.getName());
         if (model.getId() == lastCheckedPosition){
             ((ItemViewHolder)holder).radioButton.setChecked(true);
+            ((ItemViewHolder)holder).name.setTextColor(ContextCompat.getColor(activity, R.color.profile_text_color));
+
         }else{
             ((ItemViewHolder)holder).radioButton.setChecked(false);
+            ((ItemViewHolder)holder).name.setTextColor(ContextCompat.getColor(activity, R.color.profile_email_color));
+
         }
-      /*  ((ItemViewHolder)holder).radioButton.setOnClickListener(new View.OnClickListener() {
+        ((ItemViewHolder)holder).radioButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 lastCheckedPosition = model.getId();
-                notifyDataSetChanged();
                 pos=position;
+                notifyDataSetChanged();
             }
-        });*/
+        });
         ((ItemViewHolder)holder).rlStoreItem.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 lastCheckedPosition = model.getId();
-                notifyDataSetChanged();
                 pos=position;
+                notifyDataSetChanged();
+
             }
         });
     }

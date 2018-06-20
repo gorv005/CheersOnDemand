@@ -2,12 +2,13 @@ package com.cheersondemand.intractor.authentication;
 
 import android.content.Context;
 
-import com.cheersondemand.model.CategoryRequest;
 import com.cheersondemand.model.GuestUserCreateResponse;
-import com.cheersondemand.model.LoginRequest;
-import com.cheersondemand.model.SignUpRequest;
-import com.cheersondemand.model.AuthenticationResponse;
-import com.cheersondemand.model.SocialLoginRequest;
+import com.cheersondemand.model.authentication.AuthenticationResponse;
+import com.cheersondemand.model.authentication.CategoryRequest;
+import com.cheersondemand.model.authentication.LoginRequest;
+import com.cheersondemand.model.authentication.SignUpRequest;
+import com.cheersondemand.model.authentication.SocialLoginRequest;
+
 
 /**
  * Created by GAURAV on 7/31/2017.

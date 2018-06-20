@@ -1,4 +1,4 @@
-package com.cheersondemand.model;
+package com.cheersondemand.model.authentication;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
@@ -7,39 +7,39 @@ import com.google.gson.annotations.SerializedName;
  * Created by GAURAV on 6/4/2018.
  */
 
-public class SocialLoginRequest {
-    @SerializedName("access_token")
+public class LoginRequest {
+    @SerializedName("email")
     @Expose
-    private String accessToken;
-    @SerializedName("loginType")
+    private String email;
+    @SerializedName("password")
     @Expose
-    private Integer loginType;
+    private String password;
     @SerializedName("grant_type")
     @Expose
     private String grantType;
-    @SerializedName("provider")
+    @SerializedName("loginType")
     @Expose
-    private String provider;
+    private int loginType;
     @SerializedName("uuid")
     @Expose
     private String uuid;
     @SerializedName("device_token")
     @Expose
     private String deviceToken;
-    public String getAccessToken() {
-        return accessToken;
+    public String getEmail() {
+        return email;
     }
 
-    public void setAccessToken(String accessToken) {
-        this.accessToken = accessToken;
+    public void setEmail(String email) {
+        this.email = email;
     }
 
-    public Integer getLoginType() {
-        return loginType;
+    public String getPassword() {
+        return password;
     }
 
-    public void setLoginType(Integer loginType) {
-        this.loginType = loginType;
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     public String getGrantType() {
@@ -50,12 +50,12 @@ public class SocialLoginRequest {
         this.grantType = grantType;
     }
 
-    public String getProvider() {
-        return provider;
+    public int getLoginType() {
+        return loginType;
     }
 
-    public void setProvider(String provider) {
-        this.provider = provider;
+    public void setLoginType(int loginType) {
+        this.loginType = loginType;
     }
 
     public String getUuid() {

@@ -4,8 +4,8 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 
-import com.cheersondemand.model.AuthenticationResponse;
-import com.cheersondemand.model.GuestUser;
+import com.cheersondemand.model.authentication.AuthenticationResponse;
+import com.cheersondemand.model.authentication.GuestUser;
 import com.cheersondemand.model.location.SelectedLocation;
 import com.cheersondemand.model.store.StoreList;
 import com.google.gson.Gson;

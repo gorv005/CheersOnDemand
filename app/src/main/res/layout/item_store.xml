@@ -10,6 +10,7 @@
         android:layout_height="wrap_content">
         <RadioButton
             android:padding="5dp"
+            android:theme="@style/CustomRaidoButton"
             android:id="@+id/radio"
             android:layout_alignBaseline="@+id/name"
             android:layout_width="wrap_content"

@@ -6,8 +6,8 @@ import com.cheersondemand.frameworks.retrofit.ResponseResolver;
 import com.cheersondemand.frameworks.retrofit.RestError;
 import com.cheersondemand.frameworks.retrofit.WebServicesWrapper;
 import com.cheersondemand.model.CategoriesResponse;
-import com.cheersondemand.model.CategoryRequest;
 import com.cheersondemand.model.ProductsWithCategoryResponse;
+import com.cheersondemand.model.authentication.CategoryRequest;
 
 import retrofit2.Response;
 

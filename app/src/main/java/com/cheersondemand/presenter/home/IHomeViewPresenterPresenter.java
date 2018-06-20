@@ -1,8 +1,8 @@
 package com.cheersondemand.presenter.home;
 
 import com.cheersondemand.model.CategoriesResponse;
-import com.cheersondemand.model.CategoryRequest;
 import com.cheersondemand.model.ProductsWithCategoryResponse;
+import com.cheersondemand.model.authentication.CategoryRequest;
 
 /**
  * Created by GAURAV on 5/30/2018.

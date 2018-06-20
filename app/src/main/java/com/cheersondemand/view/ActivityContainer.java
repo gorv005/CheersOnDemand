@@ -33,6 +33,7 @@ public class ActivityContainer extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+
         setContentView(R.layout.activity_container);
         ButterKnife.bind(this);
         tvTitle=(TextView)findViewById(R.id.tvTitle);

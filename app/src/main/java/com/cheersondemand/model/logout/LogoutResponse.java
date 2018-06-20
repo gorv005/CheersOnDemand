@@ -1,4 +1,4 @@
-package com.cheersondemand.model.location;
+package com.cheersondemand.model.logout;
 
 import com.cheersondemand.model.authentication.Data;
 import com.google.gson.annotations.Expose;
@@ -7,10 +7,10 @@ import com.google.gson.annotations.SerializedName;
 import java.util.List;
 
 /**
- * Created by GAURAV on 6/17/2018.
+ * Created by GAURAV on 6/20/2018.
  */
 
-public class SaveLocationResponse {
+public class LogoutResponse {
     @SerializedName("success")
     @Expose
     private Boolean success;
@@ -66,4 +66,5 @@ public class SaveLocationResponse {
     public void setErrors(List<Object> errors) {
         this.errors = errors;
     }
+
 }

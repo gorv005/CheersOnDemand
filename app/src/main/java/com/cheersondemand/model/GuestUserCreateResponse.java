@@ -1,5 +1,6 @@
 package com.cheersondemand.model;
 
+import com.cheersondemand.model.authentication.GuestUser;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 

@@ -15,7 +15,7 @@ import android.widget.Button;
 import android.widget.EditText;
 
 import com.cheersondemand.R;
-import com.cheersondemand.model.AuthenticationResponse;
+import com.cheersondemand.model.authentication.AuthenticationResponse;
 import com.cheersondemand.util.C;
 import com.cheersondemand.util.SharedPreference;
 import com.cheersondemand.util.Util;

@@ -15,12 +15,14 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.cheersondemand.R;
-import com.cheersondemand.model.AuthenticationResponse;
-import com.cheersondemand.presenter.IProfileViewPresenter;
-import com.cheersondemand.presenter.ProfileViewPresenterImpl;
+import com.cheersondemand.model.authentication.AuthenticationResponse;
+import com.cheersondemand.model.logout.LogoutResponse;
+import com.cheersondemand.presenter.profile.IProfileViewPresenter;
+import com.cheersondemand.presenter.profile.ProfileViewPresenterImpl;
 import com.cheersondemand.util.C;
 import com.cheersondemand.util.ImageLoader.ImageLoader;
 import com.cheersondemand.util.SharedPreference;
+import com.cheersondemand.view.ActivityContainer;
 import com.cheersondemand.view.MainActivity;
 import com.makeramen.roundedimageview.RoundedImageView;
 import com.suke.widget.SwitchButton;
@@ -150,10 +152,11 @@ public class FragmentProfile extends Fragment implements View.OnClickListener,IP
                 break;
             case R.id.btnEdit:
 
-
-                intent.putExtra(C.FRAGMENT_ACTION, C.FRAGMENT_UPDATE_PROFILE);
-                intent.putExtra(C.BUNDLE,bundle);
-                startActivity(intent);
+                Intent intent1 = new Intent(getActivity(), ActivityContainer.class);
+                Bundle bundle1 = new Bundle();
+                intent1.putExtra(C.FRAGMENT_ACTION, C.FRAGMENT_UPDATE_PROFILE);
+                intent1.putExtra(C.BUNDLE,bundle1);
+                startActivity(intent1);
                 break;
             case R.id.llLogout:
                /* LogoutRequest logoutRequest=new LogoutRequest();
@@ -172,7 +175,7 @@ public class FragmentProfile extends Fragment implements View.OnClickListener,IP
     }
 
     @Override
-    public void getResponseSuccess(String response) {
+    public void getResponseSuccess(LogoutResponse response) {
 
 
     }

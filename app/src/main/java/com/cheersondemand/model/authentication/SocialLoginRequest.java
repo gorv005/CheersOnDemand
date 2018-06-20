@@ -1,4 +1,4 @@
-package com.cheersondemand.model;
+package com.cheersondemand.model.authentication;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
@@ -7,39 +7,39 @@ import com.google.gson.annotations.SerializedName;
  * Created by GAURAV on 6/4/2018.
  */
 
-public class LoginRequest {
-    @SerializedName("email")
+public class SocialLoginRequest {
+    @SerializedName("access_token")
     @Expose
-    private String email;
-    @SerializedName("password")
+    private String accessToken;
+    @SerializedName("loginType")
     @Expose
-    private String password;
+    private Integer loginType;
     @SerializedName("grant_type")
     @Expose
     private String grantType;
-    @SerializedName("loginType")
+    @SerializedName("provider")
     @Expose
-    private int loginType;
+    private String provider;
     @SerializedName("uuid")
     @Expose
     private String uuid;
     @SerializedName("device_token")
     @Expose
     private String deviceToken;
-    public String getEmail() {
-        return email;
+    public String getAccessToken() {
+        return accessToken;
     }
 
-    public void setEmail(String email) {
-        this.email = email;
+    public void setAccessToken(String accessToken) {
+        this.accessToken = accessToken;
     }
 
-    public String getPassword() {
-        return password;
+    public Integer getLoginType() {
+        return loginType;
     }
 
-    public void setPassword(String password) {
-        this.password = password;
+    public void setLoginType(Integer loginType) {
+        this.loginType = loginType;
     }
 
     public String getGrantType() {
@@ -50,12 +50,12 @@ public class LoginRequest {
         this.grantType = grantType;
     }
 
-    public int getLoginType() {
-        return loginType;
+    public String getProvider() {
+        return provider;
     }
 
-    public void setLoginType(int loginType) {
-        this.loginType = loginType;
+    public void setProvider(String provider) {
+        this.provider = provider;
     }
 
     public String getUuid() {

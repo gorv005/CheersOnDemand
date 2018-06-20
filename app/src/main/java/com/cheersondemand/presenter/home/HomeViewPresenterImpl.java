@@ -5,8 +5,8 @@ import android.content.Context;
 import com.cheersondemand.intractor.home.HomeViewIntractorImpl;
 import com.cheersondemand.intractor.home.IHomeViewIntractor;
 import com.cheersondemand.model.CategoriesResponse;
-import com.cheersondemand.model.CategoryRequest;
 import com.cheersondemand.model.ProductsWithCategoryResponse;
+import com.cheersondemand.model.authentication.CategoryRequest;
 
 
 public class HomeViewPresenterImpl implements IHomeViewPresenterPresenter, IHomeViewIntractor.OnLoginFinishedListener {

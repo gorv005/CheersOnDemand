@@ -1,11 +1,11 @@
-package com.cheersondemand.presenter;
+package com.cheersondemand.presenter.profile;
 
 import android.content.Context;
 
 import com.cheersondemand.intractor.IProfileViewIntractor;
 import com.cheersondemand.intractor.ProfileViewIntractorImpl;
-import com.cheersondemand.model.LoginRequest;
-import com.cheersondemand.model.LogoutRequest;
+import com.cheersondemand.model.logout.LogoutRequest;
+import com.cheersondemand.model.logout.LogoutResponse;
 
 
 public class ProfileViewPresenterImpl implements IProfileViewPresenter, IProfileViewIntractor.OnLoginFinishedListener {
@@ -24,7 +24,7 @@ public class ProfileViewPresenterImpl implements IProfileViewPresenter, IProfile
 
 
     @Override
-    public void onSuccess(String categoriesResponse) {
+    public void onSuccess(LogoutResponse categoriesResponse) {
         if (mView != null) {
             //mView.hideProgress();
             mView.getResponseSuccess(categoriesResponse);

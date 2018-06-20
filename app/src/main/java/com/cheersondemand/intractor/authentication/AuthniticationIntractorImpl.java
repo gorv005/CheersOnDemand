@@ -5,12 +5,12 @@ import android.util.Log;
 import com.cheersondemand.frameworks.retrofit.ResponseResolver;
 import com.cheersondemand.frameworks.retrofit.RestError;
 import com.cheersondemand.frameworks.retrofit.WebServicesWrapper;
-import com.cheersondemand.model.AuthenticationResponse;
-import com.cheersondemand.model.CategoryRequest;
 import com.cheersondemand.model.GuestUserCreateResponse;
-import com.cheersondemand.model.LoginRequest;
-import com.cheersondemand.model.SignUpRequest;
-import com.cheersondemand.model.SocialLoginRequest;
+import com.cheersondemand.model.authentication.AuthenticationResponse;
+import com.cheersondemand.model.authentication.CategoryRequest;
+import com.cheersondemand.model.authentication.LoginRequest;
+import com.cheersondemand.model.authentication.SignUpRequest;
+import com.cheersondemand.model.authentication.SocialLoginRequest;
 import com.cheersondemand.util.C;
 
 import retrofit2.Response;
@@ -23,7 +23,7 @@ public class AuthniticationIntractorImpl implements IAuthnicationIntractor {
 
 
     @Override
-    public void loginUsingEmail(LoginRequest loginRequest,final OnLoginFinishedListener listener) {
+    public void loginUsingEmail(LoginRequest loginRequest, final OnLoginFinishedListener listener) {
         try {
             WebServicesWrapper.getInstance().loginUsingEmail(new ResponseResolver<AuthenticationResponse>() {
                 @Override

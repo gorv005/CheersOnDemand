@@ -3,7 +3,8 @@ package com.cheersondemand.intractor;
 import com.cheersondemand.frameworks.retrofit.ResponseResolver;
 import com.cheersondemand.frameworks.retrofit.RestError;
 import com.cheersondemand.frameworks.retrofit.WebServicesWrapper;
-import com.cheersondemand.model.LogoutRequest;
+import com.cheersondemand.model.logout.LogoutRequest;
+import com.cheersondemand.model.logout.LogoutResponse;
 
 import retrofit2.Response;
 
@@ -18,9 +19,9 @@ public class ProfileViewIntractorImpl implements IProfileViewIntractor {
     public void logout(LogoutRequest logoutRequest, final OnLoginFinishedListener listener) {
         try {
 
-            WebServicesWrapper.getInstance().logout(new ResponseResolver<String>() {
+            WebServicesWrapper.getInstance().logout(new ResponseResolver<LogoutResponse>() {
                 @Override
-                public void onSuccess(String r, Response response) {
+                public void onSuccess(LogoutResponse r, Response response) {
                     listener.onSuccess(r);
                 }
 

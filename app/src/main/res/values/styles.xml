@@ -8,5 +8,11 @@
         <item name="colorAccent">@color/colorPrimary</item>
 
     </style>
+        <style name="CustomRaidoButton" parent="Widget.AppCompat.CompoundButton.RadioButton">
+        <item name="colorAccent">@color/profile_text_color</item>
+        <item name="android:textColorPrimaryDisableOnly">@color/profile_text_color</item>
+        <item name="android:textAppearance">@color/profile_text_color</item>
+            <item name="android:colorControlNormal">@color/profile_updated_text_color</item>
 
+        </style>
 </resources>

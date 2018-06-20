@@ -4,12 +4,13 @@ import android.content.Context;
 
 import com.cheersondemand.intractor.authentication.AuthniticationIntractorImpl;
 import com.cheersondemand.intractor.authentication.IAuthnicationIntractor;
-import com.cheersondemand.model.CategoryRequest;
 import com.cheersondemand.model.GuestUserCreateResponse;
-import com.cheersondemand.model.LoginRequest;
-import com.cheersondemand.model.SignUpRequest;
-import com.cheersondemand.model.AuthenticationResponse;
-import com.cheersondemand.model.SocialLoginRequest;
+import com.cheersondemand.model.authentication.AuthenticationResponse;
+import com.cheersondemand.model.authentication.CategoryRequest;
+import com.cheersondemand.model.authentication.LoginRequest;
+import com.cheersondemand.model.authentication.SignUpRequest;
+import com.cheersondemand.model.authentication.SocialLoginRequest;
+
 
 /**
  * Created by GAURAV on 5/30/2018.

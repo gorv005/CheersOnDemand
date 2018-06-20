@@ -1,6 +1,6 @@
  package com.cheersondemand.frameworks.retrofit;
 
- import com.cheersondemand.model.GuestUser;
+ import com.cheersondemand.model.authentication.GuestUser;
  import com.google.gson.annotations.Expose;
  import com.google.gson.annotations.SerializedName;
 

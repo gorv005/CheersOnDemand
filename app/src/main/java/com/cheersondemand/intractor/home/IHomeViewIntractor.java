@@ -3,8 +3,8 @@ package com.cheersondemand.intractor.home;
 import android.content.Context;
 
 import com.cheersondemand.model.CategoriesResponse;
-import com.cheersondemand.model.CategoryRequest;
 import com.cheersondemand.model.ProductsWithCategoryResponse;
+import com.cheersondemand.model.authentication.CategoryRequest;
 
 /**
  * Created by GAURAV on 7/31/2017.
