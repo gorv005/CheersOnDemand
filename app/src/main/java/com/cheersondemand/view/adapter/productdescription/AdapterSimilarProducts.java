@@ -1,4 +1,4 @@
-package com.cheersondemand.view.adapter;
+package com.cheersondemand.view.adapter.productdescription;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -25,7 +25,7 @@ import java.util.List;
  * Created by GAURAV on 6/7/2018.
  */
 
-public class AdapterHomeCategories extends RecyclerView.Adapter<RecyclerView.ViewHolder > {
+public class AdapterSimilarProducts extends RecyclerView.Adapter<RecyclerView.ViewHolder > {
     private static final int TYPE_FOOTER = 1;
     private static final int TYPE_ITEM = 0;
 private List<AllProduct> horizontalList;
@@ -46,7 +46,7 @@ public class ItemViewHolder extends RecyclerView.ViewHolder {
 }
 
 
-    public AdapterHomeCategories(List<AllProduct> horizontalList, Activity context) {
+    public AdapterSimilarProducts(List<AllProduct> horizontalList, Activity context) {
         this.horizontalList = horizontalList;
         this.context=context;
         imageLoader=new ImageLoader(context);
@@ -72,7 +72,7 @@ public class ItemViewHolder extends RecyclerView.ViewHolder {
 
             itemViewHolder.tvProductName.setText(horizontalList.get(position).getName());
             itemViewHolder.tvProductPrice.setText("$"+horizontalList.get(position).getPrice());
-          //  imageLoader.DisplayImage(horizontalList.get(position).getImage(),itemViewHolder.ivProductImage);
+           // imageLoader.DisplayImage(horizontalList.get(position).getImage(),itemViewHolder.ivProductImage);
             Util.setImage(context,horizontalList.get(position).getImage(),itemViewHolder.ivProductImage);
             itemViewHolder.rlProduct.setOnClickListener(new View.OnClickListener() {
                 @Override

@@ -18,6 +18,7 @@ import com.cheersondemand.R;
 import com.cheersondemand.util.C;
 import com.cheersondemand.view.fragments.FragmentChangePassword;
 import com.cheersondemand.view.fragments.FragmentNotification;
+import com.cheersondemand.view.fragments.FragmentProductDescription;
 import com.cheersondemand.view.fragments.FragmentProfile;
 import com.cheersondemand.view.fragments.FragmentStoreSelection;
 import com.cheersondemand.view.fragments.FragmentUpdateProfile;
@@ -81,6 +82,11 @@ public class ActivityContainer extends AppCompatActivity {
             case C.FRAGMENT_STORE_LIST:
                 getSupportActionBar().hide();
                 fragment = new FragmentStoreSelection();
+                fragmentTransaction.replace(R.id.container, fragment);
+                //fragmentTransaction.addToBackStack(C.TAG_FRAGMENT_PRODUCTS_HOME);
+                break;
+            case C.FRAGMENT_PRODUCT_DESC:
+                fragment = new FragmentProductDescription();
                 fragmentTransaction.replace(R.id.container, fragment);
                 //fragmentTransaction.addToBackStack(C.TAG_FRAGMENT_PRODUCTS_HOME);
                 break;

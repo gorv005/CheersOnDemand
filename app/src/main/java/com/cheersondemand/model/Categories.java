@@ -3,11 +3,13 @@ package com.cheersondemand.model;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+import java.io.Serializable;
+
 /**
  * Created by GAURAV on 6/11/2018.
  */
 
-public class Categories {
+public class Categories implements Serializable {
 
     @SerializedName("id")
     @Expose

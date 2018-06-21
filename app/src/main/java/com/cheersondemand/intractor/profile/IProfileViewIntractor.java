@@ -1,4 +1,4 @@
-package com.cheersondemand.intractor;
+package com.cheersondemand.intractor.profile;
 
 import android.content.Context;
 

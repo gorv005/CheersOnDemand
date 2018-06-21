@@ -81,6 +81,15 @@
     <string name="back">Back</string>
     <string name="submit">Submit</string>
     <string name="plz_select_store">Please select a store</string>
+    <string name="specification">SPECIFICATIONS</string>
+    <string name="quantity">Quantity</string>
+    <string name="type">Type</string>
+    <string name="alchohal_vol">Alcohol Volume</string>
+    <string name="region">Region</string>
+    <string name="desc">DESCRIPTION</string>
+    <string name="similar_drinks">Similar Drinks</string>
+    <string name="shared_image">shared_image</string>
+    <string name="buy_now">Buy Now</string>
     <!--
         <string name="default_web_client_id">999387565226-hdnnhm6rhgik5ljvm06shotsi7j9883c.apps.googleusercontent.com</string>
     -->

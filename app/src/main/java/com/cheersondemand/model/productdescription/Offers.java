@@ -1,4 +1,4 @@
-package com.cheersondemand.model;
+package com.cheersondemand.model.productdescription;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
@@ -9,19 +9,23 @@ import java.io.Serializable;
  * Created by GAURAV on 6/15/2018.
  */
 
-public class ProductType implements Serializable{
+public class Offers implements Serializable{
+
     @SerializedName("id")
     @Expose
     private Integer id;
     @SerializedName("name")
     @Expose
     private String name;
-    @SerializedName("created_at")
+    @SerializedName("subName")
     @Expose
-    private String createdAt;
-    @SerializedName("updated_at")
-    @Expose
-    private String updatedAt;
+    private String subName;
+
+    public Offers(Integer id, String name, String subName) {
+        this.id = id;
+        this.name = name;
+        this.subName = subName;
+    }
 
     public Integer getId() {
         return id;
@@ -39,19 +43,11 @@ public class ProductType implements Serializable{
         this.name = name;
     }
 
-    public String getCreatedAt() {
-        return createdAt;
+    public String getSubName() {
+        return subName;
     }
 
-    public void setCreatedAt(String createdAt) {
-        this.createdAt = createdAt;
-    }
-
-    public String getUpdatedAt() {
-        return updatedAt;
-    }
-
-    public void setUpdatedAt(String updatedAt) {
-        this.updatedAt = updatedAt;
+    public void setSubName(String subName) {
+        this.subName = subName;
     }
 }

@@ -1,4 +1,4 @@
-package com.cheersondemand.intractor;
+package com.cheersondemand.intractor.profile;
 
 import com.cheersondemand.frameworks.retrofit.ResponseResolver;
 import com.cheersondemand.frameworks.retrofit.RestError;

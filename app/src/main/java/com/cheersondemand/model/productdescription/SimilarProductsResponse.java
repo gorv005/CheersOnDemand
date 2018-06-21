@@ -1,4 +1,4 @@
-package com.cheersondemand.model;
+package com.cheersondemand.model.productdescription;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
@@ -7,10 +7,10 @@ import java.io.Serializable;
 import java.util.List;
 
 /**
- * Created by GAURAV on 6/11/2018.
+ * Created by GAURAV on 6/22/2018.
  */
 
-public class CategoriesResponse implements Serializable{
+public class SimilarProductsResponse implements Serializable{
     @SerializedName("success")
     @Expose
     private Boolean success;
@@ -19,10 +19,10 @@ public class CategoriesResponse implements Serializable{
     private String message;
     @SerializedName("data")
     @Expose
-    private List<Categories> data = null;
+    private SimilarProduct data;
     @SerializedName("meta")
     @Expose
-    private List<Object> meta = null;
+    private Meta meta;
     @SerializedName("errors")
     @Expose
     private List<Object> errors = null;
@@ -43,19 +43,19 @@ public class CategoriesResponse implements Serializable{
         this.message = message;
     }
 
-    public List<Categories> getData() {
+    public SimilarProduct getData() {
         return data;
     }
 
-    public void setData(List<Categories> data) {
+    public void setData(SimilarProduct data) {
         this.data = data;
     }
 
-    public List<Object> getMeta() {
+    public Meta getMeta() {
         return meta;
     }
 
-    public void setMeta(List<Object> meta) {
+    public void setMeta(Meta meta) {
         this.meta = meta;
     }
 

@@ -35,4 +35,7 @@ public interface C {
     String LOCATION_SELECTED ="selected_loc" ;
     String DEVICE_TOKEN ="device_token" ;
     String IS_AUTH_USER ="is_auth_user" ;
+    String PRODUCT ="product" ;
+    int FRAGMENT_PRODUCT_DESC = 10;
+    String bearer="bearer ";
 }

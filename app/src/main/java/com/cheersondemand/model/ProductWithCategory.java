@@ -3,13 +3,14 @@ package com.cheersondemand.model;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
  * Created by GAURAV on 6/15/2018.
  */
 
-public class ProductWithCategory {
+public class ProductWithCategory implements Serializable{
 
     @SerializedName("has_cart_product")
     @Expose

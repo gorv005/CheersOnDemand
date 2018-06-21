@@ -12,6 +12,7 @@ import android.widget.Toast;
 import com.cheersondemand.R;
 import com.cheersondemand.model.Categories;
 import com.cheersondemand.util.ImageLoader.ImageLoader;
+import com.cheersondemand.util.Util;
 
 import java.util.List;
 
@@ -73,7 +74,8 @@ public class ItemViewHolder extends RecyclerView.ViewHolder {
             final ItemViewHolder itemViewHolder = (ItemViewHolder) holder;
 
             itemViewHolder.tvBrandName.setText(horizontalList.get(position).getName());
-            imageLoader.DisplayImage(horizontalList.get(position).getImage(),((ItemViewHolder) holder).ivProductImage);
+            Util.setImage(context,horizontalList.get(position).getImage(),((ItemViewHolder) holder).ivProductImage);
+           // imageLoader.DisplayImage(horizontalList.get(position).getImage(),((ItemViewHolder) holder).ivProductImage);
             itemViewHolder.tvBrandName.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {

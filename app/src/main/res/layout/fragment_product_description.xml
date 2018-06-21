@@ -1,0 +1,396 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@color/profile_back"
+    android:layout_height="match_parent"
+    tools:context="com.cheersondemand.view.fragments.FragmentUpdateProfile">
+
+
+    <ScrollView
+        android:layout_marginBottom="60dp"
+        android:layout_width="match_parent"
+        android:scrollbars="none"
+        android:layout_height="wrap_content">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+
+        android:background="@color/white"
+       >
+
+
+        <RelativeLayout
+            android:id="@+id/rlImage"
+            android:layout_gravity="center_horizontal"
+            android:layout_width="220dp"
+            android:layout_height="220dp"
+            android:background="@color/profile_back"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="20dp">
+
+            <ImageView
+                android:transitionName="@string/shared_image"
+                android:id="@+id/imgProduct"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_centerVertical="true"
+                android:layout_gravity="center"
+                android:src="@drawable/bitmap_copy" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_marginTop="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="40dp">
+
+            <View
+                android:layout_centerVertical="true"
+                android:background="@color/devider_desc"
+                android:layout_width="match_parent"
+                android:layout_height="2dp"/>
+
+            <RelativeLayout
+                android:layout_marginEnd="30dp"
+                android:layout_centerVertical="true"
+                android:background="@drawable/like_back"
+                android:layout_alignParentEnd="true"
+                android:layout_width="35dp"
+                android:layout_height="35dp">
+            <ImageView
+                android:layout_centerInParent="true"
+                android:src="@drawable/unlike"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+            </RelativeLayout>
+        </RelativeLayout>
+
+        <TextView
+            android:id="@+id/tvProductName"
+            android:paddingRight="15dp"
+            android:paddingLeft="15dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="18sp"
+            android:layout_marginTop="5dp"
+            android:textStyle="bold"
+            android:fontFamily="@font/sf_ui_display_regular"
+            android:textColor="@color/profile_text_color"
+            android:text="Wither Hills Sauvignon Blanc "
+            />
+        <TextView
+            android:id="@+id/tvProductPrice"
+            android:paddingRight="15dp"
+            android:paddingLeft="15dp"
+            android:textStyle="bold"
+            android:fontFamily="@font/sf_ui_display_regular"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="22sp"
+            android:textColor="#c9282f"
+            android:letterSpacing="0.04"
+            android:text="$15600"
+            />
+        <View
+            android:layout_centerVertical="true"
+            android:background="@color/devider_desc"
+            android:layout_width="match_parent"
+            android:layout_height="2dp"/>
+
+        <ListView
+            android:paddingLeft="15dp"
+            android:paddingRight="15dp"
+            android:id="@+id/lvOffers"
+            android:scrollbars="none"
+            android:layout_width="match_parent"
+            android:layout_height="100dp">
+
+        </ListView>
+        <View
+            android:layout_centerVertical="true"
+            android:background="@color/devider_desc"
+            android:layout_width="match_parent"
+            android:layout_height="2dp"/>
+
+        <TextView
+            android:fontFamily="@font/sf_ui_display_regular"
+            android:layout_marginTop="10dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="12.5sp"
+            android:paddingLeft="15dp"
+            android:textColor="@color/spec_desc"
+            android:letterSpacing="0.04"
+            android:text="@string/specification"
+            />
+
+        <LinearLayout
+            android:paddingRight="15dp"
+            android:paddingLeft="15dp"
+            android:layout_width="match_parent"
+            android:layout_weight="2"
+            android:layout_height="wrap_content">
+
+            <LinearLayout
+                android:layout_marginTop="10dp"
+                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:orientation="vertical"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:fontFamily="@font/sf_ui_display_regular"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="12.5sp"
+                    android:textColor="@color/spec_desc"
+                    android:lineSpacingExtra="7.7sp"
+                    android:text="@string/type"/>
+
+                <TextView
+                    android:id="@+id/tvType"
+                    android:fontFamily="@font/sf_ui_display_regular"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="16.3sp"
+                    android:textColor="#263a5b"
+                    android:lineSpacingExtra="3.8sp"
+                    android:text="Dry White"
+                    />
+
+            </LinearLayout>
+            <LinearLayout
+                android:layout_marginTop="10dp"
+                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:orientation="vertical"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:fontFamily="@font/sf_ui_display_regular"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="12.5sp"
+                    android:textColor="@color/spec_desc"
+                    android:lineSpacingExtra="7.7sp"
+                    android:text="@string/quantity"/>
+
+                <TextView
+                    android:id="@+id/tvQuantity"
+                    android:fontFamily="@font/sf_ui_display_regular"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="16.3sp"
+                    android:textColor="#263a5b"
+                    android:lineSpacingExtra="3.8sp"
+                    android:text="2015"
+                    />
+
+            </LinearLayout>
+
+        </LinearLayout>
+        <LinearLayout
+            android:paddingRight="15dp"
+            android:paddingLeft="15dp"
+            android:layout_marginTop="20dp"
+            android:layout_width="match_parent"
+            android:layout_weight="2"
+            android:layout_height="wrap_content">
+
+            <LinearLayout
+                android:layout_marginTop="10dp"
+                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:orientation="vertical"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:fontFamily="@font/sf_ui_display_regular"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="12.5sp"
+                    android:textColor="@color/spec_desc"
+                    android:lineSpacingExtra="7.7sp"
+                    android:text="@string/alchohal_vol"/>
+
+                <TextView
+                    android:id="@+id/tvalcohal_vol"
+                    android:fontFamily="@font/sf_ui_display_regular"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="16.3sp"
+                    android:textColor="#263a5b"
+                    android:lineSpacingExtra="3.8sp"
+                    android:text="13% (2016)"
+                    />
+
+            </LinearLayout>
+            <LinearLayout
+                android:layout_marginTop="10dp"
+                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:orientation="vertical"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:fontFamily="@font/sf_ui_display_regular"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="12.5sp"
+                    android:textColor="@color/spec_desc"
+                    android:lineSpacingExtra="7.7sp"
+                    android:text="@string/region"/>
+
+                <TextView
+                    android:id="@+id/tvRegion"
+                    android:fontFamily="@font/sf_ui_display_regular"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="16.3sp"
+                    android:textColor="#263a5b"
+                    android:lineSpacingExtra="3.8sp"
+                    android:text="Marlborough"
+                    />
+
+            </LinearLayout>
+
+        </LinearLayout>
+        <View
+            android:layout_marginTop="10dp"
+            android:layout_centerVertical="true"
+            android:background="@color/devider_desc"
+            android:layout_width="match_parent"
+            android:layout_height="2dp"/>
+
+        <TextView
+            android:layout_marginTop="10dp"
+            android:paddingLeft="15dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="12.5sp"
+            android:fontFamily="@font/sf_ui_display_regular"
+            android:textColor="#263a5b"
+            android:letterSpacing="0.04"
+            android:text="@string/desc"/>
+        <TextView
+            android:id="@+id/tvDesc"
+            android:fontFamily="@font/sf_ui_display_regular"
+            android:layout_marginTop="10dp"
+            android:paddingLeft="15dp"
+            android:paddingRight="15dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="16.3sp"
+            android:textColor="#263a5b"
+            android:lineSpacingExtra="3.8sp"
+            android:text="Wither Hills Sauvignon Blanc is amongst the very best examples of the famous Marlborough style. Always a standout, the Wither Hills is lively on the palate with herbal gooseberry and lemon-grass flavours. A definite leader of the pack."
+            />
+        <View
+            android:layout_marginTop="20dp"
+            android:layout_centerVertical="true"
+            android:background="@color/devider_desc"
+            android:layout_width="match_parent"
+            android:layout_height="2dp"/>
+
+        <RelativeLayout
+            android:paddingLeft="15dp"
+            android:paddingRight="15dp"
+            android:layout_marginTop="15dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            >
+
+
+            <TextView
+                android:id="@+id/tvTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:layout_alignParentStart="true"
+                android:fontFamily="@font/sf_ui_display_regular"
+                android:textColor="@color/latest_add_color"
+                android:text="@string/similar_drinks"
+                />
+
+            <TextView
+                android:id="@+id/tvSeeMore"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="16sp"
+                android:textStyle="bold"
+
+                android:layout_alignParentEnd="true"
+                android:fontFamily="@font/sf_ui_display_regular"
+                android:textColor="@color/view_all_color"
+                android:text="@string/view_all"
+                />
+
+
+        </RelativeLayout>
+        <android.support.v7.widget.RecyclerView
+            android:layout_marginTop="10dp"
+            android:paddingLeft="15dp"
+            android:paddingRight="15dp"
+            android:id="@+id/rvSimilarDrinks"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:orientation="horizontal" />
+
+        <View
+            android:layout_marginTop="20dp"
+            android:background="@color/devider_desc"
+            android:layout_width="match_parent"
+            android:layout_height="2dp"/>
+    </LinearLayout>
+
+
+    </ScrollView>
+
+    <LinearLayout
+        android:weightSum="2"
+        android:paddingRight="15dp"
+        android:paddingLeft="15dp"
+        android:layout_alignParentBottom="true"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="50dp">
+
+
+        <Button
+
+            android:id="@+id/btnAddToCart"
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:layout_height="45dp"
+            android:layout_gravity="center_horizontal"
+
+            android:background="@drawable/add_to_cart_button"
+            android:fontFamily="@font/sf_ui_display_regular"
+            android:text="@string/add_to_cart"
+            android:textAllCaps="true"
+            android:layout_marginRight="5dp"
+            android:textColor="@color/white"
+            android:textSize="13.4sp" />
+        <Button
+
+            android:id="@+id/btnBuyNow"
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:layout_height="45dp"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginLeft="5dp"
+            android:background="@drawable/bg_button_enable"
+            android:fontFamily="@font/sf_ui_display_regular"
+            android:text="@string/buy_now"
+            android:textAllCaps="true"
+            android:textColor="@color/white"
+            android:textSize="13.4sp" />
+
+
+    </LinearLayout>
+
+</RelativeLayout>

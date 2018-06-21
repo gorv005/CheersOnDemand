@@ -7,6 +7,7 @@
     android:background="@drawable/product_border">
 
     <RelativeLayout
+        android:id="@+id/rlProduct"
         android:layout_width="165dp"
         android:layout_height="250dp"
         android:layout_centerInParent="true"
@@ -24,6 +25,7 @@
             android:layout_marginTop="20dp">
 
             <ImageView
+                android:transitionName="@string/shared_image"
                 android:id="@+id/ivProductImage"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

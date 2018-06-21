@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+
+    android:background="@color/white"
+    android:orientation="vertical"
+    >
+
+    <RelativeLayout
+        android:layout_centerVertical="true"
+
+        android:layout_width="match_parent"
+        android:layout_height="70dp"
+        >
+
+        <RelativeLayout
+            android:layout_centerVertical="true"
+            android:background="@drawable/offer_per_back"
+            android:layout_width="35dp"
+            android:layout_height="35dp">
+
+        <TextView
+            android:id="@+id/tvTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:gravity="center"
+            android:layout_centerInParent="true"
+            android:fontFamily="@font/sf_ui_display_regular"
+            android:textColor="@color/offer_text"
+            android:text="%"
+            />
+        </RelativeLayout>
+        <LinearLayout
+            android:layout_centerVertical="true"
+            android:layout_marginRight="30dp"
+            android:layout_marginLeft="60dp"
+            android:orientation="vertical"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+        <TextView
+
+            android:id="@+id/tvOfferName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="14sp"
+            android:maxLines="1"
+            android:gravity="left"
+            android:layout_gravity="left"
+            android:ellipsize="end"
+            android:fontFamily="@font/sf_ui_display_regular"
+            android:textColor="@color/offer_text"
+            android:text="Bank Offer dghdghhgdhghghgghhghgdgh: 20% off on HDFC Credit Cards above $50 zdfdmnf fjfad"
+            />
+            <TextView
+                android:ellipsize="end"
+                android:maxLines="2"
+                android:gravity="left"
+                android:layout_gravity="left"
+                android:id="@+id/tvOfferSubName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="14sp"
+                android:fontFamily="@font/sf_ui_display_regular"
+                android:textColor="@color/offer_text"
+                android:text="Bank Offer : 20% off on HDFC Credit Cards above $50"
+                />
+        </LinearLayout>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="23sp"
+            android:textStyle="bold"
+            android:layout_centerVertical="true"
+            android:layout_alignParentEnd="true"
+            android:fontFamily="@font/sf_ui_display_regular"
+            android:textColor="@color/offer_text"
+            android:text=">"
+            />
+
+
+    </RelativeLayout>
+
+
+
+</RelativeLayout>

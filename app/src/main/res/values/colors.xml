@@ -39,6 +39,12 @@
     <color name="red_error_color">#ca2b32</color>
     <color name="dark_grey">#242f41</color>
     <color name="devider">#889AB4</color>
+    <color name="devider_desc">#F2F6F8</color>
+    <color name="spec_desc">#A8B0BD</color>
+    <color name="offer_back">#CCDEF2</color>
+    <color name="offer_text">#3F5E89</color>
+    <color name="add_to_cart_text">#575E69</color>
+
 
 
 </resources>

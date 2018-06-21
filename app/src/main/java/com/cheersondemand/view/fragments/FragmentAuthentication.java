@@ -206,8 +206,8 @@ public class FragmentAuthentication extends Fragment implements IAuthenitication
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
 
-    /*    etEmailLogin.setText("gorv005@gmail.com");
-        etPasswordLogin.setText("Admin@123");*/
+        etEmailLogin.setText("gorv005@yopmail.com");
+        etPasswordLogin.setText("Admin@123");
         if(isLoginScreen){
             viewA.setVisibility(View.GONE);
             viewB.setVisibility(View.VISIBLE);

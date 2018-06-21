@@ -2,8 +2,8 @@ package com.cheersondemand.presenter.profile;
 
 import android.content.Context;
 
-import com.cheersondemand.intractor.IProfileViewIntractor;
-import com.cheersondemand.intractor.ProfileViewIntractorImpl;
+import com.cheersondemand.intractor.profile.IProfileViewIntractor;
+import com.cheersondemand.intractor.profile.ProfileViewIntractorImpl;
 import com.cheersondemand.model.logout.LogoutRequest;
 import com.cheersondemand.model.logout.LogoutResponse;
 

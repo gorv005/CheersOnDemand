@@ -36,7 +36,7 @@ public class ImageLoader {
         executorService= Executors.newFixedThreadPool(5);
     }
 
-    int stub_id = R.drawable.edit_profile_back_default;
+    int stub_id = R.drawable.bitmap_copy;
     public void DisplayImage(String url, ImageView imageView)
     {
 //        stub_id = loader;
