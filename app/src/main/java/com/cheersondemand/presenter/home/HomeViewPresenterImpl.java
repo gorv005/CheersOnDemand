@@ -6,7 +6,7 @@ import com.cheersondemand.intractor.home.HomeViewIntractorImpl;
 import com.cheersondemand.intractor.home.IHomeViewIntractor;
 import com.cheersondemand.model.CategoriesResponse;
 import com.cheersondemand.model.ProductsWithCategoryResponse;
-import com.cheersondemand.model.authentication.CategoryRequest;
+import com.cheersondemand.model.authentication.GenRequest;
 
 
 public class HomeViewPresenterImpl implements IHomeViewPresenterPresenter, IHomeViewIntractor.OnLoginFinishedListener {
@@ -54,7 +54,7 @@ public class HomeViewPresenterImpl implements IHomeViewPresenterPresenter, IHome
 
 
     @Override
-    public void getCategories(CategoryRequest uuid) {
+    public void getCategories(GenRequest uuid) {
         if (mView != null) {
 
             iHomeViewIntractor.getCategories(uuid, this);
@@ -86,7 +86,7 @@ public class HomeViewPresenterImpl implements IHomeViewPresenterPresenter, IHome
     }
 
     @Override
-    public void getBrands(String auth,CategoryRequest uuid) {
+    public void getBrands(String auth,GenRequest uuid) {
         if (mView != null) {
 
             iHomeViewIntractor.getBrands(auth,uuid, this);

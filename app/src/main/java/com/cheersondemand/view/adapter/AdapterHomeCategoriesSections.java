@@ -20,7 +20,7 @@ public class AdapterHomeCategoriesSections extends RecyclerView.Adapter<AdapterH
 
     private ArrayList<HomeCategoriesSectionList> dataList;
     private Activity mContext;
-
+    AdapterHomeCategories adapterHomeCategories;
     public AdapterHomeCategoriesSections(Activity context, ArrayList<HomeCategoriesSectionList> dataList) {
         this.dataList = dataList;
         this.mContext = context;
@@ -42,7 +42,7 @@ public class AdapterHomeCategoriesSections extends RecyclerView.Adapter<AdapterH
 
         itemRowHolder.itemTitle.setText(sectionName);
 
-        AdapterHomeCategories adapterHomeCategories = new AdapterHomeCategories (category,mContext);
+         adapterHomeCategories = new AdapterHomeCategories (category,mContext);
 
         itemRowHolder.recyclerProductList.setHasFixedSize(true);
         itemRowHolder.recyclerProductList.setLayoutManager(new LinearLayoutManager(mContext, LinearLayoutManager.HORIZONTAL, false));
@@ -93,5 +93,9 @@ public class AdapterHomeCategoriesSections extends RecyclerView.Adapter<AdapterH
         }
 
 
+    }
+
+   public void notified(){
+        adapterHomeCategories.notifyDataSetChanged();
     }
 }

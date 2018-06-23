@@ -1,4 +1,4 @@
-package com.cheersondemand.view.adapter;
+package com.cheersondemand.view.adapter.cart;
 
 import android.app.Activity;
 import android.content.Context;
@@ -6,15 +6,15 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.cheersondemand.R;
-import com.cheersondemand.model.Categories;
+import com.cheersondemand.model.order.addtocart.CartProduct;
+import com.cheersondemand.model.order.addtocart.OrderItem;
 import com.cheersondemand.util.ImageLoader.ImageLoader;
 import com.cheersondemand.util.Util;
-
-import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -22,19 +22,33 @@ import de.hdodenhof.circleimageview.CircleImageView;
  * Created by GAURAV on 6/7/2018.
  */
 
-public class AdapterHomeBrands extends RecyclerView.Adapter<RecyclerView.ViewHolder > {
+public class AdapterCartList extends RecyclerView.Adapter<RecyclerView.ViewHolder > {
     private static final int TYPE_FOOTER = 1;
     private static final int TYPE_ITEM = 0;
-private List<Categories> horizontalList;
+private CartProduct horizontalList;
     Context context;
     ImageLoader imageLoader;
 public class ItemViewHolder extends RecyclerView.ViewHolder {
-    public TextView tvBrandName;
+    public TextView tvName,tvSubName,tvPrice,tvQuantity;
     public CircleImageView ivProductImage;
+    ImageView imgProduct;
+    View rlMinus,rlPlus,rlAddToWishList,llRemove,rlCard,llProductNotAvailable;
     public ItemViewHolder(View view) {
         super(view);
-        tvBrandName = (TextView) view.findViewById(R.id.tvBrandName);
+        tvName = (TextView) view.findViewById(R.id.tvName);
         ivProductImage = (CircleImageView) view.findViewById(R.id.ivProductImage);
+        imgProduct = (ImageView) view.findViewById(R.id.imgProduct);
+        tvSubName = (TextView) view.findViewById(R.id.tvSubName);
+        tvPrice = (TextView) view.findViewById(R.id.tvPrice);
+        rlMinus = (View) view.findViewById(R.id.rlMinus);
+        tvQuantity = (TextView) view.findViewById(R.id.tvQuantity);
+        rlPlus = (View) view.findViewById(R.id.rlPlus);
+        rlAddToWishList = (View) view.findViewById(R.id.rlAddToWishList);
+        llRemove = (View) view.findViewById(R.id.llRemove);
+        rlCard = (View) view.findViewById(R.id.rlCard);
+        llProductNotAvailable = (View) view.findViewById(R.id.llProductNotAvailable);
+
+
     }
 }
 
@@ -45,18 +59,23 @@ public class ItemViewHolder extends RecyclerView.ViewHolder {
             ivMore = (CircleImageView) view.findViewById(R.id.ivProductMore);
         }
     }
-    public AdapterHomeBrands(List<Categories> horizontalList,Activity context) {
+    public AdapterCartList(CartProduct horizontalList, Activity context) {
         this.horizontalList = horizontalList;
         this.context=context;
         imageLoader=new ImageLoader(context);
 
     }
+    @Override
+    public long getItemId(int position) {
+        return position;
+    }
+
 
     @Override
     public RecyclerView.ViewHolder  onCreateViewHolder(ViewGroup parent, int viewType) {
     if(viewType==TYPE_ITEM) {
         View itemView = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.product_round_item, parent, false);
+                .inflate(R.layout.cart_item, parent, false);
 
         return new ItemViewHolder(itemView);
     }
@@ -67,24 +86,26 @@ public class ItemViewHolder extends RecyclerView.ViewHolder {
     }
     else return null;
     }
-    @Override
-    public long getItemId(int position) {
-        return position;
-    }
+
     @Override
     public void onBindViewHolder(final RecyclerView.ViewHolder  holder, final int position) {
         if (holder instanceof ItemViewHolder) {
             final ItemViewHolder itemViewHolder = (ItemViewHolder) holder;
 
-            itemViewHolder.tvBrandName.setText(horizontalList.get(position).getName());
-            Util.setImage(context,horizontalList.get(position).getImage(),((ItemViewHolder) holder).ivProductImage);
-           // imageLoader.DisplayImage(horizontalList.get(position).getImage(),((ItemViewHolder) holder).ivProductImage);
-            itemViewHolder.tvBrandName.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Toast.makeText(context, itemViewHolder.tvBrandName.getText().toString(), Toast.LENGTH_SHORT).show();
-                }
-            });
+
+           OrderItem orderItem= horizontalList.getOrder().getOrderItems().get(position);
+            itemViewHolder.tvName.setText(orderItem.getProduct().getName());
+            Util.setImage(context,orderItem.getProduct().getImage(),((ItemViewHolder) holder).imgProduct);
+            itemViewHolder.tvPrice.setText("$"+orderItem.getUnitPrice());
+            itemViewHolder.tvQuantity.setText(""+orderItem.getQuantity());
+            if(!orderItem.getIsDeliverable()){
+                itemViewHolder.rlCard.setBackgroundResource(R.drawable.card_border);
+                itemViewHolder.llProductNotAvailable.setVisibility(View.VISIBLE);
+            }
+            else {
+                itemViewHolder.llProductNotAvailable.setVisibility(View.GONE);
+
+            }
         }
         else if (holder instanceof FooterViewHolder) {
             final FooterViewHolder footerViewHolder = (FooterViewHolder) holder;
@@ -99,14 +120,14 @@ public class ItemViewHolder extends RecyclerView.ViewHolder {
     }
     @Override
     public int getItemViewType(int position) {
-        if (position == horizontalList.size() ) {
+        if (position == horizontalList.getOrder().getOrderItems().size() ) {
             return TYPE_FOOTER;
         }
         return TYPE_ITEM;
     }
     @Override
     public int getItemCount() {
-        return horizontalList.size()+1;
+        return horizontalList.getOrder().getOrderItems().size();
     }
 
 }

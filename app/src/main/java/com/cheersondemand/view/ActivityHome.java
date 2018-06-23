@@ -1,5 +1,6 @@
 package com.cheersondemand.view;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -17,6 +18,8 @@ import com.cheersondemand.util.C;
 import com.cheersondemand.view.fragments.FragmentCart;
 import com.cheersondemand.view.fragments.FragmentHome;
 import com.cheersondemand.view.fragments.FragmentProfile;
+
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -99,7 +102,29 @@ public class ActivityHome extends AppCompatActivity implements View.OnClickListe
                 break;
         }
     }
+    private Fragment getVisibleFragment() {
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        @SuppressLint("RestrictedApi") List<Fragment> fragments = fragmentManager.getFragments();
+        for (Fragment fragment : fragments) {
+            if (fragment != null && fragment.isVisible())
+                return fragment;
+        }
+        return null;
+    }
 
+
+   public void addToCart(int secPos,int pos){
+        Fragment fragment=getVisibleFragment();
+        if(fragment!=null && fragment instanceof FragmentHome ){
+            ((FragmentHome)fragment).addToCart(secPos,pos);
+        }
+    }
+    public void updateCart(int secPos,int pos,boolean isAdd){
+        Fragment fragment=getVisibleFragment();
+        if(fragment!=null && fragment instanceof FragmentHome ){
+            ((FragmentHome)fragment).updateCart(secPos,pos,isAdd);
+        }
+    }
     public     void setHome(){
             ivHome.setImageResource(R.drawable.ic_bar_home_enabled);
             ivCart.setImageResource(R.drawable.ic_bar_cart);

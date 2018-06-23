@@ -25,7 +25,7 @@ import android.widget.TextView;
 import com.cheersondemand.R;
 import com.cheersondemand.model.GuestUserCreateResponse;
 import com.cheersondemand.model.authentication.AuthenticationResponse;
-import com.cheersondemand.model.authentication.CategoryRequest;
+import com.cheersondemand.model.authentication.GenRequest;
 import com.cheersondemand.model.authentication.LoginRequest;
 import com.cheersondemand.model.authentication.SignUpRequest;
 import com.cheersondemand.model.authentication.SocialLoginRequest;
@@ -448,7 +448,7 @@ public class FragmentAuthentication extends Fragment implements IAuthenitication
             case R.id.skip_and_continue:
                 if (Util.isNetworkConnectivity(getActivity())) {
                   //gotoHome();
-                    CategoryRequest categoryRequest=new CategoryRequest();
+                    GenRequest categoryRequest=new GenRequest();
                     categoryRequest.setUuid(Util.id(getActivity()));
                    iAutheniticationPresenter.createGuestUser(categoryRequest);
                 }
@@ -850,9 +850,14 @@ public class FragmentAuthentication extends Fragment implements IAuthenitication
                 SharedPreference.getInstance(getActivity()).setBoolean(C.IS_LOGIN_GUEST,false);
 
                 SharedPreference.getInstance(getActivity()).setUser(C.AUTH_USER,response);
+                SharedPreference.getInstance(getActivity()).setString(C.ORDER_ID,response.getData().getUser().getOrderId());
 
                 gotoSearchLocation();
             }
+        }
+        else {
+            util.setSnackbarMessage(getActivity(), response.getMessage(), LLView, true);
+
         }
     }
 
@@ -866,6 +871,16 @@ public class FragmentAuthentication extends Fragment implements IAuthenitication
                 SharedPreference.getInstance(getActivity()).seGuestUser(C.GUEST_USER,response.getData());
                 gotoSearchLocation();
                 //gotoHome();
+            }
+        }
+        else {
+            if(response.getMessage().trim().equalsIgnoreCase(C.GUEST_USER_ALLREADY_CREATED)){
+                SharedPreference.getInstance(getActivity()).setBoolean(C.IS_LOGIN_GUEST,true);
+                SharedPreference.getInstance(getActivity()).seGuestUser(C.GUEST_USER,response.getData());
+                gotoSearchLocation();
+            }
+            else {
+                util.setSnackbarMessage(getActivity(), response.getMessage(), LLView, true);
             }
         }
     }

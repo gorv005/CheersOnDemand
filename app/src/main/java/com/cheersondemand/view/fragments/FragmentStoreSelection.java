@@ -125,8 +125,14 @@ public class FragmentStoreSelection extends Fragment implements IStoreViewPresen
 
     @Override
     public void getStoreListSuccess(StoreListResponse response) {
-        adapterStore = new AdapterStore(getActivity(), response.getData());
-        lvStoreList.setAdapter(adapterStore);
+        if(response.getSuccess()) {
+            adapterStore = new AdapterStore(getActivity(), response.getData());
+            lvStoreList.setAdapter(adapterStore);
+        }
+        else {
+            util.setSnackbarMessage(getActivity(), response.getMessage(), LLView, true);
+
+        }
     }
 
     @Override

@@ -28,8 +28,8 @@ import com.cheersondemand.util.C;
 import com.cheersondemand.util.SharedPreference;
 import com.cheersondemand.util.Util;
 import com.cheersondemand.view.adapter.location.AdapterLocation;
-import com.cheersondemand.view.adapter.location.RecyclerItemClickListener;
 import com.cheersondemand.view.adapter.location.AdapterRecentSearches;
+import com.cheersondemand.view.adapter.location.RecyclerItemClickListener;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.PendingResult;
@@ -61,6 +61,8 @@ public class ActivitySearchLocation extends AppCompatActivity implements
     ImageView imgBack;
     @BindView(R.id.etLocation)
     EditText autoCompleteTextView;
+    @BindView(R.id.LLView)
+    LinearLayout LLView;
     // private EditText mAutocompleteTextView;
     private GoogleApiClient mGoogleApiClient;
     private AdapterLocation adapterLocation;
@@ -68,6 +70,7 @@ public class ActivitySearchLocation extends AppCompatActivity implements
     ILocationViewPresenter iLocationViewPresenter;
     AdapterRecentSearches adapterRecentSearches;
     int from;
+    Util util;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,7 +82,7 @@ public class ActivitySearchLocation extends AppCompatActivity implements
         buildAPIClient();
         ButterKnife.bind(this);
         imgBack.setOnClickListener(this);
-
+        util = new Util();
         iLocationViewPresenter = new LocationViewPresenterImpl(this, this);
         init();
         setRecentSearches();
@@ -200,12 +203,11 @@ public class ActivitySearchLocation extends AppCompatActivity implements
         saveLocation.setUuid(Util.id(ActivitySearchLocation.this));
         if (SharedPreference.getInstance(ActivitySearchLocation.this).getBoolean(C.IS_LOGIN_GUEST)) {
             iLocationViewPresenter.saveLocation(saveLocation, "" + SharedPreference.getInstance(ActivitySearchLocation.this).geGuestUser(C.GUEST_USER).getId());
-        }
-        else {
-            String token="bearer "+SharedPreference.getInstance(ActivitySearchLocation.this).getUser(C.AUTH_USER).getData().getToken().getAccessToken();
-            String id=""+SharedPreference.getInstance(ActivitySearchLocation.this).getUser(C.AUTH_USER).getData().getUser().getId();
+        } else {
+            String token = "bearer " + SharedPreference.getInstance(ActivitySearchLocation.this).getUser(C.AUTH_USER).getData().getToken().getAccessToken();
+            String id = "" + SharedPreference.getInstance(ActivitySearchLocation.this).getUser(C.AUTH_USER).getData().getUser().getId();
 
-            iLocationViewPresenter.saveLocation(token,saveLocation, id);
+            iLocationViewPresenter.saveLocation(token, saveLocation, id);
 
         }
     }
@@ -271,12 +273,16 @@ public class ActivitySearchLocation extends AppCompatActivity implements
 
             intent.putExtra(C.BUNDLE, bundle);
             startActivity(intent);
+        } else {
+            util.setSnackbarMessage(this, response.getMessage(), LLView, true);
+
         }
 
     }
 
     @Override
     public void getResponseError(String response) {
+        util.setSnackbarMessage(this, response, LLView, true);
 
     }
 

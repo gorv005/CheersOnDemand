@@ -9,7 +9,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.cheersondemand.R;
@@ -18,6 +17,7 @@ import com.cheersondemand.util.C;
 import com.cheersondemand.util.ImageLoader.ImageLoader;
 import com.cheersondemand.util.Util;
 import com.cheersondemand.view.ActivityContainer;
+import com.cheersondemand.view.ActivityHome;
 
 import java.util.List;
 
@@ -32,15 +32,22 @@ private List<AllProduct> horizontalList;
     Activity context;
     ImageLoader imageLoader;
 public class ItemViewHolder extends RecyclerView.ViewHolder {
-    public TextView tvProductName,tvProductPrice;
+    public TextView tvProductName,tvProductPrice,tvQuantity;
     public ImageView ivProductImage,ivLike;
-    RelativeLayout rlProduct;
+    View rlProduct,btnAddToCart,rlMinus,rlPlus,llQuantity;
     public ItemViewHolder(View view) {
         super(view);
         tvProductName = (TextView) view.findViewById(R.id.tvProductName);
         tvProductPrice = (TextView) view.findViewById(R.id.tvProductPrice);
+        tvQuantity = (TextView) view.findViewById(R.id.tvQuantity);
+
         ivProductImage = (ImageView) view.findViewById(R.id.ivProductImage);
-        rlProduct = (RelativeLayout) view.findViewById(R.id.rlProduct);
+        rlProduct = (View) view.findViewById(R.id.rlProduct);
+        btnAddToCart = (View) view.findViewById(R.id.btnAddToCart);
+        rlMinus = (View) view.findViewById(R.id.rlMinus);
+        rlPlus = (View) view.findViewById(R.id.rlPlus);
+        llQuantity = (View) view.findViewById(R.id.llQuantity);
+
         ivLike= (ImageView) view.findViewById(R.id.ivLike);
     }
 }
@@ -69,11 +76,21 @@ public class ItemViewHolder extends RecyclerView.ViewHolder {
     public void onBindViewHolder(final RecyclerView.ViewHolder  holder, final int position) {
         if (holder instanceof ItemViewHolder) {
             final ItemViewHolder itemViewHolder = (ItemViewHolder) holder;
-
-            itemViewHolder.tvProductName.setText(horizontalList.get(position).getName());
-            itemViewHolder.tvProductPrice.setText("$"+horizontalList.get(position).getPrice());
+             AllProduct allProduct=horizontalList.get(position);
+            itemViewHolder.tvProductName.setText(allProduct.getName());
+            itemViewHolder.tvProductPrice.setText("$"+allProduct.getPrice());
           //  imageLoader.DisplayImage(horizontalList.get(position).getImage(),itemViewHolder.ivProductImage);
-            Util.setImage(context,horizontalList.get(position).getImage(),itemViewHolder.ivProductImage);
+            Util.setImage(context,allProduct.getImage(),itemViewHolder.ivProductImage);
+
+             if(allProduct.getIsInCart()){
+                 itemViewHolder.btnAddToCart.setVisibility(View.GONE);
+                 itemViewHolder.llQuantity.setVisibility(View.VISIBLE);
+                 itemViewHolder.tvQuantity.setText( context.getString(R.string.qty)+" "+allProduct.getCartQunatity());
+             }
+             else {
+                 itemViewHolder.btnAddToCart.setVisibility(View.VISIBLE);
+                 itemViewHolder.llQuantity.setVisibility(View.GONE);
+             }
             itemViewHolder.rlProduct.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -84,6 +101,24 @@ public class ItemViewHolder extends RecyclerView.ViewHolder {
                     intent.putExtra(C.FRAGMENT_ACTION,C.FRAGMENT_PRODUCT_DESC);
                     intent.putExtra(C.BUNDLE,bundle);
                     context.startActivity(intent, OptionsCompat.toBundle());
+                }
+            });
+            itemViewHolder.btnAddToCart.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    ((ActivityHome)context).addToCart(0,position);
+                }
+            });
+            itemViewHolder.rlPlus.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    ((ActivityHome)context).updateCart(0,position,true);
+                }
+            });
+            itemViewHolder.rlMinus.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    ((ActivityHome)context).updateCart(0,position,false);
                 }
             });
           /*  itemViewHolder.tvBrandName.setText(horizontalList.get(position));

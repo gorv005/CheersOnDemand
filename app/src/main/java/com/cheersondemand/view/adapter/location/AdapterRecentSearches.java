@@ -56,6 +56,11 @@ public class ItemViewHolder extends RecyclerView.ViewHolder {
 
     else return null;
     }
+    @Override
+    public long getItemId(int position) {
+        return position;
+    }
+
 
     @Override
     public void onBindViewHolder(final RecyclerView.ViewHolder  holder, final int position) {
