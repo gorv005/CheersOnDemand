@@ -6,6 +6,7 @@ import com.cheersondemand.frameworks.retrofit.WebServicesWrapper;
 import com.cheersondemand.model.store.StoreListResponse;
 import com.cheersondemand.model.store.UpdateStore;
 import com.cheersondemand.model.store.UpdateStoreResponse;
+import com.google.gson.Gson;
 
 import retrofit2.Response;
 
@@ -28,14 +29,16 @@ public class StoreViewIntractorImpl implements IStoreViewIntractor {
 
                 @Override
                 public void onFailure(RestError error, String msg) {
-                    if(error!=null && error.getError()!=null) {
-                        if(error.getError()==null){
-                            listener.onError(error.getMessage());
+                    if(error==null ||error.getError()==null){
 
-                        }
-                        else {
-                            listener.onError(error.getError());
-                        }                    }
+                        Gson gson=new Gson();
+                        StoreListResponse response= gson.fromJson(msg,StoreListResponse.class);
+                        listener.onStoreListSuccess(response);
+
+                    }
+                    else {
+                        listener.onError(error.getError());
+                    }
                 }
             },uuid);
         }
@@ -56,14 +59,16 @@ public class StoreViewIntractorImpl implements IStoreViewIntractor {
 
                 @Override
                 public void onFailure(RestError error, String msg) {
-                    if(error!=null && error.getError()!=null) {
-                        if(error.getError()==null){
-                            listener.onError(error.getMessage());
+                    if(error==null ||error.getError()==null){
 
-                        }
-                        else {
-                            listener.onError(error.getError());
-                        }                    }
+                        Gson gson=new Gson();
+                        StoreListResponse response= gson.fromJson(msg,StoreListResponse.class);
+                        listener.onStoreListSuccess(response);
+
+                    }
+                    else {
+                        listener.onError(error.getError());
+                    }
                 }
             },token,uuid);
         }
@@ -84,14 +89,16 @@ public class StoreViewIntractorImpl implements IStoreViewIntractor {
 
                 @Override
                 public void onFailure(RestError error, String msg) {
-                    if(error!=null && error.getError()!=null) {
-                        if(error.getError()==null){
-                            listener.onError(error.getMessage());
+                    if(error==null ||error.getError()==null){
 
-                        }
-                        else {
-                            listener.onError(error.getError());
-                        }                    }
+                        Gson gson=new Gson();
+                        UpdateStoreResponse response= gson.fromJson(msg,UpdateStoreResponse.class);
+                        listener.onUpdateStoreSuccess(response);
+
+                    }
+                    else {
+                        listener.onError(error.getError());
+                    }
                 }
             },updateStore,id);
         }
@@ -112,14 +119,16 @@ public class StoreViewIntractorImpl implements IStoreViewIntractor {
 
                 @Override
                 public void onFailure(RestError error, String msg) {
-                    if(error!=null && error.getError()!=null) {
-                        if(error.getError()==null){
-                            listener.onError(error.getMessage());
+                    if(error==null ||error.getError()==null){
 
-                        }
-                        else {
-                            listener.onError(error.getError());
-                        }                    }
+                        Gson gson=new Gson();
+                        UpdateStoreResponse response= gson.fromJson(msg,UpdateStoreResponse.class);
+                        listener.onUpdateStoreSuccess(response);
+
+                    }
+                    else {
+                        listener.onError(error.getError());
+                    }
                 }
             },token,updateStore,id);
         }

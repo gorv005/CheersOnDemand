@@ -1,48 +1,79 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.v7.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/card_view"
+    android:background="@drawable/rounded_white"
+    card_view:cardBackgroundColor="@color/white"
+    android:layout_marginStart="15dp"
+    android:layout_marginEnd="15dp"
+    android:layout_marginTop="15dp"
+    card_view:cardElevation="2dp"
+
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
-
-
+    android:layout_height="wrap_content"
+    card_view:cardCornerRadius="5dp">
     <RelativeLayout
-        android:background="@drawable/rounded_white_back"
-
+        android:id="@+id/rlCard"
         android:layout_width="match_parent"
         android:layout_centerInParent="true"
         android:layout_height="wrap_content">
 
         <RelativeLayout
-            android:background="@color/white"
-            android:padding="15dp"
+            android:paddingTop="15dp"
+            android:paddingRight="15dp"
+            android:paddingLeft="15dp"
             android:id="@+id/llProfileView"
             android:layout_width="match_parent"
-            android:layout_height="120dp"
+            android:layout_height="130dp"
             >
 
+            <LinearLayout
+                android:id="@+id/llProductNotAvailable"
+                android:layout_marginBottom="5dp"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentRight="true"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+                <ImageView
+                    android:layout_gravity="center"
+                    android:src="@drawable/alert"
+                    android:layout_width="10dp"
+                    android:layout_height="10dp" />
+                <TextView
+                    android:layout_gravity="center"
+                    android:layout_width="wrap_content"
+                    android:maxLines="1"
+                    android:textSize="12sp"
+                    android:layout_marginLeft="10dp"
+                    android:textColor="@color/red"
+                    android:fontFamily="@font/sf_ui_display_regular"
+                    android:text="@string/this_product_no_longer_available"
+                    android:layout_height="wrap_content" />
+            </LinearLayout>
 
             <RelativeLayout
-                android:id="@+id/rlimage"
+                android:id="@+id/rlImage"
                 android:layout_alignParentLeft="true"
                 android:layout_width="90dp"
                 android:layout_height="90dp">
 
                 <ImageView
 
-                    android:id="@+id/imgProfile"
+                    android:id="@+id/imgProduct"
                     android:layout_width="70dp"
                     android:layout_height="70dp"
                     android:layout_centerInParent="true"
-                    android:scaleType="fitXY"
                     android:src="@drawable/group_6"
                     />
             </RelativeLayout>
 
             <RelativeLayout
-                android:layout_toRightOf="@id/rlimage"
+                android:id="@+id/rlInfo"
+                android:layout_toRightOf="@id/rlImage"
                 android:layout_width="wrap_content"
                 android:layout_marginLeft="10dp"
                 android:layout_marginTop="5dp"
-                android:layout_height="match_parent"
+                android:layout_height="100dp"
                 android:orientation="vertical">
 
                 <TextView
@@ -57,7 +88,7 @@
 
                 <TextView
                     android:layout_below="@id/tvName"
-                    android:id="@+id/tvEmail"
+                    android:id="@+id/tvSubName"
                     android:layout_centerVertical="true"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -67,20 +98,26 @@
                     android:textColor="@color/profile_email_color"
                     android:textSize="12sp" />
                 <TextView
-                    android:layout_below="@id/tvEmail"
+                    android:layout_below="@id/tvSubName"
                     android:id="@+id/tvPrice"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/sf_ui_display_regular"
                     android:text="$120"
-                    android:layout_marginBottom="8dp"
+                    android:textStyle="bold"
+                    android:layout_marginBottom="15dp"
                     android:layout_alignParentBottom="true"
                     android:gravity="bottom"
                     android:textColor="@color/profile_text_color"
                     android:textSize="14.4sp" />
-            </RelativeLayout>
 
+            </RelativeLayout>
             <RelativeLayout
+                android:paddingBottom="30dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+            <RelativeLayout
+                android:id="@+id/rl"
                 android:layout_alignParentRight="true"
                 android:background="@drawable/cart_quantity_border"
                 android:layout_width="84dp"
@@ -98,6 +135,7 @@
                     android:gravity="bottom">
 
                     <RelativeLayout
+                        android:id="@+id/rlMinus"
                         android:layout_width="28dp"
                         android:layout_height="28dp">
                         <ImageView
@@ -115,10 +153,13 @@
                         android:layout_width="28dp"
                         android:layout_height="28dp">
                         <TextView
+                            android:id="@+id/tvQuantity"
+
                             android:textSize="12sp"
                             android:gravity="center"
                             android:layout_gravity="center"
                             android:text="20"
+                            android:fontFamily="@font/sf_ui_display_regular"
                             android:layout_centerVertical="true"
                             android:background="@color/white"
                             android:layout_width="match_parent"
@@ -126,6 +167,7 @@
 
                     </RelativeLayout>
                     <RelativeLayout
+                        android:id="@+id/rlPlus"
                         android:layout_width="28dp"
                         android:layout_height="28dp">
                         <ImageView
@@ -137,9 +179,24 @@
                             android:layout_height="wrap_content" />
 
                     </RelativeLayout>
+
                 </LinearLayout>
+
+
+            </RelativeLayout>
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/rl"
+                    android:layout_marginEnd="66dp"
+                    android:layout_marginTop="41dp"
+                    android:layout_toStartOf="@+id/rl"
+                    android:src="@drawable/unlike" />
             </RelativeLayout>
         </RelativeLayout>
+
+
 
         <View
             android:id="@+id/v"
@@ -148,16 +205,16 @@
             android:layout_marginRight="20dp"
             android:layout_marginLeft="20dp"
             android:layout_below="@+id/llProfileView"
-            android:background="@color/profile_back" />
+            android:background="@color/devider_desc" />
 
         <LinearLayout
-            android:background="@color/white"
             android:layout_below="@id/v"
             android:weightSum="10"
             android:layout_width="match_parent"
             android:layout_height="40dp">
 
             <LinearLayout
+                android:id="@+id/rlAddToWishList"
                 android:gravity="center"
                 android:layout_gravity="center"
                 android:layout_width="0dp"
@@ -172,6 +229,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textSize="14.4sp"
+                    android:fontFamily="@font/sf_ui_display_regular"
+
                     android:layout_marginLeft="10dp"
                     android:textColor="@color/profile_text_color"
                     android:gravity="center_horizontal"
@@ -181,26 +240,25 @@
             </LinearLayout>
             <View
                 android:layout_below="@id/llProfileView"
-                android:background="@color/profile_back"
+                android:background="@color/devider_desc"
                 android:layout_width="2dp"
                 android:layout_marginTop="5dp"
                 android:layout_marginBottom="5dp"
                 android:layout_height="match_parent"/>
             <LinearLayout
+                android:id="@+id/llRemove"
                 android:gravity="center"
                 android:layout_gravity="center"
                 android:layout_width="0dp"
                 android:layout_weight="5"
                 android:layout_height="match_parent">
 
-                <ImageView
-                    android:src="@drawable/unlike"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textSize="14.4sp"
+                    android:fontFamily="@font/sf_ui_display_regular"
+
                     android:layout_marginLeft="10dp"
                     android:textColor="@color/profile_text_color"
                     android:gravity="center_horizontal"
@@ -212,5 +270,4 @@
 
         </LinearLayout>
     </RelativeLayout>
-
-</RelativeLayout>
+    </android.support.v7.widget.CardView>

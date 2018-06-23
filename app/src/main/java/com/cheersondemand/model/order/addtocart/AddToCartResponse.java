@@ -1,16 +1,16 @@
-package com.cheersondemand.model.location;
+package com.cheersondemand.model.order.addtocart;
 
-import com.cheersondemand.model.authentication.Data;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
 
 /**
- * Created by GAURAV on 6/17/2018.
+ * Created by GAURAV on 6/23/2018.
  */
 
-public class SaveLocationResponse {
+public class AddToCartResponse {
+
     @SerializedName("success")
     @Expose
     private Boolean success;
@@ -19,13 +19,13 @@ public class SaveLocationResponse {
     private String message;
     @SerializedName("data")
     @Expose
-    private Data data;
+    private CartProduct data;
     @SerializedName("meta")
     @Expose
     private List<Object> meta = null;
     @SerializedName("errors")
     @Expose
-    private List<Error> errors = null;
+    private List<Object> errors = null;
 
     public Boolean getSuccess() {
         return success;
@@ -43,11 +43,11 @@ public class SaveLocationResponse {
         this.message = message;
     }
 
-    public Data getData() {
+    public CartProduct getData() {
         return data;
     }
 
-    public void setData(Data data) {
+    public void setData(CartProduct data) {
         this.data = data;
     }
 
@@ -59,11 +59,12 @@ public class SaveLocationResponse {
         this.meta = meta;
     }
 
-    public List<Error> getErrors() {
+    public List<Object> getErrors() {
         return errors;
     }
 
-    public void setErrors(List<Error> errors) {
+    public void setErrors(List<Object> errors) {
         this.errors = errors;
     }
+
 }

@@ -38,4 +38,5 @@ public interface C {
     String PRODUCT ="product" ;
     int FRAGMENT_PRODUCT_DESC = 10;
     String bearer="bearer ";
+    String ORDER_ID ="order_id" ;
 }

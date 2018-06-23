@@ -5,6 +5,7 @@ import com.cheersondemand.frameworks.retrofit.RestError;
 import com.cheersondemand.frameworks.retrofit.WebServicesWrapper;
 import com.cheersondemand.model.location.SaveLocation;
 import com.cheersondemand.model.location.SaveLocationResponse;
+import com.google.gson.Gson;
 
 import retrofit2.Response;
 
@@ -26,14 +27,16 @@ public class LocationViewIntractorImpl implements ILocationViewIntractor {
 
                 @Override
                 public void onFailure(RestError error, String msg) {
-                    if(error!=null && error.getError()!=null) {
-                        if(error.getError()==null){
-                            listener.onError(error.getMessage());
+                    if(error==null ||error.getError()==null){
 
-                        }
-                        else {
-                            listener.onError(error.getError());
-                        }                    }
+                        Gson gson=new Gson();
+                        SaveLocationResponse response= gson.fromJson(msg,SaveLocationResponse.class);
+                        listener.onLocationSavedSuccess(response);
+
+                    }
+                    else {
+                        listener.onError(error.getError());
+                    }
                 }
             },saveLocation,id);
         }
@@ -54,14 +57,19 @@ public class LocationViewIntractorImpl implements ILocationViewIntractor {
 
                 @Override
                 public void onFailure(RestError error, String msg) {
-                    if(error!=null && error.getError()!=null) {
-                        if(error.getError()==null){
-                            listener.onError(error.getMessage());
+                    if(error==null ||error.getError()==null){
 
-                        }
-                        else {
-                            listener.onError(error.getError());
-                        }                    }
+                        msg=msg.replace("[]","null");
+                        msg=msg.replace("{}","null");
+
+                        Gson gson=new Gson();
+                        SaveLocationResponse response= gson.fromJson(msg,SaveLocationResponse.class);
+                        listener.onLocationSavedSuccess(response);
+
+                    }
+                    else {
+                        listener.onError(error.getError());
+                    }
                 }
             },token,saveLocation,id);
         }

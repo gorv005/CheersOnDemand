@@ -5,6 +5,7 @@ import com.cheersondemand.frameworks.retrofit.RestError;
 import com.cheersondemand.frameworks.retrofit.WebServicesWrapper;
 import com.cheersondemand.model.logout.LogoutRequest;
 import com.cheersondemand.model.logout.LogoutResponse;
+import com.google.gson.Gson;
 
 import retrofit2.Response;
 
@@ -27,14 +28,16 @@ public class ProfileViewIntractorImpl implements IProfileViewIntractor {
 
                 @Override
                 public void onFailure(RestError error, String msg) {
-                    if(error!=null && error.getError()!=null) {
-                        if(error.getError()==null){
-                            listener.onError(error.getMessage());
+                    if(error==null ||error.getError()==null){
 
-                        }
-                        else {
-                            listener.onError(error.getError());
-                        }                    }
+                        Gson gson=new Gson();
+                        LogoutResponse response= gson.fromJson(msg,LogoutResponse.class);
+                        listener.onSuccess(response);
+
+                    }
+                    else {
+                        listener.onError(error.getError());
+                    }
                 }
             },logoutRequest);
         }

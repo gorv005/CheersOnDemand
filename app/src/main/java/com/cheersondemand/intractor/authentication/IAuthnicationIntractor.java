@@ -4,7 +4,7 @@ import android.content.Context;
 
 import com.cheersondemand.model.GuestUserCreateResponse;
 import com.cheersondemand.model.authentication.AuthenticationResponse;
-import com.cheersondemand.model.authentication.CategoryRequest;
+import com.cheersondemand.model.authentication.GenRequest;
 import com.cheersondemand.model.authentication.LoginRequest;
 import com.cheersondemand.model.authentication.SignUpRequest;
 import com.cheersondemand.model.authentication.SocialLoginRequest;
@@ -26,6 +26,6 @@ public interface IAuthnicationIntractor {
 
     public void getResponse(SignUpRequest signUpRequest, OnLoginFinishedListener listener);
     public void getResponseSocail(SocialLoginRequest socialLoginRequest, OnLoginFinishedListener listener);
-    public void createGuestUser(CategoryRequest categoryRequest, OnLoginFinishedListener listener);
+    public void createGuestUser(GenRequest categoryRequest, OnLoginFinishedListener listener);
 
 }

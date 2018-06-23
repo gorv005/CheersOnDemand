@@ -4,6 +4,7 @@ import com.cheersondemand.frameworks.retrofit.ResponseResolver;
 import com.cheersondemand.frameworks.retrofit.RestError;
 import com.cheersondemand.frameworks.retrofit.WebServicesWrapper;
 import com.cheersondemand.model.productdescription.SimilarProductsResponse;
+import com.google.gson.Gson;
 
 import retrofit2.Response;
 
@@ -27,14 +28,16 @@ public class ProductDescriptionViewIntractorImpl implements IProductDescIntracto
 
                 @Override
                 public void onFailure(RestError error, String msg) {
-                    if(error!=null && error.getError()!=null) {
-                        if(error.getError()==null){
-                            listener.onError(error.getMessage());
+                    if(error==null ||error.getError()==null){
 
-                        }
-                        else {
-                            listener.onError(error.getError());
-                        }                    }
+                        Gson gson=new Gson();
+                        SimilarProductsResponse response= gson.fromJson(msg,SimilarProductsResponse.class);
+                        listener.onSuccess(response);
+
+                    }
+                    else {
+                        listener.onError(error.getError());
+                    }
                 }
             },token,productsId,uuid,page,per_page);
         }
@@ -55,14 +58,16 @@ public class ProductDescriptionViewIntractorImpl implements IProductDescIntracto
 
                 @Override
                 public void onFailure(RestError error, String msg) {
-                    if(error!=null && error.getError()!=null) {
-                        if(error.getError()==null){
-                            listener.onError(error.getMessage());
+                    if(error==null ||error.getError()==null){
 
-                        }
-                        else {
-                            listener.onError(error.getError());
-                        }                    }
+                        Gson gson=new Gson();
+                        SimilarProductsResponse response= gson.fromJson(msg,SimilarProductsResponse.class);
+                        listener.onSuccess(response);
+
+                    }
+                    else {
+                        listener.onError(error.getError());
+                    }
                 }
             },productsId,uuid,page,per_page);
         }

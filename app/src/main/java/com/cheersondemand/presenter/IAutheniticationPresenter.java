@@ -3,7 +3,7 @@ package com.cheersondemand.presenter;
 
 import com.cheersondemand.model.GuestUserCreateResponse;
 import com.cheersondemand.model.authentication.AuthenticationResponse;
-import com.cheersondemand.model.authentication.CategoryRequest;
+import com.cheersondemand.model.authentication.GenRequest;
 import com.cheersondemand.model.authentication.LoginRequest;
 import com.cheersondemand.model.authentication.SignUpRequest;
 import com.cheersondemand.model.authentication.SocialLoginRequest;
@@ -27,7 +27,7 @@ public interface IAutheniticationPresenter {
     public void setLoginUsingEmail(LoginRequest loginRequest);
 
     public void setSignUpSocail(SocialLoginRequest signUpSocail);
-    public void createGuestUser(CategoryRequest categoryRequest);
+    public void createGuestUser(GenRequest categoryRequest);
 
     void onDestroy();
 

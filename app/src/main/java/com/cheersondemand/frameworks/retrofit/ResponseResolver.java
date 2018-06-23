@@ -4,7 +4,6 @@ import com.google.gson.Gson;
 
 import org.apache.http.conn.ConnectTimeoutException;
 
-import java.io.IOException;
 import java.net.ConnectException;
 import java.net.SocketTimeoutException;
 import java.net.UnknownHostException;
@@ -63,11 +62,22 @@ public abstract class ResponseResolver<T> implements Callback<T> {
            // body=(RestError)response.errorBody();
             try {
                 Gson gson=new Gson();
-                RestError restError= gson.fromJson(response.errorBody().string(),RestError.class);
-                    onFailure(restError, body.getMessage());
+               // RestError restError= gson.fromJson(response.errorBody().string(),RestError.class);
+                String m=response.errorBody().string();
+                while (m.contains("[]") || m.contains("{}")) {
+                    m = m.replace("[]", "null");
+                    m = m.replace("{}", "null");
+                }
+                    onFailure(null, m);
 
-            } catch (IOException e) {
+            } catch (Exception e) {
                 e.printStackTrace();
+               /* try {
+                    onFailure(null, response.errorBody().string());
+                } catch (Exception e1) {
+                    e1.printStackTrace();
+                }*/
+
             }
 
         }

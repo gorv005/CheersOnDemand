@@ -7,10 +7,15 @@ import com.google.gson.annotations.SerializedName;
  * Created by GAURAV on 5/30/2018.
  */
 
-public class CategoryRequest {
+public class GenRequest {
     @SerializedName("uuid")
     @Expose
     private String uuid;
+    public GenRequest() {
+    }
+    public GenRequest(String uuid) {
+        this.uuid = uuid;
+    }
 
     public String getUuid() {
         return uuid;

@@ -1,17 +1,15 @@
 package com.cheersondemand.intractor.authentication;
 
-import android.util.Log;
-
 import com.cheersondemand.frameworks.retrofit.ResponseResolver;
 import com.cheersondemand.frameworks.retrofit.RestError;
 import com.cheersondemand.frameworks.retrofit.WebServicesWrapper;
 import com.cheersondemand.model.GuestUserCreateResponse;
 import com.cheersondemand.model.authentication.AuthenticationResponse;
-import com.cheersondemand.model.authentication.CategoryRequest;
+import com.cheersondemand.model.authentication.GenRequest;
 import com.cheersondemand.model.authentication.LoginRequest;
 import com.cheersondemand.model.authentication.SignUpRequest;
 import com.cheersondemand.model.authentication.SocialLoginRequest;
-import com.cheersondemand.util.C;
+import com.google.gson.Gson;
 
 import retrofit2.Response;
 
@@ -33,8 +31,11 @@ public class AuthniticationIntractorImpl implements IAuthnicationIntractor {
 
                 @Override
                 public void onFailure(RestError error, String msg) {
-                    if(error.getError()==null){
-                        listener.onError(error.getMessage());
+                    if(error==null ||error.getError()==null){
+
+                        Gson gson=new Gson();
+                        AuthenticationResponse response= gson.fromJson(msg,AuthenticationResponse.class);
+                        listener.onSuccess(response);
 
                     }
                     else {
@@ -60,13 +61,16 @@ public class AuthniticationIntractorImpl implements IAuthnicationIntractor {
 
                 @Override
                 public void onFailure(RestError error, String msg) {
-                    if(error.getError()==null){
-                        listener.onError(error.getMessage());
+                    if (error == null || error.getError() == null) {
 
-                    }
-                    else {
+                        Gson gson = new Gson();
+                        AuthenticationResponse response = gson.fromJson(msg, AuthenticationResponse.class);
+                        listener.onSuccess(response);
+
+                    } else {
                         listener.onError(error.getError());
-                    }                }
+                    }
+                }
             },signUpRequest);
         }
 
@@ -87,9 +91,11 @@ public class AuthniticationIntractorImpl implements IAuthnicationIntractor {
 
                 @Override
                 public void onFailure(RestError error, String msg) {
-                    Log.e("dd","hh");
-                    if(error.getError()==null){
-                        listener.onError(error.getMessage());
+                    if(error==null ||error.getError()==null){
+
+                        Gson gson=new Gson();
+                        AuthenticationResponse response= gson.fromJson(msg,AuthenticationResponse.class);
+                        listener.onSuccess(response);
 
                     }
                     else {
@@ -104,7 +110,7 @@ public class AuthniticationIntractorImpl implements IAuthnicationIntractor {
     }
 
     @Override
-    public void createGuestUser(CategoryRequest categoryRequest, final OnLoginFinishedListener listener) {
+    public void createGuestUser(GenRequest categoryRequest, final OnLoginFinishedListener listener) {
         try {
 
             WebServicesWrapper.getInstance().createGuestUser(new ResponseResolver<GuestUserCreateResponse>() {
@@ -115,25 +121,16 @@ public class AuthniticationIntractorImpl implements IAuthnicationIntractor {
 
                 @Override
                 public void onFailure(RestError error, String msg) {
-                    Log.e("dd","hh");
+                    if(error==null ||error.getError()==null){
 
-
-
-
-                        if(error!=null &&error.getMessage()!=null &&error.getMessage().trim().equalsIgnoreCase(C.GUEST_USER_ALLREADY_CREATED)) {
-                            GuestUserCreateResponse guestUserCreateResponse = new GuestUserCreateResponse();
-                            guestUserCreateResponse.setSuccess(true);
-                            guestUserCreateResponse.setMessage(error.getMessage().trim());
-                            guestUserCreateResponse.setData(error.getData());
-                            onSuccess(guestUserCreateResponse, null);
-                        }
-                    if(error.getError()==null){
-                        listener.onError(error.getMessage());
+                        Gson gson=new Gson();
+                        GuestUserCreateResponse response= gson.fromJson(msg,GuestUserCreateResponse.class);
+                        listener.onSuccessCreateGuestuser(response);
 
                     }
-                        else {
-                            listener.onError(error.getError());
-                        }
+                    else {
+                        listener.onError(error.getError());
+                    }
 
                 }
             },categoryRequest);

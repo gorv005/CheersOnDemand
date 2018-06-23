@@ -6,7 +6,7 @@ import com.cheersondemand.intractor.authentication.AuthniticationIntractorImpl;
 import com.cheersondemand.intractor.authentication.IAuthnicationIntractor;
 import com.cheersondemand.model.GuestUserCreateResponse;
 import com.cheersondemand.model.authentication.AuthenticationResponse;
-import com.cheersondemand.model.authentication.CategoryRequest;
+import com.cheersondemand.model.authentication.GenRequest;
 import com.cheersondemand.model.authentication.LoginRequest;
 import com.cheersondemand.model.authentication.SignUpRequest;
 import com.cheersondemand.model.authentication.SocialLoginRequest;
@@ -81,7 +81,7 @@ public class AuthenicationPresenterImpl implements IAutheniticationPresenter,IAu
     }
 
     @Override
-    public void createGuestUser(CategoryRequest categoryRequest) {
+    public void createGuestUser(GenRequest categoryRequest) {
         if(mView!=null) {
 
             iAuthnicationIntractor.createGuestUser(categoryRequest, this);

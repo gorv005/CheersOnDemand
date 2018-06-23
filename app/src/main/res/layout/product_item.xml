@@ -81,12 +81,74 @@
 
 
         <RelativeLayout
-            android:id="@+id/btnAddToCart"
+            android:id="@+id/rlButton"
             android:layout_width="match_parent"
             android:layout_height="40dp"
             android:layout_alignParentBottom="true"
             android:background="@color/product_add_to_cart_back_color">
 
+
+                <LinearLayout
+                    android:id="@+id/llQuantity"
+                    android:weightSum="7"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="bottom"
+                    android:gravity="bottom">
+
+                    <RelativeLayout
+                        android:id="@+id/rlMinus"
+                        android:layout_weight="2"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent">
+                        <ImageView
+                            android:gravity="center"
+                            android:layout_gravity="center"
+                            android:src="@drawable/minus"
+                            android:padding="10dp"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content" />
+
+                    </RelativeLayout>
+                    <RelativeLayout
+                        android:paddingTop="2dp"
+                        android:paddingBottom="2dp"
+                        android:layout_weight="3"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent">
+                        <TextView
+                            android:id="@+id/tvQuantity"
+                            android:textSize="14sp"
+                            android:fontFamily="@font/sf_ui_display_regular"
+                            android:gravity="center"
+                            android:layout_gravity="center"
+                            android:text="Qty.105"
+                            android:layout_centerVertical="true"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent" />
+
+                    </RelativeLayout>
+                    <RelativeLayout
+                        android:id="@+id/rlPlus"
+                        android:layout_weight="2"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent">
+                        <ImageView
+                            android:gravity="center"
+                            android:layout_gravity="center"
+                            android:src="@drawable/plus"
+                            android:padding="12dp"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content" />
+
+                    </RelativeLayout>
+                </LinearLayout>
+
+            <RelativeLayout
+                android:visibility="gone"
+                android:id="@+id/btnAddToCart"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -94,14 +156,14 @@
                 android:fontFamily="@font/sf_ui_display_regular"
                 android:text="@string/add_to_cart"
                 android:textColor="@color/green_light" />
-
+            </RelativeLayout>
         </RelativeLayout>
 
         <View
             android:id="@+id/view"
             android:layout_width="match_parent"
             android:layout_height="2dp"
-            android:layout_above="@id/btnAddToCart"
+            android:layout_above="@id/rlButton"
             android:background="@color/product_border_color" />
     </RelativeLayout>
 
