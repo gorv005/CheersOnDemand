@@ -11,10 +11,13 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.cheersondemand.R;
-import com.cheersondemand.model.order.addtocart.CartProduct;
 import com.cheersondemand.model.order.addtocart.OrderItem;
+import com.cheersondemand.model.order.updatecart.UpdateCartRequest;
 import com.cheersondemand.util.ImageLoader.ImageLoader;
 import com.cheersondemand.util.Util;
+import com.cheersondemand.view.ActivityHome;
+
+import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -25,7 +28,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
 public class AdapterCartList extends RecyclerView.Adapter<RecyclerView.ViewHolder > {
     private static final int TYPE_FOOTER = 1;
     private static final int TYPE_ITEM = 0;
-private CartProduct horizontalList;
+private List<OrderItem> horizontalList;
     Context context;
     ImageLoader imageLoader;
 public class ItemViewHolder extends RecyclerView.ViewHolder {
@@ -59,7 +62,7 @@ public class ItemViewHolder extends RecyclerView.ViewHolder {
             ivMore = (CircleImageView) view.findViewById(R.id.ivProductMore);
         }
     }
-    public AdapterCartList(CartProduct horizontalList, Activity context) {
+    public AdapterCartList(List<OrderItem> horizontalList, Activity context) {
         this.horizontalList = horizontalList;
         this.context=context;
         imageLoader=new ImageLoader(context);
@@ -93,7 +96,7 @@ public class ItemViewHolder extends RecyclerView.ViewHolder {
             final ItemViewHolder itemViewHolder = (ItemViewHolder) holder;
 
 
-           OrderItem orderItem= horizontalList.getOrder().getOrderItems().get(position);
+           OrderItem orderItem= horizontalList.get(position);
             itemViewHolder.tvName.setText(orderItem.getProduct().getName());
             Util.setImage(context,orderItem.getProduct().getImage(),((ItemViewHolder) holder).imgProduct);
             itemViewHolder.tvPrice.setText("$"+orderItem.getUnitPrice());
@@ -106,6 +109,29 @@ public class ItemViewHolder extends RecyclerView.ViewHolder {
                 itemViewHolder.llProductNotAvailable.setVisibility(View.GONE);
 
             }
+
+
+            itemViewHolder.llRemove.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    UpdateCartRequest updateCartRequest=new UpdateCartRequest();
+                    updateCartRequest.setUuid(Util.id(context));
+                    updateCartRequest.setProductId(horizontalList.get(position).getProduct().getId());
+                    ((ActivityHome)context).removeFromCart(updateCartRequest);
+                }
+            });
+            itemViewHolder.rlPlus.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    ((ActivityHome)context).updateCart(0,position,true);
+                }
+            });
+            itemViewHolder.rlMinus.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    ((ActivityHome)context).updateCart(0,position,false);
+                }
+            });
         }
         else if (holder instanceof FooterViewHolder) {
             final FooterViewHolder footerViewHolder = (FooterViewHolder) holder;
@@ -117,17 +143,20 @@ public class ItemViewHolder extends RecyclerView.ViewHolder {
                 }
             });
         }
+
+
+
     }
     @Override
     public int getItemViewType(int position) {
-        if (position == horizontalList.getOrder().getOrderItems().size() ) {
+        if (position == horizontalList.size() ) {
             return TYPE_FOOTER;
         }
         return TYPE_ITEM;
     }
     @Override
     public int getItemCount() {
-        return horizontalList.getOrder().getOrderItems().size();
+        return horizontalList.size();
     }
 
 }

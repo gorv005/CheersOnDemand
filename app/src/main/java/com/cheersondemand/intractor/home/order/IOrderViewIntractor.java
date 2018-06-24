@@ -8,6 +8,8 @@ import com.cheersondemand.model.authentication.GenRequest;
 import com.cheersondemand.model.order.CreateOrderResponse;
 import com.cheersondemand.model.order.updatecart.UpdateCartRequest;
 import com.cheersondemand.model.order.updatecart.UpdateCartResponse;
+import com.cheersondemand.model.wishlist.WishListRequest;
+import com.cheersondemand.model.wishlist.WishListResponse;
 
 /**
  * Created by GAURAV on 7/31/2017.
@@ -20,6 +22,8 @@ public interface IOrderViewIntractor {
         void onSuccessUpdateCart(UpdateCartResponse response);
         void onSuccessRemoveCart(UpdateCartResponse response);
         void onSuccessCartList(UpdateCartResponse response);
+        void onSuccessAddToWishList(WishListResponse response);
+        void onSuccessRemoveFromWishList(WishListResponse response);
 
         void onError(String response);
         Context getAPPContext();
@@ -43,4 +47,12 @@ public interface IOrderViewIntractor {
     public void getCartList(String user_id, String order_id, String uuid, OnLoginFinishedListener listener);
 
     public void getCartList(String token, String user_id, String order_id, String uuid, OnLoginFinishedListener listener);
+
+    public void addToWishList(String user_id, WishListRequest wishListRequest, OnLoginFinishedListener listener);
+
+    public void addToWishList(String token, String user_id, WishListRequest wishListRequest, OnLoginFinishedListener listener);
+
+    public void removeFromWishList(String user_id, WishListRequest wishListRequest, OnLoginFinishedListener listener);
+
+    public void removeFromWishList(String token, String user_id, WishListRequest wishListRequest, OnLoginFinishedListener listener);
 }

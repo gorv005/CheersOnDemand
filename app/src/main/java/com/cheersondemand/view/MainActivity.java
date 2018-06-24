@@ -11,6 +11,7 @@ import android.view.View;
 
 import com.cheersondemand.R;
 import com.cheersondemand.util.C;
+import com.cheersondemand.util.SharedPreference;
 import com.cheersondemand.view.fragments.FragmentAuthentication;
 import com.cheersondemand.view.fragments.FragmentSplash;
 import com.google.firebase.iid.FirebaseInstanceId;
@@ -29,6 +30,8 @@ public class    MainActivity extends AppCompatActivity {
                 View.SYSTEM_UI_FLAG_LAYOUT_STABLE
                         | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
         setContentView(R.layout.activity_main);
+        SharedPreference.getInstance(this).setString(C.ORDER_ID,null);
+
         bundle = getIntent().getBundleExtra(C.BUNDLE);
         fragmentAction = getIntent().getIntExtra(C.FRAGMENT_ACTION, C.FRAGMENT_SPLASH);
         fragmnetLoader(fragmentAction, bundle);

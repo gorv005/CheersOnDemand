@@ -2,11 +2,13 @@ package com.cheersondemand.view.fragments;
 
 
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.content.res.ResourcesCompat;
 import android.text.Editable;
 import android.text.InputType;
 import android.text.TextWatcher;
@@ -205,7 +207,9 @@ public class FragmentAuthentication extends Fragment implements IAuthenitication
     }
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-
+        Typeface typeface = ResourcesCompat.getFont(getActivity(), R.font.sf_ui_display_regular);
+        etPasswordLogin.setTypeface(typeface);
+        etPassword.setTypeface(typeface);
         etEmailLogin.setText("gorv005@yopmail.com");
         etPasswordLogin.setText("Admin@123");
         if(isLoginScreen){

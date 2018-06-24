@@ -103,7 +103,7 @@ public class FragmentProfile extends Fragment implements View.OnClickListener,IP
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        isLogin = SharedPreference.getInstance(getActivity()).getBoolean(C.IS_LOGIN);
+        isLogin = !SharedPreference.getInstance(getActivity()).getBoolean(C.IS_LOGIN_GUEST);
 
         if (isLogin) {
             authenticationResponse = SharedPreference.getInstance(getActivity()).getUser(C.AUTH_USER);
@@ -126,6 +126,7 @@ public class FragmentProfile extends Fragment implements View.OnClickListener,IP
         btnEdit.setOnClickListener(this);
         llProfileView.setOnClickListener(this);
         llLogout.setOnClickListener(this);
+       // llChangePassword.setOnClickListener(this);
     }
 
     @Override
@@ -165,7 +166,7 @@ public class FragmentProfile extends Fragment implements View.OnClickListener,IP
                 break;
 
             case R.id.llChangePassword:
-                if (!isLogin) {
+                if (isLogin) {
                     intent.putExtra(C.FRAGMENT_ACTION, C.FRAGMENT_CHANGE_PASSWORD);
                     intent.putExtra(C.BUNDLE, bundle);
                     startActivity(intent);

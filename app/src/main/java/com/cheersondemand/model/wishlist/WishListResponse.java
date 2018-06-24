@@ -1,17 +1,16 @@
-package com.cheersondemand.model.location;
+package com.cheersondemand.model.wishlist;
 
-import com.cheersondemand.model.authentication.Data;
+import com.cheersondemand.model.AllProduct;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 import com.cheersondemand.model.Errors;
-
 import java.util.List;
 
 /**
- * Created by GAURAV on 6/17/2018.
+ * Created by GAURAV on 6/25/2018.
  */
 
-public class SaveLocationResponse {
+public class WishListResponse {
     @SerializedName("success")
     @Expose
     private Boolean success;
@@ -20,7 +19,7 @@ public class SaveLocationResponse {
     private String message;
     @SerializedName("data")
     @Expose
-    private Data data;
+    private AllProduct data = null;
     @SerializedName("meta")
     @Expose
     private List<Object> meta = null;
@@ -44,11 +43,11 @@ public class SaveLocationResponse {
         this.message = message;
     }
 
-    public Data getData() {
+    public AllProduct getData() {
         return data;
     }
 
-    public void setData(Data data) {
+    public void setData(AllProduct data) {
         this.data = data;
     }
 

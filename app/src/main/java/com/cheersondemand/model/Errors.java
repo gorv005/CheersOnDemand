@@ -7,7 +7,7 @@ import com.google.gson.annotations.SerializedName;
  * Created by GAURAV on 6/24/2018.
  */
 
-public class Error {
+public class Errors {
     @SerializedName("resource")
     @Expose
     private String resource;

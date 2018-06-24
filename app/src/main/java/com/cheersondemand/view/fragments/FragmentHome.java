@@ -30,6 +30,8 @@ import com.cheersondemand.model.order.CreateOrderResponse;
 import com.cheersondemand.model.order.updatecart.UpdateCartRequest;
 import com.cheersondemand.model.order.updatecart.UpdateCartResponse;
 import com.cheersondemand.model.store.StoreList;
+import com.cheersondemand.model.wishlist.WishListRequest;
+import com.cheersondemand.model.wishlist.WishListResponse;
 import com.cheersondemand.presenter.home.HomeViewPresenterImpl;
 import com.cheersondemand.presenter.home.IHomeViewPresenterPresenter;
 import com.cheersondemand.presenter.home.order.IOrderViewPresenterPresenter;
@@ -283,6 +285,8 @@ public class FragmentHome extends Fragment implements IHomeViewPresenterPresente
         int q;
         if(product.getCartQunatity()==null || product.getCartQunatity().equalsIgnoreCase("0")) {
             product.setCartQunatity("1");
+            product.setIsInCart(true);
+
         }
         else {
             if(isAdd) {
@@ -335,6 +339,34 @@ public class FragmentHome extends Fragment implements IHomeViewPresenterPresente
     }
 
     @Override
+    public void addTowishListSuccess(WishListResponse response) {
+        if(response.getSuccess()){
+            util.setSnackbarMessage(getActivity(), response.getMessage(),rlHomeView,false );
+            product.setIsWishlisted(true);
+            adapterHomeCategoriesSections.notified();
+
+        }
+        else {
+            util.setSnackbarMessage(getActivity(), response.getMessage(),rlHomeView,true );
+
+        }
+    }
+
+    @Override
+    public void removeFromWishListSuccess(WishListResponse response) {
+        if(response.getSuccess()){
+            util.setSnackbarMessage(getActivity(), response.getMessage(),rlHomeView,false );
+            product.setIsWishlisted(false);
+            adapterHomeCategoriesSections.notified();
+
+        }
+        else {
+            util.setSnackbarMessage(getActivity(), response.getMessage(),rlHomeView,true );
+
+        }
+    }
+
+    @Override
     public void getResponseError(String response) {
         util.setSnackbarMessage(getActivity(), response,rlHomeView,true );
     }
@@ -370,9 +402,10 @@ public class FragmentHome extends Fragment implements IHomeViewPresenterPresente
     }
 
 
-    public void addToCart(int secPos,int pos) {
+    public void addToCart(int secPos,int pos,boolean isAdd) {
          productPos= pos;
          this.secPos=secPos;
+         this.isAdd=isAdd;
         if (homeCategoriesSectionList != null && homeCategoriesSectionList.size() > 0) {
             HomeCategoriesSectionList section = homeCategoriesSectionList.get(secPos);
 
@@ -387,6 +420,49 @@ public class FragmentHome extends Fragment implements IHomeViewPresenterPresente
 
     }
 
+
+    public void wishListUpdate(int secPos,int pos,boolean isAdd) {
+        productPos= pos;
+        this.secPos=secPos;
+        this.isAdd=isAdd;
+        if (homeCategoriesSectionList != null && homeCategoriesSectionList.size() > 0) {
+            HomeCategoriesSectionList section = homeCategoriesSectionList.get(secPos);
+
+            product = section.getAllProducts().get(pos);
+            WishListRequest wishListRequest=new WishListRequest();
+            wishListRequest.setProductId(product.getId());
+            wishListRequest.setUuid(Util.id(getActivity()));
+
+            updateWishList(wishListRequest,isAdd);
+        }
+
+
+    }
+
+
+    void updateWishList(WishListRequest wishListRequest,boolean status){
+        if (SharedPreference.getInstance(getActivity()).getBoolean(C.IS_LOGIN_GUEST)) {
+            String id =""+ SharedPreference.getInstance(getActivity()).geGuestUser(C.GUEST_USER).getId();
+            if(status) {
+                iOrderViewPresenterPresenter.addToWishList(id, wishListRequest);
+            }
+            else {
+                iOrderViewPresenterPresenter.removeFromWishList(id, wishListRequest);
+
+            }
+        } else {
+            String id = ""+SharedPreference.getInstance(getActivity()).getUser(C.AUTH_USER).getData().getUser().getId();
+
+            String token = C.bearer + SharedPreference.getInstance(getActivity()).getUser(C.AUTH_USER).getData().getToken().getAccessToken();
+            if(status) {
+                iOrderViewPresenterPresenter.addToWishList(token,id, wishListRequest);
+            }
+            else {
+                iOrderViewPresenterPresenter.removeFromWishList(token,id, wishListRequest);
+
+            }
+        }
+    }
      public void updateCart(int secPos,int productPos, boolean isAdd){
         this.secPos=secPos;
         this.productPos=productPos;
@@ -419,7 +495,7 @@ public class FragmentHome extends Fragment implements IHomeViewPresenterPresente
 
 
 
-    void removeProduct(UpdateCartRequest updateCartRequest){
+  public   void removeProduct(UpdateCartRequest updateCartRequest){
         String  order_id=SharedPreference.getInstance(getActivity()).getString(C.ORDER_ID);
         if (SharedPreference.getInstance(getActivity()).getBoolean(C.IS_LOGIN_GUEST)) {
             String id =""+ SharedPreference.getInstance(getActivity()).geGuestUser(C.GUEST_USER).getId();

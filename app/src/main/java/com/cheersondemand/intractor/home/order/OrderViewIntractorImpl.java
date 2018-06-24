@@ -9,6 +9,8 @@ import com.cheersondemand.model.authentication.GenRequest;
 import com.cheersondemand.model.order.CreateOrderResponse;
 import com.cheersondemand.model.order.updatecart.UpdateCartRequest;
 import com.cheersondemand.model.order.updatecart.UpdateCartResponse;
+import com.cheersondemand.model.wishlist.WishListRequest;
+import com.cheersondemand.model.wishlist.WishListResponse;
 import com.google.gson.Gson;
 
 import retrofit2.Response;
@@ -313,16 +315,143 @@ public class OrderViewIntractorImpl implements IOrderViewIntractor {
 
                 @Override
                 public void onFailure(RestError error, String msg) {
-                    if(error!=null && error.getError()!=null) {
-                        if(error.getError()==null){
-                            listener.onError(error.getMessage());
+                    if(error==null ||error.getError()==null){
 
-                        }
-                        else {
-                            listener.onError(error.getError());
-                        }                    }
+                        Gson gson=new Gson();
+                        UpdateCartResponse response= gson.fromJson(msg,UpdateCartResponse.class);
+
+                        listener.onSuccessCartList(response);
+
+                    }
+                    else {
+                        listener.onError(error.getError());
+                    }
                 }
             },token,user_id,order_id,uuid);
+        }
+        catch (Exception e){
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void addToWishList(String user_id, WishListRequest wishListRequest, final OnLoginFinishedListener listener) {
+        try {
+
+            WebServicesWrapper.getInstance().addToWishList(new ResponseResolver<WishListResponse>() {
+                @Override
+                public void onSuccess(WishListResponse wishListResponse, Response response) {
+                    listener.onSuccessAddToWishList(wishListResponse);
+                }
+
+                @Override
+                public void onFailure(RestError error, String msg) {
+                    if(error==null ||error.getError()==null){
+
+                        Gson gson=new Gson();
+                        WishListResponse response= gson.fromJson(msg,WishListResponse.class);
+
+                        listener.onSuccessAddToWishList(response);
+
+                    }
+                    else {
+                        listener.onError(error.getError());
+                    }
+                }
+            },user_id,wishListRequest);
+        }
+        catch (Exception e){
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void addToWishList(String token, String user_id, WishListRequest wishListRequest, final OnLoginFinishedListener listener) {
+        try {
+
+            WebServicesWrapper.getInstance().addToWishList(new ResponseResolver<WishListResponse>() {
+                @Override
+                public void onSuccess(WishListResponse wishListResponse, Response response) {
+                    listener.onSuccessAddToWishList(wishListResponse);
+                }
+
+                @Override
+                public void onFailure(RestError error, String msg) {
+                    if(error==null ||error.getError()==null){
+
+                        Gson gson=new Gson();
+                        WishListResponse response= gson.fromJson(msg,WishListResponse.class);
+
+                        listener.onSuccessAddToWishList(response);
+
+                    }
+                    else {
+                        listener.onError(error.getError());
+                    }
+                }
+            },token,user_id,wishListRequest);
+        }
+        catch (Exception e){
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void removeFromWishList(String user_id, WishListRequest wishListRequest,final OnLoginFinishedListener listener) {
+        try {
+
+            WebServicesWrapper.getInstance().removeFromWishList(new ResponseResolver<WishListResponse>() {
+                @Override
+                public void onSuccess(WishListResponse wishListResponse, Response response) {
+                    listener.onSuccessRemoveFromWishList(wishListResponse);
+                }
+
+                @Override
+                public void onFailure(RestError error, String msg) {
+                    if(error==null ||error.getError()==null){
+
+                        Gson gson=new Gson();
+                        WishListResponse response= gson.fromJson(msg,WishListResponse.class);
+
+                        listener.onSuccessAddToWishList(response);
+
+                    }
+                    else {
+                        listener.onError(error.getError());
+                    }
+                }
+            },user_id,wishListRequest);
+        }
+        catch (Exception e){
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void removeFromWishList(String token, String user_id, WishListRequest wishListRequest, final OnLoginFinishedListener listener) {
+        try {
+
+            WebServicesWrapper.getInstance().removeFromWishList(new ResponseResolver<WishListResponse>() {
+                @Override
+                public void onSuccess(WishListResponse wishListResponse, Response response) {
+                    listener.onSuccessRemoveFromWishList(wishListResponse);
+                }
+
+                @Override
+                public void onFailure(RestError error, String msg) {
+                    if(error==null ||error.getError()==null){
+
+                        Gson gson=new Gson();
+                        WishListResponse response= gson.fromJson(msg,WishListResponse.class);
+
+                        listener.onSuccessAddToWishList(response);
+
+                    }
+                    else {
+                        listener.onError(error.getError());
+                    }
+                }
+            },token,user_id,wishListRequest);
         }
         catch (Exception e){
             e.printStackTrace();

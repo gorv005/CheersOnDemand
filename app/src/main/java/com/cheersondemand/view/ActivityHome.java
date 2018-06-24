@@ -14,6 +14,7 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
 import com.cheersondemand.R;
+import com.cheersondemand.model.order.updatecart.UpdateCartRequest;
 import com.cheersondemand.util.C;
 import com.cheersondemand.view.fragments.FragmentCart;
 import com.cheersondemand.view.fragments.FragmentHome;
@@ -113,16 +114,36 @@ public class ActivityHome extends AppCompatActivity implements View.OnClickListe
     }
 
 
-   public void addToCart(int secPos,int pos){
+
+    public void removeFromCart(UpdateCartRequest updateCartRequest){
+        Fragment fragment=getVisibleFragment();
+        if(fragment!=null && fragment instanceof FragmentCart ){
+            ((FragmentCart)fragment).removeProduct(updateCartRequest);
+        }
+    }
+   public void addToCart(int secPos,int pos,boolean isAdd){
         Fragment fragment=getVisibleFragment();
         if(fragment!=null && fragment instanceof FragmentHome ){
-            ((FragmentHome)fragment).addToCart(secPos,pos);
+            ((FragmentHome)fragment).addToCart(secPos,pos,isAdd);
         }
     }
     public void updateCart(int secPos,int pos,boolean isAdd){
         Fragment fragment=getVisibleFragment();
         if(fragment!=null && fragment instanceof FragmentHome ){
             ((FragmentHome)fragment).updateCart(secPos,pos,isAdd);
+        }
+        else if(fragment!=null && fragment instanceof FragmentCart ){
+            ((FragmentCart)fragment).updateCart(secPos,pos,isAdd);
+        }
+    }
+
+    public void wishListUpdate(int secPos,int pos,boolean isAdd){
+        Fragment fragment=getVisibleFragment();
+        if(fragment!=null && fragment instanceof FragmentHome ){
+            ((FragmentHome)fragment).wishListUpdate(secPos,pos,isAdd);
+        }
+        else if(fragment!=null && fragment instanceof FragmentCart ){
+            ((FragmentCart)fragment).updateCart(secPos,pos,isAdd);
         }
     }
     public     void setHome(){

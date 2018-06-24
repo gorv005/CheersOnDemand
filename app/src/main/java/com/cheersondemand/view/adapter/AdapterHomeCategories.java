@@ -76,7 +76,7 @@ public class ItemViewHolder extends RecyclerView.ViewHolder {
     public void onBindViewHolder(final RecyclerView.ViewHolder  holder, final int position) {
         if (holder instanceof ItemViewHolder) {
             final ItemViewHolder itemViewHolder = (ItemViewHolder) holder;
-             AllProduct allProduct=horizontalList.get(position);
+             final AllProduct allProduct=horizontalList.get(position);
             itemViewHolder.tvProductName.setText(allProduct.getName());
             itemViewHolder.tvProductPrice.setText("$"+allProduct.getPrice());
           //  imageLoader.DisplayImage(horizontalList.get(position).getImage(),itemViewHolder.ivProductImage);
@@ -90,6 +90,14 @@ public class ItemViewHolder extends RecyclerView.ViewHolder {
              else {
                  itemViewHolder.btnAddToCart.setVisibility(View.VISIBLE);
                  itemViewHolder.llQuantity.setVisibility(View.GONE);
+             }
+
+             if(allProduct.getIsWishlisted()){
+                 itemViewHolder.ivLike.setImageResource(R.drawable.like);
+             }
+             else {
+                 itemViewHolder.ivLike.setImageResource(R.drawable.unlike);
+
              }
             itemViewHolder.rlProduct.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -106,7 +114,7 @@ public class ItemViewHolder extends RecyclerView.ViewHolder {
             itemViewHolder.btnAddToCart.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    ((ActivityHome)context).addToCart(0,position);
+                    ((ActivityHome)context).addToCart(0,position,true);
                 }
             });
             itemViewHolder.rlPlus.setOnClickListener(new View.OnClickListener() {
@@ -119,6 +127,12 @@ public class ItemViewHolder extends RecyclerView.ViewHolder {
                 @Override
                 public void onClick(View v) {
                     ((ActivityHome)context).updateCart(0,position,false);
+                }
+            });
+            itemViewHolder.ivLike.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    ((ActivityHome)context).wishListUpdate(0,position,!allProduct.getIsWishlisted());
                 }
             });
           /*  itemViewHolder.tvBrandName.setText(horizontalList.get(position));

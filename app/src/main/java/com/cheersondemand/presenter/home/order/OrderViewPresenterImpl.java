@@ -10,6 +10,8 @@ import com.cheersondemand.model.authentication.GenRequest;
 import com.cheersondemand.model.order.CreateOrderResponse;
 import com.cheersondemand.model.order.updatecart.UpdateCartRequest;
 import com.cheersondemand.model.order.updatecart.UpdateCartResponse;
+import com.cheersondemand.model.wishlist.WishListRequest;
+import com.cheersondemand.model.wishlist.WishListResponse;
 
 
 public class OrderViewPresenterImpl implements IOrderViewPresenterPresenter, IOrderViewIntractor.OnLoginFinishedListener {
@@ -62,6 +64,22 @@ public class OrderViewPresenterImpl implements IOrderViewPresenterPresenter, IOr
         if (mView != null) {
             //mView.hideProgress();
             mView.getCartListSuccess(response);
+        }
+    }
+
+    @Override
+    public void onSuccessAddToWishList(WishListResponse response) {
+        if (mView != null) {
+            //mView.hideProgress();
+            mView.addTowishListSuccess(response);
+        }
+    }
+
+    @Override
+    public void onSuccessRemoveFromWishList(WishListResponse response) {
+        if (mView != null) {
+            //mView.hideProgress();
+            mView.removeFromWishListSuccess(response);
         }
     }
 
@@ -157,6 +175,38 @@ public class OrderViewPresenterImpl implements IOrderViewPresenterPresenter, IOr
         if (mView != null) {
 
             iOrderViewIntractor.getCartList(token,user_id,order_id,uuid, this);
+        }
+    }
+
+    @Override
+    public void addToWishList(String user_id, WishListRequest wishListRequest) {
+        if (mView != null) {
+
+            iOrderViewIntractor.addToWishList(user_id,wishListRequest, this);
+        }
+    }
+
+    @Override
+    public void addToWishList(String token, String user_id, WishListRequest wishListRequest) {
+        if (mView != null) {
+
+            iOrderViewIntractor.addToWishList(token,user_id,wishListRequest, this);
+        }
+    }
+
+    @Override
+    public void removeFromWishList(String user_id, WishListRequest wishListRequest) {
+        if (mView != null) {
+
+            iOrderViewIntractor.removeFromWishList(user_id,wishListRequest, this);
+        }
+    }
+
+    @Override
+    public void removeFromWishList(String token, String user_id, WishListRequest wishListRequest) {
+        if (mView != null) {
+
+            iOrderViewIntractor.removeFromWishList(token,user_id,wishListRequest, this);
         }
     }
 
