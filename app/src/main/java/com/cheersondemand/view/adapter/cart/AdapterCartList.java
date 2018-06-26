@@ -32,15 +32,18 @@ private List<OrderItem> horizontalList;
     Context context;
     ImageLoader imageLoader;
 public class ItemViewHolder extends RecyclerView.ViewHolder {
-    public TextView tvName,tvSubName,tvPrice,tvQuantity;
+    public TextView tvName,tvSubName,tvPrice,tvQuantity,tvAddToWishList;
     public CircleImageView ivProductImage;
-    ImageView imgProduct;
+    ImageView imgProduct,ivLike;
     View rlMinus,rlPlus,rlAddToWishList,llRemove,rlCard,llProductNotAvailable;
     public ItemViewHolder(View view) {
         super(view);
         tvName = (TextView) view.findViewById(R.id.tvName);
         ivProductImage = (CircleImageView) view.findViewById(R.id.ivProductImage);
         imgProduct = (ImageView) view.findViewById(R.id.imgProduct);
+        ivLike = (ImageView) view.findViewById(R.id.ivLike);
+        tvAddToWishList = (TextView) view.findViewById(R.id.tvAddToWishList);
+
         tvSubName = (TextView) view.findViewById(R.id.tvSubName);
         tvPrice = (TextView) view.findViewById(R.id.tvPrice);
         rlMinus = (View) view.findViewById(R.id.rlMinus);
@@ -68,6 +71,7 @@ public class ItemViewHolder extends RecyclerView.ViewHolder {
         imageLoader=new ImageLoader(context);
 
     }
+
     @Override
     public long getItemId(int position) {
         return position;
@@ -110,6 +114,15 @@ public class ItemViewHolder extends RecyclerView.ViewHolder {
 
             }
 
+            if(orderItem.getProduct().getIsWishlisted()){
+                itemViewHolder.ivLike.setImageResource(R.drawable.like);
+                itemViewHolder.tvAddToWishList.setText(context.getString(R.string.added_to_wishList));
+            }
+            else {
+                itemViewHolder.ivLike.setImageResource(R.drawable.unlike);
+                itemViewHolder.tvAddToWishList.setText(context.getString(R.string.add_to_wishlist));
+
+            }
 
             itemViewHolder.llRemove.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -130,6 +143,19 @@ public class ItemViewHolder extends RecyclerView.ViewHolder {
                 @Override
                 public void onClick(View v) {
                     ((ActivityHome)context).updateCart(0,position,false);
+                }
+            });
+            itemViewHolder.rlAddToWishList.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if(horizontalList.get(position).getProduct().getIsWishlisted()) {
+                        ((ActivityHome) context).wishListUpdate(0, position, false);
+                    }
+                    else {
+                        ((ActivityHome) context).wishListUpdate(0, position, true);
+
+                    }
+
                 }
             });
         }

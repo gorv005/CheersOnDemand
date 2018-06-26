@@ -4,6 +4,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@color/profile_back"
     android:layout_height="match_parent"
+    android:id="@+id/rlView"
     tools:context="com.cheersondemand.view.fragments.FragmentUpdateProfile">
 
 
@@ -295,6 +296,7 @@
             android:layout_height="2dp"/>
 
         <RelativeLayout
+            android:id="@+id/rlSimilar"
             android:paddingLeft="15dp"
             android:paddingRight="15dp"
             android:layout_marginTop="15dp"

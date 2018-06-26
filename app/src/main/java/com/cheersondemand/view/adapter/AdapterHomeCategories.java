@@ -114,25 +114,25 @@ public class ItemViewHolder extends RecyclerView.ViewHolder {
             itemViewHolder.btnAddToCart.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    ((ActivityHome)context).addToCart(0,position,true);
+                    ((ActivityContainer)context).addToCart(0,position,true);
                 }
             });
             itemViewHolder.rlPlus.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    ((ActivityHome)context).updateCart(0,position,true);
+                    ((ActivityContainer)context).updateCart(0,position,true);
                 }
             });
             itemViewHolder.rlMinus.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    ((ActivityHome)context).updateCart(0,position,false);
+                    ((ActivityContainer)context).updateCart(0,position,false);
                 }
             });
             itemViewHolder.ivLike.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    ((ActivityHome)context).wishListUpdate(0,position,!allProduct.getIsWishlisted());
+                    ((ActivityContainer)context).wishListUpdate(0,position,!allProduct.getIsWishlisted());
                 }
             });
           /*  itemViewHolder.tvBrandName.setText(horizontalList.get(position));

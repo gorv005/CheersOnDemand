@@ -18,6 +18,7 @@ import com.cheersondemand.model.order.updatecart.UpdateCartRequest;
 import com.cheersondemand.util.C;
 import com.cheersondemand.view.fragments.FragmentCart;
 import com.cheersondemand.view.fragments.FragmentHome;
+import com.cheersondemand.view.fragments.FragmentProductDescription;
 import com.cheersondemand.view.fragments.FragmentProfile;
 
 import java.util.List;
@@ -126,6 +127,10 @@ public class ActivityHome extends AppCompatActivity implements View.OnClickListe
         if(fragment!=null && fragment instanceof FragmentHome ){
             ((FragmentHome)fragment).addToCart(secPos,pos,isAdd);
         }
+        else   if(fragment!=null && fragment instanceof FragmentProductDescription){
+            ((FragmentProductDescription)fragment).addToCart(secPos,pos,isAdd);
+
+        }
     }
     public void updateCart(int secPos,int pos,boolean isAdd){
         Fragment fragment=getVisibleFragment();
@@ -135,6 +140,10 @@ public class ActivityHome extends AppCompatActivity implements View.OnClickListe
         else if(fragment!=null && fragment instanceof FragmentCart ){
             ((FragmentCart)fragment).updateCart(secPos,pos,isAdd);
         }
+        else   if(fragment!=null && fragment instanceof FragmentProductDescription){
+            ((FragmentProductDescription)fragment).updateCart(secPos,pos,isAdd);
+
+        }
     }
 
     public void wishListUpdate(int secPos,int pos,boolean isAdd){
@@ -143,7 +152,11 @@ public class ActivityHome extends AppCompatActivity implements View.OnClickListe
             ((FragmentHome)fragment).wishListUpdate(secPos,pos,isAdd);
         }
         else if(fragment!=null && fragment instanceof FragmentCart ){
-            ((FragmentCart)fragment).updateCart(secPos,pos,isAdd);
+            ((FragmentCart)fragment).wishListUpdate(secPos,pos,isAdd);
+        }
+        else   if(fragment!=null && fragment instanceof FragmentProductDescription){
+            ((FragmentProductDescription)fragment).wishListUpdate(secPos,pos,isAdd);
+
         }
     }
     public     void setHome(){

@@ -92,6 +92,7 @@
     <string name="buy_now">Buy Now</string>
     <string name="qty">Qty.</string>
     <string name="this_product_no_longer_available">This product is no longer available.</string>
+    <string name="added_to_wishList">Added to wishlist</string>
 
     <!--
         <string name="default_web_client_id">999387565226-hdnnhm6rhgik5ljvm06shotsi7j9883c.apps.googleusercontent.com</string>

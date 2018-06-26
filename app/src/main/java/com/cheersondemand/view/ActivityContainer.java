@@ -1,5 +1,6 @@
 package com.cheersondemand.view;
 
+import android.annotation.SuppressLint;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
@@ -22,6 +23,8 @@ import com.cheersondemand.view.fragments.FragmentProductDescription;
 import com.cheersondemand.view.fragments.FragmentProfile;
 import com.cheersondemand.view.fragments.FragmentStoreSelection;
 import com.cheersondemand.view.fragments.FragmentUpdateProfile;
+
+import java.util.List;
 
 import butterknife.ButterKnife;
 
@@ -97,8 +100,38 @@ public class ActivityContainer extends AppCompatActivity {
 
 
     }
+    private Fragment getVisibleFragment() {
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        @SuppressLint("RestrictedApi") List<Fragment> fragments = fragmentManager.getFragments();
+        for (Fragment fragment : fragments) {
+            if (fragment != null && fragment.isVisible())
+                return fragment;
+        }
+        return null;
+    }
+    public void addToCart(int secPos,int pos,boolean isAdd){
+        Fragment fragment=getVisibleFragment();
+        if(fragment!=null && fragment instanceof FragmentProductDescription){
+            ((FragmentProductDescription)fragment).addToCart(secPos,pos,isAdd);
+
+        }
+    }
+    public void updateCart(int secPos,int pos,boolean isAdd){
+        Fragment fragment=getVisibleFragment();
+        if(fragment!=null && fragment instanceof FragmentProductDescription){
+            ((FragmentProductDescription)fragment).updateCart(secPos,pos,isAdd);
+
+        }
+    }
 
 
+    public void wishListUpdate(int secPos,int pos,boolean isAdd){
+        Fragment fragment=getVisibleFragment();
+         if(fragment!=null && fragment instanceof FragmentProductDescription){
+            ((FragmentProductDescription)fragment).wishListUpdate(secPos,pos,isAdd);
+
+        }
+    }
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == android.R.id.home)

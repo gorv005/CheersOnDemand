@@ -20,6 +20,7 @@ import com.cheersondemand.model.order.addtocart.CartProduct;
 import com.cheersondemand.model.order.addtocart.OrderItem;
 import com.cheersondemand.model.order.updatecart.UpdateCartRequest;
 import com.cheersondemand.model.order.updatecart.UpdateCartResponse;
+import com.cheersondemand.model.wishlist.WishListRequest;
 import com.cheersondemand.model.wishlist.WishListResponse;
 import com.cheersondemand.presenter.home.order.IOrderViewPresenterPresenter;
 import com.cheersondemand.presenter.home.order.OrderViewPresenterImpl;
@@ -152,7 +153,47 @@ public class FragmentCart extends Fragment implements View.OnClickListener, IOrd
     }
 
 
+    public void wishListUpdate(int secPos,int pos,boolean isAdd) {
+        productPos= pos;
+        this.secPos=secPos;
+        this.isAdd=isAdd;
+        if (orderItemsList != null && orderItemsList.size() > 0) {
+            orderItem = orderItemsList.get(productPos);
 
+            WishListRequest wishListRequest=new WishListRequest();
+            wishListRequest.setProductId(orderItem.getProduct().getId());
+            wishListRequest.setUuid(Util.id(getActivity()));
+
+            updateWishList(wishListRequest,isAdd);
+        }
+
+
+    }
+
+
+    void updateWishList(WishListRequest wishListRequest,boolean status){
+        if (SharedPreference.getInstance(getActivity()).getBoolean(C.IS_LOGIN_GUEST)) {
+            String id =""+ SharedPreference.getInstance(getActivity()).geGuestUser(C.GUEST_USER).getId();
+            if(status) {
+                iOrderViewPresenterPresenter.addToWishList(id, wishListRequest);
+            }
+            else {
+                iOrderViewPresenterPresenter.removeFromWishList(id, wishListRequest);
+
+            }
+        } else {
+            String id = ""+SharedPreference.getInstance(getActivity()).getUser(C.AUTH_USER).getData().getUser().getId();
+
+            String token = C.bearer + SharedPreference.getInstance(getActivity()).getUser(C.AUTH_USER).getData().getToken().getAccessToken();
+            if(status) {
+                iOrderViewPresenterPresenter.addToWishList(token,id, wishListRequest);
+            }
+            else {
+                iOrderViewPresenterPresenter.removeFromWishList(token,id, wishListRequest);
+
+            }
+        }
+    }
     public void removeProduct(UpdateCartRequest updateCartRequest){
         String  order_id=SharedPreference.getInstance(getActivity()).getString(C.ORDER_ID);
         if (SharedPreference.getInstance(getActivity()).getBoolean(C.IS_LOGIN_GUEST)) {
@@ -237,12 +278,31 @@ public class FragmentCart extends Fragment implements View.OnClickListener, IOrd
 
     @Override
     public void addTowishListSuccess(WishListResponse response) {
+        if(response.getSuccess()){
+            util.setSnackbarMessage(getActivity(), response.getMessage(),LLView,false );
+            orderItemsList.get(productPos).getProduct().setIsWishlisted(true);
+            adapterCartList.notifyDataSetChanged();
 
+        }
+        else {
+            util.setSnackbarMessage(getActivity(), response.getMessage(),LLView,true );
+
+        }
     }
 
     @Override
     public void removeFromWishListSuccess(WishListResponse response) {
+        if(response.getSuccess()){
+            util.setSnackbarMessage(getActivity(), response.getMessage(),LLView,false );
+            orderItemsList.get(productPos).getProduct().setIsWishlisted(false);
 
+            adapterCartList.notifyDataSetChanged();
+
+        }
+        else {
+            util.setSnackbarMessage(getActivity(), response.getMessage(),LLView,true );
+
+        }
     }
 
     @Override

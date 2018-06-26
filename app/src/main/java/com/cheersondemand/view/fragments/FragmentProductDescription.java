@@ -13,20 +13,31 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.cheersondemand.R;
 import com.cheersondemand.model.AllProduct;
+import com.cheersondemand.model.authentication.GenRequest;
+import com.cheersondemand.model.order.CreateOrderResponse;
+import com.cheersondemand.model.order.addtocart.AddToCartRequest;
+import com.cheersondemand.model.order.addtocart.AddToCartResponse;
+import com.cheersondemand.model.order.updatecart.UpdateCartRequest;
+import com.cheersondemand.model.order.updatecart.UpdateCartResponse;
 import com.cheersondemand.model.productdescription.Offers;
 import com.cheersondemand.model.productdescription.SimilarProductsResponse;
+import com.cheersondemand.model.wishlist.WishListRequest;
+import com.cheersondemand.model.wishlist.WishListResponse;
+import com.cheersondemand.presenter.home.order.IOrderViewPresenterPresenter;
+import com.cheersondemand.presenter.home.order.OrderViewPresenterImpl;
 import com.cheersondemand.presenter.productDescription.IProductDescViewPresenter;
 import com.cheersondemand.presenter.productDescription.ProductDescViewPresenterImpl;
 import com.cheersondemand.util.C;
 import com.cheersondemand.util.ImageLoader.ImageLoader;
 import com.cheersondemand.util.SharedPreference;
 import com.cheersondemand.util.Util;
+import com.cheersondemand.view.adapter.AdapterHomeCategories;
 import com.cheersondemand.view.adapter.productdescription.AdapterOffers;
-import com.cheersondemand.view.adapter.productdescription.AdapterSimilarProducts;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -38,9 +49,8 @@ import butterknife.Unbinder;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class FragmentProductDescription extends Fragment implements IProductDescViewPresenter.IProductDescView {
+public class FragmentProductDescription extends Fragment implements IProductDescViewPresenter.IProductDescView, IOrderViewPresenterPresenter.IOrderView {
 
-    AllProduct product;
     @BindView(R.id.imgProduct)
     ImageView imgProduct;
     @BindView(R.id.lvOffers)
@@ -72,12 +82,24 @@ public class FragmentProductDescription extends Fragment implements IProductDesc
     AdapterOffers adapterOffers;
     LinearLayoutManager horizontalLayout;
     IProductDescViewPresenter iProductDescViewPresenter;
-    AdapterSimilarProducts adapterSimilarProducts;
+    IOrderViewPresenterPresenter iOrderViewPresenterPresenter;
+    AdapterHomeCategories adapterSimilarProducts;
     @BindView(R.id.btnAddToCart)
     Button btnAddToCart;
     @BindView(R.id.btnBuyNow)
     Button btnBuyNow;
-
+    AllProduct product;
+    @BindView(R.id.rlImage)
+    RelativeLayout rlImage;
+    @BindView(R.id.rlSimilar)
+    RelativeLayout rlSimilar;
+    @BindView(R.id.rlView)
+    RelativeLayout rlView;
+    private int productPos;
+    private int secPos;
+    private boolean isAdd;
+    List<AllProduct> allProductList;
+    Util util;
     public FragmentProductDescription() {
         // Required empty public constructor
     }
@@ -88,6 +110,8 @@ public class FragmentProductDescription extends Fragment implements IProductDesc
         imageLoader = new ImageLoader(getActivity());
         product = (AllProduct) getArguments().getSerializable(C.PRODUCT);
         iProductDescViewPresenter = new ProductDescViewPresenterImpl(this, getActivity());
+        iOrderViewPresenterPresenter = new OrderViewPresenterImpl(this, getActivity());
+        util=new Util();
         getSimilarProducts();
     }
 
@@ -149,19 +173,289 @@ public class FragmentProductDescription extends Fragment implements IProductDesc
     }
 
 
+    public void addToCart(int secPos,int pos,boolean isAdd) {
+        productPos= pos;
+        this.secPos=secPos;
+        this.isAdd=isAdd;
+        if (allProductList != null && allProductList.size() > 0) {
+
+            product =allProductList.get(pos);
+            if (SharedPreference.getInstance(getActivity()).getString(C.ORDER_ID) == null) {
+                createOrder();
+            } else {
+                addToCart();
+            }
+        }
+
+
+    }
+
+    void createOrder(){
+        if (SharedPreference.getInstance(getActivity()).getBoolean(C.IS_LOGIN_GUEST)) {
+            String id =""+ SharedPreference.getInstance(getActivity()).geGuestUser(C.GUEST_USER).getId();
+
+            iOrderViewPresenterPresenter.createOrder(id, new GenRequest(Util.id(getActivity())));
+        } else {
+            String id = ""+SharedPreference.getInstance(getActivity()).getUser(C.AUTH_USER).getData().getUser().getId();
+
+            String token = C.bearer + SharedPreference.getInstance(getActivity()).getUser(C.AUTH_USER).getData().getToken().getAccessToken();
+            iOrderViewPresenterPresenter.createOrder(token, id, new GenRequest(Util.id(getActivity())));
+        }
+    }
+
+    void addToCart(){
+        AddToCartRequest addToCartRequest=new AddToCartRequest();
+        addToCartRequest.setUuid(Util.id(getActivity()));
+        addToCartRequest.setProductId(product.getId());
+        if(product.getCartQunatity()==null || product.getCartQunatity().equalsIgnoreCase("0")) {
+            addToCartRequest.setQuantity(1);
+        }
+        else {
+            addToCartRequest.setQuantity(Integer.parseInt(product.getCartQunatity()) + 1);
+
+        }
+        String  order_id=SharedPreference.getInstance(getActivity()).getString(C.ORDER_ID);
+        if (SharedPreference.getInstance(getActivity()).getBoolean(C.IS_LOGIN_GUEST)) {
+            String id =""+ SharedPreference.getInstance(getActivity()).geGuestUser(C.GUEST_USER).getId();
+
+            iOrderViewPresenterPresenter.addToCart(id,order_id,addToCartRequest);
+        }
+        else {
+            String id = ""+SharedPreference.getInstance(getActivity()).getUser(C.AUTH_USER).getData().getUser().getId();
+
+            String token = C.bearer + SharedPreference.getInstance(getActivity()).getUser(C.AUTH_USER).getData().getToken().getAccessToken();
+            iOrderViewPresenterPresenter.addToCart(token,id,order_id,addToCartRequest);
+
+        }
+    }
+
+    public void wishListUpdate(int secPos, int pos, boolean isAdd) {
+        productPos = pos;
+        this.secPos = secPos;
+        this.isAdd = isAdd;
+        if (allProductList != null && allProductList.size() > 0) {
+
+            product = allProductList.get(pos);
+            WishListRequest wishListRequest = new WishListRequest();
+            wishListRequest.setProductId(product.getId());
+            wishListRequest.setUuid(Util.id(getActivity()));
+
+            updateWishList(wishListRequest, isAdd);
+        }
+
+
+    }
+
+
+    void updateWishList(WishListRequest wishListRequest, boolean status) {
+        if (SharedPreference.getInstance(getActivity()).getBoolean(C.IS_LOGIN_GUEST)) {
+            String id = "" + SharedPreference.getInstance(getActivity()).geGuestUser(C.GUEST_USER).getId();
+            if (status) {
+                iOrderViewPresenterPresenter.addToWishList(id, wishListRequest);
+            } else {
+                iOrderViewPresenterPresenter.removeFromWishList(id, wishListRequest);
+
+            }
+        } else {
+            String id = "" + SharedPreference.getInstance(getActivity()).getUser(C.AUTH_USER).getData().getUser().getId();
+
+            String token = C.bearer + SharedPreference.getInstance(getActivity()).getUser(C.AUTH_USER).getData().getToken().getAccessToken();
+            if (status) {
+                iOrderViewPresenterPresenter.addToWishList(token, id, wishListRequest);
+            } else {
+                iOrderViewPresenterPresenter.removeFromWishList(token, id, wishListRequest);
+
+            }
+        }
+    }
+
+    public void updateCart(int secPos, int productPos, boolean isAdd) {
+        this.secPos = secPos;
+        this.productPos = productPos;
+        this.isAdd = isAdd;
+        if (allProductList != null && allProductList.size() > 0) {
+
+            product = allProductList.get(productPos);
+
+            UpdateCartRequest updateCartRequest = new UpdateCartRequest();
+            updateCartRequest.setUuid(Util.id(getActivity()));
+            updateCartRequest.setProductId(product.getId());
+            updateCartRequest.setIsIncrease(isAdd);
+            if (isAdd) {
+                updateCartRequest.setQuantity(Integer.parseInt(product.getCartQunatity()) + 1);
+                updateProduct(updateCartRequest);
+            } else {
+                if (Integer.parseInt(product.getCartQunatity()) == 1) {
+                    removeProduct(updateCartRequest);
+                } else {
+                    updateCartRequest.setQuantity(Integer.parseInt(product.getCartQunatity()) - 1);
+                    updateProduct(updateCartRequest);
+                }
+            }
+
+        }
+    }
+
+
+    public void removeProduct(UpdateCartRequest updateCartRequest) {
+        String order_id = SharedPreference.getInstance(getActivity()).getString(C.ORDER_ID);
+        if (SharedPreference.getInstance(getActivity()).getBoolean(C.IS_LOGIN_GUEST)) {
+            String id = "" + SharedPreference.getInstance(getActivity()).geGuestUser(C.GUEST_USER).getId();
+            iOrderViewPresenterPresenter.removeItemFromCart(id, order_id, updateCartRequest);
+        } else {
+            String id = "" + SharedPreference.getInstance(getActivity()).getUser(C.AUTH_USER).getData().getUser().getId();
+
+            String token = C.bearer + SharedPreference.getInstance(getActivity()).getUser(C.AUTH_USER).getData().getToken().getAccessToken();
+            iOrderViewPresenterPresenter.removeItemFromCart(token, id, order_id, updateCartRequest);
+        }
+    }
+
+    void updateProduct(UpdateCartRequest updateCartRequest) {
+        String order_id = SharedPreference.getInstance(getActivity()).getString(C.ORDER_ID);
+        if (SharedPreference.getInstance(getActivity()).getBoolean(C.IS_LOGIN_GUEST)) {
+            String id = "" + SharedPreference.getInstance(getActivity()).geGuestUser(C.GUEST_USER).getId();
+            iOrderViewPresenterPresenter.updateCart(id, order_id, updateCartRequest);
+        } else {
+            String id = "" + SharedPreference.getInstance(getActivity()).getUser(C.AUTH_USER).getData().getUser().getId();
+
+            String token = C.bearer + SharedPreference.getInstance(getActivity()).getUser(C.AUTH_USER).getData().getToken().getAccessToken();
+            iOrderViewPresenterPresenter.updateCart(token, id, order_id, updateCartRequest);
+        }
+    }
+
     @Override
     public void getResponseSuccess(SimilarProductsResponse response) {
         if (response.getSuccess()) {
             if (response.getData().getSimilarProducts().size() > 0) {
-                adapterSimilarProducts = new AdapterSimilarProducts(response.getData().getSimilarProducts(), getActivity());
-                rvSimilarDrinks.setAdapter(adapterSimilarProducts);
+                allProductList = response.getData().getSimilarProducts();
+                if (allProductList.size() > 0) {
+                    adapterSimilarProducts = new AdapterHomeCategories(allProductList, getActivity());
+                    rvSimilarDrinks.setAdapter(adapterSimilarProducts);
+                }
+            } else {
+                rlSimilar.setVisibility(View.GONE);
+                rvSimilarDrinks.setVisibility(View.GONE);
             }
         }
 
     }
 
     @Override
+    public void getCreateOrderSuccess(CreateOrderResponse response) {
+        if (response.getSuccess()) {
+            SharedPreference.getInstance(getActivity()).setString(C.ORDER_ID, "" + response.getData().getOrder().getId());
+            addToCart();
+        }
+        else {
+            util.setSnackbarMessage(getActivity(), response.getMessage(),rlView,true );
+
+        }
+    }
+
+    @Override
+    public void getAddToCartSucess(AddToCartResponse response) {
+        if (response.getSuccess()) {
+            util.setSnackbarMessage(getActivity(), response.getMessage(),rlView,false );
+            updateCart();
+        }
+        else {
+            util.setSnackbarMessage(getActivity(), response.getMessage(),rlView,true );
+
+        }
+    }
+
+    @Override
+    public void getUpdateCartSuccess(UpdateCartResponse response) {
+        if (response.getSuccess()) {
+            util.setSnackbarMessage(getActivity(), response.getMessage(), rlView, false);
+            updateCart();
+        } else {
+            util.setSnackbarMessage(getActivity(), response.getMessage(), rlView, true);
+
+        }
+    }
+    void updateCart(){
+        int q;
+        if(product.getCartQunatity()==null || product.getCartQunatity().equalsIgnoreCase("0")) {
+            product.setCartQunatity("1");
+            product.setIsInCart(true);
+
+        }
+        else {
+            if(isAdd) {
+                q =Integer.parseInt(product.getCartQunatity()) + 1;
+            }
+            else {
+                q= Integer.parseInt(product.getCartQunatity()) - 1;
+
+            }
+            product.setCartQunatity(""+q);
+            if(q==0){
+                product.setIsInCart(false);
+
+            }
+            else {
+                product.setIsInCart(true);
+
+            }
+        }
+
+        allProductList.set(productPos,product);
+        adapterSimilarProducts.notifyDataSetChanged();
+    }
+    @Override
+    public void getRemoveItemFromCartSuccess(UpdateCartResponse response) {
+        if(response.getSuccess()){
+            util.setSnackbarMessage(getActivity(), response.getMessage(),rlView,false );
+
+            product.setCartQunatity(null);
+            product.setIsInCart(false);
+            allProductList.set(productPos,product);
+            adapterSimilarProducts.notifyDataSetChanged();
+
+        }
+        else {
+            util.setSnackbarMessage(getActivity(), response.getMessage(),rlView,true );
+
+        }
+    }
+
+    @Override
+    public void getCartListSuccess(UpdateCartResponse response) {
+
+    }
+
+    @Override
+    public void addTowishListSuccess(WishListResponse response) {
+        if(response.getSuccess()){
+            util.setSnackbarMessage(getActivity(), response.getMessage(),rlView,false );
+            product.setIsWishlisted(true);
+            adapterSimilarProducts.notifyDataSetChanged();
+
+        }
+        else {
+            util.setSnackbarMessage(getActivity(), response.getMessage(),rlView,true );
+
+        }
+    }
+
+    @Override
+    public void removeFromWishListSuccess(WishListResponse response) {
+        if(response.getSuccess()){
+            util.setSnackbarMessage(getActivity(), response.getMessage(),rlView,false );
+            product.setIsWishlisted(false);
+            adapterSimilarProducts.notifyDataSetChanged();
+
+        }
+        else {
+            util.setSnackbarMessage(getActivity(), response.getMessage(),rlView,true );
+
+        }
+    }
+
+    @Override
     public void getResponseError(String response) {
+        util.setSnackbarMessage(getActivity(), response,rlView,true );
 
     }
 
