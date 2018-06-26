@@ -26,13 +26,13 @@ public class Order {
     private String orderDate;
     @SerializedName("sub_total")
     @Expose
-    private Float subTotal;
+    private Double subTotal;
     @SerializedName("total")
     @Expose
-    private Float total;
+    private Double total;
     @SerializedName("applied_discount")
     @Expose
-    private Integer appliedDiscount;
+    private Double appliedDiscount;
     @SerializedName("is_gift")
     @Expose
     private Boolean isGift;
@@ -42,6 +42,9 @@ public class Order {
     @SerializedName("is_address_available")
     @Expose
     private Boolean isAddressAvailable;
+    @SerializedName("is_store_open")
+    @Expose
+    private Boolean isStoreOpen;
     @SerializedName("is_card_added")
     @Expose
     private Boolean isCardAdded;
@@ -87,27 +90,27 @@ public class Order {
         this.orderDate = orderDate;
     }
 
-    public Float getSubTotal() {
+    public Double getSubTotal() {
         return subTotal;
     }
 
-    public void setSubTotal(Float subTotal) {
+    public void setSubTotal(Double subTotal) {
         this.subTotal = subTotal;
     }
 
-    public Float getTotal() {
+    public Double getTotal() {
         return total;
     }
 
-    public void setTotal(Float total) {
+    public void setTotal(Double total) {
         this.total = total;
     }
 
-    public Integer getAppliedDiscount() {
+    public Double getAppliedDiscount() {
         return appliedDiscount;
     }
 
-    public void setAppliedDiscount(Integer appliedDiscount) {
+    public void setAppliedDiscount(Double appliedDiscount) {
         this.appliedDiscount = appliedDiscount;
     }
 
@@ -199,5 +202,13 @@ public class Order {
 
     public void setCoupon(Coupon coupon) {
         this.coupon = coupon;
+    }
+
+    public Boolean getStoreOpen() {
+        return isStoreOpen;
+    }
+
+    public void setStoreOpen(Boolean storeOpen) {
+        isStoreOpen = storeOpen;
     }
 }

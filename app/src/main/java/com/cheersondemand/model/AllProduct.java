@@ -188,4 +188,19 @@ public class AllProduct implements Serializable {
         this.category = category;
     }
 
+    public Boolean getWishlisted() {
+        return isWishlisted;
+    }
+
+    public void setWishlisted(Boolean wishlisted) {
+        isWishlisted = wishlisted;
+    }
+
+    public Boolean getInCart() {
+        return isInCart;
+    }
+
+    public void setInCart(Boolean inCart) {
+        isInCart = inCart;
+    }
 }

@@ -42,7 +42,7 @@ public class AdapterHomeCategoriesSections extends RecyclerView.Adapter<AdapterH
 
         itemRowHolder.itemTitle.setText(sectionName);
 
-         adapterHomeCategories = new AdapterHomeCategories (category,mContext);
+         adapterHomeCategories = new AdapterHomeCategories (true,category,mContext);
 
         itemRowHolder.recyclerProductList.setHasFixedSize(true);
         itemRowHolder.recyclerProductList.setLayoutManager(new LinearLayoutManager(mContext, LinearLayoutManager.HORIZONTAL, false));

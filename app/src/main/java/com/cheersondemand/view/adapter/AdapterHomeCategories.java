@@ -31,6 +31,7 @@ public class AdapterHomeCategories extends RecyclerView.Adapter<RecyclerView.Vie
 private List<AllProduct> horizontalList;
     Activity context;
     ImageLoader imageLoader;
+    boolean isHome;
 public class ItemViewHolder extends RecyclerView.ViewHolder {
     public TextView tvProductName,tvProductPrice,tvQuantity;
     public ImageView ivProductImage,ivLike;
@@ -53,9 +54,10 @@ public class ItemViewHolder extends RecyclerView.ViewHolder {
 }
 
 
-    public AdapterHomeCategories(List<AllProduct> horizontalList, Activity context) {
+    public AdapterHomeCategories(boolean isHome,List<AllProduct> horizontalList, Activity context) {
         this.horizontalList = horizontalList;
         this.context=context;
+        this.isHome=isHome;
         imageLoader=new ImageLoader(context);
     }
 
@@ -114,25 +116,48 @@ public class ItemViewHolder extends RecyclerView.ViewHolder {
             itemViewHolder.btnAddToCart.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    ((ActivityContainer)context).addToCart(0,position,true);
+                    if(isHome){
+                        ((ActivityHome) context).addToCart(0, position, true);
+
+                    }
+                    else {
+                        ((ActivityContainer) context).addToCart(0, position, true);
+                    }
                 }
             });
             itemViewHolder.rlPlus.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    ((ActivityContainer)context).updateCart(0,position,true);
+                    if(isHome){
+                        ((ActivityHome) context).updateCart(0, position, true);
+
+                    }
+                    else {
+                        ((ActivityContainer) context).updateCart(0, position, true);
+                    }
                 }
             });
             itemViewHolder.rlMinus.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    ((ActivityContainer)context).updateCart(0,position,false);
+                    if(isHome){
+                        ((ActivityHome) context).updateCart(0, position, false);
+
+                    }
+                    else {
+                        ((ActivityContainer) context).updateCart(0, position, false);
+                    }
                 }
             });
             itemViewHolder.ivLike.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    ((ActivityContainer)context).wishListUpdate(0,position,!allProduct.getIsWishlisted());
+                    if (isHome) {
+                        ((ActivityHome) context).wishListUpdate(0, position, !allProduct.getIsWishlisted());
+
+                    } else {
+                        ((ActivityContainer) context).wishListUpdate(0, position, !allProduct.getIsWishlisted());
+                    }
                 }
             });
           /*  itemViewHolder.tvBrandName.setText(horizontalList.get(position));

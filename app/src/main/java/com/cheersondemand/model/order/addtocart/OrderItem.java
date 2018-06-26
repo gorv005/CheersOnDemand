@@ -19,6 +19,9 @@ public class OrderItem {
     @SerializedName("unit_price")
     @Expose
     private String unitPrice;
+    @SerializedName("old_unit_price")
+    @Expose
+    private String oldUnitPrice;
     @SerializedName("total_price")
     @Expose
     private String totalPrice;
@@ -75,13 +78,7 @@ public class OrderItem {
         this.productName = productName;
     }
 
-    public Boolean getIsDeliverable() {
-        return isDeliverable;
-    }
 
-    public void setIsDeliverable(Boolean isDeliverable) {
-        this.isDeliverable = isDeliverable;
-    }
 
     public String getRemainingStockMessage() {
         return remainingStockMessage;
@@ -98,5 +95,25 @@ public class OrderItem {
     public void setProduct(AllProduct product) {
         this.product = product;
     }
+
+    public String getOldUnitPrice() {
+        return oldUnitPrice;
+    }
+
+    public void setOldUnitPrice(String oldUnitPrice) {
+        this.oldUnitPrice = oldUnitPrice;
+    }
+
+
+
+    public Boolean getIsDeliverable() {
+        return isDeliverable;
+    }
+
+    public void setIsDeliverable(Boolean isDeliverable) {
+        this.isDeliverable = isDeliverable;
+    }
+
+
 
 }

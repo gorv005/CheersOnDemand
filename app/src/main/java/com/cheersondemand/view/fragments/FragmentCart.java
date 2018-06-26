@@ -17,6 +17,7 @@ import com.cheersondemand.R;
 import com.cheersondemand.model.order.CreateOrderResponse;
 import com.cheersondemand.model.order.addtocart.AddToCartResponse;
 import com.cheersondemand.model.order.addtocart.CartProduct;
+import com.cheersondemand.model.order.addtocart.Order;
 import com.cheersondemand.model.order.addtocart.OrderItem;
 import com.cheersondemand.model.order.updatecart.UpdateCartRequest;
 import com.cheersondemand.model.order.updatecart.UpdateCartResponse;
@@ -56,6 +57,7 @@ public class FragmentCart extends Fragment implements View.OnClickListener, IOrd
     AdapterCartList adapterCartList;
     Util util;
     CartProduct cartProduct;
+    Order order;
     List<OrderItem> orderItemsList;
     int secPos,productPos;
     boolean isAdd;
@@ -233,10 +235,14 @@ public class FragmentCart extends Fragment implements View.OnClickListener, IOrd
         if (response.getSuccess()) {
             util.setSnackbarMessage(getActivity(), response.getMessage(),LLView,false );
             cartProduct=response.getData();
+
             orderItemsList.clear();
-            for(int i=0;i<response.getData().getOrder().getOrderItems().size();i++) {
+            orderItemsList=response.getData().getOrder().getOrderItems();
+            adapterCartList.setData(cartProduct,orderItemsList);
+
+            /*for(int i=0;i<response.getData().getOrder().getOrderItems().size();i++) {
                 orderItemsList.add(response.getData().getOrder().getOrderItems().get(i));
-            }
+            }*/
             adapterCartList.notifyDataSetChanged();
         }
         else {
@@ -251,9 +257,12 @@ public class FragmentCart extends Fragment implements View.OnClickListener, IOrd
             util.setSnackbarMessage(getActivity(), response.getMessage(),LLView,false );
             cartProduct=response.getData();
             orderItemsList.clear();
-            for(int i=0;i<response.getData().getOrder().getOrderItems().size();i++) {
+            orderItemsList=response.getData().getOrder().getOrderItems();
+            adapterCartList.setData(cartProduct,orderItemsList);
+
+          /*  for(int i=0;i<response.getData().getOrder().getOrderItems().size();i++) {
                 orderItemsList.add(response.getData().getOrder().getOrderItems().get(i));
-            }
+            }*/
             adapterCartList.notifyDataSetChanged();
         }
         else {
@@ -266,8 +275,9 @@ public class FragmentCart extends Fragment implements View.OnClickListener, IOrd
     public void getCartListSuccess(UpdateCartResponse response) {
         if (response.getSuccess()) {
             cartProduct=response.getData();
+//            adapterCartList.setData(cartProduct);
             orderItemsList=response.getData().getOrder().getOrderItems();
-            adapterCartList = new AdapterCartList(orderItemsList, getActivity());
+            adapterCartList = new AdapterCartList(cartProduct,orderItemsList, getActivity());
             rvCartList.setAdapter(adapterCartList);
         }
         else {

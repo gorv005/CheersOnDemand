@@ -44,7 +44,7 @@
     <color name="offer_back">#CCDEF2</color>
     <color name="offer_text">#3F5E89</color>
     <color name="add_to_cart_text">#575E69</color>
-
+    <color name="yellow">#F8AF35</color>
 
 
 </resources>

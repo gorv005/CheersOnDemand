@@ -93,6 +93,16 @@
     <string name="qty">Qty.</string>
     <string name="this_product_no_longer_available">This product is no longer available.</string>
     <string name="added_to_wishList">Added to wishlist</string>
+    <string name="your_cart">Your Cart</string>
+    <string name="amount">Amount</string>
+    <string name="taxes">Taxes</string>
+    <string name="delivery_charges">Delievry Charges</string>
+    <string name="apply_Coupen">Apply Coupon</string>
+    <string name="coupen_applied">Coupen Applied</string>
+    <string name="change_coupon">Change Coupon</string>
+    <string name="total_amount">Total Amount</string>
+    <string name="doller">$</string>
+    <string name="subtotal">Sub Total</string>
 
     <!--
         <string name="default_web_client_id">999387565226-hdnnhm6rhgik5ljvm06shotsi7j9883c.apps.googleusercontent.com</string>

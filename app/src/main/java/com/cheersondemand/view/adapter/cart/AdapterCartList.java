@@ -7,10 +7,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.cheersondemand.R;
+import com.cheersondemand.model.order.addtocart.CartProduct;
 import com.cheersondemand.model.order.addtocart.OrderItem;
 import com.cheersondemand.model.order.updatecart.UpdateCartRequest;
 import com.cheersondemand.util.ImageLoader.ImageLoader;
@@ -31,7 +32,10 @@ public class AdapterCartList extends RecyclerView.Adapter<RecyclerView.ViewHolde
 private List<OrderItem> horizontalList;
     Context context;
     ImageLoader imageLoader;
-public class ItemViewHolder extends RecyclerView.ViewHolder {
+    CartProduct cartProduct;
+    AdapterProductAmount adapterProductAmount;
+
+    public class ItemViewHolder extends RecyclerView.ViewHolder {
     public TextView tvName,tvSubName,tvPrice,tvQuantity,tvAddToWishList;
     public CircleImageView ivProductImage;
     ImageView imgProduct,ivLike;
@@ -59,17 +63,36 @@ public class ItemViewHolder extends RecyclerView.ViewHolder {
 }
 
     public class FooterViewHolder extends RecyclerView.ViewHolder {
-        CircleImageView ivMore;
+        ListView lvCharges;
+        TextView tvTaxes,tvDelieveryCharges,tvSubTotal,tvCouponAmount,tvCouponName,tvChangeCoupon,tvTotalAmount;
+        View rlAfterApplyCoupon,rlApplyCoupon;
         public FooterViewHolder(View view) {
             super(view);
-            ivMore = (CircleImageView) view.findViewById(R.id.ivProductMore);
+            lvCharges = (ListView) view.findViewById(R.id.lvCharges);
+            tvTaxes = (TextView) view.findViewById(R.id.tvTaxes);
+            tvDelieveryCharges = (TextView) view.findViewById(R.id.tvDelieveryCharges);
+            tvSubTotal = (TextView) view.findViewById(R.id.tvSubTotal);
+            tvCouponAmount = (TextView) view.findViewById(R.id.tvCouponAmount);
+            tvCouponName = (TextView) view.findViewById(R.id.tvCouponName);
+            tvChangeCoupon = (TextView) view.findViewById(R.id.tvChangeCoupon);
+            tvTotalAmount = (TextView) view.findViewById(R.id.tvTotalAmount);
+            rlAfterApplyCoupon = (View) view.findViewById(R.id.rlAfterApplyCoupon);
+            rlApplyCoupon = (View) view.findViewById(R.id.rlApplyCoupon);
+
+
         }
     }
-    public AdapterCartList(List<OrderItem> horizontalList, Activity context) {
+    public AdapterCartList(CartProduct cartProduct,List<OrderItem> horizontalList, Activity context) {
         this.horizontalList = horizontalList;
         this.context=context;
+        this.cartProduct=cartProduct;
         imageLoader=new ImageLoader(context);
 
+    }
+    public void setData(CartProduct data,List<OrderItem> horizontalList){
+        this.cartProduct=data;
+        this.horizontalList.clear();
+        this.horizontalList=horizontalList;
     }
 
     @Override
@@ -88,7 +111,7 @@ public class ItemViewHolder extends RecyclerView.ViewHolder {
     }
     else if (viewType == TYPE_FOOTER) {
         //Inflating footer view
-        View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.product_round_item_footer, parent, false);
+        View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_cart_products_and_charges, parent, false);
         return new FooterViewHolder(itemView);
     }
     else return null;
@@ -161,14 +184,22 @@ public class ItemViewHolder extends RecyclerView.ViewHolder {
         }
         else if (holder instanceof FooterViewHolder) {
             final FooterViewHolder footerViewHolder = (FooterViewHolder) holder;
-            footerViewHolder.ivMore.setOnClickListener(new View.OnClickListener() {
+
+            adapterProductAmount=new AdapterProductAmount(context,horizontalList);
+            footerViewHolder.lvCharges.setAdapter(adapterProductAmount);
+            Util.setListViewHeightBasedOnChildren(footerViewHolder.lvCharges);
+            footerViewHolder.tvTaxes.setText(context.getString(R.string.doller)+"0.0");
+            footerViewHolder.tvDelieveryCharges.setText(context.getString(R.string.doller)+"0.0");
+            footerViewHolder.tvSubTotal.setText(context.getString(R.string.subtotal)+"   "+context.getString(R.string.doller)+cartProduct.getOrder().getSubTotal());
+
+           /* footerViewHolder.ivMore.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     Toast.makeText(context, "More", Toast.LENGTH_SHORT).show();
 
                 }
             });
-        }
+*/        }
 
 
 
@@ -182,7 +213,7 @@ public class ItemViewHolder extends RecyclerView.ViewHolder {
     }
     @Override
     public int getItemCount() {
-        return horizontalList.size();
+        return horizontalList.size()+1;
     }
 
 }

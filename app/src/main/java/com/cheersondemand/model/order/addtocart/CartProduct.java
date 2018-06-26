@@ -12,6 +12,9 @@ public class CartProduct {
     @SerializedName("coupon_message")
     @Expose
     private String couponMessage;
+    @SerializedName("delivery_address")
+    @Expose
+    private String deliveryAddress;
     @SerializedName("order")
     @Expose
     private Order order;
@@ -30,5 +33,13 @@ public class CartProduct {
 
     public void setOrder(Order order) {
         this.order = order;
+    }
+
+    public String getDeliveryAddress() {
+        return deliveryAddress;
+    }
+
+    public void setDeliveryAddress(String deliveryAddress) {
+        this.deliveryAddress = deliveryAddress;
     }
 }

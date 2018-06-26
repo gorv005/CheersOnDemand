@@ -329,7 +329,7 @@ public class FragmentProductDescription extends Fragment implements IProductDesc
             if (response.getData().getSimilarProducts().size() > 0) {
                 allProductList = response.getData().getSimilarProducts();
                 if (allProductList.size() > 0) {
-                    adapterSimilarProducts = new AdapterHomeCategories(allProductList, getActivity());
+                    adapterSimilarProducts = new AdapterHomeCategories(false,allProductList, getActivity());
                     rvSimilarDrinks.setAdapter(adapterSimilarProducts);
                 }
             } else {
