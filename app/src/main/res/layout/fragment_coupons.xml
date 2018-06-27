@@ -1,0 +1,146 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:id="@+id/LLView"
+    android:background="@color/white"
+   >
+
+   <!-- <TextView
+        android:layout_width="match_parent"
+        android:background="@color/white"
+        android:layout_height="60dp"
+        android:layout_centerHorizontal="true"
+        android:layout_gravity="center"
+        android:paddingTop="15dp"
+        android:textStyle="bold"
+        android:fontFamily="@font/sf_ui_display_regular"
+        android:gravity="center|center_vertical"
+        android:textColor="@color/profile_text_color"
+        android:textSize="16.3sp"
+        android:text="@string/coupon_code" />
+    <View
+        android:background="@color/hint_color"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"/>-->
+    <RelativeLayout
+
+        android:layout_marginTop="5dp"
+        android:background="@color/white"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingLeft="40dp"
+        android:paddingRight="40dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:focusable="true"
+            android:layout_marginBottom="30dp"
+            android:layout_marginRight="130dp"
+            android:focusableInTouchMode="true"
+            android:orientation="vertical">
+
+        <TextView
+
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:fontFamily="@font/sf_ui_display_regular"
+            android:text="@string/enter_coupon_code"
+            android:textColor="@color/profile_updated_text_color"
+            android:textSize="14sp" />
+
+        <EditText
+            android:id="@+id/etCouponName"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_centerHorizontal="true"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            android:fontFamily="@font/sf_ui_display_regular"
+            android:maxLines="1"
+            android:singleLine="true"
+            android:textColor="@color/editext_text_color"
+            android:textColorHint="@color/editext_hint_color"
+            android:textCursorDrawable="@drawable/edit_text_cursor_color"
+            android:textSize="16sp" />
+        </LinearLayout>
+        <Button
+            android:id="@+id/btnApply"
+            android:layout_width="100dp"
+            android:layout_height="45dp"
+            android:layout_centerVertical="true"
+            android:layout_gravity="center_horizontal"
+            android:layout_alignParentRight="true"
+            android:background="@drawable/bg_button_noborder_disable"
+            android:fontFamily="@font/sf_ui_display_regular"
+            android:text="@string/apply"
+            android:textAllCaps="true"
+            android:textColor="@color/white"
+            android:textSize="13.4sp" />
+    </RelativeLayout>
+
+
+    <RelativeLayout
+        android:paddingLeft="40dp"
+        android:paddingRight="40dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+
+            android:layout_centerHorizontal="true"
+            android:id="@+id/tvOr"
+            android:layout_centerInParent="true"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:background="@drawable/like_back"
+            android:fontFamily="@font/sf_ui_display_regular"
+            android:textStyle="bold"
+            android:layout_centerVertical="true"
+            android:text="@string/or"
+            android:gravity="center"
+            android:textColor="@color/offer_text"
+            android:textSize="18sp" />
+        <View
+            android:layout_toLeftOf="@id/tvOr"
+            android:background="@color/hint_color"
+            android:layout_centerVertical="true"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"/>
+        <View
+            android:layout_toRightOf="@id/tvOr"
+            android:background="@color/hint_color"
+            android:layout_centerVertical="true"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"/>
+
+
+    </RelativeLayout>
+
+
+    <TextView
+        android:layout_marginTop="20dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="14.4sp"
+        android:paddingLeft="40dp"
+        android:paddingRight="40dp"
+        android:textColor="@color/profile_text_color"
+        android:text="@string/select_following"
+        />
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/rvCouponList"
+        android:visibility="visible"
+        android:layout_marginTop="20dp"
+        android:paddingLeft="40dp"
+        android:paddingRight="40dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+    </android.support.v7.widget.RecyclerView>
+
+</LinearLayout>

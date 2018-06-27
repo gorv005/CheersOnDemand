@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/card_view"
+    card_view:cardBackgroundColor="@color/white"
+
+    card_view:cardElevation="2dp"
+
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    card_view:cardCornerRadius="5dp">
+    <RelativeLayout
+        android:id="@+id/rlCard"
+        android:padding="20dp"
+        android:layout_width="match_parent"
+        android:layout_centerInParent="true"
+        android:layout_height="wrap_content">
+
+
+
+            <LinearLayout
+                android:layout_marginRight="60dp"
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <TextView
+                    android:id="@+id/tvCouponTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="14.4sp"
+                    android:textColor="@color/profile_text_color"
+                    android:text="@string/select_following"
+                    />
+                <TextView
+                    android:id="@+id/tvCouponDesc"
+                    android:layout_marginTop="5dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="14.4sp"
+                    android:textColor="@color/profile_updated_text_color"
+                    android:text="@string/select_following"
+                    />
+                <TextView
+                    android:id="@+id/tvTermsAndCondition"
+                    android:layout_marginTop="5dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="14.4sp"
+                    android:textColor="@color/profile_text_color"
+                    android:text="@string/terms_and_condition"
+                    />
+
+        </LinearLayout>
+        <TextView
+            android:id="@+id/tvApply"
+            android:layout_alignParentRight="true"
+            android:layout_marginTop="5dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="16sp"
+            android:textColor="@color/red"
+            android:text="@string/apply"
+            />
+        </RelativeLayout>
+    </android.support.v7.widget.CardView>

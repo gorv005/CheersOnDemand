@@ -14,8 +14,10 @@ import com.cheersondemand.R;
 import com.cheersondemand.model.order.addtocart.CartProduct;
 import com.cheersondemand.model.order.addtocart.OrderItem;
 import com.cheersondemand.model.order.updatecart.UpdateCartRequest;
+import com.cheersondemand.util.C;
 import com.cheersondemand.util.ImageLoader.ImageLoader;
 import com.cheersondemand.util.Util;
+import com.cheersondemand.view.ActivityContainer;
 import com.cheersondemand.view.ActivityHome;
 
 import java.util.List;
@@ -64,7 +66,7 @@ private List<OrderItem> horizontalList;
 
     public class FooterViewHolder extends RecyclerView.ViewHolder {
         ListView lvCharges;
-        TextView tvTaxes,tvDelieveryCharges,tvSubTotal,tvCouponAmount,tvCouponName,tvChangeCoupon,tvTotalAmount;
+        TextView tvTaxes,tvDelieveryCharges,tvSubTotal,tvCouponAmount,tvCouponName,tvChangeCoupon,tvTotalAmount,tvApplyCoupon;
         View rlAfterApplyCoupon,rlApplyCoupon;
         public FooterViewHolder(View view) {
             super(view);
@@ -78,6 +80,7 @@ private List<OrderItem> horizontalList;
             tvTotalAmount = (TextView) view.findViewById(R.id.tvTotalAmount);
             rlAfterApplyCoupon = (View) view.findViewById(R.id.rlAfterApplyCoupon);
             rlApplyCoupon = (View) view.findViewById(R.id.rlApplyCoupon);
+            tvApplyCoupon = (TextView) view.findViewById(R.id.tvApplyCoupon);
 
 
         }
@@ -192,14 +195,14 @@ private List<OrderItem> horizontalList;
             footerViewHolder.tvDelieveryCharges.setText(context.getString(R.string.doller)+"0.0");
             footerViewHolder.tvSubTotal.setText(context.getString(R.string.subtotal)+"   "+context.getString(R.string.doller)+cartProduct.getOrder().getSubTotal());
 
-           /* footerViewHolder.ivMore.setOnClickListener(new View.OnClickListener() {
+          footerViewHolder.tvApplyCoupon.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Toast.makeText(context, "More", Toast.LENGTH_SHORT).show();
 
+                    ((ActivityContainer)context).fragmnetLoader(C.FRAGMENT_COUPON_LIST,null);
                 }
             });
-*/        }
+       }
 
 
 
