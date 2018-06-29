@@ -4,6 +4,7 @@ import android.content.Context;
 
 import com.cheersondemand.intractor.coupon.CouponViewIntractorImpl;
 import com.cheersondemand.intractor.coupon.ICouponIntractor;
+import com.cheersondemand.model.coupon.ApplyCouponRequest;
 import com.cheersondemand.model.coupon.CouponInfoResponse;
 import com.cheersondemand.model.coupon.CouponListResponse;
 import com.cheersondemand.model.coupon.CouponRequest;
@@ -61,10 +62,10 @@ public class CouponViewPresenterImpl implements ICouponViewPresenter, ICouponInt
     }
 
     @Override
-    public void applyCoupon(boolean isAuthUser, String token, String uuid, String code, String cart_value, String cart_id) {
+    public void applyCoupon(boolean isAuthUser, String token, ApplyCouponRequest applyCouponRequest) {
         if (mView != null) {
 
-            iCouponIntractor.applyCoupon(isAuthUser,token,uuid,code,cart_value,cart_id, this);
+            iCouponIntractor.applyCoupon(isAuthUser,token,applyCouponRequest, this);
         }
     }
 

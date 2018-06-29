@@ -102,6 +102,7 @@
                         android:layout_width="0dp"
                         android:layout_height="match_parent">
                         <ImageView
+                            android:layout_centerInParent="true"
                             android:gravity="center"
                             android:layout_gravity="center"
                             android:src="@drawable/minus"
@@ -136,7 +137,8 @@
                         <ImageView
                             android:gravity="center"
                             android:layout_gravity="center"
-                            android:src="@drawable/plus"
+                            android:src="@drawable/add"
+                            android:layout_centerInParent="true"
                             android:padding="12dp"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content" />

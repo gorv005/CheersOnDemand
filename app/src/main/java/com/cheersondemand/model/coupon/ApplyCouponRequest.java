@@ -16,7 +16,7 @@ public class ApplyCouponRequest {
     private String code;
     @SerializedName("cart_value")
     @Expose
-    private Double cartValue;
+    private String cartValue;
     @SerializedName("cart_id")
     @Expose
     private String cartId;
@@ -37,11 +37,11 @@ public class ApplyCouponRequest {
         this.code = code;
     }
 
-    public Double getCartValue() {
+    public String getCartValue() {
         return cartValue;
     }
 
-    public void setCartValue(Double cartValue) {
+    public void setCartValue(String cartValue) {
         this.cartValue = cartValue;
     }
 

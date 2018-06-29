@@ -130,7 +130,14 @@ public class ActivityContainer extends AppCompatActivity {
         }
     }
 
+ public void applyCoupon(String couponName){
 
+     Fragment fragment=getVisibleFragment();
+     if(fragment!=null && fragment instanceof FragmentCoupons){
+         ((FragmentCoupons)fragment).applyCoupon(couponName);
+
+     }
+ }
     public void wishListUpdate(int secPos,int pos,boolean isAdd){
         Fragment fragment=getVisibleFragment();
          if(fragment!=null && fragment instanceof FragmentProductDescription){

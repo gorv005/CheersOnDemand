@@ -6,12 +6,12 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.cheersondemand.R;
 import com.cheersondemand.model.coupon.CouponInfo;
 import com.cheersondemand.util.ImageLoader.ImageLoader;
+import com.cheersondemand.view.ActivityContainer;
 
 import java.util.List;
 
@@ -25,10 +25,9 @@ public class AdapterCouponList extends RecyclerView.Adapter<RecyclerView.ViewHol
 private List<CouponInfo> horizontalList;
     Context context;
     ImageLoader imageLoader;
-
+    String couponName="";
     public class ItemViewHolder extends RecyclerView.ViewHolder {
-    public TextView tvCouponTitle,tvCouponDesc,tvTermsAndCondition,tvApply;
-    ImageView imgProduct,ivLike;
+    public TextView tvCouponTitle,tvCouponDesc,tvTermsAndCondition,tvApply,tvApplied;
     View rlCard;
     public ItemViewHolder(View view) {
         super(view);
@@ -37,6 +36,7 @@ private List<CouponInfo> horizontalList;
 
         tvTermsAndCondition = (TextView) view.findViewById(R.id.tvTermsAndCondition);
         tvApply = (TextView) view.findViewById(R.id.tvApply);
+        tvApplied = (TextView) view.findViewById(R.id.tvApplied);
 
         rlCard = (View) view.findViewById(R.id.rlCard);
 
@@ -45,15 +45,18 @@ private List<CouponInfo> horizontalList;
 }
 
 
-    public AdapterCouponList(List<CouponInfo> horizontalList, Activity context) {
+    public AdapterCouponList(List<CouponInfo> horizontalList, Activity context,String couponName) {
         this.horizontalList = horizontalList;
         this.context=context;
+        this.couponName=couponName;
         imageLoader=new ImageLoader(context);
 
     }
-    public void setData(List<CouponInfo> horizontalList){
+    public void setData(List<CouponInfo> horizontalList,String couponName){
         this.horizontalList.clear();
         this.horizontalList=horizontalList;
+        this.couponName=couponName;
+      //  notifyDataSetChanged();
     }
 
     @Override
@@ -83,6 +86,19 @@ private List<CouponInfo> horizontalList;
             CouponInfo couponInfo= horizontalList.get(position);
             itemViewHolder.tvCouponTitle.setText(couponInfo.getTitle());
             itemViewHolder.tvCouponDesc.setText(couponInfo.getDescription());
+            if(couponInfo.getCouponName().equals(couponInfo.getCode())){
+                itemViewHolder.rlCard.setBackgroundResource(R.drawable.coupon_border);
+                itemViewHolder.tvApply.setVisibility(View.GONE);
+                itemViewHolder.tvApplied.setVisibility(View.VISIBLE);
+            }
+            else {
+                itemViewHolder.tvApply.setVisibility(View.VISIBLE);
+                itemViewHolder.tvApplied.setVisibility(View.GONE);
+                itemViewHolder.rlCard.setBackgroundResource(0);
+
+            }
+
+
 
         /*
             if(!orderItem.getIsDeliverable()){
@@ -94,6 +110,12 @@ private List<CouponInfo> horizontalList;
 
             }
             */
+            itemViewHolder.tvApply.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    ((ActivityContainer)context).applyCoupon(horizontalList.get(position).getCode());
+                }
+            });
         }
 
     }

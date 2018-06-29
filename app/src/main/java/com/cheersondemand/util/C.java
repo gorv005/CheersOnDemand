@@ -40,4 +40,7 @@ public interface C {
     String bearer="bearer ";
     String ORDER_ID ="order_id" ;
     int FRAGMENT_COUPON_LIST = 11;
+    String CART_VALUE ="cart_value" ;
+    String COUPON_ID ="coupon_id" ;
+    String COUPON_NAME ="coupon_name" ;
 }

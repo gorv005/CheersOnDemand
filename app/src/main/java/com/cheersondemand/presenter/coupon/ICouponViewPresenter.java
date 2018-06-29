@@ -1,5 +1,6 @@
 package com.cheersondemand.presenter.coupon;
 
+import com.cheersondemand.model.coupon.ApplyCouponRequest;
 import com.cheersondemand.model.coupon.CouponInfoResponse;
 import com.cheersondemand.model.coupon.CouponListResponse;
 import com.cheersondemand.model.coupon.CouponRequest;
@@ -11,7 +12,7 @@ import com.cheersondemand.model.order.updatecart.UpdateCartResponse;
 
 public interface ICouponViewPresenter {
 
-    public void applyCoupon(boolean isAuthUser,String token, String uuid,String code, String cart_value,String cart_id);
+    public void applyCoupon(boolean isAuthUser, String token, ApplyCouponRequest applyCouponRequest);
 
     public void getListOfCoupons(boolean isAuthUser,String token, String uuid,String cart_id);
 

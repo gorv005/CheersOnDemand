@@ -2,6 +2,7 @@ package com.cheersondemand.intractor.coupon;
 
 import android.content.Context;
 
+import com.cheersondemand.model.coupon.ApplyCouponRequest;
 import com.cheersondemand.model.coupon.CouponInfoResponse;
 import com.cheersondemand.model.coupon.CouponListResponse;
 import com.cheersondemand.model.coupon.CouponRequest;
@@ -21,7 +22,7 @@ public interface ICouponIntractor {
         void onError(String response);
         Context getAPPContext();
     }
-    public void applyCoupon(boolean isAuthUser,String token, String uuid,String code, String cart_value,String cart_id, OnLoginFinishedListener listener);
+    public void applyCoupon(boolean isAuthUser, String token, ApplyCouponRequest applyCouponRequest, OnLoginFinishedListener listener);
 
     public void getListOfCoupons(boolean isAuthUser,String token, String uuid,String cart_id, OnLoginFinishedListener listener);
 

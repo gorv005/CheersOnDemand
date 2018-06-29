@@ -3,6 +3,7 @@ package com.cheersondemand.intractor.coupon;
 import com.cheersondemand.frameworks.retrofit.ResponseResolver;
 import com.cheersondemand.frameworks.retrofit.RestError;
 import com.cheersondemand.frameworks.retrofit.WebServicesWrapper;
+import com.cheersondemand.model.coupon.ApplyCouponRequest;
 import com.cheersondemand.model.coupon.CouponInfoResponse;
 import com.cheersondemand.model.coupon.CouponListResponse;
 import com.cheersondemand.model.coupon.CouponRequest;
@@ -19,7 +20,7 @@ public class CouponViewIntractorImpl implements ICouponIntractor {
 
 
     @Override
-    public void applyCoupon(boolean isAuthUser, String token, String uuid, String code, String cart_value, String cart_id, final OnLoginFinishedListener listener) {
+    public void applyCoupon(boolean isAuthUser, String token, ApplyCouponRequest applyCouponRequest, final OnLoginFinishedListener listener) {
         try {
             WebServicesWrapper.getInstance().applyCoupon(new ResponseResolver<UpdateCartResponse>() {
                 @Override
@@ -40,7 +41,7 @@ public class CouponViewIntractorImpl implements ICouponIntractor {
                         listener.onError(error.getError());
                     }
                 }
-            },isAuthUser,token,uuid,code,cart_value,cart_id);
+            },isAuthUser,token,applyCouponRequest);
         }
 
         catch (Exception e){

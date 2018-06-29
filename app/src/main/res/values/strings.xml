@@ -96,9 +96,9 @@
     <string name="your_cart">Your Cart</string>
     <string name="amount">Amount</string>
     <string name="taxes">Taxes</string>
-    <string name="delivery_charges">Delievry Charges</string>
+    <string name="delivery_charges">Delivery Charges</string>
     <string name="apply_Coupen">Apply Coupon</string>
-    <string name="coupen_applied">Coupen Applied</string>
+    <string name="coupen_applied">Coupon Applied</string>
     <string name="change_coupon">Change Coupon</string>
     <string name="total_amount">Total Amount</string>
     <string name="doller">$</string>
@@ -109,6 +109,7 @@
     <string name="or">OR</string>
     <string name="select_following">Select one of the following</string>
     <string name="terms_and_condition"><![CDATA[Terms & Conditions]]></string>
+    <string name="applied">Applied</string>
 
     <!--
         <string name="default_web_client_id">999387565226-hdnnhm6rhgik5ljvm06shotsi7j9883c.apps.googleusercontent.com</string>

@@ -14,6 +14,9 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 
 import com.cheersondemand.R;
+import com.cheersondemand.model.coupon.CouponInfoResponse;
+import com.cheersondemand.model.coupon.CouponListResponse;
+import com.cheersondemand.model.coupon.CouponRequest;
 import com.cheersondemand.model.order.CreateOrderResponse;
 import com.cheersondemand.model.order.addtocart.AddToCartResponse;
 import com.cheersondemand.model.order.addtocart.CartProduct;
@@ -23,6 +26,8 @@ import com.cheersondemand.model.order.updatecart.UpdateCartRequest;
 import com.cheersondemand.model.order.updatecart.UpdateCartResponse;
 import com.cheersondemand.model.wishlist.WishListRequest;
 import com.cheersondemand.model.wishlist.WishListResponse;
+import com.cheersondemand.presenter.coupon.CouponViewPresenterImpl;
+import com.cheersondemand.presenter.coupon.ICouponViewPresenter;
 import com.cheersondemand.presenter.home.order.IOrderViewPresenterPresenter;
 import com.cheersondemand.presenter.home.order.OrderViewPresenterImpl;
 import com.cheersondemand.util.C;
@@ -40,7 +45,7 @@ import butterknife.Unbinder;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class FragmentCart extends Fragment implements View.OnClickListener, IOrderViewPresenterPresenter.IOrderView {
+public class FragmentCart extends Fragment implements View.OnClickListener, IOrderViewPresenterPresenter.IOrderView,ICouponViewPresenter.ICouponView {
 
 
     @BindView(R.id.btnBrowseProduct)
@@ -54,6 +59,7 @@ public class FragmentCart extends Fragment implements View.OnClickListener, IOrd
     LinearLayout LLView;
     private LinearLayoutManager mLinearLayoutManager;
     IOrderViewPresenterPresenter iOrderViewPresenterPresenter;
+    ICouponViewPresenter iCouponViewPresenter;
     AdapterCartList adapterCartList;
     Util util;
     CartProduct cartProduct;
@@ -71,6 +77,7 @@ public class FragmentCart extends Fragment implements View.OnClickListener, IOrd
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         iOrderViewPresenterPresenter = new OrderViewPresenterImpl(this, getActivity());
+        iCouponViewPresenter=new CouponViewPresenterImpl(this,getActivity());
         util=new Util();
     }
 
@@ -89,9 +96,14 @@ public class FragmentCart extends Fragment implements View.OnClickListener, IOrd
         btnBrowseProduct.setOnClickListener(this);
         mLinearLayoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
         rvCartList.setLayoutManager(mLinearLayoutManager);
-        getCartList();
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        getCartList();
+
+    }
 
     void getCartList() {
         String order_id = SharedPreference.getInstance(getActivity()).getString(C.ORDER_ID);
@@ -123,6 +135,24 @@ public class FragmentCart extends Fragment implements View.OnClickListener, IOrd
         }
     }
 
+
+    public void removeCoupon(){
+
+        CouponRequest couponRequest=new CouponRequest();
+        couponRequest.setUuid(Util.id(getActivity()));
+        String order_id = SharedPreference.getInstance(getActivity()).getString(C.ORDER_ID);
+        couponRequest.setCartId( order_id);
+
+        if (SharedPreference.getInstance(getActivity()).getBoolean(C.IS_LOGIN_GUEST)) {
+            String id = "" + SharedPreference.getInstance(getActivity()).geGuestUser(C.GUEST_USER).getId();
+
+            iCouponViewPresenter.removeCoupon(false,"",couponRequest);
+        } else {
+            String id = "" + SharedPreference.getInstance(getActivity()).getUser(C.AUTH_USER).getData().getUser().getId();
+            String token =  C.bearer + SharedPreference.getInstance(getActivity()).getUser(C.AUTH_USER).getData().getToken().getAccessToken();
+            iCouponViewPresenter.removeCoupon(true,token,couponRequest);
+        }
+    }
 
 
     public void updateCart(int secPos,int productPos, boolean isAdd){
@@ -306,6 +336,44 @@ public class FragmentCart extends Fragment implements View.OnClickListener, IOrd
             util.setSnackbarMessage(getActivity(), response.getMessage(),LLView,false );
             orderItemsList.get(productPos).getProduct().setIsWishlisted(false);
 
+            adapterCartList.notifyDataSetChanged();
+
+        }
+        else {
+            util.setSnackbarMessage(getActivity(), response.getMessage(),LLView,true );
+
+        }
+    }
+
+    @Override
+    public void onSuccessCouponInfo(CouponInfoResponse response) {
+
+    }
+
+    @Override
+    public void onSuccessCouponList(CouponListResponse response) {
+
+    }
+
+    @Override
+    public void onSuccessCartAfterCoupon(UpdateCartResponse response) {
+        if(response.getSuccess()){
+
+           cartProduct=response.getData();
+         //   cartProduct.getOrder().setOrderDate("");
+            orderItemsList.clear();
+            orderItemsList=response.getData().getOrder().getOrderItems();
+
+           /* for (int i=0;i<response.getData().getOrder().getOrderItems().size();i++){
+                orderItemsList.add(response.getData().getOrder().getOrderItems().get(i));
+                orderItemsList.get(i).setChange("couponremove");
+            }*/
+            adapterCartList=new AdapterCartList(cartProduct,response.getData().getOrder().getOrderItems(),getActivity());
+            rvCartList.setAdapter(adapterCartList);
+     //      CartProduct s=cartProduct;
+         //   orderItemsList=response.getData().getOrder().getOrderItems();
+
+         //   adapterCartList.setData(cartProduct,orderItemsList);
             adapterCartList.notifyDataSetChanged();
 
         }

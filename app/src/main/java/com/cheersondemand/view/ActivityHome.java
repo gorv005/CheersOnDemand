@@ -122,6 +122,12 @@ public class ActivityHome extends AppCompatActivity implements View.OnClickListe
             ((FragmentCart)fragment).removeProduct(updateCartRequest);
         }
     }
+    public void removeCoupon(){
+        Fragment fragment=getVisibleFragment();
+        if(fragment!=null && fragment instanceof FragmentCart ){
+            ((FragmentCart)fragment).removeCoupon();
+        }
+    }
    public void addToCart(int secPos,int pos,boolean isAdd){
         Fragment fragment=getVisibleFragment();
         if(fragment!=null && fragment instanceof FragmentHome ){

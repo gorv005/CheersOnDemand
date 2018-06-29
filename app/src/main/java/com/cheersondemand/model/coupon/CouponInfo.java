@@ -39,6 +39,10 @@ public class CouponInfo {
     @Expose
     private String maxCartValue;
 
+    @SerializedName("CouponName")
+    @Expose
+    private String CouponName="";
+
     public Integer getId() {
         return id;
     }
@@ -119,4 +123,11 @@ public class CouponInfo {
         this.maxCartValue = maxCartValue;
     }
 
+    public String getCouponName() {
+        return CouponName;
+    }
+
+    public void setCouponName(String couponName) {
+        CouponName = couponName;
+    }
 }

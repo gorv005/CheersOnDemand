@@ -34,6 +34,9 @@ public class OrderItem {
     @SerializedName("remaining_stock_message")
     @Expose
     private String remainingStockMessage;
+    @SerializedName("change")
+    @Expose
+    private String change;
     @SerializedName("product")
     @Expose
     private AllProduct product;
@@ -114,6 +117,19 @@ public class OrderItem {
         this.isDeliverable = isDeliverable;
     }
 
+    public Boolean getDeliverable() {
+        return isDeliverable;
+    }
 
+    public void setDeliverable(Boolean deliverable) {
+        isDeliverable = deliverable;
+    }
 
+    public String getChange() {
+        return change;
+    }
+
+    public void setChange(String change) {
+        this.change = change;
+    }
 }

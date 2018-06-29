@@ -2,6 +2,8 @@ package com.cheersondemand.view.adapter.cart;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
+import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -68,6 +70,7 @@ private List<OrderItem> horizontalList;
         ListView lvCharges;
         TextView tvTaxes,tvDelieveryCharges,tvSubTotal,tvCouponAmount,tvCouponName,tvChangeCoupon,tvTotalAmount,tvApplyCoupon;
         View rlAfterApplyCoupon,rlApplyCoupon;
+        ImageView ivDelete;
         public FooterViewHolder(View view) {
             super(view);
             lvCharges = (ListView) view.findViewById(R.id.lvCharges);
@@ -81,6 +84,7 @@ private List<OrderItem> horizontalList;
             rlAfterApplyCoupon = (View) view.findViewById(R.id.rlAfterApplyCoupon);
             rlApplyCoupon = (View) view.findViewById(R.id.rlApplyCoupon);
             tvApplyCoupon = (TextView) view.findViewById(R.id.tvApplyCoupon);
+            ivDelete = (ImageView) view.findViewById(R.id.ivDelete);
 
 
         }
@@ -97,7 +101,14 @@ private List<OrderItem> horizontalList;
         this.horizontalList.clear();
         this.horizontalList=horizontalList;
     }
+    public void setData1(CartProduct data,List<OrderItem> horizontalList){
+        this.cartProduct=null;
 
+        this.cartProduct=data;
+        this.horizontalList.clear();
+        this.horizontalList=horizontalList;
+        notifyDataSetChanged();
+    }
     @Override
     public long getItemId(int position) {
         return position;
@@ -136,6 +147,8 @@ private List<OrderItem> horizontalList;
                 itemViewHolder.llProductNotAvailable.setVisibility(View.VISIBLE);
             }
             else {
+                itemViewHolder.rlCard.setBackgroundResource(0);
+
                 itemViewHolder.llProductNotAvailable.setVisibility(View.GONE);
 
             }
@@ -195,11 +208,50 @@ private List<OrderItem> horizontalList;
             footerViewHolder.tvDelieveryCharges.setText(context.getString(R.string.doller)+"0.0");
             footerViewHolder.tvSubTotal.setText(context.getString(R.string.subtotal)+"   "+context.getString(R.string.doller)+cartProduct.getOrder().getSubTotal());
 
+            if(cartProduct.getOrder().getCoupon()!=null && cartProduct.getOrder().getAppliedDiscount()>0){
+                footerViewHolder.rlAfterApplyCoupon.setVisibility(View.VISIBLE);
+                footerViewHolder.rlApplyCoupon.setVisibility(View.GONE);
+                footerViewHolder.tvCouponAmount.setText("-"+context.getString(R.string.doller)+cartProduct.getOrder().getAppliedDiscount());
+
+                footerViewHolder.tvCouponName.setText(""+cartProduct.getOrder().getCoupon().getCode());
+                footerViewHolder.tvTotalAmount.setText(context.getString(R.string.doller)+""+cartProduct.getOrder().getSubTotal());
+
+            }
+
+            footerViewHolder.ivDelete.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    ((ActivityHome) context).removeCoupon();
+                }
+            });
+            footerViewHolder.tvChangeCoupon.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+
+                    Intent intent = new Intent(context, ActivityContainer.class);
+                    intent.putExtra(C.FRAGMENT_ACTION,C.FRAGMENT_COUPON_LIST);
+                    Bundle bundle=new Bundle();
+                    bundle.putString(C.CART_VALUE,""+cartProduct.getOrder().getSubTotal());
+                    bundle.putString(C.COUPON_NAME,""+cartProduct.getOrder().getCoupon().getCode());
+
+                    intent.putExtra(C.BUNDLE,bundle);
+                    context.startActivity(intent);
+                }
+            });
           footerViewHolder.tvApplyCoupon.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
 
-                    ((ActivityContainer)context).fragmnetLoader(C.FRAGMENT_COUPON_LIST,null);
+
+                    Intent intent = new Intent(context, ActivityContainer.class);
+                    intent.putExtra(C.FRAGMENT_ACTION,C.FRAGMENT_COUPON_LIST);
+                    Bundle bundle=new Bundle();
+                    bundle.putString(C.CART_VALUE,""+cartProduct.getOrder().getSubTotal());
+                    bundle.putString(C.COUPON_NAME,"");
+
+                    intent.putExtra(C.BUNDLE,bundle);
+                    context.startActivity(intent);
                 }
             });
        }
