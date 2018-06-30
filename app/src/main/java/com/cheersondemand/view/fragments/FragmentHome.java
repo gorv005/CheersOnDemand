@@ -17,6 +17,7 @@ import android.widget.TextView;
 
 import com.cheersondemand.R;
 import com.cheersondemand.model.AllProduct;
+import com.cheersondemand.model.Categories;
 import com.cheersondemand.model.CategoriesResponse;
 import com.cheersondemand.model.HomeCategoriesSectionList;
 import com.cheersondemand.model.ProductsWithCategoryResponse;
@@ -52,8 +53,6 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
-
-import static com.facebook.FacebookSdk.getApplicationContext;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -156,11 +155,11 @@ public class FragmentHome extends Fragment implements IHomeViewPresenterPresente
         rlNotification.setOnClickListener(this);
         llLocationSelect.setOnClickListener(this);
         llStoreSelect.setOnClickListener(this);
-        horizontalLayout = new LinearLayoutManager(getApplicationContext(), LinearLayoutManager.HORIZONTAL, false);
+        horizontalLayout = new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false);
         rvBrands.setLayoutManager(horizontalLayout);
 
 
-        horizontalLayout1 = new LinearLayoutManager(getApplicationContext(), LinearLayoutManager.VERTICAL, false);
+        horizontalLayout1 = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
 
         rvProducts.setLayoutManager(horizontalLayout1);
         rvProducts.setHasFixedSize(true);
@@ -217,7 +216,19 @@ public class FragmentHome extends Fragment implements IHomeViewPresenterPresente
     public void getProductWithCategoriesSuccess(ProductsWithCategoryResponse response) {
         if (response.getSuccess()) {
             shimmerBrands.stopShimmerAnimation();
-            adapterHomeBrands = new AdapterHomeBrands(response.getData().getCategories(), getActivity());
+            List<Categories> categories=new ArrayList<>();
+
+            if(response.getData().getCategories()!=null &&response.getData().getCategories().size()>0){
+                if(response.getData().getCategories().size()>5){
+                    for (int i=0;i<5;i++){
+                        categories.add(response.getData().getCategories().get(i));
+                    }
+                }
+                else {
+                    categories.addAll(response.getData().getCategories());
+                }
+            }
+            adapterHomeBrands = new AdapterHomeBrands(categories, getActivity());
             rvBrands.setAdapter(adapterHomeBrands);
 
             homeCategoriesSectionList = new ArrayList<>();
@@ -240,7 +251,7 @@ public class FragmentHome extends Fragment implements IHomeViewPresenterPresente
     @Override
     public void getResponseSuccess(CategoriesResponse response) {
         // Log.e("DEBUG", "" + response.getMessage());
-        if (response.getSuccess()) {
+       /* if (response.getSuccess()) {
             shimmerBrands.stopShimmerAnimation();
             adapterHomeBrands = new AdapterHomeBrands(response.getData(), getActivity());
             rvBrands.setAdapter(adapterHomeBrands);
@@ -248,7 +259,7 @@ public class FragmentHome extends Fragment implements IHomeViewPresenterPresente
         else {
             util.setSnackbarMessage(getActivity(), response.getMessage(),rlHomeView,true );
 
-        }
+        }*/
     }
 
     @Override

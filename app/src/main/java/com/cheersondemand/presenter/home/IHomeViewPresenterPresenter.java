@@ -11,7 +11,7 @@ import com.cheersondemand.model.authentication.GenRequest;
 public interface IHomeViewPresenterPresenter {
 
     public void getCategories(GenRequest uuid);
-    public void getCategories(String uuid);
+    public void getCategories(boolean isAuth,String token,String uuid);
 
 
     //LANDING SCREEN

@@ -17,10 +17,12 @@ import android.widget.TextView;
 
 import com.cheersondemand.R;
 import com.cheersondemand.util.C;
+import com.cheersondemand.view.fragments.FragmentCategoryList;
 import com.cheersondemand.view.fragments.FragmentChangePassword;
 import com.cheersondemand.view.fragments.FragmentCoupons;
 import com.cheersondemand.view.fragments.FragmentNotification;
 import com.cheersondemand.view.fragments.FragmentProductDescription;
+import com.cheersondemand.view.fragments.FragmentProductsListing;
 import com.cheersondemand.view.fragments.FragmentProfile;
 import com.cheersondemand.view.fragments.FragmentStoreSelection;
 import com.cheersondemand.view.fragments.FragmentUpdateProfile;
@@ -98,6 +100,16 @@ public class ActivityContainer extends AppCompatActivity {
                 fragment = new FragmentCoupons();
                 fragmentTransaction.replace(R.id.container, fragment);
                 //fragmentTransaction.addToBackStack(C.TAG_FRAGMENT_PRODUCTS_HOME);
+                break;
+            case C.FRAGMENT_CATEGORIES:
+                fragment = new FragmentCategoryList();
+                fragmentTransaction.replace(R.id.container, fragment);
+                //fragmentTransaction.addToBackStack(C.TAG_FRAGMENT_PRODUCTS_HOME);
+                break;
+            case C.FRAGMENT_PRODUCT_LISTING:
+                fragment = new FragmentProductsListing();
+                fragmentTransaction.replace(R.id.container, fragment);
+                fragmentTransaction.addToBackStack(C.TAG_FRAGMENT_PRODUCT_LISTING);
                 break;
         }
         fragment.setArguments(bundle);

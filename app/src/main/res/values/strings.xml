@@ -111,6 +111,11 @@
     <string name="terms_and_condition"><![CDATA[Terms & Conditions]]></string>
     <string name="applied">Applied</string>
     <string name="final_amount">Final Amount</string>
+    <string name="brands_available">Brands available</string>
+    <string name="Explore">Explore</string>
+    <string name="sort">Sort</string>
+    <string name="filter">Filter</string>
+    <string name="product_listing">Product Listing</string>
 
     <!--
         <string name="default_web_client_id">999387565226-hdnnhm6rhgik5ljvm06shotsi7j9883c.apps.googleusercontent.com</string>

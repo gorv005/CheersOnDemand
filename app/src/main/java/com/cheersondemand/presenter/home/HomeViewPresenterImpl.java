@@ -62,10 +62,10 @@ public class HomeViewPresenterImpl implements IHomeViewPresenterPresenter, IHome
     }
 
     @Override
-    public void getCategories(String uuid) {
+    public void getCategories(boolean isAuth ,String token,String uuid) {
         if (mView != null) {
 
-            iHomeViewIntractor.getCategories(uuid, this);
+            iHomeViewIntractor.getCategories(isAuth,token,uuid, this);
         }
     }
 

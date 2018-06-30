@@ -51,7 +51,7 @@ public class HomeViewIntractorImpl implements IHomeViewIntractor {
     }
 
     @Override
-    public void getCategories(String uuid, final OnLoginFinishedListener listener) {
+    public void getCategories(boolean isAuth,String token,String uuid, final OnLoginFinishedListener listener) {
         try {
 
             WebServicesWrapper.getInstance().getCategories(new ResponseResolver<CategoriesResponse>() {
@@ -73,7 +73,7 @@ public class HomeViewIntractorImpl implements IHomeViewIntractor {
                         listener.onError(error.getError());
                     }
                 }
-            },uuid);
+            },isAuth,token,uuid);
         }
         catch (Exception e){
             e.printStackTrace();

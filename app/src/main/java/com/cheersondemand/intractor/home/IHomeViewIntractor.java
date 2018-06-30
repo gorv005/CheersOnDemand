@@ -20,7 +20,7 @@ public interface IHomeViewIntractor {
     }
     public void getCategories(GenRequest uuid, OnLoginFinishedListener listener);
 
-    public void getCategories(String uuid, OnLoginFinishedListener listener);
+    public void getCategories(boolean isAuth ,String token,String uuid, OnLoginFinishedListener listener);
 
     public void getBrands(String auth, GenRequest uuid, OnLoginFinishedListener listener);
 

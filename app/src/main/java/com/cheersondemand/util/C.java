@@ -8,6 +8,7 @@ public interface C {
     String TAG_FRAGMENT_SPLASH ="TAG_FRAGMENT_SPLASH" ;
     String TAG_FRAGMENT_LOGIN ="TAG_FRAGMENT_LOGIN" ;
     int FRAGMENT_AUTHNITICATION = 2;
+    String TAG_FRAGMENT_PRODUCT_LISTING ="TAG_FRAGMENT_PRODUCT_LISTING" ;
 
     int FRAGMENT_PRODUCTS_HOME =3 ;
     String TAG_FRAGMENT_PRODUCTS_HOME = "TAG_FRAGMENT_PRODUCTS_HOME";
@@ -44,4 +45,8 @@ public interface C {
     String COUPON_ID ="coupon_id" ;
     String COUPON_NAME ="coupon_name" ;
     String CART_HAS_ITEM ="cart_has_item" ;
+    int FRAGMENT_CATEGORIES = 12;
+    int FRAGMENT_PRODUCT_LISTING = 13;
+
+    String CAT_ID = "cat_id";
 }
