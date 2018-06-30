@@ -110,6 +110,7 @@
     <string name="select_following">Select one of the following</string>
     <string name="terms_and_condition"><![CDATA[Terms & Conditions]]></string>
     <string name="applied">Applied</string>
+    <string name="final_amount">Final Amount</string>
 
     <!--
         <string name="default_web_client_id">999387565226-hdnnhm6rhgik5ljvm06shotsi7j9883c.apps.googleusercontent.com</string>

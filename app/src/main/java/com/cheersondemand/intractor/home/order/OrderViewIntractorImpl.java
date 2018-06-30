@@ -7,6 +7,7 @@ import com.cheersondemand.model.order.addtocart.AddToCartRequest;
 import com.cheersondemand.model.order.addtocart.AddToCartResponse;
 import com.cheersondemand.model.authentication.GenRequest;
 import com.cheersondemand.model.order.CreateOrderResponse;
+import com.cheersondemand.model.order.addtocart.CartHasItemResponse;
 import com.cheersondemand.model.order.updatecart.UpdateCartRequest;
 import com.cheersondemand.model.order.updatecart.UpdateCartResponse;
 import com.cheersondemand.model.wishlist.WishListRequest;
@@ -457,4 +458,37 @@ public class OrderViewIntractorImpl implements IOrderViewIntractor {
             e.printStackTrace();
         }
     }
+
+    @Override
+    public void getCartHasItem(boolean isAuthUser, String token, String UserId, GenRequest genRequest, final onCartResponseFinishListner listener) {
+        try {
+
+            WebServicesWrapper.getInstance().getCartHasItem(new ResponseResolver<CartHasItemResponse>() {
+                @Override
+                public void onSuccess(CartHasItemResponse cartHasItemResponse, Response response) {
+                    listener.onSuccess(cartHasItemResponse);
+                }
+
+                @Override
+                public void onFailure(RestError error, String msg) {
+                    if(error==null ||error.getError()==null){
+
+                        Gson gson=new Gson();
+                        CartHasItemResponse response= gson.fromJson(msg,CartHasItemResponse.class);
+
+                        listener.onSuccess(response);
+
+                    }
+                    else {
+                        listener.onError(error.getError());
+                    }
+                }
+            },isAuthUser,token,UserId,genRequest);
+        }
+        catch (Exception e){
+            e.printStackTrace();
+        }
+    }
+
+
 }

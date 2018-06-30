@@ -14,8 +14,14 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
 import com.cheersondemand.R;
+import com.cheersondemand.model.authentication.GenRequest;
+import com.cheersondemand.model.order.addtocart.CartHasItemResponse;
 import com.cheersondemand.model.order.updatecart.UpdateCartRequest;
+import com.cheersondemand.presenter.home.order.IOrderViewPresenterPresenter;
+import com.cheersondemand.presenter.home.order.OrderViewPresenterImpl;
 import com.cheersondemand.util.C;
+import com.cheersondemand.util.SharedPreference;
+import com.cheersondemand.util.Util;
 import com.cheersondemand.view.fragments.FragmentCart;
 import com.cheersondemand.view.fragments.FragmentHome;
 import com.cheersondemand.view.fragments.FragmentProductDescription;
@@ -26,7 +32,7 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class ActivityHome extends AppCompatActivity implements View.OnClickListener{
+public class ActivityHome extends AppCompatActivity implements View.OnClickListener,IOrderViewPresenterPresenter.ICartHasItem{
     @BindView(R.id.ivHome)
     ImageView ivHome;
     @BindView(R.id.rlHome)
@@ -40,7 +46,7 @@ public class ActivityHome extends AppCompatActivity implements View.OnClickListe
     @BindView(R.id.rlProfile)
     RelativeLayout rlProfile;
     private Fragment fragment;
-
+    IOrderViewPresenterPresenter iOrderViewPresenterPresenter;
     static {
         AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);
     }
@@ -56,6 +62,7 @@ public class ActivityHome extends AppCompatActivity implements View.OnClickListe
         rlCart.setOnClickListener(this);
         rlProfile.setOnClickListener(this);
         rlHome.setOnClickListener(this);
+        iOrderViewPresenterPresenter=new OrderViewPresenterImpl(this,this);
 
     }
 
@@ -115,6 +122,21 @@ public class ActivityHome extends AppCompatActivity implements View.OnClickListe
     }
 
 
+  public   void getCartHasItem(){
+        GenRequest genRequest=new GenRequest();
+        genRequest.setUuid(Util.id(this));
+
+        if (SharedPreference.getInstance(this).getBoolean(C.IS_LOGIN_GUEST)) {
+            String id = "" + SharedPreference.getInstance(this).geGuestUser(C.GUEST_USER).getId();
+
+            iOrderViewPresenterPresenter.getCartHasItem(false,"",id,genRequest);
+        } else {
+            String id = "" + SharedPreference.getInstance(this).getUser(C.AUTH_USER).getData().getUser().getId();
+            String token =  C.bearer + SharedPreference.getInstance(this).getUser(C.AUTH_USER).getData().getToken().getAccessToken();
+            iOrderViewPresenterPresenter.getCartHasItem(true,token,id,genRequest);
+
+        }
+    }
 
     public void removeFromCart(UpdateCartRequest updateCartRequest){
         Fragment fragment=getVisibleFragment();
@@ -186,4 +208,27 @@ public class ActivityHome extends AppCompatActivity implements View.OnClickListe
             fragmnetLoader(C.FRAGMENT_PROFILE_HOME, null);
         }
 
+    @Override
+    public void getCartHasItemSuccess(CartHasItemResponse response) {
+        if(response.getSuccess()){
+            SharedPreference.getInstance(this).setBoolean(C.CART_HAS_ITEM,response.getData().getHasCartProduct());
+            SharedPreference.getInstance(this).setString(C.ORDER_ID,""+response.getData().getOrderId());
+
+        }
+    }
+
+    @Override
+    public void getResponseError(String response) {
+
+    }
+
+    @Override
+    public void showProgress() {
+
+    }
+
+    @Override
+    public void hideProgress() {
+
+    }
 }

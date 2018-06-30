@@ -6,6 +6,7 @@ import com.cheersondemand.model.order.addtocart.AddToCartRequest;
 import com.cheersondemand.model.order.addtocart.AddToCartResponse;
 import com.cheersondemand.model.authentication.GenRequest;
 import com.cheersondemand.model.order.CreateOrderResponse;
+import com.cheersondemand.model.order.addtocart.CartHasItemResponse;
 import com.cheersondemand.model.order.updatecart.UpdateCartRequest;
 import com.cheersondemand.model.order.updatecart.UpdateCartResponse;
 import com.cheersondemand.model.wishlist.WishListRequest;
@@ -24,6 +25,12 @@ public interface IOrderViewIntractor {
         void onSuccessCartList(UpdateCartResponse response);
         void onSuccessAddToWishList(WishListResponse response);
         void onSuccessRemoveFromWishList(WishListResponse response);
+
+        void onError(String response);
+        Context getAPPContext();
+    }
+    interface onCartResponseFinishListner {
+        void onSuccess(CartHasItemResponse response);
 
         void onError(String response);
         Context getAPPContext();
@@ -55,4 +62,7 @@ public interface IOrderViewIntractor {
     public void removeFromWishList(String user_id, WishListRequest wishListRequest, OnLoginFinishedListener listener);
 
     public void removeFromWishList(String token, String user_id, WishListRequest wishListRequest, OnLoginFinishedListener listener);
+
+    public void getCartHasItem(boolean isAuthUser,String token, String UserId ,GenRequest genRequest, onCartResponseFinishListner listener);
+
 }

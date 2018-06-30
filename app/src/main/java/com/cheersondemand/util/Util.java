@@ -17,6 +17,7 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.cheersondemand.R;
 
+import java.text.DecimalFormat;
 import java.util.UUID;
 
 /**
@@ -119,5 +120,11 @@ public class Util {
                // .placeholder(R.drawable.placeholder)
     //.error(R.drawable.imagenotfound)
                 .into(imageView);
+    }
+
+    public static String get2Decimal(Double d){
+          DecimalFormat df2 = new DecimalFormat(".##");
+          return df2.format(d);
+
     }
 }

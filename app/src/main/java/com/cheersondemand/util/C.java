@@ -43,4 +43,5 @@ public interface C {
     String CART_VALUE ="cart_value" ;
     String COUPON_ID ="coupon_id" ;
     String COUPON_NAME ="coupon_name" ;
+    String CART_HAS_ITEM ="cart_has_item" ;
 }

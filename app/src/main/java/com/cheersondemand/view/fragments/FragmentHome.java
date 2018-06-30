@@ -22,11 +22,11 @@ import com.cheersondemand.model.HomeCategoriesSectionList;
 import com.cheersondemand.model.ProductsWithCategoryResponse;
 import com.cheersondemand.model.SectionDataModel;
 import com.cheersondemand.model.SingleItemModel;
-import com.cheersondemand.model.order.addtocart.AddToCartRequest;
-import com.cheersondemand.model.order.addtocart.AddToCartResponse;
 import com.cheersondemand.model.authentication.GenRequest;
 import com.cheersondemand.model.location.SelectedLocation;
 import com.cheersondemand.model.order.CreateOrderResponse;
+import com.cheersondemand.model.order.addtocart.AddToCartRequest;
+import com.cheersondemand.model.order.addtocart.AddToCartResponse;
 import com.cheersondemand.model.order.updatecart.UpdateCartRequest;
 import com.cheersondemand.model.order.updatecart.UpdateCartResponse;
 import com.cheersondemand.model.store.StoreList;
@@ -141,6 +141,7 @@ public class FragmentHome extends Fragment implements IHomeViewPresenterPresente
         // iHomeViewPresenterPresenter.getCategories(categoryRequest);
         //  iHomeViewPresenterPresenter.getBrands(SharedPreference.getInstance(getActivity()).getUser(C.AUTH_USER).getData().getToken().getAccessToken(),categoryRequest);
         shimmerBrands.startShimmerAnimation();
+      //  ((ActivityHome)getActivity()).getCartHasItem();
         if (SharedPreference.getInstance(getActivity()).getBoolean(C.IS_LOGIN_GUEST)) {
             iHomeViewPresenterPresenter.getProductWithCategories(Util.id(getActivity()));
         } else {
@@ -224,6 +225,11 @@ public class FragmentHome extends Fragment implements IHomeViewPresenterPresente
 
             adapterHomeCategoriesSections = new AdapterHomeCategoriesSections(getActivity(), homeCategoriesSectionList);
             rvProducts.setAdapter(adapterHomeCategoriesSections);
+
+            SharedPreference.getInstance(getActivity()).setBoolean(C.CART_HAS_ITEM,response.getData().getHasCartProduct());
+            SharedPreference.getInstance(getActivity()).setString(C.ORDER_ID,response.getData().getUser().getOrderId());
+
+
         }
         else {
             util.setSnackbarMessage(getActivity(), response.getMessage(),rlHomeView,true );

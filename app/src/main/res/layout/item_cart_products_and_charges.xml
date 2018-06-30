@@ -151,6 +151,42 @@
 
 
         </RelativeLayout>
+        <RelativeLayout
+            android:paddingLeft="15dp"
+            android:paddingRight="15dp"
+            android:background="@color/white"
+            android:layout_marginTop="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            >
+
+
+            <TextView
+
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="14sp"
+                android:layout_alignParentStart="true"
+                android:fontFamily="@font/sf_ui_display_regular"
+                android:textColor="@color/view_all_color"
+                android:text="@string/total_amount"
+                />
+
+            <TextView
+                android:id="@+id/tvTotalAmount"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="14sp"
+                android:textStyle="bold"
+
+                android:layout_alignParentEnd="true"
+                android:fontFamily="@font/sf_ui_display_regular"
+                android:textColor="@color/view_all_color"
+                android:text="@string/amount"
+                />
+
+
+        </RelativeLayout>
         <View
             android:layout_marginLeft="15dp"
             android:layout_marginRight="15dp"
@@ -223,7 +259,7 @@
                 android:textSize="14sp"
                 android:layout_alignParentStart="true"
                 android:fontFamily="@font/sf_ui_display_regular"
-                android:textColor="@color/yellow"
+                android:textColor="@color/view_all_color"
                 android:text="@string/coupen_applied"
                 />
 
@@ -309,11 +345,11 @@
                     android:layout_alignParentStart="true"
                     android:fontFamily="@font/sf_ui_display_regular"
                     android:textColor="@color/view_all_color"
-                    android:text="@string/total_amount"
+                    android:text="@string/final_amount"
                     />
 
                 <TextView
-                    android:id="@+id/tvTotalAmount"
+                    android:id="@+id/tvFinalAmount"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textSize="14sp"

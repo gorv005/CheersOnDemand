@@ -68,7 +68,7 @@ private List<OrderItem> horizontalList;
 
     public class FooterViewHolder extends RecyclerView.ViewHolder {
         ListView lvCharges;
-        TextView tvTaxes,tvDelieveryCharges,tvSubTotal,tvCouponAmount,tvCouponName,tvChangeCoupon,tvTotalAmount,tvApplyCoupon;
+        TextView tvTaxes,tvDelieveryCharges,tvSubTotal,tvFinalAmount,tvCouponAmount,tvCouponName,tvChangeCoupon,tvTotalAmount,tvApplyCoupon;
         View rlAfterApplyCoupon,rlApplyCoupon;
         ImageView ivDelete;
         public FooterViewHolder(View view) {
@@ -85,6 +85,7 @@ private List<OrderItem> horizontalList;
             rlApplyCoupon = (View) view.findViewById(R.id.rlApplyCoupon);
             tvApplyCoupon = (TextView) view.findViewById(R.id.tvApplyCoupon);
             ivDelete = (ImageView) view.findViewById(R.id.ivDelete);
+            tvFinalAmount = (TextView) view.findViewById(R.id.tvFinalAmount);
 
 
         }
@@ -206,7 +207,9 @@ private List<OrderItem> horizontalList;
             Util.setListViewHeightBasedOnChildren(footerViewHolder.lvCharges);
             footerViewHolder.tvTaxes.setText(context.getString(R.string.doller)+"0.0");
             footerViewHolder.tvDelieveryCharges.setText(context.getString(R.string.doller)+"0.0");
-            footerViewHolder.tvSubTotal.setText(context.getString(R.string.subtotal)+"   "+context.getString(R.string.doller)+cartProduct.getOrder().getSubTotal());
+            footerViewHolder.tvTotalAmount.setText(context.getString(R.string.doller)+""+Util.get2Decimal(cartProduct.getOrder().getTotal()));
+
+            footerViewHolder.tvSubTotal.setText(context.getString(R.string.subtotal)+"   "+context.getString(R.string.doller)+Util.get2Decimal(cartProduct.getOrder().getSubTotal()));
 
             if(cartProduct.getOrder().getCoupon()!=null && cartProduct.getOrder().getAppliedDiscount()>0){
                 footerViewHolder.rlAfterApplyCoupon.setVisibility(View.VISIBLE);
@@ -214,7 +217,7 @@ private List<OrderItem> horizontalList;
                 footerViewHolder.tvCouponAmount.setText("-"+context.getString(R.string.doller)+cartProduct.getOrder().getAppliedDiscount());
 
                 footerViewHolder.tvCouponName.setText(""+cartProduct.getOrder().getCoupon().getCode());
-                footerViewHolder.tvTotalAmount.setText(context.getString(R.string.doller)+""+cartProduct.getOrder().getSubTotal());
+                footerViewHolder.tvFinalAmount.setText(context.getString(R.string.doller)+""+Util.get2Decimal(cartProduct.getOrder().getSubTotal()));
 
             }
 
