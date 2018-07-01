@@ -1,0 +1,45 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:orientation="vertical"
+    android:background="@color/white"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context="com.cheersondemand.view.fragments.FragmentPriceRangeFilter">
+
+
+   <LinearLayout
+       android:layout_marginTop="50dp"
+
+       android:padding="10dp"
+       android:orientation="horizontal"
+       android:layout_width="match_parent"
+       android:layout_height="wrap_content">
+
+      <TextView
+          android:textColor="@color/brand_text_color"
+          android:gravity="left"
+          android:layout_weight="1"
+          android:fontFamily="@font/sf_ui_display_regular"
+          android:layout_width="0dp"
+          android:layout_gravity="left"
+          android:layout_height="wrap_content"
+          android:text="Left index"
+          android:id="@+id/left" />
+
+      <TextView
+          android:textColor="@color/brand_text_color"
+          android:gravity="right"
+          android:layout_weight="1"
+          android:fontFamily="@font/sf_ui_display_regular"
+          android:layout_width="0dp"
+          android:layout_height="wrap_content"
+          android:text="Right index"
+          android:id="@+id/right" />
+   </LinearLayout>
+   <FrameLayout
+       android:id="@+id/seekbar_placeholder"
+       android:layout_width="match_parent"
+       android:layout_height="wrap_content"
+       android:orientation="vertical"/>
+</LinearLayout>

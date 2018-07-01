@@ -50,4 +50,10 @@ public interface C {
 
     String CAT_ID = "cat_id";
     String SOURCE = "source";
+    String TAG_FRAGMENT_PRICE_RANGE ="TAG_FRAGMENT_PRICE_RANGE" ;
+    String TAG_FRAGMENT_CATEGORY = "TAG_FRAGMENT_CATEGORY";
+    String TAG_FRAGMENT_BRAND = "TAG_FRAGMENT_BRAND";
+    int FRAGMENT_PRICE_RANGE = 14;
+    int FRAGMENT_BRANDS =15 ;
+    int FRAGMENT_CATEGORIES_FILTER =16 ;
 }

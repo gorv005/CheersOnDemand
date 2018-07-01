@@ -23,6 +23,20 @@ public class Categories implements Serializable {
     @SerializedName("products_count")
     @Expose
     private Integer productsCount;
+    @SerializedName("is_selected")
+    @Expose
+    private boolean isSelected;
+
+    public Categories() {
+    }
+
+    public Categories(Integer id, String name, String image, Integer productsCount, boolean isSelected) {
+        this.id = id;
+        this.name = name;
+        this.image = image;
+        this.productsCount = productsCount;
+        this.isSelected = isSelected;
+    }
 
     public Integer getId() {
         return id;
@@ -54,5 +68,13 @@ public class Categories implements Serializable {
 
     public void setProductsCount(Integer productsCount) {
         this.productsCount = productsCount;
+    }
+
+    public boolean isSelected() {
+        return isSelected;
+    }
+
+    public void setSelected(boolean selected) {
+        isSelected = selected;
     }
 }

@@ -116,7 +116,11 @@
     <string name="sort">Sort</string>
     <string name="filter">Filter</string>
     <string name="product_listing">Product Listing</string>
-
+    <string name="price_range">Price Range</string>
+    <string name="brand">Brand</string>
+    <string name="category">Category</string>
+    <string name="demo_min_label">Min</string>
+    <string name="demo_max_label">Max</string>
     <!--
         <string name="default_web_client_id">999387565226-hdnnhm6rhgik5ljvm06shotsi7j9883c.apps.googleusercontent.com</string>
     -->

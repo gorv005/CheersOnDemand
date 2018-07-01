@@ -16,8 +16,11 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.cheersondemand.R;
+import com.cheersondemand.model.SideMenuItem;
 
 import java.text.DecimalFormat;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 /**
@@ -65,6 +68,14 @@ public class Util {
         snackbar.show();
 
 
+    }
+
+    public static List<SideMenuItem> getSideFilterList(){
+      List<SideMenuItem> sideMenuItems = new ArrayList<SideMenuItem>();
+        sideMenuItems.add(new SideMenuItem(R.string.price_range, 0, C.TAG_FRAGMENT_PRICE_RANGE));
+        sideMenuItems.add(new SideMenuItem(R.string.brand, 0, C.TAG_FRAGMENT_BRAND));
+        sideMenuItems.add(new SideMenuItem(R.string.category, 0, C.TAG_FRAGMENT_CATEGORY));
+        return sideMenuItems;
     }
     public static boolean isValidMail(String email) {
         return email != null && android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches();

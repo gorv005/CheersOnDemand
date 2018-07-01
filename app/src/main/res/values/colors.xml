@@ -45,6 +45,7 @@
     <color name="offer_text">#3F5E89</color>
     <color name="add_to_cart_text">#575E69</color>
     <color name="yellow">#F8AF35</color>
-
-
+    <color name="thumb_default">#f44336</color>
+    <color name="thumb_ripple_color">#757575</color>
+    <color name="side_back">#F9F9F9</color>
 </resources>

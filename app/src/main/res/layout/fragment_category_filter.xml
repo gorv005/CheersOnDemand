@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:id="@+id/LLView"
+    android:background="@color/white"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    >
+
+
+
+    <LinearLayout
+        android:background="@color/profile_back"
+        android:layout_width="match_parent"
+        android:orientation="vertical"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:background="@color/white"
+            android:paddingTop="20dp"
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+
+
+            <RelativeLayout
+                android:focusableInTouchMode="true"
+                android:focusable="true"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingLeft="15dp"
+                android:orientation="horizontal">
+
+                <EditText
+                    android:layout_marginTop="20dp"
+                    android:id="@+id/etCatName"
+                    android:layout_width="match_parent"
+                    android:layout_height="44dp"
+                    android:layout_marginRight="10dp"
+                    android:fontFamily="@font/sf_ui_display_regular"
+                    android:textSize="21sp"
+                    android:paddingLeft="5dp"
+                    android:lines="1"
+                    android:singleLine="true"
+                    android:background="@color/white"
+                    android:layout_centerHorizontal="true"
+                    android:layout_centerVertical="true"
+                    android:hint="@string/select_store"
+                    android:textColor="@color/editext_text_color"
+                    android:textColorHint="@color/hint_color" />
+
+            </RelativeLayout>
+
+        </LinearLayout>
+
+
+
+
+
+        <LinearLayout
+            android:visibility="visible"
+            android:layout_marginTop="10dp"
+            android:id="@+id/rlCategories"
+            android:background="@color/white"
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+
+            <ListView
+                android:id="@+id/lvCategories"
+                android:background="@color/white"
+                android:divider="@null"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="20dp">
+
+            </ListView>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+
+</RelativeLayout>

@@ -136,7 +136,7 @@ public class ActivityContainer extends AppCompatActivity {
         Fragment fragment=getVisibleFragment();
         if(fragment!=null && fragment instanceof FragmentProductDescription){
             ((FragmentProductDescription)fragment).addToCart(secPos,pos,isAdd);
-
+    
         }
         if(fragment!=null && fragment instanceof FragmentProductsListing){
             ((FragmentProductsListing)fragment).addToCart(secPos,pos,isAdd);

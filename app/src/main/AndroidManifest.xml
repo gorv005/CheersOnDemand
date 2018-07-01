@@ -5,7 +5,8 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-    <uses-permission android:name="com.google.android.providers.gsf.permission.READ_GSERVICES"/>
+    <uses-permission android:name="com.google.android.providers.gsf.permission.READ_GSERVICES" />
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -16,25 +17,21 @@
         <activity
             android:name=".view.MainActivity"
             android:screenOrientation="portrait">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
 
         <meta-data
             android:name="com.facebook.sdk.ApplicationId"
             android:value="@string/facebook_app_id" />
-
-
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyCr_DiSsxjrwqA8dakEki3ZZ5KcJQQdd5E" />
 
-<!--        <meta-data
+        <!--
+            <meta-data
             android:name="com.google.android.gms.version"
-            android:value="@integer/google_play_services_version"/>-->
+            android:value="@integer/google_play_services_version"/>
+        -->
         <activity
             android:name="com.facebook.FacebookActivity"
             android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation"
@@ -57,23 +54,29 @@
         <activity
             android:name=".view.ActivityContainer"
             android:screenOrientation="portrait" />
-        <activity android:name=".view.ActivitySearchLocation"
-            android:screenOrientation="portrait"
-            ></activity>
+        <activity
+            android:name=".view.ActivitySearchLocation"
+            android:screenOrientation="portrait" />
 
-        <service
-            android:name=".firebase.FirebaseMessagingServices">
+        <service android:name=".firebase.FirebaseMessagingServices">
             <intent-filter>
-                <action android:name="com.google.firebase.MESSAGING_EVENT"/>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+            </intent-filter>
+        </service>
+        <service android:name=".firebase.FirebaseInstanceIDService">
+            <intent-filter>
+                <action android:name="com.google.firebase.INSTANCE_ID_EVENT" />
             </intent-filter>
         </service>
 
-        <service
-            android:name=".firebase.FirebaseInstanceIDService">
+        <activity android:name=".view.ActivityFilters" android:screenOrientation="portrait">
             <intent-filter>
-                <action android:name="com.google.firebase.INSTANCE_ID_EVENT"/>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-        </service>
+
+        </activity>
     </application>
 
 </manifest>
