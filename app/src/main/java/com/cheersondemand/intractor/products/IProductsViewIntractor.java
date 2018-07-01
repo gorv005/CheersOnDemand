@@ -19,5 +19,7 @@ public interface IProductsViewIntractor {
 
     public void getProductList(boolean isAuthUser ,String token,String uuid,String page,String per_page,String cat_id,String from,String to, String orderBy,String orderField, OnLoginFinishedListener listener);
 
+    public void getAllProducts(boolean isAuthUser ,String token,String uuid,String page,String per_page,String from,String to, String orderBy,String orderField, OnLoginFinishedListener listener);
+
 
 }

@@ -62,6 +62,14 @@ public class ProductViewPresenterImpl implements IProductViewPresenter, IProduct
     }
 
     @Override
+    public void getAllProducts(boolean isAuthUser, String token, String uuid, String page, String per_page, String from, String to, String orderBy, String orderField) {
+        if (mView != null) {
+
+            iProductsViewIntractor.getAllProducts(isAuthUser,token,uuid,page,per_page,from,to,orderBy,orderField,this);
+        }
+    }
+
+    @Override
     public void onDestroy() {
         try {
             mView = null;

@@ -127,10 +127,19 @@ public class ActivityContainer extends AppCompatActivity {
         }
         return null;
     }
+
+
+
+
+
     public void addToCart(int secPos,int pos,boolean isAdd){
         Fragment fragment=getVisibleFragment();
         if(fragment!=null && fragment instanceof FragmentProductDescription){
             ((FragmentProductDescription)fragment).addToCart(secPos,pos,isAdd);
+
+        }
+        if(fragment!=null && fragment instanceof FragmentProductsListing){
+            ((FragmentProductsListing)fragment).addToCart(secPos,pos,isAdd);
 
         }
     }
@@ -138,6 +147,10 @@ public class ActivityContainer extends AppCompatActivity {
         Fragment fragment=getVisibleFragment();
         if(fragment!=null && fragment instanceof FragmentProductDescription){
             ((FragmentProductDescription)fragment).updateCart(secPos,pos,isAdd);
+
+        }
+        else if(fragment!=null && fragment instanceof FragmentProductsListing){
+            ((FragmentProductsListing)fragment).updateCart(secPos,pos,isAdd);
 
         }
     }
@@ -154,6 +167,10 @@ public class ActivityContainer extends AppCompatActivity {
         Fragment fragment=getVisibleFragment();
          if(fragment!=null && fragment instanceof FragmentProductDescription){
             ((FragmentProductDescription)fragment).wishListUpdate(secPos,pos,isAdd);
+
+        }
+        else if(fragment!=null && fragment instanceof FragmentProductsListing){
+            ((FragmentProductsListing)fragment).wishListUpdate(secPos,pos,isAdd);
 
         }
     }

@@ -1,16 +1,18 @@
 package com.cheersondemand.view.adapter;
 
 import android.app.Activity;
+import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.cheersondemand.R;
 import com.cheersondemand.model.HomeCategoriesSectionList;
+import com.cheersondemand.util.C;
+import com.cheersondemand.view.ActivityContainer;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -54,9 +56,12 @@ public class AdapterHomeCategoriesSections extends RecyclerView.Adapter<AdapterH
             public void onClick(View v) {
 
 
-                Toast.makeText(v.getContext(), "click event on more, "+sectionName , Toast.LENGTH_SHORT).show();
+           //     Toast.makeText(v.getContext(), "click event on more, "+sectionName , Toast.LENGTH_SHORT).show();
 
-
+                Bundle bundle=new Bundle();
+                bundle.putString(C.CAT_ID,"");
+                bundle.putInt(C.SOURCE,C.FRAGMENT_PRODUCTS_HOME);
+                ((ActivityContainer)mContext).fragmnetLoader(C.FRAGMENT_PRODUCT_LISTING,bundle);
 
             }
         });

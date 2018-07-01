@@ -49,4 +49,5 @@ public interface C {
     int FRAGMENT_PRODUCT_LISTING = 13;
 
     String CAT_ID = "cat_id";
+    String SOURCE = "source";
 }
