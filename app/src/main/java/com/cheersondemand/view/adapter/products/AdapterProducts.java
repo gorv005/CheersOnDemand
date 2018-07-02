@@ -62,7 +62,7 @@ public class ItemViewHolder extends RecyclerView.ViewHolder {
     public RecyclerView.ViewHolder  onCreateViewHolder(ViewGroup parent, int viewType) {
     if(viewType==TYPE_ITEM) {
         View itemView = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.product_item, parent, false);
+                .inflate(R.layout.product_grid_item, parent, false);
 
         return new ItemViewHolder(itemView);
     }

@@ -35,22 +35,22 @@
                 android:orientation="horizontal">
 
                 <EditText
-                    android:layout_marginTop="20dp"
                     android:id="@+id/etCatName"
                     android:layout_width="match_parent"
-                    android:layout_height="44dp"
-                    android:layout_marginRight="10dp"
-                    android:fontFamily="@font/sf_ui_display_regular"
-                    android:textSize="21sp"
-                    android:paddingLeft="5dp"
-                    android:lines="1"
-                    android:singleLine="true"
-                    android:background="@color/white"
+                    android:layout_height="50dp"
                     android:layout_centerHorizontal="true"
-                    android:layout_centerVertical="true"
-                    android:hint="@string/select_store"
+                    android:focusable="true"
+                    android:drawableLeft="@drawable/ic_search"
+                    android:paddingLeft="30dp"
+                    android:drawablePadding="20dp"
+                    android:focusableInTouchMode="true"
+                    android:fontFamily="@font/sf_ui_display_regular"
+                    android:maxLines="1"
+                    android:singleLine="true"
                     android:textColor="@color/editext_text_color"
-                    android:textColorHint="@color/hint_color" />
+                    android:textColorHint="@color/editext_hint_color"
+                    android:textCursorDrawable="@drawable/edit_text_cursor_color"
+                    android:textSize="14sp" />
 
             </RelativeLayout>
 
@@ -62,7 +62,7 @@
 
         <LinearLayout
             android:visibility="visible"
-            android:layout_marginTop="10dp"
+            android:paddingTop="10dp"
             android:id="@+id/rlCategories"
             android:background="@color/white"
             android:orientation="vertical"
@@ -76,7 +76,7 @@
                 android:divider="@null"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="20dp">
+                android:layout_marginBottom="2dp">
 
             </ListView>
 

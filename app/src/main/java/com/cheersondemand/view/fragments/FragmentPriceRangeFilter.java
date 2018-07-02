@@ -8,11 +8,12 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.FrameLayout;
 import android.widget.TextView;
 
 import com.cheersondemand.R;
 import com.cheersondemand.util.seekbar.RangeSeekBar;
+import com.crystal.crystalrangeseekbar.interfaces.OnRangeSeekbarChangeListener;
+import com.crystal.crystalrangeseekbar.widgets.CrystalRangeSeekbar;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -30,6 +31,8 @@ public class FragmentPriceRangeFilter extends Fragment {
     TextView right;
 
     Unbinder unbinder;
+    @BindView(R.id.rangeSeekbar)
+    CrystalRangeSeekbar rangeSeekbar;
 
     public FragmentPriceRangeFilter() {
         // Required empty public constructor
@@ -50,23 +53,16 @@ public class FragmentPriceRangeFilter extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         RangeSeekBar<Long> rangeSeekBar = new RangeSeekBar<>(getActivity());
         // Set the range
-        rangeSeekBar.setRangeValues(0L, 5000L);
-        rangeSeekBar.setSelectedMinValue(0L);
-        rangeSeekBar.setSelectedMaxValue(5000L);
-        rangeSeekBar.setOnRangeSeekBarChangeListener(new RangeSeekBar.OnRangeSeekBarChangeListener<Long>() {
+        left.setText(getString(R.string.doller) + 0);
+        left.setText(getString(R.string.doller) + 5000);
+        rangeSeekbar.setOnRangeSeekbarChangeListener(new OnRangeSeekbarChangeListener() {
             @Override
-            public void onRangeSeekBarValuesChanged(RangeSeekBar<Long> bar, Long min, Long maxValue) {
-                left.setText(""+min);
-                right.setText(""+maxValue);
+            public void valueChanged(Number minValue, Number maxValue) {
+                left.setText(getString(R.string.doller) +String.valueOf(minValue));
+                right.setText(getString(R.string.doller) +String.valueOf(maxValue));
             }
         });
-        // Add to layout
-        FrameLayout layout = (FrameLayout)view.findViewById(R.id.seekbar_placeholder);
-        layout.addView(rangeSeekBar);
 
-        // Seek bar for which we will set text color in code
-      /*  RangeSeekBar rangeSeekBarTextColorWithCode = (RangeSeekBar)view.findViewById(R.id.rangeSeekBarTextColorWithCode);
-        rangeSeekBarTextColorWithCode.setTextAboveThumbsColorResource(android.R.color.holo_blue_bright);*/
     }
 
     @Override

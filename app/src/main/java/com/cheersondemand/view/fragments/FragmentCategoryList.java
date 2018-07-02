@@ -13,6 +13,7 @@ import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 
 import com.cheersondemand.R;
+import com.cheersondemand.model.BrandResponse;
 import com.cheersondemand.model.CategoriesResponse;
 import com.cheersondemand.model.ProductsWithCategoryResponse;
 import com.cheersondemand.presenter.home.HomeViewPresenterImpl;
@@ -99,6 +100,11 @@ public class FragmentCategoryList extends Fragment implements IHomeViewPresenter
 
     @Override
     public void getProductWithCategoriesSuccess(ProductsWithCategoryResponse response) {
+
+    }
+
+    @Override
+    public void getBrandResponseSuccess(BrandResponse response) {
 
     }
 

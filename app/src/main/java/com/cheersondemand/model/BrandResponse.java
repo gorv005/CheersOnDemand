@@ -8,10 +8,10 @@ import java.io.Serializable;
 import java.util.List;
 
 /**
- * Created by GAURAV on 6/11/2018.
+ * Created by GAURAV on 7/2/2018.
  */
 
-public class CategoriesResponse implements Serializable{
+public class BrandResponse implements Serializable{
     @SerializedName("success")
     @Expose
     private Boolean success;
@@ -20,7 +20,7 @@ public class CategoriesResponse implements Serializable{
     private String message;
     @SerializedName("data")
     @Expose
-    private List<Categories> data = null;
+    private List<Brand> data = null;
     @SerializedName("meta")
     @Expose
     private List<Meta> meta = null;
@@ -44,11 +44,11 @@ public class CategoriesResponse implements Serializable{
         this.message = message;
     }
 
-    public List<Categories> getData() {
+    public List<Brand> getData() {
         return data;
     }
 
-    public void setData(List<Categories> data) {
+    public void setData(List<Brand> data) {
         this.data = data;
     }
 

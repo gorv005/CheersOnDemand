@@ -11,6 +11,9 @@ import java.io.Serializable;
 
 public class Brand  implements Serializable{
 
+    @SerializedName("pos")
+    @Expose
+    private Integer pos;
     @SerializedName("id")
     @Expose
     private Integer id;
@@ -23,6 +26,23 @@ public class Brand  implements Serializable{
     @SerializedName("updated_at")
     @Expose
     private String updatedAt;
+
+    @SerializedName("is_selected")
+    @Expose
+    private boolean isSelected;
+
+    public Brand() {
+
+    }
+
+    public Brand(Integer pos, Integer id, String name, String createdAt, String updatedAt, boolean isSelected) {
+        this.pos = pos;
+        this.id = id;
+        this.name = name;
+        this.createdAt = createdAt;
+        this.updatedAt = updatedAt;
+        this.isSelected = isSelected;
+    }
 
     public Integer getId() {
         return id;
@@ -54,5 +74,21 @@ public class Brand  implements Serializable{
 
     public void setUpdatedAt(String updatedAt) {
         this.updatedAt = updatedAt;
+    }
+
+    public boolean isSelected() {
+        return isSelected;
+    }
+
+    public void setSelected(boolean selected) {
+        isSelected = selected;
+    }
+
+    public Integer getPos() {
+        return pos;
+    }
+
+    public void setPos(Integer pos) {
+        this.pos = pos;
     }
 }

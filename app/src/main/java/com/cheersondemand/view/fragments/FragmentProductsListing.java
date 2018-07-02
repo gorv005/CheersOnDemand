@@ -1,12 +1,18 @@
 package com.cheersondemand.view.fragments;
 
 
+import android.content.Intent;
+import android.content.res.Resources;
+import android.graphics.Rect;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,6 +21,11 @@ import android.widget.RelativeLayout;
 
 import com.cheersondemand.R;
 import com.cheersondemand.model.AllProduct;
+import com.cheersondemand.model.Brand;
+import com.cheersondemand.model.BrandResponse;
+import com.cheersondemand.model.Categories;
+import com.cheersondemand.model.CategoriesResponse;
+import com.cheersondemand.model.ProductsWithCategoryResponse;
 import com.cheersondemand.model.authentication.GenRequest;
 import com.cheersondemand.model.order.CreateOrderResponse;
 import com.cheersondemand.model.order.addtocart.AddToCartRequest;
@@ -24,6 +35,8 @@ import com.cheersondemand.model.order.updatecart.UpdateCartResponse;
 import com.cheersondemand.model.productList.ProductListResponse;
 import com.cheersondemand.model.wishlist.WishListRequest;
 import com.cheersondemand.model.wishlist.WishListResponse;
+import com.cheersondemand.presenter.home.HomeViewPresenterImpl;
+import com.cheersondemand.presenter.home.IHomeViewPresenterPresenter;
 import com.cheersondemand.presenter.home.order.IOrderViewPresenterPresenter;
 import com.cheersondemand.presenter.home.order.OrderViewPresenterImpl;
 import com.cheersondemand.presenter.products.IProductViewPresenter;
@@ -32,18 +45,23 @@ import com.cheersondemand.util.C;
 import com.cheersondemand.util.SharedPreference;
 import com.cheersondemand.util.Util;
 import com.cheersondemand.view.ActivityContainer;
+import com.cheersondemand.view.ActivityFilters;
 import com.cheersondemand.view.adapter.products.AdapterProducts;
 
+import java.io.Serializable;
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 
+import static android.app.Activity.RESULT_OK;
+import static com.cheersondemand.util.C.REQUEST_CODE;
+
 /**
  * A simple {@link Fragment} subclass.
  */
-public class FragmentProductsListing extends Fragment implements IProductViewPresenter.IProductView,IOrderViewPresenterPresenter.IOrderView {
+public class FragmentProductsListing extends Fragment implements View.OnClickListener,IProductViewPresenter.IProductView,IOrderViewPresenterPresenter.IOrderView,IHomeViewPresenterPresenter.IHomeView {
 
 
     @BindView(R.id.llSort)
@@ -56,7 +74,7 @@ public class FragmentProductsListing extends Fragment implements IProductViewPre
     Util util;
     IProductViewPresenter iProductViewPresenter;
     IOrderViewPresenterPresenter iOrderViewPresenterPresenter;
-
+    IHomeViewPresenterPresenter iHomeViewPresenterPresenter;
     AdapterProducts adapterProducts;
     List<AllProduct> allProductList;
     int page = 1;
@@ -73,7 +91,8 @@ public class FragmentProductsListing extends Fragment implements IProductViewPre
     private int secPos;
     private boolean isAdd;
     AllProduct product;
-
+    List<Categories> categoriesList;
+    List<Brand> brandList;
     public FragmentProductsListing() {
         // Required empty public constructor
     }
@@ -84,7 +103,7 @@ public class FragmentProductsListing extends Fragment implements IProductViewPre
         util = new Util();
         iProductViewPresenter = new ProductViewPresenterImpl(this, getActivity());
         iOrderViewPresenterPresenter = new OrderViewPresenterImpl(this, getActivity());
-
+        iHomeViewPresenterPresenter=new HomeViewPresenterImpl(this,getActivity());
         catId=getArguments().getString(C.CAT_ID);
         source=getArguments().getInt(C.SOURCE);
     }
@@ -102,14 +121,44 @@ public class FragmentProductsListing extends Fragment implements IProductViewPre
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         lLayout = new GridLayoutManager(getActivity(), 2);
-        rvProductsList.setHasFixedSize(true);
+        //rvProductsList.setHasFixedSize(true);
+        llFilter.setOnClickListener(this);
+        llSort.setOnClickListener(this);
         rvProductsList.setLayoutManager(lLayout);
+        rvProductsList.addItemDecoration(new GridSpacingItemDecoration(2, dpToPx(10), true));
+        rvProductsList.setItemAnimator(new DefaultItemAnimator());
         if(source==C.FRAGMENT_CATEGORIES) {
             getProductsList(page, perPage, catId, "" + from, "" + to, orderBy, orderField);
         }
         else if(source==C.FRAGMENT_PRODUCTS_HOME){
             getAllProducts(page, perPage, "" + from, "" + to, orderBy, orderField);
 
+        }
+        getBrands();
+        getCategories();
+    }
+
+
+    void getCategories(){
+        if (SharedPreference.getInstance(getActivity()).getBoolean(C.IS_LOGIN_GUEST)) {
+            String id = "" + SharedPreference.getInstance(getActivity()).geGuestUser(C.GUEST_USER).getId();
+
+            iHomeViewPresenterPresenter.getCategories(false,"",Util.id(getActivity()));
+        } else {
+            String id = "" + SharedPreference.getInstance(getActivity()).getUser(C.AUTH_USER).getData().getUser().getId();
+            String token =  C.bearer + SharedPreference.getInstance(getActivity()).getUser(C.AUTH_USER).getData().getToken().getAccessToken();
+            iHomeViewPresenterPresenter.getCategories(true,token,Util.id(getActivity()));
+        }
+    }
+    void getBrands(){
+        if (SharedPreference.getInstance(getActivity()).getBoolean(C.IS_LOGIN_GUEST)) {
+            String id = "" + SharedPreference.getInstance(getActivity()).geGuestUser(C.GUEST_USER).getId();
+
+            iHomeViewPresenterPresenter.getBrands(false,"",Util.id(getActivity()));
+        } else {
+            String id = "" + SharedPreference.getInstance(getActivity()).getUser(C.AUTH_USER).getData().getUser().getId();
+            String token =  C.bearer + SharedPreference.getInstance(getActivity()).getUser(C.AUTH_USER).getData().getToken().getAccessToken();
+            iHomeViewPresenterPresenter.getBrands(true,token,Util.id(getActivity()));
         }
     }
     @Override
@@ -439,6 +488,25 @@ public class FragmentProductsListing extends Fragment implements IProductViewPre
     }
 
     @Override
+    public void getProductWithCategoriesSuccess(ProductsWithCategoryResponse response) {
+
+    }
+
+    @Override
+    public void getBrandResponseSuccess(BrandResponse response) {
+        if(response.getSuccess()){
+            brandList=response.getData();
+        }
+    }
+
+    @Override
+    public void getResponseSuccess(CategoriesResponse response) {
+        if(response.getSuccess()){
+            categoriesList=response.getData();
+        }
+    }
+
+    @Override
     public void getResponseError(String response) {
         util.setSnackbarMessage(getActivity(), response, rlView, true);
 
@@ -452,5 +520,77 @@ public class FragmentProductsListing extends Fragment implements IProductViewPre
     @Override
     public void hideProgress() {
 
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()){
+            case R.id.llFilter:
+                sendFilterData();
+                break;
+        }
+    }
+
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        Log.d("onActivityResult", "requestCode = " + requestCode);
+        if(requestCode==RESULT_OK) {
+            Bundle bundle = data.getBundleExtra(C.BUNDLE);
+            brandList = (List<Brand>) bundle.getSerializable(C.BRANDS_LIST);
+            categoriesList = (List<Categories>) bundle.getSerializable(C.CATEGORY_LIST);
+        }
+    }
+    void sendFilterData(){
+        Intent intent = new Intent(getContext(), ActivityFilters.class);
+        Bundle bundle=new Bundle();
+        bundle.putSerializable(C.BRANDS_LIST,(Serializable)brandList);
+        bundle.putSerializable(C.CATEGORY_LIST,(Serializable)categoriesList);
+        intent.putExtra(C.BUNDLE,bundle);
+        startActivityForResult(intent, REQUEST_CODE);
+    }
+
+    public class GridSpacingItemDecoration extends RecyclerView.ItemDecoration {
+
+        private int spanCount;
+        private int spacing;
+        private boolean includeEdge;
+
+        public GridSpacingItemDecoration(int spanCount, int spacing, boolean includeEdge) {
+            this.spanCount = spanCount;
+            this.spacing = spacing;
+            this.includeEdge = includeEdge;
+        }
+
+        @Override
+        public void getItemOffsets(Rect outRect, View view, RecyclerView parent, RecyclerView.State state) {
+            int position = parent.getChildAdapterPosition(view); // item position
+            int column = position % spanCount; // item column
+
+            if (includeEdge) {
+                outRect.left = spacing - column * spacing / spanCount; // spacing - column * ((1f / spanCount) * spacing)
+                outRect.right = (column + 1) * spacing / spanCount; // (column + 1) * ((1f / spanCount) * spacing)
+
+                if (position < spanCount) { // top edge
+                    outRect.top = spacing;
+                }
+                outRect.bottom = spacing; // item bottom
+            } else {
+                outRect.left = column * spacing / spanCount; // column * ((1f / spanCount) * spacing)
+                outRect.right = spacing - (column + 1) * spacing / spanCount; // spacing - (column + 1) * ((1f /    spanCount) * spacing)
+                if (position >= spanCount) {
+                    outRect.top = spacing; // item top
+                }
+            }
+        }
+    }
+
+    /**
+     * Converting dp to pixel
+     */
+    private int dpToPx(int dp) {
+        Resources r = getResources();
+        return Math.round(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, r.getDisplayMetrics()));
     }
 }

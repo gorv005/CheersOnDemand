@@ -56,4 +56,7 @@ public interface C {
     int FRAGMENT_PRICE_RANGE = 14;
     int FRAGMENT_BRANDS =15 ;
     int FRAGMENT_CATEGORIES_FILTER =16 ;
+    String BRANDS_LIST ="brand_list" ;
+    String CATEGORY_LIST ="cat_list" ;
+    int REQUEST_CODE =122 ;
 }

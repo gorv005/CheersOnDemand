@@ -57,6 +57,7 @@
 
     </android.support.design.widget.AppBarLayout>
     <LinearLayout
+        android:layout_marginBottom="55dp"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
@@ -81,4 +82,47 @@
 
     </LinearLayout>
     </LinearLayout>
+    <LinearLayout
+        android:weightSum="2"
+        android:paddingRight="15dp"
+        android:paddingLeft="15dp"
+        android:layout_alignParentBottom="true"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="50dp">
+
+
+        <Button
+
+            android:id="@+id/btnCancel"
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:layout_height="40dp"
+            android:layout_gravity="center_horizontal"
+
+            android:background="@drawable/add_to_cart_button"
+            android:fontFamily="@font/sf_ui_display_regular"
+            android:text="@string/cancel"
+            android:textAllCaps="true"
+            android:layout_marginRight="5dp"
+            android:textColor="@color/white"
+            android:textSize="13.4sp" />
+        <Button
+
+            android:id="@+id/btnApplyFilter"
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:layout_height="40dp"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginLeft="5dp"
+            android:background="@drawable/bg_button_enable"
+            android:fontFamily="@font/sf_ui_display_regular"
+            android:text="@string/apply_filter"
+            android:textAllCaps="true"
+            android:textColor="@color/white"
+            android:textSize="13.4sp" />
+
+
+    </LinearLayout>
+
 </RelativeLayout>

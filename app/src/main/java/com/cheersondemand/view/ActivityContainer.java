@@ -109,7 +109,9 @@ public class ActivityContainer extends AppCompatActivity {
             case C.FRAGMENT_PRODUCT_LISTING:
                 fragment = new FragmentProductsListing();
                 fragmentTransaction.replace(R.id.container, fragment);
-                fragmentTransaction.addToBackStack(C.TAG_FRAGMENT_PRODUCT_LISTING);
+                if(bundle.getInt(C.SOURCE)!=C.FRAGMENT_PRODUCTS_HOME) {
+                    fragmentTransaction.addToBackStack(C.TAG_FRAGMENT_PRODUCT_LISTING);
+                }
                 break;
         }
         fragment.setArguments(bundle);

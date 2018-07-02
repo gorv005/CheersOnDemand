@@ -1,6 +1,7 @@
 package com.cheersondemand.view.adapter;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -58,10 +59,15 @@ public class AdapterHomeCategoriesSections extends RecyclerView.Adapter<AdapterH
 
            //     Toast.makeText(v.getContext(), "click event on more, "+sectionName , Toast.LENGTH_SHORT).show();
 
+                Intent intent=new Intent(mContext,ActivityContainer.class);
+
                 Bundle bundle=new Bundle();
                 bundle.putString(C.CAT_ID,"");
                 bundle.putInt(C.SOURCE,C.FRAGMENT_PRODUCTS_HOME);
-                ((ActivityContainer)mContext).fragmnetLoader(C.FRAGMENT_PRODUCT_LISTING,bundle);
+                intent.putExtra(C.BUNDLE,bundle);
+                intent.putExtra(C.FRAGMENT_ACTION,C.FRAGMENT_PRODUCT_LISTING);
+
+                mContext.startActivity(intent);
 
             }
         });

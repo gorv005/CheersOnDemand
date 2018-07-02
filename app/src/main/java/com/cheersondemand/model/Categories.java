@@ -10,7 +10,9 @@ import java.io.Serializable;
  */
 
 public class Categories implements Serializable {
-
+    @SerializedName("pos")
+    @Expose
+    private Integer pos;
     @SerializedName("id")
     @Expose
     private Integer id;
@@ -25,12 +27,14 @@ public class Categories implements Serializable {
     private Integer productsCount;
     @SerializedName("is_selected")
     @Expose
-    private boolean isSelected;
+    private boolean isSelected=false;
 
     public Categories() {
     }
 
-    public Categories(Integer id, String name, String image, Integer productsCount, boolean isSelected) {
+
+    public Categories(Integer pos, Integer id, String name, String image, Integer productsCount, boolean isSelected) {
+        this.pos = pos;
         this.id = id;
         this.name = name;
         this.image = image;
@@ -76,5 +80,13 @@ public class Categories implements Serializable {
 
     public void setSelected(boolean selected) {
         isSelected = selected;
+    }
+
+    public Integer getPos() {
+        return pos;
+    }
+
+    public void setPos(Integer pos) {
+        this.pos = pos;
     }
 }

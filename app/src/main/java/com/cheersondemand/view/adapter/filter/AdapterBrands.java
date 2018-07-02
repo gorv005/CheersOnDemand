@@ -13,7 +13,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.cheersondemand.R;
-import com.cheersondemand.model.Categories;
+import com.cheersondemand.model.Brand;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,30 +22,31 @@ import java.util.List;
  * Created by GAURAV on 7/2/2018.
  */
 
-public class CategoryAdapter extends BaseAdapter implements Filterable {
+public class AdapterBrands extends BaseAdapter implements Filterable {
 
 
     private final LayoutInflater mInflater;
     private Activity activity;
-    private List<Categories> Items;
+    private List<Brand> Items;
     int pos=-1;
     private int lastCheckedPosition = -1;
-    List<Categories> filterList;
-    CategoryFilter filter;
+    List<Brand> filterList;
+    BrandFilter filter;
 
-    public CategoryAdapter(Activity activity, List<Categories> sideMenuItems) {
+    public AdapterBrands(Activity activity, List<Brand> sideMenuItems) {
         this.activity = activity;
         this.Items = sideMenuItems;
         mInflater = LayoutInflater.from(activity);
         this.filterList=sideMenuItems;
     }
 
+
+
     @Override
     public int getViewTypeCount() {
         return Items.size();
     }
-
-    public List<Categories> getCategoryList(){
+   public List<Brand> getBrandList(){
         return filterList;
     }
     @Override
@@ -59,7 +60,7 @@ public class CategoryAdapter extends BaseAdapter implements Filterable {
     }
 
     @Override
-    public Categories getItem(int position) {
+    public Brand getItem(int position) {
         return Items.get(position);
     }
 
@@ -99,7 +100,6 @@ public class CategoryAdapter extends BaseAdapter implements Filterable {
                     holder.name.setTextColor(ContextCompat.getColor(activity, R.color.brand_text_color));
                     Items.get(position).setSelected(false);
                     filterList.get(Items.get(position).getPos()).setSelected(false);
-
                 }
                 else {
                     holder.checkBox.setChecked(true);
@@ -114,7 +114,7 @@ public class CategoryAdapter extends BaseAdapter implements Filterable {
         return convertView;
 
     }
-    public Categories getSelectedItem() {
+    public Brand getSelectedItem() {
         if(pos!=-1) {
             return filterList.get(pos);
         }
@@ -155,13 +155,13 @@ public class CategoryAdapter extends BaseAdapter implements Filterable {
     public Filter getFilter() {
         if(filter == null)
         {
-            filter=new CategoryFilter();
+            filter=new BrandFilter();
         }
 
         return filter;
     }
 
-    public  class ItemViewHolder {
+    public static class ItemViewHolder {
 
         private TextView name;
         private CheckBox checkBox;
@@ -170,7 +170,7 @@ public class CategoryAdapter extends BaseAdapter implements Filterable {
 
     }
 
-    class CategoryFilter extends Filter
+    class BrandFilter extends Filter
     {
 
         @Override
@@ -184,14 +184,14 @@ public class CategoryAdapter extends BaseAdapter implements Filterable {
                 //CONSTARINT TO UPPER
                 constraint=constraint.toString().toLowerCase();
 
-                List<Categories> filters=new ArrayList<Categories>();
+                List<Brand> filters=new ArrayList<Brand>();
 
                 //get specific items
                 for(int i=0;i<filterList.size();i++)
                 {
                     if(filterList.get(i).getName().toLowerCase().contains(constraint))
                     {
-                        Categories p=new Categories(i, filterList.get(i).getId(),filterList.get(i).getName(),filterList.get(i).getImage(),filterList.get(i).getProductsCount(),filterList.get(i).isSelected());
+                        Brand p=new Brand(i, filterList.get(i).getId(),filterList.get(i).getName(),filterList.get(i).getCreatedAt(),filterList.get(i).getUpdatedAt(),filterList.get(i).isSelected());
 
                         filters.add(p);
                     }
@@ -214,7 +214,7 @@ public class CategoryAdapter extends BaseAdapter implements Filterable {
         protected void publishResults(CharSequence constraint, FilterResults results) {
             // TODO Auto-generated method stub
 
-            Items=(ArrayList<Categories>) results.values;
+            Items=(ArrayList<Brand>) results.values;
             notifyDataSetChanged();
         }
 

@@ -5,9 +5,9 @@ import android.util.Log;
 import com.cheersondemand.frameworks.retrofit.ResponseResolver;
 import com.cheersondemand.frameworks.retrofit.RestError;
 import com.cheersondemand.frameworks.retrofit.WebServicesWrapper;
+import com.cheersondemand.model.BrandResponse;
 import com.cheersondemand.model.CategoriesResponse;
 import com.cheersondemand.model.ProductsWithCategoryResponse;
-import com.cheersondemand.model.authentication.GenRequest;
 import com.google.gson.Gson;
 
 import retrofit2.Response;
@@ -21,13 +21,13 @@ public class HomeViewIntractorImpl implements IHomeViewIntractor {
 
 
     @Override
-    public void getCategories(GenRequest uuid, final OnLoginFinishedListener listener) {
+    public void getCategories(String uuid, final OnLoginFinishedListener listener) {
         try {
 
-            WebServicesWrapper.getInstance().getCategories(new ResponseResolver<CategoriesResponse>() {
+            WebServicesWrapper.getInstance().getCategories(new ResponseResolver<BrandResponse>() {
                 @Override
-                public void onSuccess(CategoriesResponse signUpResponse, Response response) {
-                    listener.onSuccess(signUpResponse);
+                public void onSuccess(BrandResponse signUpResponse, Response response) {
+                    listener.onSuccessBrand(signUpResponse);
                 }
 
                 @Override
@@ -35,8 +35,8 @@ public class HomeViewIntractorImpl implements IHomeViewIntractor {
                     if(error==null ||error.getError()==null){
 
                         Gson gson=new Gson();
-                        CategoriesResponse response= gson.fromJson(msg,CategoriesResponse.class);
-                        listener.onSuccess(response);
+                        BrandResponse response= gson.fromJson(msg,BrandResponse.class);
+                        listener.onSuccessBrand(response);
 
                     }
                     else {
@@ -81,13 +81,13 @@ public class HomeViewIntractorImpl implements IHomeViewIntractor {
     }
 
     @Override
-    public void getBrands(String auth, GenRequest uuid, final OnLoginFinishedListener listener) {
+    public void getBrands(boolean isAuth,String auth, String uuid, final OnLoginFinishedListener listener) {
         try {
 
-            WebServicesWrapper.getInstance().getBrands(new ResponseResolver<CategoriesResponse>() {
+            WebServicesWrapper.getInstance().getBrands(new ResponseResolver<BrandResponse>() {
                 @Override
-                public void onSuccess(CategoriesResponse signUpResponse, Response response) {
-                    listener.onSuccess(signUpResponse);
+                public void onSuccess(BrandResponse signUpResponse, Response response) {
+                    listener.onSuccessBrand(signUpResponse);
                 }
 
                 @Override
@@ -95,15 +95,15 @@ public class HomeViewIntractorImpl implements IHomeViewIntractor {
                     if(error==null ||error.getError()==null){
 
                         Gson gson=new Gson();
-                        CategoriesResponse response= gson.fromJson(msg,CategoriesResponse.class);
-                        listener.onSuccess(response);
+                        BrandResponse response= gson.fromJson(msg,BrandResponse.class);
+                        listener.onSuccessBrand(response);
 
                     }
                     else {
                         listener.onError(error.getError());
                     }
                 }
-            },auth,uuid);
+            },isAuth,auth,uuid);
         }
         catch (Exception e){
             e.printStackTrace();

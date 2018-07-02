@@ -17,6 +17,7 @@ import android.widget.TextView;
 
 import com.cheersondemand.R;
 import com.cheersondemand.model.AllProduct;
+import com.cheersondemand.model.BrandResponse;
 import com.cheersondemand.model.Categories;
 import com.cheersondemand.model.CategoriesResponse;
 import com.cheersondemand.model.HomeCategoriesSectionList;
@@ -246,6 +247,11 @@ public class FragmentHome extends Fragment implements IHomeViewPresenterPresente
             util.setSnackbarMessage(getActivity(), response.getMessage(),rlHomeView,true );
 
         }
+    }
+
+    @Override
+    public void getBrandResponseSuccess(BrandResponse response) {
+
     }
 
     @Override
