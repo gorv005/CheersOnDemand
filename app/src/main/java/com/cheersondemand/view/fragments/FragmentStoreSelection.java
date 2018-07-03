@@ -30,6 +30,8 @@ import com.cheersondemand.util.Util;
 import com.cheersondemand.view.ActivityHome;
 import com.cheersondemand.view.adapter.store.AdapterStore;
 
+import java.util.List;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
@@ -59,6 +61,8 @@ public class FragmentStoreSelection extends Fragment implements IStoreViewPresen
     @BindView(R.id.imgBack)
     ImageView imgBack;
     int from;
+    List<StoreList> storeList;
+    StoreList store;
     public FragmentStoreSelection() {
         // Required empty public constructor
     }
@@ -126,8 +130,12 @@ public class FragmentStoreSelection extends Fragment implements IStoreViewPresen
     @Override
     public void getStoreListSuccess(StoreListResponse response) {
         if(response.getSuccess()) {
-            adapterStore = new AdapterStore(getActivity(), response.getData());
-            lvStoreList.setAdapter(adapterStore);
+            storeList=response.getData();
+            if(storeList!=null && storeList.size()>0) {
+                StoreList storeList1=SharedPreference.getInstance(getActivity()).getStore(C.SELECTED_STORE);
+                adapterStore = new AdapterStore(getActivity(), storeList,storeList1);
+                lvStoreList.setAdapter(adapterStore);
+            }
         }
         else {
             util.setSnackbarMessage(getActivity(), response.getMessage(), LLView, true);
@@ -138,6 +146,7 @@ public class FragmentStoreSelection extends Fragment implements IStoreViewPresen
     @Override
     public void updateStoreSuccess(UpdateStoreResponse response) {
         if(response.getSuccess()) {
+            SharedPreference.getInstance(getActivity()).setStore(C.SELECTED_STORE, store);
             if (from == C.SEARCH) {
                 gotoHome();
             } else if (from == C.HOME) {
@@ -176,12 +185,11 @@ public class FragmentStoreSelection extends Fragment implements IStoreViewPresen
                 getActivity().finish();
                 break;
             case R.id.btnSubmit:
-                StoreList storeList = adapterStore.getSelectedItem();
+                store = adapterStore.getSelectedItem();
                 if (storeList != null) {
-                    SharedPreference.getInstance(getActivity()).setStore(C.SELECTED_STORE, storeList);
 
                     UpdateStore updateStore = new UpdateStore();
-                    updateStore.setWarehouseId(storeList.getId());
+                    updateStore.setWarehouseId(store.getId());
                     updateStore.setUuid(Util.id(getActivity()));
                     if (SharedPreference.getInstance(getActivity()).getBoolean(C.IS_LOGIN_GUEST)) {
 
@@ -189,7 +197,7 @@ public class FragmentStoreSelection extends Fragment implements IStoreViewPresen
                                 geGuestUser(C.GUEST_USER).getId(), updateStore);
                     }
                     else {
-                        String token="bearer "+SharedPreference.getInstance(getActivity()).getUser(C.AUTH_USER).getData().getToken().getAccessToken();
+                        String token= C.bearer+SharedPreference.getInstance(getActivity()).getUser(C.AUTH_USER).getData().getToken().getAccessToken();
                         String id=""+SharedPreference.getInstance(getActivity()).getUser(C.AUTH_USER).getData().getUser().getId();
 
                         iStoreViewPresenter.updateStore(token,id, updateStore);

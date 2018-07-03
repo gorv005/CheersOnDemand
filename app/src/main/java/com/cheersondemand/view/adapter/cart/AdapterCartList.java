@@ -38,7 +38,7 @@ private List<OrderItem> horizontalList;
     ImageLoader imageLoader;
     CartProduct cartProduct;
     AdapterProductAmount adapterProductAmount;
-
+    int source;
     public class ItemViewHolder extends RecyclerView.ViewHolder {
     public TextView tvName,tvSubName,tvPrice,tvQuantity,tvAddToWishList;
     public CircleImageView ivProductImage;
@@ -90,12 +90,12 @@ private List<OrderItem> horizontalList;
 
         }
     }
-    public AdapterCartList(CartProduct cartProduct,List<OrderItem> horizontalList, Activity context) {
+    public AdapterCartList(CartProduct cartProduct,List<OrderItem> horizontalList, Activity context,int source) {
         this.horizontalList = horizontalList;
         this.context=context;
         this.cartProduct=cartProduct;
         imageLoader=new ImageLoader(context);
-
+        this.source=source;
     }
     public void setData(CartProduct data,List<OrderItem> horizontalList){
         this.cartProduct=data;
@@ -170,29 +170,60 @@ private List<OrderItem> horizontalList;
                     UpdateCartRequest updateCartRequest=new UpdateCartRequest();
                     updateCartRequest.setUuid(Util.id(context));
                     updateCartRequest.setProductId(horizontalList.get(position).getProduct().getId());
-                    ((ActivityHome)context).removeFromCart(updateCartRequest);
+                    if(source==C.FRAGMENT_PRODUCTS_HOME) {
+                        ((ActivityHome) context).removeFromCart(updateCartRequest);
+                    }
+                    else {
+                        ((ActivityContainer) context).removeFromCart(updateCartRequest);
+
+                    }
                 }
             });
             itemViewHolder.rlPlus.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    ((ActivityHome)context).updateCart(0,position,true);
+                    if(source==C.FRAGMENT_PRODUCTS_HOME) {
+
+                        ((ActivityHome) context).updateCart(0, position, true);
+                    }
+                    else {
+                        ((ActivityContainer) context).updateCart(0, position, true);
+
+                    }
                 }
             });
             itemViewHolder.rlMinus.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    ((ActivityHome)context).updateCart(0,position,false);
+                    if(source==C.FRAGMENT_PRODUCTS_HOME) {
+                        ((ActivityHome) context).updateCart(0, position, false);
+                    }
+                    else {
+                        ((ActivityContainer) context).updateCart(0, position, false);
+
+                    }
                 }
             });
             itemViewHolder.rlAddToWishList.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     if(horizontalList.get(position).getProduct().getIsWishlisted()) {
-                        ((ActivityHome) context).wishListUpdate(0, position, false);
+                        if(source==C.FRAGMENT_PRODUCTS_HOME) {
+                            ((ActivityHome) context).wishListUpdate(0, position, false);
+                        }
+                        else {
+                            ((ActivityContainer) context).wishListUpdate(0, position, false);
+
+                        }
                     }
                     else {
-                        ((ActivityHome) context).wishListUpdate(0, position, true);
+                        if(source==C.FRAGMENT_PRODUCTS_HOME) {
+                            ((ActivityHome) context).wishListUpdate(0, position, true);
+                        }
+                        else {
+                            ((ActivityContainer) context).wishListUpdate(0, position, true);
+
+                        }
 
                     }
 
@@ -224,7 +255,14 @@ private List<OrderItem> horizontalList;
             footerViewHolder.ivDelete.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    ((ActivityHome) context).removeCoupon();
+                    if(source==C.FRAGMENT_PRODUCTS_HOME) {
+
+                        ((ActivityHome) context).removeCoupon();
+                    }
+                    else {
+                        ((ActivityContainer) context).removeCoupon();
+
+                    }
                 }
             });
             footerViewHolder.tvChangeCoupon.setOnClickListener(new View.OnClickListener() {

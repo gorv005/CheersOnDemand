@@ -59,4 +59,5 @@ public interface C {
     String BRANDS_LIST ="brand_list" ;
     String CATEGORY_LIST ="cat_list" ;
     int REQUEST_CODE =122 ;
+    String TAG_FRAGMENT_CART = "TAG_FRAGMENT_CART";
 }

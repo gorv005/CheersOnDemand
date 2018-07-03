@@ -29,12 +29,16 @@ public class AdapterStore extends BaseAdapter implements Filterable{
     private int lastCheckedPosition = -1;
 List<StoreList> filterList;
     StoreListFilter filter;
-
-    public AdapterStore(Activity activity, List<StoreList> sideMenuItems) {
+    StoreList selectedStore;
+    public AdapterStore(Activity activity, List<StoreList> sideMenuItems, StoreList store) {
         this.activity = activity;
         this.Items = sideMenuItems;
         mInflater = LayoutInflater.from(activity);
         this.filterList=sideMenuItems;
+        this.selectedStore=store;
+        if(store!=null){
+            lastCheckedPosition=store.getId();
+        }
     }
 
 

@@ -16,7 +16,9 @@ import android.view.WindowManager;
 import android.widget.TextView;
 
 import com.cheersondemand.R;
+import com.cheersondemand.model.order.updatecart.UpdateCartRequest;
 import com.cheersondemand.util.C;
+import com.cheersondemand.view.fragments.FragmentCart;
 import com.cheersondemand.view.fragments.FragmentCategoryList;
 import com.cheersondemand.view.fragments.FragmentChangePassword;
 import com.cheersondemand.view.fragments.FragmentCoupons;
@@ -106,7 +108,13 @@ public class ActivityContainer extends AppCompatActivity {
                 fragmentTransaction.replace(R.id.container, fragment);
                 //fragmentTransaction.addToBackStack(C.TAG_FRAGMENT_PRODUCTS_HOME);
                 break;
+            case C.FRAGMENT_CART:
+                fragment = new FragmentCart();
+                fragmentTransaction.replace(R.id.container, fragment);
+                fragmentTransaction.addToBackStack(C.TAG_FRAGMENT_CART);
+                break;
             case C.FRAGMENT_PRODUCT_LISTING:
+                getSupportActionBar().hide();
                 fragment = new FragmentProductsListing();
                 fragmentTransaction.replace(R.id.container, fragment);
                 if(bundle.getInt(C.SOURCE)!=C.FRAGMENT_PRODUCTS_HOME) {
@@ -120,6 +128,8 @@ public class ActivityContainer extends AppCompatActivity {
 
 
     }
+
+
     private Fragment getVisibleFragment() {
         FragmentManager fragmentManager = getSupportFragmentManager();
         @SuppressLint("RestrictedApi") List<Fragment> fragments = fragmentManager.getFragments();
@@ -132,18 +142,29 @@ public class ActivityContainer extends AppCompatActivity {
 
 
 
-
-
+    public void removeCoupon(){
+        Fragment fragment=getVisibleFragment();
+        if(fragment!=null && fragment instanceof FragmentCart ){
+            ((FragmentCart)fragment).removeCoupon();
+        }
+    }
+    public void removeFromCart(UpdateCartRequest updateCartRequest){
+        Fragment fragment=getVisibleFragment();
+        if(fragment!=null && fragment instanceof FragmentCart ){
+            ((FragmentCart)fragment).removeProduct(updateCartRequest);
+        }
+    }
     public void addToCart(int secPos,int pos,boolean isAdd){
         Fragment fragment=getVisibleFragment();
         if(fragment!=null && fragment instanceof FragmentProductDescription){
             ((FragmentProductDescription)fragment).addToCart(secPos,pos,isAdd);
     
         }
-        if(fragment!=null && fragment instanceof FragmentProductsListing){
+        else if(fragment!=null && fragment instanceof FragmentProductsListing){
             ((FragmentProductsListing)fragment).addToCart(secPos,pos,isAdd);
 
         }
+
     }
     public void updateCart(int secPos,int pos,boolean isAdd){
         Fragment fragment=getVisibleFragment();
@@ -153,6 +174,10 @@ public class ActivityContainer extends AppCompatActivity {
         }
         else if(fragment!=null && fragment instanceof FragmentProductsListing){
             ((FragmentProductsListing)fragment).updateCart(secPos,pos,isAdd);
+
+        }
+        else if(fragment!=null && fragment instanceof FragmentCart){
+            ((FragmentCart)fragment).updateCart(secPos,pos,isAdd);
 
         }
     }
@@ -175,6 +200,10 @@ public class ActivityContainer extends AppCompatActivity {
             ((FragmentProductsListing)fragment).wishListUpdate(secPos,pos,isAdd);
 
         }
+         else if(fragment!=null && fragment instanceof FragmentCart){
+             ((FragmentCart)fragment).wishListUpdate(secPos,pos,isAdd);
+
+         }
     }
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -186,6 +215,12 @@ public class ActivityContainer extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
+        Fragment fragment=getVisibleFragment();
+        if(fragment!=null && fragment instanceof FragmentProductsListing){
+            getSupportActionBar().show();
+        }
+
         super.onBackPressed();
+
     }
 }

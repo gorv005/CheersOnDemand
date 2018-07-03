@@ -36,6 +36,7 @@ import com.cheersondemand.util.C;
 import com.cheersondemand.util.ImageLoader.ImageLoader;
 import com.cheersondemand.util.SharedPreference;
 import com.cheersondemand.util.Util;
+import com.cheersondemand.view.ActivityContainer;
 import com.cheersondemand.view.adapter.AdapterHomeCategories;
 import com.cheersondemand.view.adapter.productdescription.AdapterOffers;
 
@@ -49,7 +50,7 @@ import butterknife.Unbinder;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class FragmentProductDescription extends Fragment implements IProductDescViewPresenter.IProductDescView, IOrderViewPresenterPresenter.IOrderView {
+public class FragmentProductDescription extends Fragment implements View.OnClickListener, IProductDescViewPresenter.IProductDescView, IOrderViewPresenterPresenter.IOrderView {
 
     @BindView(R.id.imgProduct)
     ImageView imgProduct;
@@ -88,18 +89,24 @@ public class FragmentProductDescription extends Fragment implements IProductDesc
     Button btnAddToCart;
     @BindView(R.id.btnBuyNow)
     Button btnBuyNow;
-    AllProduct product;
+    AllProduct product,productDes;
     @BindView(R.id.rlImage)
     RelativeLayout rlImage;
     @BindView(R.id.rlSimilar)
     RelativeLayout rlSimilar;
     @BindView(R.id.rlView)
     RelativeLayout rlView;
+    @BindView(R.id.imgLike)
+    ImageView imgLike;
+    @BindView(R.id.rlLike)
+    RelativeLayout rlLike;
     private int productPos;
     private int secPos;
     private boolean isAdd;
     List<AllProduct> allProductList;
     Util util;
+    private boolean isProductDes=false;
+
     public FragmentProductDescription() {
         // Required empty public constructor
     }
@@ -109,10 +116,10 @@ public class FragmentProductDescription extends Fragment implements IProductDesc
         super.onCreate(savedInstanceState);
         imageLoader = new ImageLoader(getActivity());
         product = (AllProduct) getArguments().getSerializable(C.PRODUCT);
+        productDes = (AllProduct) getArguments().getSerializable(C.PRODUCT);
         iProductDescViewPresenter = new ProductDescViewPresenterImpl(this, getActivity());
         iOrderViewPresenterPresenter = new OrderViewPresenterImpl(this, getActivity());
-        util=new Util();
-        getSimilarProducts();
+        util = new Util();
     }
 
     @Override
@@ -129,8 +136,19 @@ public class FragmentProductDescription extends Fragment implements IProductDesc
         super.onViewCreated(view, savedInstanceState);
         horizontalLayout = new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false);
         rvSimilarDrinks.setLayoutManager(horizontalLayout);
+        tvSeeMore.setOnClickListener(this);
+        rlLike.setOnClickListener(this);
+        btnAddToCart.setOnClickListener(this);
+        btnBuyNow.setOnClickListener(this);
         setDetail();
 
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        getSimilarProducts();
+        ActivityContainer.tvTitle.setText(productDes.getName());
     }
 
     void getSimilarProducts() {
@@ -146,7 +164,20 @@ public class FragmentProductDescription extends Fragment implements IProductDesc
     void setDetail() {
         //  imageLoader.DisplayImage(product.getImage(), imgProduct);
         Util.setImage(getActivity(), product.getImage(), imgProduct);
+        if(product.getIsWishlisted()){
+            imgLike.setImageResource(R.drawable.like);
+        }
+        else {
+            imgLike.setImageResource(R.drawable.unlike);
 
+        }
+        if(product.getIsInCart()){
+            btnAddToCart.setText(getString(R.string.added_to_cart));
+        }
+        else {
+            btnAddToCart.setText(getString(R.string.add_to_cart));
+
+        }
         tvProductName.setText(product.getName());
         tvProductPrice.setText("$" + product.getPrice());
         tvType.setText(product.getSubCategory().getName());
@@ -173,13 +204,13 @@ public class FragmentProductDescription extends Fragment implements IProductDesc
     }
 
 
-    public void addToCart(int secPos,int pos,boolean isAdd) {
-        productPos= pos;
-        this.secPos=secPos;
-        this.isAdd=isAdd;
+    public void addToCart(int secPos, int pos, boolean isAdd) {
+        productPos = pos;
+        this.secPos = secPos;
+        this.isAdd = isAdd;
         if (allProductList != null && allProductList.size() > 0) {
 
-            product =allProductList.get(pos);
+            product = allProductList.get(pos);
             if (SharedPreference.getInstance(getActivity()).getString(C.ORDER_ID) == null) {
                 createOrder();
             } else {
@@ -190,41 +221,39 @@ public class FragmentProductDescription extends Fragment implements IProductDesc
 
     }
 
-    void createOrder(){
+    void createOrder() {
         if (SharedPreference.getInstance(getActivity()).getBoolean(C.IS_LOGIN_GUEST)) {
-            String id =""+ SharedPreference.getInstance(getActivity()).geGuestUser(C.GUEST_USER).getId();
+            String id = "" + SharedPreference.getInstance(getActivity()).geGuestUser(C.GUEST_USER).getId();
 
             iOrderViewPresenterPresenter.createOrder(id, new GenRequest(Util.id(getActivity())));
         } else {
-            String id = ""+SharedPreference.getInstance(getActivity()).getUser(C.AUTH_USER).getData().getUser().getId();
+            String id = "" + SharedPreference.getInstance(getActivity()).getUser(C.AUTH_USER).getData().getUser().getId();
 
             String token = C.bearer + SharedPreference.getInstance(getActivity()).getUser(C.AUTH_USER).getData().getToken().getAccessToken();
             iOrderViewPresenterPresenter.createOrder(token, id, new GenRequest(Util.id(getActivity())));
         }
     }
 
-    void addToCart(){
-        AddToCartRequest addToCartRequest=new AddToCartRequest();
+    void addToCart() {
+        AddToCartRequest addToCartRequest = new AddToCartRequest();
         addToCartRequest.setUuid(Util.id(getActivity()));
         addToCartRequest.setProductId(product.getId());
-        if(product.getCartQunatity()==null || product.getCartQunatity().equalsIgnoreCase("0")) {
+        if (product.getCartQunatity() == null || product.getCartQunatity().equalsIgnoreCase("0")) {
             addToCartRequest.setQuantity(1);
-        }
-        else {
+        } else {
             addToCartRequest.setQuantity(Integer.parseInt(product.getCartQunatity()) + 1);
 
         }
-        String  order_id=SharedPreference.getInstance(getActivity()).getString(C.ORDER_ID);
+        String order_id = SharedPreference.getInstance(getActivity()).getString(C.ORDER_ID);
         if (SharedPreference.getInstance(getActivity()).getBoolean(C.IS_LOGIN_GUEST)) {
-            String id =""+ SharedPreference.getInstance(getActivity()).geGuestUser(C.GUEST_USER).getId();
+            String id = "" + SharedPreference.getInstance(getActivity()).geGuestUser(C.GUEST_USER).getId();
 
-            iOrderViewPresenterPresenter.addToCart(id,order_id,addToCartRequest);
-        }
-        else {
-            String id = ""+SharedPreference.getInstance(getActivity()).getUser(C.AUTH_USER).getData().getUser().getId();
+            iOrderViewPresenterPresenter.addToCart(id, order_id, addToCartRequest);
+        } else {
+            String id = "" + SharedPreference.getInstance(getActivity()).getUser(C.AUTH_USER).getData().getUser().getId();
 
             String token = C.bearer + SharedPreference.getInstance(getActivity()).getUser(C.AUTH_USER).getData().getToken().getAccessToken();
-            iOrderViewPresenterPresenter.addToCart(token,id,order_id,addToCartRequest);
+            iOrderViewPresenterPresenter.addToCart(token, id, order_id, addToCartRequest);
 
         }
     }
@@ -329,7 +358,7 @@ public class FragmentProductDescription extends Fragment implements IProductDesc
             if (response.getData().getSimilarProducts().size() > 0) {
                 allProductList = response.getData().getSimilarProducts();
                 if (allProductList.size() > 0) {
-                    adapterSimilarProducts = new AdapterHomeCategories(false,allProductList, getActivity());
+                    adapterSimilarProducts = new AdapterHomeCategories(false, allProductList, getActivity());
                     rvSimilarDrinks.setAdapter(adapterSimilarProducts);
                 }
             } else {
@@ -345,9 +374,8 @@ public class FragmentProductDescription extends Fragment implements IProductDesc
         if (response.getSuccess()) {
             SharedPreference.getInstance(getActivity()).setString(C.ORDER_ID, "" + response.getData().getOrder().getId());
             addToCart();
-        }
-        else {
-            util.setSnackbarMessage(getActivity(), response.getMessage(),rlView,true );
+        } else {
+            util.setSnackbarMessage(getActivity(), response.getMessage(), rlView, true);
 
         }
     }
@@ -355,11 +383,19 @@ public class FragmentProductDescription extends Fragment implements IProductDesc
     @Override
     public void getAddToCartSucess(AddToCartResponse response) {
         if (response.getSuccess()) {
-            util.setSnackbarMessage(getActivity(), response.getMessage(),rlView,false );
-            updateCart();
-        }
-        else {
-            util.setSnackbarMessage(getActivity(), response.getMessage(),rlView,true );
+            util.setSnackbarMessage(getActivity(), response.getMessage(), rlView, false);
+
+            if(isProductDes){
+                btnAddToCart.setText(getString(R.string.added_to_cart));
+                productDes.setIsInCart(true);
+                isProductDes=false;
+            }
+            else {
+                updateCart();
+            }
+        } else {
+            util.setSnackbarMessage(getActivity(), response.getMessage(), rlView, true);
+            isProductDes=false;
 
         }
     }
@@ -374,48 +410,46 @@ public class FragmentProductDescription extends Fragment implements IProductDesc
 
         }
     }
-    void updateCart(){
+
+    void updateCart() {
         int q;
-        if(product.getCartQunatity()==null || product.getCartQunatity().equalsIgnoreCase("0")) {
+        if (product.getCartQunatity() == null || product.getCartQunatity().equalsIgnoreCase("0")) {
             product.setCartQunatity("1");
             product.setIsInCart(true);
 
-        }
-        else {
-            if(isAdd) {
-                q =Integer.parseInt(product.getCartQunatity()) + 1;
-            }
-            else {
-                q= Integer.parseInt(product.getCartQunatity()) - 1;
+        } else {
+            if (isAdd) {
+                q = Integer.parseInt(product.getCartQunatity()) + 1;
+            } else {
+                q = Integer.parseInt(product.getCartQunatity()) - 1;
 
             }
-            product.setCartQunatity(""+q);
-            if(q==0){
+            product.setCartQunatity("" + q);
+            if (q == 0) {
                 product.setIsInCart(false);
 
-            }
-            else {
+            } else {
                 product.setIsInCart(true);
 
             }
         }
 
-        allProductList.set(productPos,product);
+        allProductList.set(productPos, product);
         adapterSimilarProducts.notifyDataSetChanged();
     }
+
     @Override
     public void getRemoveItemFromCartSuccess(UpdateCartResponse response) {
-        if(response.getSuccess()){
-            util.setSnackbarMessage(getActivity(), response.getMessage(),rlView,false );
+        if (response.getSuccess()) {
+            util.setSnackbarMessage(getActivity(), response.getMessage(), rlView, false);
 
             product.setCartQunatity(null);
             product.setIsInCart(false);
-            allProductList.set(productPos,product);
+            allProductList.set(productPos, product);
             adapterSimilarProducts.notifyDataSetChanged();
 
-        }
-        else {
-            util.setSnackbarMessage(getActivity(), response.getMessage(),rlView,true );
+        } else {
+            util.setSnackbarMessage(getActivity(), response.getMessage(), rlView, true);
 
         }
     }
@@ -427,35 +461,51 @@ public class FragmentProductDescription extends Fragment implements IProductDesc
 
     @Override
     public void addTowishListSuccess(WishListResponse response) {
-        if(response.getSuccess()){
-            util.setSnackbarMessage(getActivity(), response.getMessage(),rlView,false );
-            product.setIsWishlisted(true);
-            adapterSimilarProducts.notifyDataSetChanged();
+        if (response.getSuccess()) {
+            util.setSnackbarMessage(getActivity(), response.getMessage(), rlView, false);
+            if(isProductDes) {
+                isProductDes=false;
 
-        }
-        else {
-            util.setSnackbarMessage(getActivity(), response.getMessage(),rlView,true );
+                productDes.setIsWishlisted(true);
+                imgLike.setImageResource(R.drawable.like);
+            }
+            else {
+                product.setIsWishlisted(true);
+                adapterSimilarProducts.notifyDataSetChanged();
+            }
+        } else {
+            util.setSnackbarMessage(getActivity(), response.getMessage(), rlView, true);
+            isProductDes=false;
 
         }
     }
 
     @Override
     public void removeFromWishListSuccess(WishListResponse response) {
-        if(response.getSuccess()){
-            util.setSnackbarMessage(getActivity(), response.getMessage(),rlView,false );
-            product.setIsWishlisted(false);
-            adapterSimilarProducts.notifyDataSetChanged();
+        if (response.getSuccess()) {
+            util.setSnackbarMessage(getActivity(), response.getMessage(), rlView, false);
+            if(isProductDes) {
+                isProductDes=false;
+                productDes.setIsWishlisted(false);
+                imgLike.setImageResource(R.drawable.unlike);
 
-        }
-        else {
-            util.setSnackbarMessage(getActivity(), response.getMessage(),rlView,true );
+            }
+            else {
+                product.setIsWishlisted(false);
+
+                adapterSimilarProducts.notifyDataSetChanged();
+            }
+        } else {
+            util.setSnackbarMessage(getActivity(), response.getMessage(), rlView, true);
+            isProductDes=false;
 
         }
     }
 
     @Override
     public void getResponseError(String response) {
-        util.setSnackbarMessage(getActivity(), response,rlView,true );
+        isProductDes=false;
+        util.setSnackbarMessage(getActivity(), response, rlView, true);
 
     }
 
@@ -467,5 +517,53 @@ public class FragmentProductDescription extends Fragment implements IProductDesc
     @Override
     public void hideProgress() {
 
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.tvSeeMore:
+                Bundle bundle = new Bundle();
+                bundle.putString(C.CAT_ID, "" + product.getId());
+                bundle.putInt(C.SOURCE, C.FRAGMENT_PRODUCT_DESC);
+                ((ActivityContainer) getActivity()).fragmnetLoader(C.FRAGMENT_PRODUCT_LISTING, bundle);
+                break;
+            case R.id.rlLike:
+                isProductDes=true;
+                WishListRequest wishListRequest = new WishListRequest();
+                wishListRequest.setProductId(productDes.getId());
+                wishListRequest.setUuid(Util.id(getActivity()));
+                if(productDes.getIsWishlisted()) {
+                    updateWishList(wishListRequest, false);
+                }
+                else {
+                    updateWishList(wishListRequest, true);
+
+                }
+                break;
+
+            case R.id.btnAddToCart:
+
+                if(!productDes.getIsInCart()) {
+                    isProductDes = true;
+                    product = productDes;
+
+                    if (SharedPreference.getInstance(getActivity()).getString(C.ORDER_ID) == null) {
+                        createOrder();
+                    } else {
+                        addToCart();
+                    }
+                }
+                else {
+                    util.setSnackbarMessage(getActivity(), getString(R.string.product_already_in_cart), rlView, true);
+
+                }
+                break;
+            case R.id.btnBuyNow:
+                Bundle bundle1=new Bundle();
+                bundle1.putInt(C.SOURCE,C.FRAGMENT_PRODUCT_DESC);
+                ((ActivityContainer)getActivity()).fragmnetLoader(C.FRAGMENT_CART,bundle1);
+                break;
+        }
     }
 }

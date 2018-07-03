@@ -198,7 +198,9 @@ public class ActivityHome extends AppCompatActivity implements View.OnClickListe
             ivCart.setImageResource(R.drawable.cart_enable);
             ivProfile.setImageResource(R.drawable.ic_bar_profile);
             ivHome.setImageResource(R.drawable.home_disable);
-            fragmnetLoader(C.FRAGMENT_CART, null);
+            Bundle bundle=new Bundle();
+            bundle.putInt(C.SOURCE,C.FRAGMENT_PRODUCTS_HOME);
+            fragmnetLoader(C.FRAGMENT_CART, bundle);
 
         }
         public void setProfile(){
