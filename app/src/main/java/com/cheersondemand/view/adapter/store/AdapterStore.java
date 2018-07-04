@@ -98,6 +98,7 @@ List<StoreList> filterList;
     private void initializeViews(final StoreList model, final ItemViewHolder holder, final int position) {
         ((ItemViewHolder)holder).name.setText(model.getName());
         if (model.getId() == lastCheckedPosition){
+            pos=position;
             ((ItemViewHolder)holder).radioButton.setChecked(true);
             ((ItemViewHolder)holder).name.setTextColor(ContextCompat.getColor(activity, R.color.profile_text_color));
 

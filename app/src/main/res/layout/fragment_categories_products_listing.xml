@@ -10,21 +10,23 @@
         android:id="@+id/rlbar"
         android:background="@drawable/top_banner"
         android:layout_width="match_parent"
+
         android:paddingBottom="10dp"
-        android:layout_height="60dp">
+        android:layout_height="50dp">
         <ImageView
             android:id="@+id/imgBack"
             android:layout_alignParentBottom="true"
             android:layout_width="wrap_content"
             android:paddingLeft="20dp"
             android:tint="@color/white"
+            android:backgroundTint="@color/white"
             android:src="@drawable/left_arrow_1"
             android:layout_height="wrap_content" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="14.4sp"
+            android:textSize="16sp"
             android:layout_centerHorizontal="true"
             android:fontFamily="@font/sf_ui_display_regular"
             android:layout_alignParentBottom="true"
@@ -52,10 +54,10 @@
             android:layout_height="match_parent">
 
             <ImageView
-                android:id="@+id/ivLike"
-                android:src="@drawable/unlike"
-                android:layout_width="15dp"
-                android:layout_height="15dp" />
+                android:src="@drawable/sort"
+                android:layout_width="20dp"
+                android:layout_gravity="center_vertical"
+                android:layout_height="20dp" />
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -72,10 +74,11 @@
         <View
             android:layout_below="@id/llProfileView"
             android:background="@color/profile_text_color"
-            android:layout_width="2dp"
-            android:layout_marginTop="5dp"
-            android:layout_marginBottom="5dp"
-            android:layout_height="match_parent"/>
+            android:layout_width="1dp"
+            android:paddingTop="10dp"
+            android:paddingBottom="10dp"
+            android:layout_gravity="center_vertical"
+            android:layout_height="30dp"/>
         <LinearLayout
             android:id="@+id/llFilter"
             android:gravity="center"
@@ -84,10 +87,9 @@
             android:layout_weight="5"
             android:layout_height="match_parent">
             <ImageView
-                android:id="@+id/ivDelete"
-                android:src="@drawable/delete"
-                android:layout_width="15dp"
-                android:layout_height="15dp" />
+                android:src="@drawable/filter"
+                android:layout_width="20dp"
+                android:layout_height="20dp" />
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -104,11 +106,17 @@
 
 
     </LinearLayout>
+    <View
+        android:id="@+id/v"
+        android:layout_below="@id/llSortView"
+        android:background="@color/edit_text_border"
+        android:layout_width="match_parent"
+
+        android:layout_height="1dp"/>
     <RelativeLayout
         android:layout_marginTop="10dp"
-        android:layout_below="@id/llSortView"
+        android:layout_below="@id/v"
         android:layout_width="match_parent"
-        android:layout_marginBottom="40dp"
         android:layout_height="match_parent">
     <android.support.v7.widget.RecyclerView
 
@@ -119,6 +127,7 @@
          />
     </RelativeLayout>
     <ProgressBar
+
         android:id="@+id/progressbar"
         style="?android:attr/progressBarStyleLarge"
         android:layout_width="30dp"

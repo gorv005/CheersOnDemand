@@ -60,4 +60,5 @@ public interface C {
     String CATEGORY_LIST ="cat_list" ;
     int REQUEST_CODE =122 ;
     String TAG_FRAGMENT_CART = "TAG_FRAGMENT_CART";
+    int FRAGMENT_FORGOT_PASSWORD = 17;
 }

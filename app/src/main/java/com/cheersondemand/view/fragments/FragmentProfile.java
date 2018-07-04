@@ -16,6 +16,7 @@ import android.widget.TextView;
 
 import com.cheersondemand.R;
 import com.cheersondemand.model.authentication.AuthenticationResponse;
+import com.cheersondemand.model.logout.LogoutRequest;
 import com.cheersondemand.model.logout.LogoutResponse;
 import com.cheersondemand.presenter.profile.IProfileViewPresenter;
 import com.cheersondemand.presenter.profile.ProfileViewPresenterImpl;
@@ -103,7 +104,7 @@ public class FragmentProfile extends Fragment implements View.OnClickListener,IP
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        isLogin = !SharedPreference.getInstance(getActivity()).getBoolean(C.IS_LOGIN_GUEST);
+        isLogin = SharedPreference.getInstance(getActivity()).getBoolean(C.IS_LOGIN);
 
         if (isLogin) {
             authenticationResponse = SharedPreference.getInstance(getActivity()).getUser(C.AUTH_USER);
@@ -126,7 +127,7 @@ public class FragmentProfile extends Fragment implements View.OnClickListener,IP
         btnEdit.setOnClickListener(this);
         llProfileView.setOnClickListener(this);
         llLogout.setOnClickListener(this);
-       // llChangePassword.setOnClickListener(this);
+        llChangePassword.setOnClickListener(this);
     }
 
     @Override
@@ -160,16 +161,18 @@ public class FragmentProfile extends Fragment implements View.OnClickListener,IP
                 startActivity(intent1);
                 break;
             case R.id.llLogout:
-               /* LogoutRequest logoutRequest=new LogoutRequest();
+                LogoutRequest logoutRequest=new LogoutRequest();
                 logoutRequest.setToken(SharedPreference.getInstance(getActivity()).getUser(C.AUTH_USER).getData().getToken().getAccessToken());
-                iProfileViewPresenter.logout(logoutRequest);*/
+                logoutRequest.setDeviceToken(SharedPreference.getInstance(getActivity()).getString(C.DEVICE_TOKEN));
+
+                iProfileViewPresenter.logout(logoutRequest);
                 break;
 
             case R.id.llChangePassword:
                 if (isLogin) {
-                    intent.putExtra(C.FRAGMENT_ACTION, C.FRAGMENT_CHANGE_PASSWORD);
-                    intent.putExtra(C.BUNDLE, bundle);
-                    startActivity(intent);
+                    Intent intent2 = new Intent(getActivity(), ActivityContainer.class);
+                    intent2.putExtra(C.FRAGMENT_ACTION, C.FRAGMENT_CHANGE_PASSWORD);
+                    startActivity(intent2);
                 }
                 break;
         }
@@ -177,7 +180,16 @@ public class FragmentProfile extends Fragment implements View.OnClickListener,IP
 
     @Override
     public void getResponseSuccess(LogoutResponse response) {
-
+        if(response.getSuccess()){
+            SharedPreference.getInstance(getActivity()).setBoolean(C.IS_LOGIN,false);
+            Intent intent = new Intent(getActivity(), MainActivity.class);
+            Bundle bundle=new Bundle();
+            bundle.putBoolean(C.IS_LOGIN_SCREEN,true);
+            intent.putExtra(C.FRAGMENT_ACTION,C.FRAGMENT_AUTHNITICATION);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            intent.putExtra(C.BUNDLE,bundle);
+            getActivity().startActivity(intent);
+        }
 
     }
 

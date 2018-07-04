@@ -39,6 +39,7 @@ import com.cheersondemand.util.CustomEditText;
 import com.cheersondemand.util.DrawableClickListener;
 import com.cheersondemand.util.SharedPreference;
 import com.cheersondemand.util.Util;
+import com.cheersondemand.view.ActivityContainer;
 import com.cheersondemand.view.ActivityHome;
 import com.cheersondemand.view.ActivitySearchLocation;
 import com.facebook.AccessToken;
@@ -236,7 +237,7 @@ public class FragmentAuthentication extends Fragment implements IAuthenitication
         skipAndContinueLogin.setOnClickListener(this);
         btnSignUp.setOnClickListener(this);
         btnLogin.setOnClickListener(this);
-
+        tvForgotPassword.setOnClickListener(this);
         callbackManager = CallbackManager.Factory.create();
         loginButton.setReadPermissions("email");
         initLogin();
@@ -472,6 +473,11 @@ public class FragmentAuthentication extends Fragment implements IAuthenitication
             case R.id.btnLogin:
                 btnLogin.startAnimation();
                login();
+                break;
+            case R.id.tvForgotPassword:
+                Intent intent = new Intent(getActivity(), ActivityContainer.class);
+                intent.putExtra(C.FRAGMENT_ACTION, C.FRAGMENT_FORGOT_PASSWORD);
+                startActivity(intent);
                 break;
         }
     }
@@ -851,6 +857,7 @@ public class FragmentAuthentication extends Fragment implements IAuthenitication
         if(response.getSuccess()){
             btnLogin.revertAnimation();
             if (Util.isNetworkConnectivity(getActivity())) {
+                SharedPreference.getInstance(getActivity()).setBoolean(C.IS_LOGIN,true);
                 SharedPreference.getInstance(getActivity()).setBoolean(C.IS_LOGIN_GUEST,false);
 
                 SharedPreference.getInstance(getActivity()).setUser(C.AUTH_USER,response);

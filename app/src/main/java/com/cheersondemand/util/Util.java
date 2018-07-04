@@ -17,6 +17,7 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.cheersondemand.R;
 import com.cheersondemand.model.SideMenuItem;
+import com.cheersondemand.model.productList.Sort;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
@@ -76,6 +77,17 @@ public class Util {
         sideMenuItems.add(new SideMenuItem(R.string.brand, 0, C.TAG_FRAGMENT_BRAND));
         sideMenuItems.add(new SideMenuItem(R.string.category, 0, C.TAG_FRAGMENT_CATEGORY));
         return sideMenuItems;
+    }
+
+
+    public static List<Sort> getSortList(){
+        List<Sort> sorts = new ArrayList<Sort>();
+        sorts.add(new Sort(1,R.string.low_to_high, R.drawable.group_23, R.drawable.right));
+        sorts.add(new Sort(2,R.string.high_to_low, R.drawable.group_23, R.drawable.right));
+        sorts.add(new Sort(3,R.string.new_product, R.drawable.new_sticker, R.drawable.right));
+        sorts.add(new Sort(4,R.string.popularity, R.drawable.fire_1_copy, R.drawable.right));
+
+        return sorts;
     }
     public static boolean isValidMail(String email) {
         return email != null && android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches();

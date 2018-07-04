@@ -14,9 +14,18 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.cheersondemand.R;
+import com.cheersondemand.model.changepassword.Password;
+import com.cheersondemand.model.changepassword.PasswordRequest;
+import com.cheersondemand.model.changepassword.PasswordResponse;
+import com.cheersondemand.presenter.password.IPasswordViewPresenter;
+import com.cheersondemand.presenter.password.PasswordViewPresenterImpl;
+import com.cheersondemand.util.C;
+import com.cheersondemand.util.SharedPreference;
+import com.cheersondemand.util.Util;
 import com.cheersondemand.view.ActivityContainer;
 
 import butterknife.BindView;
@@ -26,7 +35,7 @@ import butterknife.Unbinder;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class FragmentChangePassword extends Fragment implements View.OnClickListener {
+public class FragmentChangePassword extends Fragment implements View.OnClickListener, IPasswordViewPresenter.IPasswordView {
 
 
     @BindView(R.id.tvPasswordError)
@@ -46,11 +55,21 @@ public class FragmentChangePassword extends Fragment implements View.OnClickList
     LinearLayout llpasswordChangeSuccess;
     @BindView(R.id.llPasswordChangelayout)
     LinearLayout llPasswordChangelayout;
-
+    @BindView(R.id.rlView)
+    RelativeLayout rlView;
+    Util util;
+    IPasswordViewPresenter iPasswordViewPresenter;
     public FragmentChangePassword() {
         // Required empty public constructor
     }
 
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        util=new Util();
+        iPasswordViewPresenter=new PasswordViewPresenterImpl(this,getActivity());
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -73,6 +92,7 @@ public class FragmentChangePassword extends Fragment implements View.OnClickList
         super.onViewCreated(view, savedInstanceState);
         btnChangePassword.setOnClickListener(this);
         btnGotoProfile.setOnClickListener(this);
+        initFields();
     }
 
     void initFields() {
@@ -180,12 +200,52 @@ public class FragmentChangePassword extends Fragment implements View.OnClickList
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()){
+        switch (v.getId()) {
             case R.id.btnChangePassword:
+                changePassword();
                 break;
             case R.id.btnGotoProfile:
                 getActivity().finish();
                 break;
         }
+    }
+
+
+    void  changePassword(){
+        PasswordRequest passwordRequest=new PasswordRequest();
+        Password password=new Password();
+        password.setCurrentPassword(etCurrentPassword.getText().toString());
+        password.setPassword(etNewPassword.getText().toString());
+        passwordRequest.setUser(password);
+
+      String id=  ""+SharedPreference.getInstance(getActivity()).getUser(C.AUTH_USER).getData().getUser().getId();
+        iPasswordViewPresenter.changePassword(id,passwordRequest);
+    }
+    @Override
+    public void getPasswordSuccess(PasswordResponse response) {
+        if (response.getSuccess()) {
+            llpasswordChangeSuccess.setVisibility(View.VISIBLE);
+            llPasswordChangelayout.setVisibility(View.GONE);
+        }
+        else {
+            util.setSnackbarMessage(getActivity(), getString(R.string.product_already_in_cart), rlView, true);
+
+        }
+    }
+
+    @Override
+    public void getResponseError(String response) {
+        util.setSnackbarMessage(getActivity(), getString(R.string.product_already_in_cart), rlView, true);
+
+    }
+
+    @Override
+    public void showProgress() {
+
+    }
+
+    @Override
+    public void hideProgress() {
+
     }
 }

@@ -125,6 +125,12 @@
     <string name="cancel">Cancel</string>
     <string name="added_to_cart">Added to cart</string>
     <string name="product_already_in_cart">Product already exist in your cart.</string>
+    <string name="sort_by">Sort by</string>
+    <string name="low_to_high">Price - Low to High</string>
+    <string name="high_to_low">Price - High to Low</string>
+    <string name="new_product">Newest Products</string>
+    <string name="popularity">Popularity</string>
+    <string name="filters">Filters</string>
     <!--
         <string name="default_web_client_id">999387565226-hdnnhm6rhgik5ljvm06shotsi7j9883c.apps.googleusercontent.com</string>
     -->

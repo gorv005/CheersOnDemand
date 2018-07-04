@@ -2,13 +2,18 @@ package com.cheersondemand.view;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.graphics.PorterDuff;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.MenuItem;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.TextView;
 
@@ -41,22 +46,36 @@ public class ActivityFilters extends AppCompatActivity implements View.OnClickLi
     @BindView(R.id.btnApplyFilter)
     Button btnApplyFilter;
     Bundle bundleg;
+    @BindView(R.id.tvClearAll)
+    TextView tvClearAll;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
+        this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_filters);
+
+        final Drawable upArrow = getResources().getDrawable(R.drawable.left_arrow_1);
+        upArrow.setColorFilter(getResources().getColor(R.color.profile_text_color), PorterDuff.Mode.SRC_ATOP);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setHomeAsUpIndicator(upArrow);
         ButterKnife.bind(this);
         bundleg = getIntent().getBundleExtra(C.BUNDLE);
         //int fragmentAction = getIntent().getIntExtra(C.FRAGMENT_ACTION, 100);
         brandList = (List<Brand>) bundleg.getSerializable(C.BRANDS_LIST);
-        for(int i=0;i<brandList.size();i++){
+        for (int i = 0; i < brandList.size(); i++) {
             brandList.get(i).setPos(i);
         }
 
         categoriesList = (List<Categories>) bundleg.getSerializable(C.CATEGORY_LIST);
-        for(int i=0;i<categoriesList.size();i++){
+        for (int i = 0; i < categoriesList.size(); i++) {
             categoriesList.get(i).setPos(i);
         }
+        tvClearAll.setOnClickListener(this);
         btnApplyFilter.setOnClickListener(this);
         btnCancel.setOnClickListener(this);
         fragmnetLoader(C.TAG_FRAGMENT_PRICE_RANGE, bundleg);
@@ -117,7 +136,13 @@ public class ActivityFilters extends AppCompatActivity implements View.OnClickLi
 
         }
     }
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == android.R.id.home)
+            onBackPressed();
+        return super.onOptionsItemSelected(item);
 
+    }
     public void getBrandsList() {
         Fragment fragment = getVisibleFragment();
         if (fragment != null && fragment instanceof FragmentBrandsFilter) {
@@ -135,25 +160,46 @@ public class ActivityFilters extends AppCompatActivity implements View.OnClickLi
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()){
+        getBrandsList();
+        getCategoriesList();
+        Intent intent;
+        Bundle bundle;
+        switch (v.getId()) {
+
             case R.id.btnApplyFilter:
-                Intent intent = new Intent();
-                Bundle bundle=new Bundle();
-                bundle.putSerializable(C.BRANDS_LIST,(Serializable)brandList);
-                bundle.putSerializable(C.CATEGORY_LIST,(Serializable)categoriesList);
-                intent.putExtra(C.BUNDLE,bundle);
+                intent = new Intent();
+                bundle = new Bundle();
+                bundle.putSerializable(C.BRANDS_LIST, (Serializable) brandList);
+                bundle.putSerializable(C.CATEGORY_LIST, (Serializable) categoriesList);
+                intent.putExtra(C.BUNDLE, bundle);
                 setResult(RESULT_OK, intent);
                 finish();
                 break;
-                case R.id.btnCancel:
+            case R.id.tvClearAll:
+
+                intent = new Intent();
+                bundle = new Bundle();
+                for (int i=0;i<brandList.size();i++){
+                    brandList.get(i).setSelected(false);
+                }
+                for (int i=0;i<categoriesList.size();i++){
+                    categoriesList.get(i).setSelected(false);
+                }
+                bundle.putSerializable(C.BRANDS_LIST, (Serializable) brandList);
+                bundle.putSerializable(C.CATEGORY_LIST, (Serializable) categoriesList);
+                intent.putExtra(C.BUNDLE, bundle);
+                setResult(RESULT_OK, intent);
+                finish();
+                break;
+            case R.id.btnCancel:
                     /*Intent intent1 = new Intent();
                     Bundle bundle1=new Bundle();
                     bundle1.putSerializable(C.BRANDS_LIST,(Serializable)(List<Brand>) bundleg.getSerializable(C.BRANDS_LIST));
                     bundle1.putSerializable(C.CATEGORY_LIST,(Serializable)(List<Categories>) bundleg.getSerializable(C.CATEGORY_LIST));
                     intent1.putExtra(C.BUNDLE,bundle1);
                     setResult(RESULT_OK, intent1);*/
-                    finish();
-                    break;
+                finish();
+                break;
         }
     }
 }

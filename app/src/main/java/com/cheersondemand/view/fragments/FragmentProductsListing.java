@@ -1,6 +1,7 @@
 package com.cheersondemand.view.fragments;
 
 
+import android.app.Dialog;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Rect;
@@ -13,11 +14,14 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.util.TypedValue;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 
@@ -52,6 +56,7 @@ import com.cheersondemand.util.Util;
 import com.cheersondemand.view.ActivityContainer;
 import com.cheersondemand.view.ActivityFilters;
 import com.cheersondemand.view.adapter.products.AdapterProducts;
+import com.cheersondemand.view.adapter.products.AdapterSortList;
 
 import java.io.Serializable;
 import java.util.List;
@@ -106,7 +111,7 @@ public class FragmentProductsListing extends Fragment implements View.OnClickLis
     int totalPages;
     int pastVisibleItems, visibleItemCount, totalItemCount;
     boolean loading = true;
-
+    int sortPos=-1;
     public FragmentProductsListing() {
         // Required empty public constructor
     }
@@ -601,6 +606,9 @@ public class FragmentProductsListing extends Fragment implements View.OnClickLis
             case R.id.llFilter:
                 sendFilterData();
                 break;
+            case R.id.llSort:
+                getSortDialog();
+                break;
             case R.id.imgBack:
                 getActivity().onBackPressed();
                 break;
@@ -612,7 +620,7 @@ public class FragmentProductsListing extends Fragment implements View.OnClickLis
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         Log.d("onActivityResult", "requestCode = " + requestCode);
-        if (requestCode == RESULT_OK) {
+        if (resultCode == RESULT_OK) {
             Bundle bundle = data.getBundleExtra(C.BUNDLE);
             brandList = (List<Brand>) bundle.getSerializable(C.BRANDS_LIST);
             categoriesList = (List<Categories>) bundle.getSerializable(C.CATEGORY_LIST);
@@ -669,5 +677,55 @@ public class FragmentProductsListing extends Fragment implements View.OnClickLis
     private int dpToPx(int dp) {
         Resources r = getResources();
         return Math.round(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, r.getDisplayMetrics()));
+    }
+
+
+    public void getSortDialog() {
+
+        View view = getLayoutInflater().inflate(R.layout.dialog_sort, null);
+
+        ListView sortList = (ListView) view.findViewById(R.id.lvSortItems);
+        ImageView btnDone = (ImageView) view.findViewById(R.id.ivCross);
+
+        final Dialog mBottomSheetDialog = new Dialog(getActivity(),
+                R.style.MaterialDialogSheet);
+        mBottomSheetDialog.setContentView(view);
+        mBottomSheetDialog.setCancelable(true);
+        mBottomSheetDialog.getWindow().setLayout(LinearLayout.LayoutParams.MATCH_PARENT,
+                LinearLayout.LayoutParams.WRAP_CONTENT);
+        mBottomSheetDialog.getWindow().setGravity(Gravity.BOTTOM);
+        final AdapterSortList adapterSortList=new AdapterSortList(getActivity(),Util.getSortList(),sortPos);
+        mBottomSheetDialog.show();
+
+        sortList.setAdapter(adapterSortList);
+        sortList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                adapterSortList.setTick(position+1);
+                sortPos=position+1;
+                mBottomSheetDialog.dismiss();
+                if(position==0){
+                    orderBy="asc";
+                  //  orderField="price";
+                }
+               else if(position==0){
+                    orderBy="desc";
+                  //  orderField="price";
+                }
+                else {
+                     orderBy = "desc";
+                   //  orderField = "created_at";
+                }
+
+                getProducts(1);
+            }
+        });
+        btnDone.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mBottomSheetDialog.dismiss();
+            }
+        });
+
     }
 }

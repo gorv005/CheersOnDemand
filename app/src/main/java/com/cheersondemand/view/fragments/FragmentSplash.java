@@ -1,6 +1,7 @@
 package com.cheersondemand.view.fragments;
 
 
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.Handler;
@@ -20,7 +21,9 @@ import android.widget.Toast;
 
 import com.cheersondemand.R;
 import com.cheersondemand.util.C;
+import com.cheersondemand.util.SharedPreference;
 import com.cheersondemand.util.Util;
+import com.cheersondemand.view.ActivitySearchLocation;
 import com.cheersondemand.view.MainActivity;
 
 import butterknife.BindView;
@@ -91,9 +94,18 @@ public class FragmentSplash extends Fragment {
                         if (CheckingPermissionIsEnabledOrNot()) {
                             try {
 
-                                 Bundle bundle=new Bundle();
-                                 bundle.putBoolean(C.IS_LOGIN_SCREEN,false);
-                                ((MainActivity) getActivity()).fragmnetLoader(C.FRAGMENT_AUTHNITICATION, bundle);
+                                if(SharedPreference.getInstance(getActivity()).getBoolean(C.IS_LOGIN)){
+
+                                    Intent intent = new Intent(getActivity(), ActivitySearchLocation.class);
+                                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                                    intent.putExtra(C.FROM, C.SEARCH);
+                                    startActivity(intent);
+                                }
+                                else {
+                                    Bundle bundle = new Bundle();
+                                    bundle.putBoolean(C.IS_LOGIN_SCREEN, false);
+                                    ((MainActivity) getActivity()).fragmnetLoader(C.FRAGMENT_AUTHNITICATION, bundle);
+                                }
                             }
                             catch (Exception e){
                                 e.printStackTrace();
