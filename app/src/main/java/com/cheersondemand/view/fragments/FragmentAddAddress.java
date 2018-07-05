@@ -52,7 +52,7 @@ public class FragmentAddAddress extends Fragment implements View.OnClickListener
     Button btnSaveAdd;
     Unbinder unbinder;
     boolean isEdit;
-    Address address;
+    Address address1;
     IAddressViewPresenter iAddressViewPresenter;
     @BindView(R.id.rlView)
     RelativeLayout rlView;
@@ -69,7 +69,7 @@ public class FragmentAddAddress extends Fragment implements View.OnClickListener
         util=new Util();
         isEdit = getArguments().getBoolean(C.IS_EDIT);
         if (isEdit) {
-            address = (Address) getArguments().getSerializable(C.ADDRESS);
+            address1 = (Address) getArguments().getSerializable(C.ADDRESS);
         }
     }
 
@@ -105,12 +105,12 @@ public class FragmentAddAddress extends Fragment implements View.OnClickListener
 
     void fillFields() {
         if (isEdit) {
-            etName.setText(address.getName());
-            etFlat.setText(address.getFlatNo());
-            etAddLine1.setText(address.getAddressFirst());
-            etAddLine2.setText(address.getAddressSecond());
-            etPincode.setText(address.getZipCode());
-            etPhoneNo.setText(address.getPhoneNumber());
+            etName.setText(address1.getName());
+            etFlat.setText(address1.getFlatNo());
+            etAddLine1.setText(address1.getAddressFirst());
+            etAddLine2.setText(address1.getAddressSecond());
+            etPincode.setText(address1.getZipCode());
+            etPhoneNo.setText(address1.getPhoneNumber());
             btnSaveAdd.setBackground(ContextCompat.getDrawable(getActivity(), R.drawable.bg_button_enable));
             btnSaveAdd.setEnabled(true);
             btnSaveAdd.setText(getString(R.string.update_address));
@@ -330,7 +330,7 @@ public class FragmentAddAddress extends Fragment implements View.OnClickListener
         String id = "" + SharedPreference.getInstance(getActivity()).getUser(C.AUTH_USER).getData().getUser().getId();
 
         String token = C.bearer + SharedPreference.getInstance(getActivity()).getUser(C.AUTH_USER).getData().getToken().getAccessToken();
-        iAddressViewPresenter.EditAddAddress(token, id, "" + address.getId(), addressRequest);
+        iAddressViewPresenter.EditAddAddress(token, id, "" + address1.getId(), addressRequest);
     }
 
     void addAddress() {
