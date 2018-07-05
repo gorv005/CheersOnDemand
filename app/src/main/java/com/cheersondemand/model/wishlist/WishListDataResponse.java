@@ -1,8 +1,7 @@
-package com.cheersondemand.model.productList;
+package com.cheersondemand.model.wishlist;
 
 import com.cheersondemand.model.AllProduct;
 import com.cheersondemand.model.Errors;
-import com.cheersondemand.model.productdescription.Meta;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
@@ -10,10 +9,10 @@ import java.io.Serializable;
 import java.util.List;
 
 /**
- * Created by GAURAV on 6/30/2018.
+ * Created by GAURAV on 6/25/2018.
  */
 
-public class ProductListResponse implements Serializable{
+public class WishListDataResponse implements Serializable {
     @SerializedName("success")
     @Expose
     private Boolean success;
@@ -22,10 +21,10 @@ public class ProductListResponse implements Serializable{
     private String message;
     @SerializedName("data")
     @Expose
-    private List<AllProduct> data;
+    private List<AllProduct> data = null;
     @SerializedName("meta")
     @Expose
-    private Meta meta;
+    private List<Object> meta = null;
     @SerializedName("errors")
     @Expose
     private List<Errors> errors = null;
@@ -54,11 +53,11 @@ public class ProductListResponse implements Serializable{
         this.data = data;
     }
 
-    public Meta getMeta() {
+    public List<Object> getMeta() {
         return meta;
     }
 
-    public void setMeta(Meta meta) {
+    public void setMeta(List<Object> meta) {
         this.meta = meta;
     }
 

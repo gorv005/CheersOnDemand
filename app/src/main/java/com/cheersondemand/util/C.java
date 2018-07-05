@@ -61,4 +61,11 @@ public interface C {
     int REQUEST_CODE =122 ;
     String TAG_FRAGMENT_CART = "TAG_FRAGMENT_CART";
     int FRAGMENT_FORGOT_PASSWORD = 17;
+    int FRAGMENT_WISHLIST =18 ;
+    String PRODUCT_LIST = "product_list";
+    String IS_EDIT ="is_edit" ;
+    String ADDRESS = "address";
+    int FRAGMENT_ADDRESS_LIST = 19;
+    int FRAGMENT_ADD_ADDRESS = 20;
+    String TAG_FRAGMENT_ADD_ADDRESS = "TAG_FRAGMENT_ADD_ADDRESS";
 }

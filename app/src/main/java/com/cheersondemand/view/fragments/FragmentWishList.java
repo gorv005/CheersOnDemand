@@ -1,8 +1,6 @@
 package com.cheersondemand.view.fragments;
 
 
-import android.app.Dialog;
-import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Rect;
 import android.os.Bundle;
@@ -12,130 +10,83 @@ import android.support.v4.app.Fragment;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.util.TypedValue;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.ListView;
-import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import com.cheersondemand.R;
 import com.cheersondemand.model.AllProduct;
-import com.cheersondemand.model.Brand;
-import com.cheersondemand.model.BrandResponse;
-import com.cheersondemand.model.Categories;
-import com.cheersondemand.model.CategoriesResponse;
-import com.cheersondemand.model.ProductsWithCategoryResponse;
 import com.cheersondemand.model.authentication.GenRequest;
 import com.cheersondemand.model.order.CreateOrderResponse;
 import com.cheersondemand.model.order.addtocart.AddToCartRequest;
 import com.cheersondemand.model.order.addtocart.AddToCartResponse;
 import com.cheersondemand.model.order.updatecart.UpdateCartRequest;
 import com.cheersondemand.model.order.updatecart.UpdateCartResponse;
-import com.cheersondemand.model.productList.ProductListResponse;
-import com.cheersondemand.model.productdescription.SimilarProductsResponse;
 import com.cheersondemand.model.wishlist.WishListDataResponse;
 import com.cheersondemand.model.wishlist.WishListRequest;
 import com.cheersondemand.model.wishlist.WishListResponse;
-import com.cheersondemand.presenter.home.HomeViewPresenterImpl;
-import com.cheersondemand.presenter.home.IHomeViewPresenterPresenter;
 import com.cheersondemand.presenter.home.order.IOrderViewPresenterPresenter;
 import com.cheersondemand.presenter.home.order.OrderViewPresenterImpl;
-import com.cheersondemand.presenter.productDescription.IProductDescViewPresenter;
-import com.cheersondemand.presenter.productDescription.ProductDescViewPresenterImpl;
-import com.cheersondemand.presenter.products.IProductViewPresenter;
-import com.cheersondemand.presenter.products.ProductViewPresenterImpl;
 import com.cheersondemand.util.C;
 import com.cheersondemand.util.SharedPreference;
 import com.cheersondemand.util.Util;
 import com.cheersondemand.view.ActivityContainer;
-import com.cheersondemand.view.ActivityFilters;
 import com.cheersondemand.view.adapter.products.AdapterProducts;
-import com.cheersondemand.view.adapter.products.AdapterSortList;
 
-import java.io.Serializable;
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 
-import static android.app.Activity.RESULT_OK;
-import static com.cheersondemand.util.C.REQUEST_CODE;
-
 /**
  * A simple {@link Fragment} subclass.
  */
-public class FragmentProductsListing extends Fragment implements View.OnClickListener, IProductViewPresenter.IProductView, IOrderViewPresenterPresenter.IOrderView, IProductDescViewPresenter.IProductDescView, IHomeViewPresenterPresenter.IHomeView {
+public class FragmentWishList extends Fragment implements IOrderViewPresenterPresenter.IOrderView {
 
 
-    @BindView(R.id.llSort)
-    LinearLayout llSort;
-    @BindView(R.id.llFilter)
-    LinearLayout llFilter;
     @BindView(R.id.rvProductsList)
     RecyclerView rvProductsList;
-    Unbinder unbinder;
-    Util util;
-    IProductViewPresenter iProductViewPresenter;
-    IOrderViewPresenterPresenter iOrderViewPresenterPresenter;
-    IHomeViewPresenterPresenter iHomeViewPresenterPresenter;
-    IProductDescViewPresenter iProductDescViewPresenter;
-    AdapterProducts adapterProducts;
-    List<AllProduct> allProductList;
-    int page = 1;
-    int perPage = 10;
     @BindView(R.id.rlView)
     RelativeLayout rlView;
-    @BindView(R.id.progressbar)
-    ProgressBar progressbar;
-    @BindView(R.id.imgBack)
-    ImageView imgBack;
+    Unbinder unbinder;
+    AdapterProducts adapterProducts;
+    List<AllProduct> allProductList;
+    WishListDataResponse productListResponse;
+    @BindView(R.id.tvNoProduct)
+    TextView tvNoProduct;
     private GridLayoutManager lLayout;
-    String catId;
-    long from = 0, to = 5000;
-    String orderBy = "desc";
-    String orderField = "created_at";
-    int source;
+    IOrderViewPresenterPresenter iOrderViewPresenterPresenter;
+
+    Util util;
     private int productPos;
     private int secPos;
     private boolean isAdd;
     AllProduct product;
-    List<Categories> categoriesList;
-    List<Brand> brandList;
-    int totalPages;
-    int pastVisibleItems, visibleItemCount, totalItemCount;
-    boolean loading = true;
-    int sortPos=-1;
-    public FragmentProductsListing() {
+
+    public FragmentWishList() {
         // Required empty public constructor
     }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        util = new Util();
-
-        iProductViewPresenter = new ProductViewPresenterImpl(this, getActivity());
+        productListResponse = (WishListDataResponse) getArguments().getSerializable(C.PRODUCT_LIST);
+        //  allProductList=productListResponse.getData();
         iOrderViewPresenterPresenter = new OrderViewPresenterImpl(this, getActivity());
-        iHomeViewPresenterPresenter = new HomeViewPresenterImpl(this, getActivity());
-        iProductDescViewPresenter = new ProductDescViewPresenterImpl(this, getActivity());
 
-        catId = getArguments().getString(C.CAT_ID);
-        source = getArguments().getInt(C.SOURCE);
+
+        util = new Util();
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_categories_products_listing, container, false);
+        View view = inflater.inflate(R.layout.fragment_wish_list, container, false);
         unbinder = ButterKnife.bind(this, view);
         return view;
     }
@@ -144,75 +95,24 @@ public class FragmentProductsListing extends Fragment implements View.OnClickLis
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         lLayout = new GridLayoutManager(getActivity(), 2);
-        //rvProductsList.setHasFixedSize(true);
-        llFilter.setOnClickListener(this);
-        llSort.setOnClickListener(this);
-        imgBack.setOnClickListener(this);
         rvProductsList.setLayoutManager(lLayout);
         rvProductsList.addItemDecoration(new GridSpacingItemDecoration(2, dpToPx(10), true));
         rvProductsList.setItemAnimator(new DefaultItemAnimator());
-        getProducts(page);
-        rvProductsList.addOnScrollListener(new RecyclerView.OnScrollListener() {
-            @Override
-            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-                if (dy > 0) {
-                    visibleItemCount = lLayout.getChildCount();
-                    totalItemCount = lLayout.getItemCount();
-                    pastVisibleItems = lLayout.findFirstVisibleItemPosition();
-                    if (loading && page <= totalPages) {
-                        if ((visibleItemCount + pastVisibleItems) >= totalItemCount) {
-                            loading = false;
-                            progressbar.setVisibility(View.VISIBLE);
-                            getProducts(page++);
-                        }
-                    }
-                }
-            }
-        });
-        getBrands();
-        getCategories();
+        // showWishlist();
     }
 
 
-    void getProducts(int page) {
-        if (source == C.FRAGMENT_CATEGORIES) {
-            getProductsList(page, perPage, catId, "" + from, "" + to, orderBy, orderField);
-        } else if (source == C.FRAGMENT_PRODUCTS_HOME) {
-            getAllProducts(page, perPage, "" + from, "" + to, orderBy, orderField);
-
-        } else if (source == C.FRAGMENT_PRODUCT_DESC) {
-            getSimilarProducts(catId,page,perPage);
-        }
-    }
-
-    void getCategories() {
-        if (SharedPreference.getInstance(getActivity()).getBoolean(C.IS_LOGIN_GUEST)) {
-            String id = "" + SharedPreference.getInstance(getActivity()).geGuestUser(C.GUEST_USER).getId();
-
-            iHomeViewPresenterPresenter.getCategories(false, "", Util.id(getActivity()));
-        } else {
-            String id = "" + SharedPreference.getInstance(getActivity()).getUser(C.AUTH_USER).getData().getUser().getId();
-            String token = C.bearer + SharedPreference.getInstance(getActivity()).getUser(C.AUTH_USER).getData().getToken().getAccessToken();
-            iHomeViewPresenterPresenter.getCategories(true, token, Util.id(getActivity()));
-        }
-    }
-
-    void getBrands() {
-        if (SharedPreference.getInstance(getActivity()).getBoolean(C.IS_LOGIN_GUEST)) {
-            String id = "" + SharedPreference.getInstance(getActivity()).geGuestUser(C.GUEST_USER).getId();
-
-            iHomeViewPresenterPresenter.getBrands(false, "", Util.id(getActivity()));
-        } else {
-            String id = "" + SharedPreference.getInstance(getActivity()).getUser(C.AUTH_USER).getData().getUser().getId();
-            String token = C.bearer + SharedPreference.getInstance(getActivity()).getUser(C.AUTH_USER).getData().getToken().getAccessToken();
-            iHomeViewPresenterPresenter.getBrands(true, token, Util.id(getActivity()));
-        }
-    }
-
+    /* void  showWishlist(){
+         if(allProductList!=null && allProductList.size()>0) {
+             adapterProducts = new AdapterProducts(allProductList, getActivity());
+             rvProductsList.setAdapter(adapterProducts);
+         }
+     }*/
     @Override
     public void onResume() {
         super.onResume();
-        ActivityContainer.tvTitle.setText(R.string.product_listing);
+        ActivityContainer.tvTitle.setText(R.string.wishList);
+        getWishList();
     }
 
     @Override
@@ -221,72 +121,17 @@ public class FragmentProductsListing extends Fragment implements View.OnClickLis
         unbinder.unbind();
     }
 
-
-    void getProducts(int page, int perPage) {
-
+    void getWishList() {
         if (SharedPreference.getInstance(getActivity()).getBoolean(C.IS_LOGIN_GUEST)) {
-            iProductViewPresenter.getProductList(false, "", Util.id(getActivity()), "" + page, "" + perPage);
+            String id = "" + SharedPreference.getInstance(getActivity()).geGuestUser(C.GUEST_USER).getId();
+            iOrderViewPresenterPresenter.getWishList(false, "", id, Util.id(getActivity()));
         } else {
             String id = "" + SharedPreference.getInstance(getActivity()).getUser(C.AUTH_USER).getData().getUser().getId();
+
             String token = C.bearer + SharedPreference.getInstance(getActivity()).getUser(C.AUTH_USER).getData().getToken().getAccessToken();
-            iProductViewPresenter.getProductList(true, token, Util.id(getActivity()), "" + page, "" + perPage);
+            iOrderViewPresenterPresenter.getWishList(true, token, id, Util.id(getActivity()));
         }
     }
-
-    void getProductsList(int page, int perPage, String catId, String from, String to, String orderBy, String orderField) {
-
-        if (SharedPreference.getInstance(getActivity()).getBoolean(C.IS_LOGIN_GUEST)) {
-            iProductViewPresenter.getProductList(false, "", Util.id(getActivity()), "" + page, "" + perPage, catId, from, to, orderBy, orderField);
-        } else {
-            String id = "" + SharedPreference.getInstance(getActivity()).getUser(C.AUTH_USER).getData().getUser().getId();
-            String token = C.bearer + SharedPreference.getInstance(getActivity()).getUser(C.AUTH_USER).getData().getToken().getAccessToken();
-            iProductViewPresenter.getProductList(true, token, Util.id(getActivity()), "" + page, "" + perPage, catId, from, to, orderBy, orderField);
-        }
-    }
-
-
-  void getSimilarProducts(String id,int page,int per_page) {
-          if (SharedPreference.getInstance(getActivity()).getBoolean(C.IS_LOGIN_GUEST)) {
-              iProductDescViewPresenter.getSimilarProducts(id, Util.id(getActivity()), ""+page, ""+per_page);
-          } else {
-              String token = C.bearer + SharedPreference.getInstance(getActivity()).getUser(C.AUTH_USER).getData().getToken().getAccessToken();
-              iProductDescViewPresenter.getSimilarProducts(token, id, Util.id(getActivity()), ""+page, ""+per_page);
-
-          }
-      }
-    void getAllProducts(int page, int perPage, String from, String to, String orderBy, String orderField) {
-
-        if (SharedPreference.getInstance(getActivity()).getBoolean(C.IS_LOGIN_GUEST)) {
-            iProductViewPresenter.getAllProducts(false, "", Util.id(getActivity()), "" + page, "" + perPage, from, to, orderBy, orderField);
-        } else {
-            String id = "" + SharedPreference.getInstance(getActivity()).getUser(C.AUTH_USER).getData().getUser().getId();
-            String token = C.bearer + SharedPreference.getInstance(getActivity()).getUser(C.AUTH_USER).getData().getToken().getAccessToken();
-            iProductViewPresenter.getAllProducts(true, token, Util.id(getActivity()), "" + page, "" + perPage, from, to, orderBy, orderField);
-        }
-    }
-
-    @Override
-    public void getProductListSuccess(ProductListResponse response) {
-        if (response.getSuccess()) {
-            progressbar.setVisibility(View.GONE);
-            if (allProductList != null && allProductList.size() > 0) {
-                allProductList.addAll(response.getData());
-                adapterProducts.notifyDataSetChanged();
-            } else {
-                if (response.getMeta() != null && response.getMeta().getPagination() != null) {
-                    totalPages = response.getMeta().getPagination().getTotalPages();
-                }
-                allProductList = response.getData();
-                adapterProducts = new AdapterProducts(allProductList, getActivity());
-                rvProductsList.setAdapter(adapterProducts);
-            }
-            loading = true;
-        } else {
-            util.setSnackbarMessage(getActivity(), response.getMessage(), rlView, true);
-
-        }
-    }
-
 
     public void addToCart(int secPos, int pos, boolean isAdd) {
         productPos = pos;
@@ -359,7 +204,6 @@ public class FragmentProductsListing extends Fragment implements View.OnClickLis
 
     }
 
-
     void updateWishList(WishListRequest wishListRequest, boolean status) {
         if (SharedPreference.getInstance(getActivity()).getBoolean(C.IS_LOGIN_GUEST)) {
             String id = "" + SharedPreference.getInstance(getActivity()).geGuestUser(C.GUEST_USER).getId();
@@ -381,6 +225,7 @@ public class FragmentProductsListing extends Fragment implements View.OnClickLis
             }
         }
     }
+
 
     public void updateCart(int secPos, int productPos, boolean isAdd) {
         this.secPos = secPos;
@@ -408,7 +253,6 @@ public class FragmentProductsListing extends Fragment implements View.OnClickLis
 
         }
     }
-
 
     public void removeProduct(UpdateCartRequest updateCartRequest) {
         String order_id = SharedPreference.getInstance(getActivity()).getString(C.ORDER_ID);
@@ -536,6 +380,10 @@ public class FragmentProductsListing extends Fragment implements View.OnClickLis
         if (response.getSuccess()) {
             util.setSnackbarMessage(getActivity(), response.getMessage(), rlView, false);
             product.setIsWishlisted(false);
+            allProductList.remove(productPos);
+            if(allProductList.size()==0){
+                tvNoProduct.setVisibility(View.VISIBLE);
+            }
             adapterProducts.notifyDataSetChanged();
 
         } else {
@@ -544,47 +392,22 @@ public class FragmentProductsListing extends Fragment implements View.OnClickLis
         }
     }
 
+
     @Override
     public void getWishListSuccess(WishListDataResponse response) {
-
-    }
-
-    @Override
-    public void getProductWithCategoriesSuccess(ProductsWithCategoryResponse response) {
-
-    }
-
-    @Override
-    public void getBrandResponseSuccess(BrandResponse response) {
         if (response.getSuccess()) {
-            brandList = response.getData();
-        }
-    }
-
-    @Override
-    public void getResponseSuccess(CategoriesResponse response) {
-        if (response.getSuccess()) {
-            categoriesList = response.getData();
-        }
-    }
-
-    @Override
-    public void getResponseSuccess(SimilarProductsResponse response) {
-        if (response.getSuccess()) {
-            progressbar.setVisibility(View.GONE);
-            if (allProductList != null && allProductList.size() > 0) {
-                allProductList.addAll(response.getData().getSimilarProducts());
-                adapterProducts.notifyDataSetChanged();
-            } else {
-                if (response.getMeta() != null && response.getMeta().getPagination() != null) {
-                    totalPages = response.getMeta().getPagination().getTotalPages();
-                }
-                allProductList = response.getData().getSimilarProducts();
+            if (response.getData() != null && response.getData().size() > 0) {
+                allProductList = response.getData();
                 adapterProducts = new AdapterProducts(allProductList, getActivity());
                 rvProductsList.setAdapter(adapterProducts);
+
             }
-            loading = true;
+            else {
+                tvNoProduct.setVisibility(View.VISIBLE);
+
+            }
         } else {
+            tvNoProduct.setVisibility(View.VISIBLE);
             util.setSnackbarMessage(getActivity(), response.getMessage(), rlView, true);
 
         }
@@ -606,41 +429,6 @@ public class FragmentProductsListing extends Fragment implements View.OnClickLis
 
     }
 
-    @Override
-    public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.llFilter:
-                sendFilterData();
-                break;
-            case R.id.llSort:
-                getSortDialog();
-                break;
-            case R.id.imgBack:
-                getActivity().onBackPressed();
-                break;
-        }
-    }
-
-
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        Log.d("onActivityResult", "requestCode = " + requestCode);
-        if (resultCode == RESULT_OK) {
-            Bundle bundle = data.getBundleExtra(C.BUNDLE);
-            brandList = (List<Brand>) bundle.getSerializable(C.BRANDS_LIST);
-            categoriesList = (List<Categories>) bundle.getSerializable(C.CATEGORY_LIST);
-        }
-    }
-
-    void sendFilterData() {
-        Intent intent = new Intent(getContext(), ActivityFilters.class);
-        Bundle bundle = new Bundle();
-        bundle.putSerializable(C.BRANDS_LIST, (Serializable) brandList);
-        bundle.putSerializable(C.CATEGORY_LIST, (Serializable) categoriesList);
-        intent.putExtra(C.BUNDLE, bundle);
-        startActivityForResult(intent, REQUEST_CODE);
-    }
 
     public class GridSpacingItemDecoration extends RecyclerView.ItemDecoration {
 
@@ -685,53 +473,4 @@ public class FragmentProductsListing extends Fragment implements View.OnClickLis
         return Math.round(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, r.getDisplayMetrics()));
     }
 
-
-    public void getSortDialog() {
-
-        View view = getLayoutInflater().inflate(R.layout.dialog_sort, null);
-
-        ListView sortList = (ListView) view.findViewById(R.id.lvSortItems);
-        ImageView btnDone = (ImageView) view.findViewById(R.id.ivCross);
-
-        final Dialog mBottomSheetDialog = new Dialog(getActivity(),
-                R.style.MaterialDialogSheet);
-        mBottomSheetDialog.setContentView(view);
-        mBottomSheetDialog.setCancelable(true);
-        mBottomSheetDialog.getWindow().setLayout(LinearLayout.LayoutParams.MATCH_PARENT,
-                LinearLayout.LayoutParams.WRAP_CONTENT);
-        mBottomSheetDialog.getWindow().setGravity(Gravity.BOTTOM);
-        final AdapterSortList adapterSortList=new AdapterSortList(getActivity(),Util.getSortList(),sortPos);
-        mBottomSheetDialog.show();
-
-        sortList.setAdapter(adapterSortList);
-        sortList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                adapterSortList.setTick(position+1);
-                sortPos=position+1;
-                mBottomSheetDialog.dismiss();
-                if(position==0){
-                    orderBy="asc";
-                  //  orderField="price";
-                }
-               else if(position==0){
-                    orderBy="desc";
-                  //  orderField="price";
-                }
-                else {
-                     orderBy = "desc";
-                   //  orderField = "created_at";
-                }
-
-                getProducts(1);
-            }
-        });
-        btnDone.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mBottomSheetDialog.dismiss();
-            }
-        });
-
-    }
 }

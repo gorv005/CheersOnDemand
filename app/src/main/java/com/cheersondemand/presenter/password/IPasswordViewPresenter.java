@@ -9,7 +9,7 @@ import com.cheersondemand.model.changepassword.PasswordResponse;
 
 public interface IPasswordViewPresenter {
 
-    public void changePassword(String userId, PasswordRequest passwordRequest);
+    public void changePassword(String token,String userId, PasswordRequest passwordRequest);
     public void forgotPassword(PasswordRequest passwordRequest);
 
 

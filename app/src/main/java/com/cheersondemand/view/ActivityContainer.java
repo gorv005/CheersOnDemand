@@ -16,8 +16,11 @@ import android.view.WindowManager;
 import android.widget.TextView;
 
 import com.cheersondemand.R;
+import com.cheersondemand.model.address.Address;
 import com.cheersondemand.model.order.updatecart.UpdateCartRequest;
 import com.cheersondemand.util.C;
+import com.cheersondemand.view.fragments.FragmentAddAddress;
+import com.cheersondemand.view.fragments.FragmentAddressList;
 import com.cheersondemand.view.fragments.FragmentCart;
 import com.cheersondemand.view.fragments.FragmentCategoryList;
 import com.cheersondemand.view.fragments.FragmentChangePassword;
@@ -29,6 +32,7 @@ import com.cheersondemand.view.fragments.FragmentProductsListing;
 import com.cheersondemand.view.fragments.FragmentProfile;
 import com.cheersondemand.view.fragments.FragmentStoreSelection;
 import com.cheersondemand.view.fragments.FragmentUpdateProfile;
+import com.cheersondemand.view.fragments.FragmentWishList;
 
 import java.util.List;
 
@@ -87,6 +91,11 @@ public class ActivityContainer extends AppCompatActivity {
                 fragmentTransaction.replace(R.id.container, fragment);
                 //fragmentTransaction.addToBackStack(C.TAG_FRAGMENT_PRODUCTS_HOME);
                 break;
+            case C.FRAGMENT_WISHLIST:
+                fragment = new FragmentWishList();
+                fragmentTransaction.replace(R.id.container, fragment);
+                //fragmentTransaction.addToBackStack(C.TAG_FRAGMENT_PRODUCTS_HOME);
+                break;
             case C.FRAGMENT_FORGOT_PASSWORD:
                 getSupportActionBar().hide();
                 fragment = new FragmentForgotPassword();
@@ -113,6 +122,16 @@ public class ActivityContainer extends AppCompatActivity {
                 fragment = new FragmentCategoryList();
                 fragmentTransaction.replace(R.id.container, fragment);
                 //fragmentTransaction.addToBackStack(C.TAG_FRAGMENT_PRODUCTS_HOME);
+                break;
+            case C.FRAGMENT_ADDRESS_LIST:
+                fragment = new FragmentAddressList();
+                fragmentTransaction.replace(R.id.container, fragment);
+                //fragmentTransaction.addToBackStack(C.TAG_FRAGMENT_PRODUCTS_HOME);
+                break;
+            case C.FRAGMENT_ADD_ADDRESS:
+                fragment = new FragmentAddAddress();
+                fragmentTransaction.replace(R.id.container, fragment);
+               // fragmentTransaction.addToBackStack(C.TAG_FRAGMENT_ADD_ADDRESS);
                 break;
             case C.FRAGMENT_CART:
                 fragment = new FragmentCart();
@@ -159,6 +178,14 @@ public class ActivityContainer extends AppCompatActivity {
         if(fragment!=null && fragment instanceof FragmentCart ){
             ((FragmentCart)fragment).removeProduct(updateCartRequest);
         }
+
+    }
+    public void removeAddress(Address address,int pos){
+        Fragment fragment=getVisibleFragment();
+        if(fragment!=null && fragment instanceof FragmentAddressList ){
+            ((FragmentAddressList)fragment).removeAddress(address,pos);
+        }
+
     }
     public void addToCart(int secPos,int pos,boolean isAdd){
         Fragment fragment=getVisibleFragment();
@@ -170,7 +197,10 @@ public class ActivityContainer extends AppCompatActivity {
             ((FragmentProductsListing)fragment).addToCart(secPos,pos,isAdd);
 
         }
+        else if(fragment!=null && fragment instanceof FragmentWishList){
+            ((FragmentWishList)fragment).addToCart(secPos,pos,isAdd);
 
+        }
     }
     public void updateCart(int secPos,int pos,boolean isAdd){
         Fragment fragment=getVisibleFragment();
@@ -184,6 +214,10 @@ public class ActivityContainer extends AppCompatActivity {
         }
         else if(fragment!=null && fragment instanceof FragmentCart){
             ((FragmentCart)fragment).updateCart(secPos,pos,isAdd);
+
+        }
+        else if(fragment!=null && fragment instanceof FragmentWishList){
+            ((FragmentWishList)fragment).updateCart(secPos,pos,isAdd);
 
         }
     }
@@ -208,6 +242,10 @@ public class ActivityContainer extends AppCompatActivity {
         }
          else if(fragment!=null && fragment instanceof FragmentCart){
              ((FragmentCart)fragment).wishListUpdate(secPos,pos,isAdd);
+
+         }
+         else if(fragment!=null && fragment instanceof FragmentWishList){
+             ((FragmentWishList)fragment).wishListUpdate(secPos,pos,isAdd);
 
          }
     }

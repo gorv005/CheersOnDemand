@@ -4,13 +4,14 @@ import android.content.Context;
 
 import com.cheersondemand.intractor.home.order.IOrderViewIntractor;
 import com.cheersondemand.intractor.home.order.OrderViewIntractorImpl;
-import com.cheersondemand.model.order.addtocart.AddToCartRequest;
-import com.cheersondemand.model.order.addtocart.AddToCartResponse;
 import com.cheersondemand.model.authentication.GenRequest;
 import com.cheersondemand.model.order.CreateOrderResponse;
+import com.cheersondemand.model.order.addtocart.AddToCartRequest;
+import com.cheersondemand.model.order.addtocart.AddToCartResponse;
 import com.cheersondemand.model.order.addtocart.CartHasItemResponse;
 import com.cheersondemand.model.order.updatecart.UpdateCartRequest;
 import com.cheersondemand.model.order.updatecart.UpdateCartResponse;
+import com.cheersondemand.model.wishlist.WishListDataResponse;
 import com.cheersondemand.model.wishlist.WishListRequest;
 import com.cheersondemand.model.wishlist.WishListResponse;
 
@@ -96,6 +97,14 @@ public class OrderViewPresenterImpl implements IOrderViewPresenterPresenter, IOr
         if (hasItemView != null) {
             //mView.hideProgress();
             hasItemView.getCartHasItemSuccess(response);
+        }
+    }
+
+    @Override
+    public void onSuccessWishList(WishListDataResponse response) {
+        if (mView != null) {
+            //mView.hideProgress();
+            mView.getWishListSuccess(response);
         }
     }
 
@@ -228,9 +237,17 @@ public class OrderViewPresenterImpl implements IOrderViewPresenterPresenter, IOr
 
     @Override
     public void getCartHasItem(boolean isAuth, String token, String user_id, GenRequest genRequest) {
-        if (mView != null) {
+        if (hasItemView != null) {
 
             iOrderViewIntractor.getCartHasItem(isAuth,token,user_id,genRequest, this);
+        }
+    }
+
+    @Override
+    public void getWishList(boolean isAuthUser, String token, String UserId, String uuid) {
+        if (mView != null) {
+
+            iOrderViewIntractor.getWishList(isAuthUser,token,UserId,uuid, this);
         }
     }
 

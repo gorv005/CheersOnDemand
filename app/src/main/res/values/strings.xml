@@ -43,7 +43,7 @@
     <string name="name_">Name</string>
     <string name="phone_no">Phone  No</string>
     <string name="save_profile">Save Profile</string>
-    <string name="no_product_found">No Products found</string>
+    <string name="no_product_found">No Product(s) found.</string>
     <string name="try_search_diff">Try searching with a different terms or browse our categories.</string>
     <string name="browse_product">Browse Products</string>
     <string name="products">Products</string>
@@ -131,6 +131,20 @@
     <string name="new_product">Newest Products</string>
     <string name="popularity">Popularity</string>
     <string name="filters">Filters</string>
+    <string name="flat">Flat / House / Apartment No.</string>
+    <string name="address_line_1">Address Line 1</string>
+    <string name="address_line_2">Address Line 2</string>
+    <string name="pincode">Pin Code</string>
+    <string name="PhoneNumber">Phone Number</string>
+    <string name="save_address">Save Address</string>
+    <string name="update_address">Update Address</string>
+    <string name="add_address">Add New Address</string>
+    <string name="edit_address">Edit Address</string>
+    <string name="delete_">Delete</string>
+    <string name="saved_addresses">Saved Addresses</string>
+    <string name="no_address_saved">No addresses saved !</string>
+    <string name="no_address_have_been">No adresses have been saved to the address list yet !</string>
+    <string name="add_an_address">Add an address</string>
     <!--
         <string name="default_web_client_id">999387565226-hdnnhm6rhgik5ljvm06shotsi7j9883c.apps.googleusercontent.com</string>
     -->

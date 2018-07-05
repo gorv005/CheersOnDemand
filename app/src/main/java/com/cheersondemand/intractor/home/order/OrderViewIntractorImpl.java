@@ -3,13 +3,14 @@ package com.cheersondemand.intractor.home.order;
 import com.cheersondemand.frameworks.retrofit.ResponseResolver;
 import com.cheersondemand.frameworks.retrofit.RestError;
 import com.cheersondemand.frameworks.retrofit.WebServicesWrapper;
-import com.cheersondemand.model.order.addtocart.AddToCartRequest;
-import com.cheersondemand.model.order.addtocart.AddToCartResponse;
 import com.cheersondemand.model.authentication.GenRequest;
 import com.cheersondemand.model.order.CreateOrderResponse;
+import com.cheersondemand.model.order.addtocart.AddToCartRequest;
+import com.cheersondemand.model.order.addtocart.AddToCartResponse;
 import com.cheersondemand.model.order.addtocart.CartHasItemResponse;
 import com.cheersondemand.model.order.updatecart.UpdateCartRequest;
 import com.cheersondemand.model.order.updatecart.UpdateCartResponse;
+import com.cheersondemand.model.wishlist.WishListDataResponse;
 import com.cheersondemand.model.wishlist.WishListRequest;
 import com.cheersondemand.model.wishlist.WishListResponse;
 import com.google.gson.Gson;
@@ -453,6 +454,36 @@ public class OrderViewIntractorImpl implements IOrderViewIntractor {
                     }
                 }
             },token,user_id,wishListRequest);
+        }
+        catch (Exception e){
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void getWishList(boolean isAuthUser, String token, String UserId, String uuid, final onCartResponseFinishListner listener) {
+        try {
+
+            WebServicesWrapper.getInstance().getWishList(new ResponseResolver<WishListDataResponse>() {
+                @Override
+                public void onSuccess(WishListDataResponse r, Response response) {
+                    listener.onSuccessWishList(r);
+                }
+
+                @Override
+                public void onFailure(RestError error, String msg) {
+                    if(error==null ||error.getError()==null){
+
+                        Gson gson=new Gson();
+                        WishListDataResponse response= gson.fromJson(msg,WishListDataResponse.class);
+                        listener.onSuccessWishList(response);
+
+                    }
+                    else {
+                        listener.onError(error.getError());
+                    }
+                }
+            },isAuthUser,token,UserId,uuid);
         }
         catch (Exception e){
             e.printStackTrace();

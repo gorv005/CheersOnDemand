@@ -15,7 +15,7 @@ import retrofit2.Response;
 
 public class PasswordViewIntractorImpl implements IPasswordViewIntractor {
     @Override
-    public void changePassword(String userId, PasswordRequest passwordRequest, final OnLoginFinishedListener listener) {
+    public void changePassword(String token,String userId, PasswordRequest passwordRequest, final OnLoginFinishedListener listener) {
         try {
 
             WebServicesWrapper.getInstance().changePassword(new ResponseResolver<PasswordResponse>() {
@@ -37,7 +37,7 @@ public class PasswordViewIntractorImpl implements IPasswordViewIntractor {
                         listener.onError(error.getError());
                     }
                 }
-            },userId,passwordRequest);
+            },token,userId,passwordRequest);
         }
         catch (Exception e){
             e.printStackTrace();

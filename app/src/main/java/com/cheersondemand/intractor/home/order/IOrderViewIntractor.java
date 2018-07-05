@@ -2,13 +2,14 @@ package com.cheersondemand.intractor.home.order;
 
 import android.content.Context;
 
-import com.cheersondemand.model.order.addtocart.AddToCartRequest;
-import com.cheersondemand.model.order.addtocart.AddToCartResponse;
 import com.cheersondemand.model.authentication.GenRequest;
 import com.cheersondemand.model.order.CreateOrderResponse;
+import com.cheersondemand.model.order.addtocart.AddToCartRequest;
+import com.cheersondemand.model.order.addtocart.AddToCartResponse;
 import com.cheersondemand.model.order.addtocart.CartHasItemResponse;
 import com.cheersondemand.model.order.updatecart.UpdateCartRequest;
 import com.cheersondemand.model.order.updatecart.UpdateCartResponse;
+import com.cheersondemand.model.wishlist.WishListDataResponse;
 import com.cheersondemand.model.wishlist.WishListRequest;
 import com.cheersondemand.model.wishlist.WishListResponse;
 
@@ -31,6 +32,7 @@ public interface IOrderViewIntractor {
     }
     interface onCartResponseFinishListner {
         void onSuccess(CartHasItemResponse response);
+        void onSuccessWishList(WishListDataResponse response);
 
         void onError(String response);
         Context getAPPContext();
@@ -62,6 +64,9 @@ public interface IOrderViewIntractor {
     public void removeFromWishList(String user_id, WishListRequest wishListRequest, OnLoginFinishedListener listener);
 
     public void removeFromWishList(String token, String user_id, WishListRequest wishListRequest, OnLoginFinishedListener listener);
+
+    public void getWishList(boolean isAuthUser,String token, String UserId ,String uuid, onCartResponseFinishListner listener);
+
 
     public void getCartHasItem(boolean isAuthUser,String token, String UserId ,GenRequest genRequest, onCartResponseFinishListner listener);
 

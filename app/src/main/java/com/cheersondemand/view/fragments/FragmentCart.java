@@ -25,6 +25,7 @@ import com.cheersondemand.model.order.addtocart.Order;
 import com.cheersondemand.model.order.addtocart.OrderItem;
 import com.cheersondemand.model.order.updatecart.UpdateCartRequest;
 import com.cheersondemand.model.order.updatecart.UpdateCartResponse;
+import com.cheersondemand.model.wishlist.WishListDataResponse;
 import com.cheersondemand.model.wishlist.WishListRequest;
 import com.cheersondemand.model.wishlist.WishListResponse;
 import com.cheersondemand.presenter.coupon.CouponViewPresenterImpl;
@@ -380,6 +381,11 @@ public class FragmentCart extends Fragment implements View.OnClickListener, IOrd
             util.setSnackbarMessage(getActivity(), response.getMessage(), LLView, true);
 
         }
+    }
+
+    @Override
+    public void getWishListSuccess(WishListDataResponse response) {
+
     }
 
     @Override

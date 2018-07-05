@@ -16,7 +16,7 @@ public interface IPasswordViewIntractor {
         void onError(String response);
         Context getAPPContext();
     }
-    public void changePassword(String userId, PasswordRequest passwordRequest, OnLoginFinishedListener listener);
+    public void changePassword(String token,String userId, PasswordRequest passwordRequest, OnLoginFinishedListener listener);
     public void forgotPassword(PasswordRequest passwordRequest, OnLoginFinishedListener listener);
 
 

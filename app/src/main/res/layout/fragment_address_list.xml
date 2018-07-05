@@ -1,0 +1,80 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:id="@+id/rlView"
+    android:background="@color/profile_back"
+    android:layout_height="match_parent">
+
+    <RelativeLayout
+        android:layout_marginTop="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <android.support.v7.widget.RecyclerView
+
+            android:id="@+id/rvAddressList"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="center_vertical"
+            />
+    </RelativeLayout>
+
+
+    <LinearLayout
+        android:visibility="gone"
+
+        android:layout_marginTop="5dp"
+        android:background="@color/white"
+        android:id="@+id/llNoProductInCount"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:paddingLeft="40dp"
+        android:paddingRight="40dp">
+
+        <ImageView
+
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/group_6" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:fontFamily="@font/sf_ui_display_regular"
+            android:gravity="center_horizontal"
+            android:text="@string/no_address_saved"
+            android:textColor="@color/profile_text_color"
+            android:textSize="16.3sp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/sf_ui_display_regular"
+            android:gravity="center_horizontal"
+
+            android:text="@string/no_address_have_been"
+            android:textColor="@color/profile_updated_text_color"
+            android:textSize="14.4sp" />
+
+
+        <Button
+            android:id="@+id/btnAddAnAddress"
+            android:layout_width="match_parent"
+            android:layout_height="45dp"
+            android:layout_alignParentBottom="true"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginBottom="20dp"
+            android:layout_marginEnd="20dp"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="30dp"
+            android:background="@drawable/bg_button_enable"
+            android:fontFamily="@font/sf_ui_display_regular"
+            android:text="@string/add_an_address"
+            android:textAllCaps="false"
+            android:textColor="@color/white"
+            android:textSize="13.4sp" />
+    </LinearLayout>
+
+</RelativeLayout>

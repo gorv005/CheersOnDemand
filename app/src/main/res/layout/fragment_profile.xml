@@ -153,8 +153,9 @@
                 android:background="@drawable/wishlist_back"
                 android:fontFamily="@font/sf_ui_display_regular"
                 android:padding="7dp"
+                android:visibility="gone"
                 android:layout_centerVertical="true"
-                android:text="16"
+                android:text="0"
                 android:textColor="@color/white"
                 android:textSize="10sp" />
         </RelativeLayout>

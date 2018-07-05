@@ -32,6 +32,7 @@ import com.cheersondemand.model.order.addtocart.AddToCartResponse;
 import com.cheersondemand.model.order.updatecart.UpdateCartRequest;
 import com.cheersondemand.model.order.updatecart.UpdateCartResponse;
 import com.cheersondemand.model.store.StoreList;
+import com.cheersondemand.model.wishlist.WishListDataResponse;
 import com.cheersondemand.model.wishlist.WishListRequest;
 import com.cheersondemand.model.wishlist.WishListResponse;
 import com.cheersondemand.presenter.home.HomeViewPresenterImpl;
@@ -387,6 +388,11 @@ public class FragmentHome extends Fragment implements IHomeViewPresenterPresente
             util.setSnackbarMessage(getActivity(), response.getMessage(),rlHomeView,true );
 
         }
+    }
+
+    @Override
+    public void getWishListSuccess(WishListDataResponse response) {
+
     }
 
     @Override

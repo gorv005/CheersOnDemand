@@ -45,10 +45,10 @@ public class PasswordViewPresenterImpl implements IPasswordViewPresenter, IPassw
 
 
     @Override
-    public void changePassword(String userId, PasswordRequest passwordRequest) {
+    public void changePassword(String token,String userId, PasswordRequest passwordRequest) {
         if (mView != null) {
 
-            iPasswordViewIntractor.changePassword(userId,passwordRequest, this);
+            iPasswordViewIntractor.changePassword(token,userId,passwordRequest, this);
         }
     }
 

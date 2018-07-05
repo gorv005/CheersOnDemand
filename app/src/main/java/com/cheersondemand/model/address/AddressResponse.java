@@ -1,19 +1,17 @@
-package com.cheersondemand.model.productList;
+package com.cheersondemand.model.address;
 
-import com.cheersondemand.model.AllProduct;
 import com.cheersondemand.model.Errors;
 import com.cheersondemand.model.productdescription.Meta;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-import java.io.Serializable;
 import java.util.List;
 
 /**
- * Created by GAURAV on 6/30/2018.
+ * Created by GAURAV on 7/6/2018.
  */
 
-public class ProductListResponse implements Serializable{
+public class AddressResponse {
     @SerializedName("success")
     @Expose
     private Boolean success;
@@ -22,10 +20,10 @@ public class ProductListResponse implements Serializable{
     private String message;
     @SerializedName("data")
     @Expose
-    private List<AllProduct> data;
+    private List<Address> data = null;
     @SerializedName("meta")
     @Expose
-    private Meta meta;
+    private List<Meta> meta = null;
     @SerializedName("errors")
     @Expose
     private List<Errors> errors = null;
@@ -46,19 +44,19 @@ public class ProductListResponse implements Serializable{
         this.message = message;
     }
 
-    public List<AllProduct> getData() {
+    public List<Address> getData() {
         return data;
     }
 
-    public void setData(List<AllProduct> data) {
+    public void setData(List<Address> data) {
         this.data = data;
     }
 
-    public Meta getMeta() {
+    public List<Meta> getMeta() {
         return meta;
     }
 
-    public void setMeta(Meta meta) {
+    public void setMeta(List<Meta> meta) {
         this.meta = meta;
     }
 

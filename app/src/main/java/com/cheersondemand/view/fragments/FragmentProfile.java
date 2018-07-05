@@ -18,11 +18,19 @@ import com.cheersondemand.R;
 import com.cheersondemand.model.authentication.AuthenticationResponse;
 import com.cheersondemand.model.logout.LogoutRequest;
 import com.cheersondemand.model.logout.LogoutResponse;
+import com.cheersondemand.model.order.CreateOrderResponse;
+import com.cheersondemand.model.order.addtocart.AddToCartResponse;
+import com.cheersondemand.model.order.updatecart.UpdateCartResponse;
+import com.cheersondemand.model.wishlist.WishListDataResponse;
+import com.cheersondemand.model.wishlist.WishListResponse;
+import com.cheersondemand.presenter.home.order.IOrderViewPresenterPresenter;
+import com.cheersondemand.presenter.home.order.OrderViewPresenterImpl;
 import com.cheersondemand.presenter.profile.IProfileViewPresenter;
 import com.cheersondemand.presenter.profile.ProfileViewPresenterImpl;
 import com.cheersondemand.util.C;
 import com.cheersondemand.util.ImageLoader.ImageLoader;
 import com.cheersondemand.util.SharedPreference;
+import com.cheersondemand.util.Util;
 import com.cheersondemand.view.ActivityContainer;
 import com.cheersondemand.view.MainActivity;
 import com.makeramen.roundedimageview.RoundedImageView;
@@ -35,7 +43,7 @@ import butterknife.Unbinder;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class FragmentProfile extends Fragment implements View.OnClickListener,IProfileViewPresenter.IProfileView {
+public class FragmentProfile extends Fragment implements View.OnClickListener,IProfileViewPresenter.IProfileView,IOrderViewPresenterPresenter.IOrderView {
 
 
     @BindView(R.id.imgProfile)
@@ -79,6 +87,8 @@ public class FragmentProfile extends Fragment implements View.OnClickListener,IP
     View viewChangePassword;
     ImageLoader imageLoader;
     IProfileViewPresenter iProfileViewPresenter;
+    WishListDataResponse productListResponse;
+    IOrderViewPresenterPresenter iOrderViewPresenterPresenter;
     public FragmentProfile() {
         // Required empty public constructor
     }
@@ -89,8 +99,28 @@ public class FragmentProfile extends Fragment implements View.OnClickListener,IP
         super.onCreate(savedInstanceState);
         imageLoader = new ImageLoader(getActivity());
         iProfileViewPresenter=new ProfileViewPresenterImpl(this,getActivity());
+        iOrderViewPresenterPresenter=new OrderViewPresenterImpl(this,getActivity());
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        getWishList();
+    }
+
+
+    void  getWishList(){
+        if (SharedPreference.getInstance(getActivity()).getBoolean(C.IS_LOGIN_GUEST)) {
+            String id = "" + SharedPreference.getInstance(getActivity()).geGuestUser(C.GUEST_USER).getId();
+            iOrderViewPresenterPresenter.getWishList(false,"",id, Util.id(getActivity()));
+        } else {
+            String id = "" + SharedPreference.getInstance(getActivity()).getUser(C.AUTH_USER).getData().getUser().getId();
+
+            String token = C.bearer + SharedPreference.getInstance(getActivity()).getUser(C.AUTH_USER).getData().getToken().getAccessToken();
+            iOrderViewPresenterPresenter.getWishList(true,token,id, Util.id(getActivity()));
+        }
+    }
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -128,6 +158,8 @@ public class FragmentProfile extends Fragment implements View.OnClickListener,IP
         llProfileView.setOnClickListener(this);
         llLogout.setOnClickListener(this);
         llChangePassword.setOnClickListener(this);
+        llWishList.setOnClickListener(this);
+        llSavedAddress.setOnClickListener(this);
     }
 
     @Override
@@ -175,6 +207,22 @@ public class FragmentProfile extends Fragment implements View.OnClickListener,IP
                     startActivity(intent2);
                 }
                 break;
+            case R.id.llWishList:
+                    Intent intent2 = new Intent(getActivity(), ActivityContainer.class);
+                    Bundle bundle2=new Bundle();
+                    bundle2.putSerializable(C.PRODUCT_LIST,productListResponse);
+                    intent2.putExtra(C.BUNDLE,bundle2);
+                    intent2.putExtra(C.FRAGMENT_ACTION, C.FRAGMENT_WISHLIST);
+                    startActivity(intent2);
+
+                break;
+            case R.id.llSavedAddress:
+                Intent intent3 = new Intent(getActivity(), ActivityContainer.class);
+
+                intent3.putExtra(C.FRAGMENT_ACTION, C.FRAGMENT_ADDRESS_LIST);
+                startActivity(intent3);
+
+                break;
         }
     }
 
@@ -191,6 +239,57 @@ public class FragmentProfile extends Fragment implements View.OnClickListener,IP
             getActivity().startActivity(intent);
         }
 
+    }
+
+
+
+    @Override
+    public void getCreateOrderSuccess(CreateOrderResponse response) {
+
+    }
+
+    @Override
+    public void getAddToCartSucess(AddToCartResponse response) {
+
+    }
+
+    @Override
+    public void getUpdateCartSuccess(UpdateCartResponse response) {
+
+    }
+
+    @Override
+    public void getRemoveItemFromCartSuccess(UpdateCartResponse response) {
+
+    }
+
+    @Override
+    public void getCartListSuccess(UpdateCartResponse response) {
+
+    }
+
+    @Override
+    public void addTowishListSuccess(WishListResponse response) {
+
+    }
+
+    @Override
+    public void removeFromWishListSuccess(WishListResponse response) {
+
+    }
+
+    @Override
+    public void getWishListSuccess(WishListDataResponse response) {
+            if(response.getSuccess()){
+                productListResponse=response;
+                if(response.getData()!=null &&response.getData().size()>0){
+                    tvNumberWishListItems.setVisibility(View.VISIBLE);
+                    tvNumberWishListItems.setText(""+response.getData().size());
+                }
+                else {
+                    tvNumberWishListItems.setVisibility(View.GONE);
+                }
+            }
     }
 
     @Override

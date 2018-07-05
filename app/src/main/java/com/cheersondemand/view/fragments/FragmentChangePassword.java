@@ -217,9 +217,10 @@ public class FragmentChangePassword extends Fragment implements View.OnClickList
         password.setCurrentPassword(etCurrentPassword.getText().toString());
         password.setPassword(etNewPassword.getText().toString());
         passwordRequest.setUser(password);
+        String id=  ""+SharedPreference.getInstance(getActivity()).getUser(C.AUTH_USER).getData().getUser().getId();
 
-      String id=  ""+SharedPreference.getInstance(getActivity()).getUser(C.AUTH_USER).getData().getUser().getId();
-        iPasswordViewPresenter.changePassword(id,passwordRequest);
+        String token = C.bearer + SharedPreference.getInstance(getActivity()).getUser(C.AUTH_USER).getData().getToken().getAccessToken();
+        iPasswordViewPresenter.changePassword(token,id,passwordRequest);
     }
     @Override
     public void getPasswordSuccess(PasswordResponse response) {
