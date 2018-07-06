@@ -17,6 +17,7 @@ import android.widget.RelativeLayout;
 
 import com.cheersondemand.R;
 import com.cheersondemand.model.address.Address;
+import com.cheersondemand.model.address.AddressAddResponse;
 import com.cheersondemand.model.address.AddressRequest;
 import com.cheersondemand.model.address.AddressResponse;
 import com.cheersondemand.presenter.address.AddressViewPresenterImpl;
@@ -363,9 +364,11 @@ public class FragmentAddAddress extends Fragment implements View.OnClickListener
     }
 
     @Override
-    public void onAddAddressSuccess(AddressResponse response) {
+    public void onAddAddressSuccess(AddressAddResponse response) {
         if(response.getSuccess()){
             util.setSnackbarMessage(getActivity(), response.getMessage(), rlView, false);
+            getActivity().finish();
+
         }
         else {
             util.setSnackbarMessage(getActivity(), response.getMessage(), rlView, true);
@@ -374,9 +377,10 @@ public class FragmentAddAddress extends Fragment implements View.OnClickListener
     }
 
     @Override
-    public void onEditAddressSuccess(AddressResponse response) {
+    public void onEditAddressSuccess(AddressAddResponse response) {
         if(response.getSuccess()){
             util.setSnackbarMessage(getActivity(), response.getMessage(), rlView, false);
+            getActivity().finish();
         }
         else {
             util.setSnackbarMessage(getActivity(), response.getMessage(), rlView, true);

@@ -3,6 +3,7 @@ package com.cheersondemand.intractor.address;
 import com.cheersondemand.frameworks.retrofit.ResponseResolver;
 import com.cheersondemand.frameworks.retrofit.RestError;
 import com.cheersondemand.frameworks.retrofit.WebServicesWrapper;
+import com.cheersondemand.model.address.AddressAddResponse;
 import com.cheersondemand.model.address.AddressRequest;
 import com.cheersondemand.model.address.AddressResponse;
 import com.google.gson.Gson;
@@ -20,9 +21,9 @@ public class AddressViewIntractorImpl implements IAddressViewIntractor {
     public void AddAddress(String token, String userId, AddressRequest addressRequest, final OnFinishedListener listener) {
         try {
 
-            WebServicesWrapper.getInstance().AddAddress(new ResponseResolver<AddressResponse>() {
+            WebServicesWrapper.getInstance().AddAddress(new ResponseResolver<AddressAddResponse>() {
                 @Override
-                public void onSuccess(AddressResponse r, Response response) {
+                public void onSuccess(AddressAddResponse r, Response response) {
                     listener.onAddAddressSucess(r);
                 }
 
@@ -31,7 +32,7 @@ public class AddressViewIntractorImpl implements IAddressViewIntractor {
                     if(error==null ||error.getError()==null){
 
                         Gson gson=new Gson();
-                        AddressResponse response= gson.fromJson(msg,AddressResponse.class);
+                        AddressAddResponse response= gson.fromJson(msg,AddressAddResponse.class);
                         listener.onAddAddressSucess(response);
 
                     }
@@ -50,9 +51,9 @@ public class AddressViewIntractorImpl implements IAddressViewIntractor {
     public void EditAddAddress(String token, String userId, String id, AddressRequest addressRequest, final OnFinishedListener listener) {
         try {
 
-            WebServicesWrapper.getInstance().EditAddress(new ResponseResolver<AddressResponse>() {
+            WebServicesWrapper.getInstance().EditAddress(new ResponseResolver<AddressAddResponse>() {
                 @Override
-                public void onSuccess(AddressResponse r, Response response) {
+                public void onSuccess(AddressAddResponse r, Response response) {
                     listener.onEditAddressSucess(r);
                 }
 
@@ -61,7 +62,7 @@ public class AddressViewIntractorImpl implements IAddressViewIntractor {
                     if(error==null ||error.getError()==null){
 
                         Gson gson=new Gson();
-                        AddressResponse response= gson.fromJson(msg,AddressResponse.class);
+                        AddressAddResponse response= gson.fromJson(msg,AddressAddResponse.class);
                         listener.onEditAddressSucess(response);
 
                     }

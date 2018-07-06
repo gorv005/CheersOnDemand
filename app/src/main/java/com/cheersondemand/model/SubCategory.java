@@ -19,7 +19,9 @@ public class SubCategory implements Serializable {
     @SerializedName("category_id")
     @Expose
     private Integer categoryId;
-
+    @SerializedName("is_selected")
+    @Expose
+    private boolean isSelected;
     public Integer getId() {
         return id;
     }
@@ -42,5 +44,13 @@ public class SubCategory implements Serializable {
 
     public void setCategoryId(Integer categoryId) {
         this.categoryId = categoryId;
+    }
+
+    public boolean isSelected() {
+        return isSelected;
+    }
+
+    public void setSelected(boolean selected) {
+        isSelected = selected;
     }
 }

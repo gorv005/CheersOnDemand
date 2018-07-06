@@ -17,6 +17,7 @@ import android.widget.RelativeLayout;
 
 import com.cheersondemand.R;
 import com.cheersondemand.model.address.Address;
+import com.cheersondemand.model.address.AddressAddResponse;
 import com.cheersondemand.model.address.AddressResponse;
 import com.cheersondemand.presenter.address.AddressViewPresenterImpl;
 import com.cheersondemand.presenter.address.IAddressViewPresenter;
@@ -129,12 +130,12 @@ public class FragmentAddressList extends Fragment implements View.OnClickListene
     }
 
     @Override
-    public void onAddAddressSuccess(AddressResponse Response) {
+    public void onAddAddressSuccess(AddressAddResponse Response) {
 
     }
 
     @Override
-    public void onEditAddressSuccess(AddressResponse Response) {
+    public void onEditAddressSuccess(AddressAddResponse Response) {
 
     }
 

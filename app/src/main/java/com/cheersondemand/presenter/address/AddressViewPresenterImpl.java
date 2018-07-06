@@ -4,6 +4,7 @@ import android.content.Context;
 
 import com.cheersondemand.intractor.address.AddressViewIntractorImpl;
 import com.cheersondemand.intractor.address.IAddressViewIntractor;
+import com.cheersondemand.model.address.AddressAddResponse;
 import com.cheersondemand.model.address.AddressRequest;
 import com.cheersondemand.model.address.AddressResponse;
 
@@ -30,7 +31,7 @@ public class AddressViewPresenterImpl implements IAddressViewPresenter, IAddress
     }
 
     @Override
-    public void onAddAddressSucess(AddressResponse Response) {
+    public void onAddAddressSucess(AddressAddResponse Response) {
         if (mView != null) {
             //mView.hideProgress();
             mView.onAddAddressSuccess(Response);
@@ -38,7 +39,7 @@ public class AddressViewPresenterImpl implements IAddressViewPresenter, IAddress
     }
 
     @Override
-    public void onEditAddressSucess(AddressResponse Response) {
+    public void onEditAddressSucess(AddressAddResponse Response) {
         if (mView != null) {
             //mView.hideProgress();
             mView.onEditAddressSuccess(Response);

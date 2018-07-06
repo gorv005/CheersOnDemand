@@ -4,6 +4,8 @@ import android.content.Context;
 
 import com.cheersondemand.model.productList.ProductListResponse;
 
+import java.util.List;
+
 /**
  * Created by GAURAV on 7/31/2017.
  */
@@ -21,5 +23,8 @@ public interface IProductsViewIntractor {
 
     public void getAllProducts(boolean isAuthUser ,String token,String uuid,String page,String per_page,String from,String to, String orderBy,String orderField, OnLoginFinishedListener listener);
 
+    public void getAllProductsFilter(boolean isAuthUser , String token, List<Integer> category_id, String uuid, String page, String per_page, String from, String to, String orderBy, String orderField, OnLoginFinishedListener listener);
+
+    public void getAllProductsFilter(boolean isAuthUser , String token, List<Integer> category_id, List<Integer> brand_id,List<Integer> sub_cat_id,String uuid, String page, String per_page, String from, String to, String orderBy, String orderField, OnLoginFinishedListener listener);
 
 }

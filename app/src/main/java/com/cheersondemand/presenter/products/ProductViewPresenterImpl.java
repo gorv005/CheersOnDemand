@@ -6,6 +6,8 @@ import com.cheersondemand.intractor.products.IProductsViewIntractor;
 import com.cheersondemand.intractor.products.ProductViewIntractorImpl;
 import com.cheersondemand.model.productList.ProductListResponse;
 
+import java.util.List;
+
 
 public class ProductViewPresenterImpl implements IProductViewPresenter, IProductsViewIntractor.OnLoginFinishedListener {
 
@@ -66,6 +68,22 @@ public class ProductViewPresenterImpl implements IProductViewPresenter, IProduct
         if (mView != null) {
 
             iProductsViewIntractor.getAllProducts(isAuthUser,token,uuid,page,per_page,from,to,orderBy,orderField,this);
+        }
+    }
+
+    @Override
+    public void getAllProductsFilter(boolean isAuthUser, String token, List<Integer> category_id, String uuid, String page, String per_page, String from, String to, String orderBy, String orderField) {
+        if (mView != null) {
+
+            iProductsViewIntractor.getAllProductsFilter(isAuthUser,token,category_id,uuid,page,per_page,from,to,orderBy,orderField,this);
+        }
+    }
+
+    @Override
+    public void getAllProductsFilter(boolean isAuthUser, String token, List<Integer> category_id, List<Integer> brand_id, List<Integer> sub_cat_id,String uuid, String page, String per_page, String from, String to, String orderBy, String orderField) {
+        if (mView != null) {
+
+            iProductsViewIntractor.getAllProductsFilter(isAuthUser,token,category_id,brand_id,sub_cat_id,uuid,page,per_page,from,to,orderBy,orderField,this);
         }
     }
 

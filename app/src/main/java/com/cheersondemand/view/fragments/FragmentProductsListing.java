@@ -32,6 +32,7 @@ import com.cheersondemand.model.BrandResponse;
 import com.cheersondemand.model.Categories;
 import com.cheersondemand.model.CategoriesResponse;
 import com.cheersondemand.model.ProductsWithCategoryResponse;
+import com.cheersondemand.model.SubCategory;
 import com.cheersondemand.model.authentication.GenRequest;
 import com.cheersondemand.model.order.CreateOrderResponse;
 import com.cheersondemand.model.order.addtocart.AddToCartRequest;
@@ -60,6 +61,7 @@ import com.cheersondemand.view.adapter.products.AdapterProducts;
 import com.cheersondemand.view.adapter.products.AdapterSortList;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
@@ -105,14 +107,20 @@ public class FragmentProductsListing extends Fragment implements View.OnClickLis
     int source;
     private int productPos;
     private int secPos;
-    private boolean isAdd;
+    private boolean isAdd,isFilter=false;
     AllProduct product;
     List<Categories> categoriesList;
     List<Brand> brandList;
+    List<SubCategory> subCatList;
+
     int totalPages;
     int pastVisibleItems, visibleItemCount, totalItemCount;
     boolean loading = true;
     int sortPos=-1;
+    List<Integer> catIdList;
+    List<Integer> brandId;
+    List<Integer> sub_cat_id;
+
     public FragmentProductsListing() {
         // Required empty public constructor
     }
@@ -129,6 +137,11 @@ public class FragmentProductsListing extends Fragment implements View.OnClickLis
 
         catId = getArguments().getString(C.CAT_ID);
         source = getArguments().getInt(C.SOURCE);
+        catIdList=new ArrayList<>();
+        brandId=new ArrayList<>();
+        sub_cat_id=new ArrayList<>();
+
+        catIdList.add(Integer.parseInt(catId));
     }
 
     @Override
@@ -175,13 +188,18 @@ public class FragmentProductsListing extends Fragment implements View.OnClickLis
 
 
     void getProducts(int page) {
-        if (source == C.FRAGMENT_CATEGORIES) {
-            getProductsList(page, perPage, catId, "" + from, "" + to, orderBy, orderField);
-        } else if (source == C.FRAGMENT_PRODUCTS_HOME) {
-            getAllProducts(page, perPage, "" + from, "" + to, orderBy, orderField);
+        if(isFilter){
+            getProductsList(page, perPage, catIdList, brandId, sub_cat_id, "" + from, "" + to, orderBy, orderField);
+        }
+        else {
+            if (source == C.FRAGMENT_CATEGORIES) {
+                getProductsList(page, perPage, catIdList, brandId, sub_cat_id, "" + from, "" + to, orderBy, orderField);
+            } else if (source == C.FRAGMENT_PRODUCTS_HOME) {
+                getAllProducts(page, perPage, "" + from, "" + to, orderBy, orderField);
 
-        } else if (source == C.FRAGMENT_PRODUCT_DESC) {
-            getSimilarProducts(catId,page,perPage);
+            } else if (source == C.FRAGMENT_PRODUCT_DESC) {
+                getSimilarProducts(catId, page, perPage);
+            }
         }
     }
 
@@ -244,7 +262,27 @@ public class FragmentProductsListing extends Fragment implements View.OnClickLis
         }
     }
 
+    void getProductsList(int page, int perPage, List<Integer> catId, String from, String to, String orderBy, String orderField) {
 
+        if (SharedPreference.getInstance(getActivity()).getBoolean(C.IS_LOGIN_GUEST)) {
+            iProductViewPresenter.getAllProductsFilter(false,"",catId,Util.id(getActivity()), "" + page, "" + perPage, from, to, orderBy, orderField);
+        } else {
+            String id = "" + SharedPreference.getInstance(getActivity()).getUser(C.AUTH_USER).getData().getUser().getId();
+            String token = C.bearer + SharedPreference.getInstance(getActivity()).getUser(C.AUTH_USER).getData().getToken().getAccessToken();
+            iProductViewPresenter.getAllProductsFilter(true,token,catId,Util.id(getActivity()), "" + page, "" + perPage, from, to, orderBy, orderField);
+        }
+    }
+
+    void getProductsList(int page, int perPage, List<Integer> catId,List<Integer> brandId,List<Integer> sub_cat_id, String from, String to, String orderBy, String orderField) {
+
+        if (SharedPreference.getInstance(getActivity()).getBoolean(C.IS_LOGIN_GUEST)) {
+            iProductViewPresenter.getAllProductsFilter(false,"",catId,brandId,sub_cat_id,Util.id(getActivity()), "" + page, "" + perPage, from, to, orderBy, orderField);
+        } else {
+            String id = "" + SharedPreference.getInstance(getActivity()).getUser(C.AUTH_USER).getData().getUser().getId();
+            String token = C.bearer + SharedPreference.getInstance(getActivity()).getUser(C.AUTH_USER).getData().getToken().getAccessToken();
+            iProductViewPresenter.getAllProductsFilter(true,token,catId,brandId,sub_cat_id,Util.id(getActivity()), "" + page, "" + perPage, from, to, orderBy, orderField);
+        }
+    }
   void getSimilarProducts(String id,int page,int per_page) {
           if (SharedPreference.getInstance(getActivity()).getBoolean(C.IS_LOGIN_GUEST)) {
               iProductDescViewPresenter.getSimilarProducts(id, Util.id(getActivity()), ""+page, ""+per_page);
@@ -269,7 +307,7 @@ public class FragmentProductsListing extends Fragment implements View.OnClickLis
     public void getProductListSuccess(ProductListResponse response) {
         if (response.getSuccess()) {
             progressbar.setVisibility(View.GONE);
-            if (allProductList != null && allProductList.size() > 0) {
+            if (allProductList != null && allProductList.size() > 0 && page!=1) {
                 allProductList.addAll(response.getData());
                 adapterProducts.notifyDataSetChanged();
             } else {
@@ -630,6 +668,40 @@ public class FragmentProductsListing extends Fragment implements View.OnClickLis
             Bundle bundle = data.getBundleExtra(C.BUNDLE);
             brandList = (List<Brand>) bundle.getSerializable(C.BRANDS_LIST);
             categoriesList = (List<Categories>) bundle.getSerializable(C.CATEGORY_LIST);
+            subCatList=(List<SubCategory>) bundle.getSerializable(C.CATEGORY_LIST);
+            catIdList=new ArrayList<>();
+            brandId=new ArrayList<>();
+            sub_cat_id=new ArrayList<>();
+
+            for(int i=0;i<categoriesList.size();i++){
+                if(categoriesList.get(i).isSelected()){
+                    catIdList.add(categoriesList.get(i).getId());
+                }
+            }
+            for(int i=0;i<brandList.size();i++){
+                if(brandList.get(i).isSelected()){
+                    brandId.add(brandList.get(i).getId());
+                }
+            }
+            for(int i=0;i<subCatList.size();i++){
+                if(subCatList.get(i).isSelected()){
+                    sub_cat_id.add(subCatList.get(i).getId());
+                }
+            }
+
+            if(source==C.FRAGMENT_PRODUCTS_HOME && catIdList.size()==0){
+                catIdList.add(Integer.parseInt(catId));
+            }
+
+            if(catIdList.size()>0 || brandId.size()>0 || sub_cat_id.size()>0){
+                isFilter=true;
+            }
+            else {
+                isFilter=false;
+            }
+            page=1;
+            getProducts(page);
+
         }
     }
 

@@ -1,5 +1,6 @@
 package com.cheersondemand.presenter.address;
 
+import com.cheersondemand.model.address.AddressAddResponse;
 import com.cheersondemand.model.address.AddressRequest;
 import com.cheersondemand.model.address.AddressResponse;
 
@@ -22,9 +23,9 @@ public interface IAddressViewPresenter {
     interface IAddressView {
         void onRemoveAddressSuccess(AddressResponse Response);
 
-        void onAddAddressSuccess(AddressResponse Response);
+        void onAddAddressSuccess(AddressAddResponse Response);
 
-        void onEditAddressSuccess(AddressResponse Response);
+        void onEditAddressSuccess(AddressAddResponse Response);
 
         void onAddressListSuccess(AddressResponse Response);
         public void getResponseError(String response);
