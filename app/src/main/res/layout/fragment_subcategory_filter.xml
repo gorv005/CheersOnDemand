@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:id="@+id/LLView"
+    android:background="@color/white"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    >
+
+
+
+    <LinearLayout
+        android:background="@color/profile_back"
+        android:layout_width="match_parent"
+        android:orientation="vertical"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:background="@color/white"
+            android:paddingTop="20dp"
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+
+
+            <RelativeLayout
+                android:focusableInTouchMode="true"
+                android:focusable="true"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingLeft="15dp"
+                android:orientation="horizontal">
+
+                <EditText
+                    android:id="@+id/etSubCatName"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:layout_centerHorizontal="true"
+                    android:focusable="true"
+                    android:drawableLeft="@drawable/ic_search"
+                    android:paddingLeft="30dp"
+                    android:drawablePadding="20dp"
+                    android:focusableInTouchMode="true"
+                    android:fontFamily="@font/sf_ui_display_regular"
+                    android:maxLines="1"
+                    android:singleLine="true"
+                    android:textColor="@color/editext_text_color"
+                    android:textColorHint="@color/editext_hint_color"
+                    android:textCursorDrawable="@drawable/edit_text_cursor_color"
+                    android:textSize="14sp" />
+
+            </RelativeLayout>
+
+        </LinearLayout>
+
+
+
+
+
+        <LinearLayout
+            android:visibility="visible"
+            android:paddingTop="10dp"
+            android:id="@+id/rlSubCategories"
+            android:background="@color/white"
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+
+            <ListView
+                android:id="@+id/lvSubCategories"
+                android:background="@color/white"
+                android:divider="@null"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="2dp">
+
+            </ListView>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+
+</RelativeLayout>

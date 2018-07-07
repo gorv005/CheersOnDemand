@@ -8,7 +8,10 @@ import com.cheersondemand.frameworks.retrofit.WebServicesWrapper;
 import com.cheersondemand.model.BrandResponse;
 import com.cheersondemand.model.CategoriesResponse;
 import com.cheersondemand.model.ProductsWithCategoryResponse;
+import com.cheersondemand.model.SubCategoryResponse;
 import com.google.gson.Gson;
+
+import java.util.List;
 
 import retrofit2.Response;
 
@@ -74,6 +77,36 @@ public class HomeViewIntractorImpl implements IHomeViewIntractor {
                     }
                 }
             },isAuth,token,uuid);
+        }
+        catch (Exception e){
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void getSubCategories(boolean isAuth, String token, List<Integer> id, String uuid,final OnLoginFinishedListener listener) {
+        try {
+
+            WebServicesWrapper.getInstance().getSubCategories(new ResponseResolver<SubCategoryResponse>() {
+                @Override
+                public void onSuccess(SubCategoryResponse signUpResponse, Response response) {
+                    listener.onSuccessSubCat(signUpResponse);
+                }
+
+                @Override
+                public void onFailure(RestError error, String msg) {
+                    if(error==null ||error.getError()==null){
+
+                        Gson gson=new Gson();
+                        SubCategoryResponse response= gson.fromJson(msg,SubCategoryResponse.class);
+                        listener.onSuccessSubCat(response);
+
+                    }
+                    else {
+                        listener.onError(error.getError());
+                    }
+                }
+            },isAuth,token,id,uuid);
         }
         catch (Exception e){
             e.printStackTrace();

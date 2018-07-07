@@ -16,6 +16,7 @@ import com.cheersondemand.R;
 import com.cheersondemand.model.BrandResponse;
 import com.cheersondemand.model.CategoriesResponse;
 import com.cheersondemand.model.ProductsWithCategoryResponse;
+import com.cheersondemand.model.SubCategoryResponse;
 import com.cheersondemand.presenter.home.HomeViewPresenterImpl;
 import com.cheersondemand.presenter.home.IHomeViewPresenterPresenter;
 import com.cheersondemand.util.C;
@@ -105,6 +106,11 @@ public class FragmentCategoryList extends Fragment implements IHomeViewPresenter
 
     @Override
     public void getBrandResponseSuccess(BrandResponse response) {
+
+    }
+
+    @Override
+    public void getResponseSuccessSubCat(SubCategoryResponse response) {
 
     }
 

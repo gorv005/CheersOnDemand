@@ -76,6 +76,8 @@ public class Util {
         sideMenuItems.add(new SideMenuItem(R.string.price_range, 0, C.TAG_FRAGMENT_PRICE_RANGE));
         sideMenuItems.add(new SideMenuItem(R.string.brand, 0, C.TAG_FRAGMENT_BRAND));
         sideMenuItems.add(new SideMenuItem(R.string.category, 0, C.TAG_FRAGMENT_CATEGORY));
+        sideMenuItems.add(new SideMenuItem(R.string.sub_category, 0, C.TAG_FRAGMENT_SUB_CAT));
+
         return sideMenuItems;
     }
 

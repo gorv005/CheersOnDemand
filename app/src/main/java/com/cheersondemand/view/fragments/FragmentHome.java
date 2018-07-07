@@ -24,6 +24,7 @@ import com.cheersondemand.model.HomeCategoriesSectionList;
 import com.cheersondemand.model.ProductsWithCategoryResponse;
 import com.cheersondemand.model.SectionDataModel;
 import com.cheersondemand.model.SingleItemModel;
+import com.cheersondemand.model.SubCategoryResponse;
 import com.cheersondemand.model.authentication.GenRequest;
 import com.cheersondemand.model.location.SelectedLocation;
 import com.cheersondemand.model.order.CreateOrderResponse;
@@ -252,6 +253,11 @@ public class FragmentHome extends Fragment implements IHomeViewPresenterPresente
 
     @Override
     public void getBrandResponseSuccess(BrandResponse response) {
+
+    }
+
+    @Override
+    public void getResponseSuccessSubCat(SubCategoryResponse response) {
 
     }
 

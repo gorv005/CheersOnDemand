@@ -33,6 +33,7 @@ import com.cheersondemand.model.Categories;
 import com.cheersondemand.model.CategoriesResponse;
 import com.cheersondemand.model.ProductsWithCategoryResponse;
 import com.cheersondemand.model.SubCategory;
+import com.cheersondemand.model.SubCategoryResponse;
 import com.cheersondemand.model.authentication.GenRequest;
 import com.cheersondemand.model.order.CreateOrderResponse;
 import com.cheersondemand.model.order.addtocart.AddToCartRequest;
@@ -600,6 +601,11 @@ public class FragmentProductsListing extends Fragment implements View.OnClickLis
     }
 
     @Override
+    public void getResponseSuccessSubCat(SubCategoryResponse response) {
+
+    }
+
+    @Override
     public void getResponseSuccess(CategoriesResponse response) {
         if (response.getSuccess()) {
             categoriesList = response.getData();
@@ -668,7 +674,7 @@ public class FragmentProductsListing extends Fragment implements View.OnClickLis
             Bundle bundle = data.getBundleExtra(C.BUNDLE);
             brandList = (List<Brand>) bundle.getSerializable(C.BRANDS_LIST);
             categoriesList = (List<Categories>) bundle.getSerializable(C.CATEGORY_LIST);
-            subCatList=(List<SubCategory>) bundle.getSerializable(C.CATEGORY_LIST);
+            subCatList=(List<SubCategory>) bundle.getSerializable(C.SUB_CATEGORY_LIST);
             catIdList=new ArrayList<>();
             brandId=new ArrayList<>();
             sub_cat_id=new ArrayList<>();
@@ -683,12 +689,13 @@ public class FragmentProductsListing extends Fragment implements View.OnClickLis
                     brandId.add(brandList.get(i).getId());
                 }
             }
-            for(int i=0;i<subCatList.size();i++){
-                if(subCatList.get(i).isSelected()){
-                    sub_cat_id.add(subCatList.get(i).getId());
+            if(subCatList!=null) {
+                for (int i = 0; i < subCatList.size(); i++) {
+                    if (subCatList.get(i).isSelected()) {
+                        sub_cat_id.add(subCatList.get(i).getId());
+                    }
                 }
             }
-
             if(source==C.FRAGMENT_PRODUCTS_HOME && catIdList.size()==0){
                 catIdList.add(Integer.parseInt(catId));
             }
@@ -710,6 +717,8 @@ public class FragmentProductsListing extends Fragment implements View.OnClickLis
         Bundle bundle = new Bundle();
         bundle.putSerializable(C.BRANDS_LIST, (Serializable) brandList);
         bundle.putSerializable(C.CATEGORY_LIST, (Serializable) categoriesList);
+        bundle.putSerializable(C.SUB_CATEGORY_LIST, (Serializable) subCatList);
+
         intent.putExtra(C.BUNDLE, bundle);
         startActivityForResult(intent, REQUEST_CODE);
     }

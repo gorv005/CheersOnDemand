@@ -10,6 +10,9 @@ import java.io.Serializable;
  */
 
 public class SubCategory implements Serializable {
+    @SerializedName("pos")
+    @Expose
+    private Integer pos;
     @SerializedName("id")
     @Expose
     private Integer id;
@@ -22,6 +25,26 @@ public class SubCategory implements Serializable {
     @SerializedName("is_selected")
     @Expose
     private boolean isSelected;
+
+    public SubCategory() {
+    }
+
+    public SubCategory(Integer pos, Integer id, String name, Integer categoryId, boolean isSelected) {
+        this.pos = pos;
+        this.id = id;
+        this.name = name;
+        this.categoryId = categoryId;
+        this.isSelected = isSelected;
+    }
+
+    public Integer getPos() {
+        return pos;
+    }
+
+    public void setPos(Integer pos) {
+        this.pos = pos;
+    }
+
     public Integer getId() {
         return id;
     }

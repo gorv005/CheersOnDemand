@@ -20,11 +20,13 @@ import android.widget.TextView;
 import com.cheersondemand.R;
 import com.cheersondemand.model.Brand;
 import com.cheersondemand.model.Categories;
+import com.cheersondemand.model.SubCategory;
 import com.cheersondemand.util.C;
 import com.cheersondemand.util.listeners.OnFilterNameSelectionChangeListener;
 import com.cheersondemand.view.fragments.FragmentBrandsFilter;
 import com.cheersondemand.view.fragments.FragmentCategoryFilter;
 import com.cheersondemand.view.fragments.FragmentPriceRangeFilter;
+import com.cheersondemand.view.fragments.FragmentSubcategoryFilter;
 
 import java.io.Serializable;
 import java.util.List;
@@ -41,6 +43,8 @@ public class ActivityFilters extends AppCompatActivity implements View.OnClickLi
     Fragment fragment;
     public List<Brand> brandList;
     public List<Categories> categoriesList;
+    public List<SubCategory> subCategoriesList;
+
     @BindView(R.id.btnCancel)
     Button btnCancel;
     @BindView(R.id.btnApplyFilter)
@@ -75,6 +79,13 @@ public class ActivityFilters extends AppCompatActivity implements View.OnClickLi
         for (int i = 0; i < categoriesList.size(); i++) {
             categoriesList.get(i).setPos(i);
         }
+
+        subCategoriesList = (List<SubCategory>) bundleg.getSerializable(C.SUB_CATEGORY_LIST);
+        if(subCategoriesList!=null) {
+            for (int i = 0; i < subCategoriesList.size(); i++) {
+                subCategoriesList.get(i).setPos(i);
+            }
+        }
         tvClearAll.setOnClickListener(this);
         btnApplyFilter.setOnClickListener(this);
         btnCancel.setOnClickListener(this);
@@ -101,7 +112,11 @@ public class ActivityFilters extends AppCompatActivity implements View.OnClickLi
                 fragmentTransaction.replace(R.id.container, fragment);
                 //fragmentTransaction.addToBackStack(C.TAG_FRAGMENT_PRODUCTS_HOME);
                 break;
-
+            case C.TAG_FRAGMENT_SUB_CAT:
+                fragment = new FragmentSubcategoryFilter();
+                fragmentTransaction.replace(R.id.container, fragment);
+                //fragmentTransaction.addToBackStack(C.TAG_FRAGMENT_PRODUCTS_HOME);
+                break;
         }
         fragment.setArguments(bundle);
         fragmentTransaction.commit();
@@ -127,14 +142,32 @@ public class ActivityFilters extends AppCompatActivity implements View.OnClickLi
     public List<Brand> getBrandList() {
         return brandList;
     }
+    public List<SubCategory> getSubCatList() {
+        return subCategoriesList;
+    }
 
 
     void getCategoryList() {
-        Fragment fragment = getVisibleFragment();
+      //  Fragment fragment = getVisibleFragment();
         if (fragment != null && fragment instanceof FragmentCategoryFilter) {
             categoriesList = ((FragmentCategoryFilter) fragment).getCategoriesList();
 
         }
+    }
+    void getSubCategoryList() {
+       // Fragment fragment = getVisibleFragment();
+        if (fragment != null && fragment instanceof FragmentSubcategoryFilter) {
+            subCategoriesList = ((FragmentSubcategoryFilter) fragment).getSubCategoriesList();
+
+        }
+    }
+   public List<Categories> getCategoryListFilter() {
+      //  Fragment fragment = getVisibleFragment();
+        if (fragment != null && fragment instanceof FragmentCategoryFilter) {
+            categoriesList = ((FragmentCategoryFilter) fragment).getCategoriesList();
+
+        }
+        return categoriesList;
     }
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -144,7 +177,7 @@ public class ActivityFilters extends AppCompatActivity implements View.OnClickLi
 
     }
     public void getBrandsList() {
-        Fragment fragment = getVisibleFragment();
+     //   Fragment fragment = getVisibleFragment();
         if (fragment != null && fragment instanceof FragmentBrandsFilter) {
             brandList = ((FragmentBrandsFilter) fragment).getBrandList();
 
@@ -155,6 +188,7 @@ public class ActivityFilters extends AppCompatActivity implements View.OnClickLi
     public void OnSelectionChanged(String versionNameIndex, Bundle bundle) {
         getCategoryList();
         getBrandsList();
+        getSubCategoryList();
         fragmnetLoader(versionNameIndex, bundle);
     }
 
@@ -162,6 +196,7 @@ public class ActivityFilters extends AppCompatActivity implements View.OnClickLi
     public void onClick(View v) {
         getBrandsList();
         getCategoriesList();
+        getSubCategoryList();
         Intent intent;
         Bundle bundle;
         switch (v.getId()) {
@@ -171,6 +206,8 @@ public class ActivityFilters extends AppCompatActivity implements View.OnClickLi
                 bundle = new Bundle();
                 bundle.putSerializable(C.BRANDS_LIST, (Serializable) brandList);
                 bundle.putSerializable(C.CATEGORY_LIST, (Serializable) categoriesList);
+                bundle.putSerializable(C.SUB_CATEGORY_LIST, (Serializable) subCategoriesList);
+
                 intent.putExtra(C.BUNDLE, bundle);
                 setResult(RESULT_OK, intent);
                 finish();
@@ -185,8 +222,13 @@ public class ActivityFilters extends AppCompatActivity implements View.OnClickLi
                 for (int i=0;i<categoriesList.size();i++){
                     categoriesList.get(i).setSelected(false);
                 }
+                for (int i=0;i<subCategoriesList.size();i++){
+                    subCategoriesList.get(i).setSelected(false);
+                }
                 bundle.putSerializable(C.BRANDS_LIST, (Serializable) brandList);
                 bundle.putSerializable(C.CATEGORY_LIST, (Serializable) categoriesList);
+                bundle.putSerializable(C.SUB_CATEGORY_LIST, (Serializable) subCategoriesList);
+
                 intent.putExtra(C.BUNDLE, bundle);
                 setResult(RESULT_OK, intent);
                 finish();

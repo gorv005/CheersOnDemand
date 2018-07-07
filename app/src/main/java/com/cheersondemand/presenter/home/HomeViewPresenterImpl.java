@@ -7,6 +7,9 @@ import com.cheersondemand.intractor.home.IHomeViewIntractor;
 import com.cheersondemand.model.BrandResponse;
 import com.cheersondemand.model.CategoriesResponse;
 import com.cheersondemand.model.ProductsWithCategoryResponse;
+import com.cheersondemand.model.SubCategoryResponse;
+
+import java.util.List;
 
 
 public class HomeViewPresenterImpl implements IHomeViewPresenterPresenter, IHomeViewIntractor.OnLoginFinishedListener {
@@ -36,6 +39,14 @@ public class HomeViewPresenterImpl implements IHomeViewPresenterPresenter, IHome
         if (mView != null) {
             //mView.hideProgress();
             mView.getBrandResponseSuccess(categoriesResponse);
+        }
+    }
+
+    @Override
+    public void onSuccessSubCat(SubCategoryResponse categoriesResponse) {
+        if (mView != null) {
+            //mView.hideProgress();
+            mView.getResponseSuccessSubCat(categoriesResponse);
         }
     }
 
@@ -74,6 +85,14 @@ public class HomeViewPresenterImpl implements IHomeViewPresenterPresenter, IHome
         if (mView != null) {
 
             iHomeViewIntractor.getCategories(isAuth,token,uuid, this);
+        }
+    }
+
+    @Override
+    public void getSubCategories(boolean isAuth, String token, List<Integer> id, String uuid) {
+        if (mView != null) {
+
+            iHomeViewIntractor.getSubCategories(isAuth,token,id,uuid, this);
         }
     }
 
