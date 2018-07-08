@@ -72,4 +72,5 @@ public interface C {
     String TAG_FRAGMENT_SUB_CAT = "TAG_FRAGMENT_SUB_CAT";
     int FRAGMENT_CATEGORIES_HOME=21;
     String SUB_CAT_ID = "subCatId";
+    String MSG ="" ;
 }

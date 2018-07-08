@@ -27,7 +27,7 @@ public class SearchViewPresenterImpl implements ISearchViewPresenter, ISearchVie
     @Override
     public void onRecentSearchSuccess(SearchResponse Response) {
         if (mView != null) {
-            //mView.hideProgress();
+            mView.hideProgress();
             mView.onRecentSearchSuccess(Response);
         }
     }
@@ -35,7 +35,7 @@ public class SearchViewPresenterImpl implements ISearchViewPresenter, ISearchVie
     @Override
     public void onSearchResultSuccess(SearchResultsResponse Response) {
         if (mView != null) {
-            //mView.hideProgress();
+            mView.hideProgress();
             mView.onSearchResultSuccess(Response);
         }
     }
@@ -43,7 +43,7 @@ public class SearchViewPresenterImpl implements ISearchViewPresenter, ISearchVie
     @Override
     public void onSearchProductSuccess(SearchProductResponse response) {
         if (mView != null) {
-            //mView.hideProgress();
+            mView.hideProgress();
             mView.onSearchProductSuccess(response);
         }
     }
@@ -51,7 +51,7 @@ public class SearchViewPresenterImpl implements ISearchViewPresenter, ISearchVie
     @Override
     public void onError(String response) {
         if (mView != null) {
-            //mView.hideProgress();
+            mView.hideProgress();
             mView.getResponseError(response);
         }
     }
@@ -82,7 +82,7 @@ public class SearchViewPresenterImpl implements ISearchViewPresenter, ISearchVie
     @Override
     public void getFetchRecordOfSearch(boolean isAuthUser, String token, String uuid, String query, String class_name, String class_id, String results_count) {
         if (mView != null) {
-
+            mView.showProgress();
             iSearchViewIntractor.getFetchRecordOfSearch(isAuthUser,token,uuid,query,class_name,class_id, results_count, this);
         }
     }

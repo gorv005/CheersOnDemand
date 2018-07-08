@@ -134,7 +134,7 @@
 
     </RelativeLayout>
     <LinearLayout
-        android:visibility="visible"
+        android:visibility="gone"
         android:layout_below="@id/rlbar"
         android:background="@color/white"
         android:id="@+id/llNoProductInCount"

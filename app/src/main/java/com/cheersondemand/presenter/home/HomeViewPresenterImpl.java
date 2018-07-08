@@ -29,7 +29,7 @@ public class HomeViewPresenterImpl implements IHomeViewPresenterPresenter, IHome
     @Override
     public void onSuccess(CategoriesResponse categoriesResponse) {
         if (mView != null) {
-            //mView.hideProgress();
+            mView.hideProgress();
             mView.getResponseSuccess(categoriesResponse);
         }
     }
@@ -37,7 +37,7 @@ public class HomeViewPresenterImpl implements IHomeViewPresenterPresenter, IHome
     @Override
     public void onSuccessBrand(BrandResponse categoriesResponse) {
         if (mView != null) {
-            //mView.hideProgress();
+            mView.hideProgress();
             mView.getBrandResponseSuccess(categoriesResponse);
         }
     }
@@ -45,7 +45,7 @@ public class HomeViewPresenterImpl implements IHomeViewPresenterPresenter, IHome
     @Override
     public void onSuccessSubCat(SubCategoryResponse categoriesResponse) {
         if (mView != null) {
-            //mView.hideProgress();
+            mView.hideProgress();
             mView.getResponseSuccessSubCat(categoriesResponse);
         }
     }
@@ -53,7 +53,7 @@ public class HomeViewPresenterImpl implements IHomeViewPresenterPresenter, IHome
     @Override
     public void onProductWithCategorySuccess(ProductsWithCategoryResponse response) {
         if (mView != null) {
-            //mView.hideProgress();
+            mView.hideProgress();
             mView.getProductWithCategoriesSuccess(response);
         }
     }
@@ -61,7 +61,7 @@ public class HomeViewPresenterImpl implements IHomeViewPresenterPresenter, IHome
     @Override
     public void onError(String response) {
         if (mView != null) {
-            //mView.hideProgress();
+            mView.hideProgress();
             mView.getResponseError(response);
         }
     }
@@ -75,7 +75,7 @@ public class HomeViewPresenterImpl implements IHomeViewPresenterPresenter, IHome
     @Override
     public void getCategories(String uuid) {
         if (mView != null) {
-
+            mView.showProgress();
             iHomeViewIntractor.getCategories(uuid, this);
         }
     }

@@ -134,11 +134,12 @@ public class FragmentCategoryList extends Fragment implements IHomeViewPresenter
 
     @Override
     public void showProgress() {
-
+        util.showDialog(C.MSG,getActivity());
     }
 
     @Override
     public void hideProgress() {
+        util.hideDialog();
 
     }
 }

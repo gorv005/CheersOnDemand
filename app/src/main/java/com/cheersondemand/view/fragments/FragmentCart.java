@@ -433,11 +433,11 @@ public class FragmentCart extends Fragment implements View.OnClickListener, IOrd
 
     @Override
     public void showProgress() {
-
+        util.showDialog(C.MSG,getActivity());
     }
 
     @Override
     public void hideProgress() {
-
+        util.hideDialog();
     }
 }

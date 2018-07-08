@@ -1,6 +1,7 @@
 package com.cheersondemand.util;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -30,6 +31,7 @@ import java.util.UUID;
 
 public class Util {
     Snackbar snackbar;
+    ProgressDialog progressDialog=null;
 
     public static boolean isNetworkConnectivity(Activity activity) {
         ConnectivityManager cm = (ConnectivityManager) activity
@@ -151,5 +153,40 @@ public class Util {
           DecimalFormat df2 = new DecimalFormat(".##");
           return df2.format(d);
 
+    }
+
+
+    public void showDialog(String msg, Context context){
+        try {
+
+            if (progressDialog == null || !progressDialog.isShowing()) {
+
+                progressDialog = new ProgressDialog(context,R.style.customDialog);
+                progressDialog.setCancelable(false);
+                progressDialog.setProgressStyle(android.R.style.Widget_ProgressBar_Small);
+
+               /* progressDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                progressDialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+                progressDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);*/
+              /*  progressDialog.setContentView(R.layout.progress_dialog);
+               TextView text = (TextView) progressDialog.findViewById(R.id.tvMsg);
+               text.setText(msg);*/
+                progressDialog.show();
+            }
+        }
+        catch (Exception e){
+            e.printStackTrace();
+        }
+    }
+    public void hideDialog(){
+        try {
+
+            if (progressDialog.isShowing()) {
+                progressDialog.dismiss();
+            }
+        }
+        catch (Exception e){
+            e.printStackTrace();
+        }
     }
 }

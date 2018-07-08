@@ -33,7 +33,7 @@ public class AddressViewPresenterImpl implements IAddressViewPresenter, IAddress
     @Override
     public void onAddAddressSucess(AddressAddResponse Response) {
         if (mView != null) {
-            //mView.hideProgress();
+            mView.hideProgress();
             mView.onAddAddressSuccess(Response);
         }
     }
@@ -41,7 +41,7 @@ public class AddressViewPresenterImpl implements IAddressViewPresenter, IAddress
     @Override
     public void onEditAddressSucess(AddressAddResponse Response) {
         if (mView != null) {
-            //mView.hideProgress();
+            mView.hideProgress();
             mView.onEditAddressSuccess(Response);
         }
     }
@@ -49,7 +49,7 @@ public class AddressViewPresenterImpl implements IAddressViewPresenter, IAddress
     @Override
     public void onAddressListSucess(AddressResponse Response) {
         if (mView != null) {
-            //mView.hideProgress();
+            mView.hideProgress();
             mView.onAddressListSuccess(Response);
         }
     }
@@ -57,7 +57,7 @@ public class AddressViewPresenterImpl implements IAddressViewPresenter, IAddress
     @Override
     public void onError(String response) {
         if (mView != null) {
-            //mView.hideProgress();
+            mView.hideProgress();
             mView.getResponseError(response);
         }
     }
@@ -71,7 +71,7 @@ public class AddressViewPresenterImpl implements IAddressViewPresenter, IAddress
     @Override
     public void AddAddress(String token, String userId, AddressRequest addressRequest) {
         if (mView != null) {
-
+            mView.showProgress();
             iAddressViewIntractor.AddAddress(token,userId,addressRequest, this);
         }
     }
@@ -79,7 +79,7 @@ public class AddressViewPresenterImpl implements IAddressViewPresenter, IAddress
     @Override
     public void EditAddAddress(String token, String userId, String id, AddressRequest addressRequest) {
         if (mView != null) {
-
+            mView.showProgress();
             iAddressViewIntractor.EditAddAddress(token,userId,id,addressRequest, this);
         }
     }
@@ -87,6 +87,7 @@ public class AddressViewPresenterImpl implements IAddressViewPresenter, IAddress
     @Override
     public void getAddresses(String token, String userId) {
         if (mView != null) {
+            mView.showProgress();
 
             iAddressViewIntractor.getAddresses(token,userId, this);
         }
@@ -95,7 +96,7 @@ public class AddressViewPresenterImpl implements IAddressViewPresenter, IAddress
     @Override
     public void RemoveAddAddress(String token, String userId, String id) {
         if (mView != null) {
-
+            mView.showProgress();
             iAddressViewIntractor.RemoveAddAddress(token,userId,id, this);
         }
     }

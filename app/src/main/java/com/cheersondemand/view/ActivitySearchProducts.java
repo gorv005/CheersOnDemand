@@ -61,7 +61,7 @@ public class ActivitySearchProducts extends Activity implements View.OnClickList
     LinearLayoutManager horizontalLayout, horizontalLayout1, horizontalLayout2;
     AdapterProductSearcheResults adapterProductSearcheResults;
     AdapterRecentProductSearches adapterRecentProductSearch;
-
+    Util util;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -71,6 +71,7 @@ public class ActivitySearchProducts extends Activity implements View.OnClickList
         setContentView(R.layout.activity_search_products);
         ButterKnife.bind(this);
         imgBack.setOnClickListener(this);
+        util=new Util();
         horizontalLayout = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
         lvCategory.setLayoutManager(horizontalLayout);
         lvCategory.setHasFixedSize(true);
@@ -218,11 +219,13 @@ public class ActivitySearchProducts extends Activity implements View.OnClickList
 
     @Override
     public void showProgress() {
+        util.showDialog(C.MSG,this);
 
     }
 
     @Override
     public void hideProgress() {
+        util.hideDialog();
 
     }
 

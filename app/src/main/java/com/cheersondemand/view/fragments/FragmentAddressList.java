@@ -169,11 +169,13 @@ public class FragmentAddressList extends Fragment implements View.OnClickListene
 
     @Override
     public void showProgress() {
+        util.showDialog(C.MSG,getActivity());
 
     }
 
     @Override
     public void hideProgress() {
+        util.hideDialog();
 
     }
 

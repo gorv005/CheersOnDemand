@@ -26,7 +26,7 @@ public class StoreViewPresenterImpl implements IStoreViewPresenter, IStoreViewIn
     @Override
     public void onStoreListSuccess(StoreListResponse Response) {
         if (mView != null) {
-            //mView.hideProgress();
+            mView.hideProgress();
             mView.getStoreListSuccess(Response);
         }
     }
@@ -34,7 +34,7 @@ public class StoreViewPresenterImpl implements IStoreViewPresenter, IStoreViewIn
     @Override
     public void onUpdateStoreSuccess(UpdateStoreResponse Response) {
         if (mView != null) {
-            //mView.hideProgress();
+            mView.hideProgress();
             mView.updateStoreSuccess(Response);
         }
     }
@@ -42,7 +42,7 @@ public class StoreViewPresenterImpl implements IStoreViewPresenter, IStoreViewIn
     @Override
     public void onError(String response) {
         if (mView != null) {
-            //mView.hideProgress();
+            mView.hideProgress();
             mView.getResponseError(response);
         }
     }
@@ -59,7 +59,7 @@ public class StoreViewPresenterImpl implements IStoreViewPresenter, IStoreViewIn
     @Override
     public void getStoreList(String uuid) {
         if (mView != null) {
-
+            mView.showProgress();
             iStoreViewIntractor.getStoreList(uuid, this);
         }
     }
@@ -67,7 +67,7 @@ public class StoreViewPresenterImpl implements IStoreViewPresenter, IStoreViewIn
     @Override
     public void getStoreList(String token, String uuid) {
         if (mView != null) {
-
+            mView.showProgress();
             iStoreViewIntractor.getStoreList(token,uuid, this);
         }
     }

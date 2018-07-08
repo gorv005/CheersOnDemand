@@ -421,11 +421,13 @@ public class FragmentWishList extends Fragment implements IOrderViewPresenterPre
 
     @Override
     public void showProgress() {
+        util.showDialog(C.MSG,getActivity());
 
     }
 
     @Override
     public void hideProgress() {
+        util.hideDialog();
 
     }
 

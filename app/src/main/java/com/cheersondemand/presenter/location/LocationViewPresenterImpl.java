@@ -25,7 +25,7 @@ public class LocationViewPresenterImpl implements ILocationViewPresenter, ILocat
     @Override
     public void onLocationSavedSuccess(SaveLocationResponse Response) {
         if (mView != null) {
-            //mView.hideProgress();
+            mView.hideProgress();
             mView.getSaveLocationSuccess(Response);
         }
     }
@@ -33,7 +33,7 @@ public class LocationViewPresenterImpl implements ILocationViewPresenter, ILocat
     @Override
     public void onError(String response) {
         if (mView != null) {
-            //mView.hideProgress();
+            mView.hideProgress();
             mView.getResponseError(response);
         }
     }
@@ -51,7 +51,7 @@ public class LocationViewPresenterImpl implements ILocationViewPresenter, ILocat
     @Override
     public void saveLocation(SaveLocation saveLocation, String id) {
         if (mView != null) {
-
+            mView.showProgress();
             iLocationViewIntractor.saveLocation(id,saveLocation ,this);
         }
     }
@@ -59,7 +59,7 @@ public class LocationViewPresenterImpl implements ILocationViewPresenter, ILocat
     @Override
     public void saveLocation(String token, SaveLocation saveLocation, String id) {
         if (mView != null) {
-
+            mView.showProgress();
             iLocationViewIntractor.saveLocation(token,id,saveLocation ,this);
         }
     }

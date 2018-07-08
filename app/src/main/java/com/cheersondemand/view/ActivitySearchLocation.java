@@ -288,11 +288,13 @@ public class ActivitySearchLocation extends AppCompatActivity implements
 
     @Override
     public void showProgress() {
+        util.showDialog(C.MSG,this);
 
     }
 
     @Override
     public void hideProgress() {
+        util.hideDialog();
 
     }
 

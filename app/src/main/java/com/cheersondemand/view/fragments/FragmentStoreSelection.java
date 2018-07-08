@@ -167,11 +167,13 @@ public class FragmentStoreSelection extends Fragment implements IStoreViewPresen
 
     @Override
     public void showProgress() {
+        util.showDialog(C.MSG,getActivity());
 
     }
 
     @Override
     public void hideProgress() {
+        util.hideDialog();
 
     }
 
