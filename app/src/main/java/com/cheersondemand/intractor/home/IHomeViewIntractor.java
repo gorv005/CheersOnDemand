@@ -10,7 +10,7 @@ import com.cheersondemand.model.SubCategoryResponse;
 import java.util.List;
 
 /**
- * Created by GAURAV on 7/31/2017.
+ * Created by AB on 7/31/2017.
  */
 
 public interface IHomeViewIntractor {

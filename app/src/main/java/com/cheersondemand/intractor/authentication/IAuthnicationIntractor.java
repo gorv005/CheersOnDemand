@@ -11,7 +11,7 @@ import com.cheersondemand.model.authentication.SocialLoginRequest;
 
 
 /**
- * Created by GAURAV on 7/31/2017.
+ * Created by AB on 7/31/2017.
  */
 
 public interface IAuthnicationIntractor {

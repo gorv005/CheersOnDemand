@@ -7,7 +7,7 @@ import com.cheersondemand.model.coupon.CouponRequest;
 import com.cheersondemand.model.order.updatecart.UpdateCartResponse;
 
 /**
- * Created by GAURAV on 5/30/2018.
+ * Created by AB on 5/30/2018.
  */
 
 public interface ICouponViewPresenter {

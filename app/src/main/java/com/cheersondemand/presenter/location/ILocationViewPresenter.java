@@ -4,7 +4,7 @@ import com.cheersondemand.model.location.SaveLocation;
 import com.cheersondemand.model.location.SaveLocationResponse;
 
 /**
- * Created by GAURAV on 5/30/2018.
+ * Created by AB on 5/30/2018.
  */
 
 public interface ILocationViewPresenter {

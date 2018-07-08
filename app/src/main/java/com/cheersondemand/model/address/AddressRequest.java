@@ -6,7 +6,7 @@ import com.google.gson.annotations.SerializedName;
 import java.io.Serializable;
 
 /**
- * Created by GAURAV on 7/6/2018.
+ * Created by AB on 7/6/2018.
  */
 
 public class AddressRequest implements Serializable {

@@ -22,7 +22,7 @@ import com.cheersondemand.view.ActivityHome;
 import java.util.List;
 
 /**
- * Created by GAURAV on 6/7/2018.
+ * Created by AB on 6/7/2018.
  */
 
 public class AdapterHomeCategories extends RecyclerView.Adapter<RecyclerView.ViewHolder > {

@@ -10,7 +10,7 @@ import com.google.gson.Gson;
 import retrofit2.Response;
 
 /**
- * Created by GAURAV on 7/31/2017.
+ * Created by AB on 7/31/2017.
  */
 
 public class ProfileViewIntractorImpl implements IProfileViewIntractor {

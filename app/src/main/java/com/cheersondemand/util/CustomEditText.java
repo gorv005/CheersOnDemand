@@ -9,7 +9,7 @@ import android.util.AttributeSet;
 import android.view.MotionEvent;
 
 /**
- * Created by GAURAV on 5/28/2018.
+ * Created by AB on 5/28/2018.
  */
 
 public class CustomEditText extends AppCompatEditText{

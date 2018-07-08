@@ -8,7 +8,7 @@ import com.google.gson.annotations.SerializedName;
 import java.util.List;
 
 /**
- * Created by GAURAV on 6/27/2018.
+ * Created by AB on 6/27/2018.
  */
 
 public class CouponListResponse {

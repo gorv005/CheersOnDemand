@@ -5,7 +5,7 @@ import com.cheersondemand.model.search.SearchResponse;
 import com.cheersondemand.model.search.SearchResultsResponse;
 
 /**
- * Created by GAURAV on 5/30/2018.
+ * Created by AB on 5/30/2018.
  */
 
 public interface ISearchViewPresenter {

@@ -4,7 +4,7 @@ import android.content.Context;
 import android.util.DisplayMetrics;
 
 /**
- * Created by GAURAV on 7/1/2018.
+ * Created by AB on 7/1/2018.
  */
 
 public class PixelUtil {

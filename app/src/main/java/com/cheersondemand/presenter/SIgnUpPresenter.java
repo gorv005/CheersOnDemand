@@ -1,7 +1,7 @@
 package com.cheersondemand.presenter;
 
 /**
- * Created by GAURAV on 5/30/2018.
+ * Created by AB on 5/30/2018.
  */
 
 public class SIgnUpPresenter {/*extends AppBasePresenter<IAutheniticationPresenter.IAuthenticationView> implements IAutheniticationPresenter.IAuthenticationPresenter {

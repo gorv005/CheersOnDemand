@@ -9,7 +9,7 @@ import com.cheersondemand.model.authentication.SignUpRequest;
 import com.cheersondemand.model.authentication.SocialLoginRequest;
 
 /**
- * Created by GAURAV on 5/30/2018.
+ * Created by AB on 5/30/2018.
  */
 
 public interface IAutheniticationPresenter {

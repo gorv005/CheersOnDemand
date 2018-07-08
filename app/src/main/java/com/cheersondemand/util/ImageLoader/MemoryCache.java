@@ -1,9 +1,5 @@
 package com.cheersondemand.util.ImageLoader;
 
-/**
- * Created by aditya.singh on 5/31/2016.
- */
-
 import android.graphics.Bitmap;
 
 import java.lang.ref.SoftReference;

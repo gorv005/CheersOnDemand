@@ -19,7 +19,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by GAURAV on 7/2/2018.
+ * Created by AB on 7/2/2018.
  */
 
 public class AdapterBrands extends BaseAdapter implements Filterable {

@@ -7,7 +7,7 @@ import android.view.ViewGroup;
 import android.widget.ListView;
 
 /**
- * Created by GAURAV on 6/27/2018.
+ * Created by AB on 6/27/2018.
  */
 
 public class NonScrollListView extends ListView {

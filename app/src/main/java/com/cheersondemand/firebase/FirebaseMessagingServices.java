@@ -14,7 +14,7 @@ import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 
 /**
- * Created by GAURAV on 6/20/2018.
+ * Created by AB on 6/20/2018.
  */
 
 public class FirebaseMessagingServices extends FirebaseMessagingService {

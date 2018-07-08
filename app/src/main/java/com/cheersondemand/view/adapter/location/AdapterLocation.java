@@ -26,7 +26,7 @@ import java.util.Iterator;
 import java.util.concurrent.TimeUnit;
 
 /**
- * Created by GAURAV on 6/16/2018.
+ * Created by AB on 6/16/2018.
  */
 
 public class AdapterLocation extends RecyclerView.Adapter<AdapterLocation.PredictionHolder> implements Filterable {

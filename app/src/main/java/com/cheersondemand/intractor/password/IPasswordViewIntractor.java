@@ -6,7 +6,7 @@ import com.cheersondemand.model.changepassword.PasswordRequest;
 import com.cheersondemand.model.changepassword.PasswordResponse;
 
 /**
- * Created by GAURAV on 7/5/2018.
+ * Created by AB on 7/5/2018.
  */
 
 public interface IPasswordViewIntractor {

@@ -8,7 +8,7 @@ import java.io.Serializable;
 import java.util.List;
 
 /**
- * Created by GAURAV on 6/22/2018.
+ * Created by AB on 6/22/2018.
  */
 
 public class SimilarProduct implements Serializable{

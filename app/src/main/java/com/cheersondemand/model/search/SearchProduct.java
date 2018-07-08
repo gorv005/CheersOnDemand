@@ -11,7 +11,7 @@ import java.io.Serializable;
 import java.util.List;
 
 /**
- * Created by GAURAV on 7/8/2018.
+ * Created by AB on 7/8/2018.
  */
 
 public class SearchProduct implements Serializable{

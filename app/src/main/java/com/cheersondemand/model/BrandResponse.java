@@ -8,7 +8,7 @@ import java.io.Serializable;
 import java.util.List;
 
 /**
- * Created by GAURAV on 7/2/2018.
+ * Created by AB on 7/2/2018.
  */
 
 public class BrandResponse implements Serializable{

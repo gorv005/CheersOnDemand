@@ -22,7 +22,7 @@ import java.util.List;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 /**
- * Created by GAURAV on 6/7/2018.
+ * Created by AB on 6/7/2018.
  */
 
 public class AdapterHomeBrands extends RecyclerView.Adapter<RecyclerView.ViewHolder > {

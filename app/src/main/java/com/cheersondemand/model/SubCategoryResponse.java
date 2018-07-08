@@ -7,7 +7,7 @@ import java.io.Serializable;
 import java.util.List;
 
 /**
- * Created by GAURAV on 7/7/2018.
+ * Created by AB on 7/7/2018.
  */
 
 public class SubCategoryResponse implements Serializable{
