@@ -142,10 +142,11 @@ public class ActivityContainer extends AppCompatActivity {
                 getSupportActionBar().hide();
                 fragment = new FragmentProductsListing();
                 fragmentTransaction.replace(R.id.container, fragment);
-                if(bundle.getInt(C.SOURCE)!=C.FRAGMENT_PRODUCTS_HOME) {
+                if(bundle.getInt(C.SOURCE)!=C.FRAGMENT_PRODUCTS_HOME && bundle.getInt(C.SOURCE)!=C.FRAGMENT_CATEGORIES_HOME) {
                     fragmentTransaction.addToBackStack(C.TAG_FRAGMENT_PRODUCT_LISTING);
                 }
                 break;
+
         }
         fragment.setArguments(bundle);
         fragmentTransaction.commit();
@@ -259,12 +260,27 @@ public class ActivityContainer extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        Fragment fragment=getVisibleFragment();
-        if(fragment!=null && fragment instanceof FragmentProductsListing){
-            getSupportActionBar().show();
-        }
 
+       /* getSupportFragmentManager().executePendingTransactions();
+        if (getSupportFragmentManager().getBackStackEntryCount() > 1) {
+            int fragmentCount = getSupportFragmentManager().getBackStackEntryCount();
+            FragmentManager.BackStackEntry backEntry = getSupportFragmentManager().getBackStackEntryAt(fragmentCount - 2);
+            String fragmentTag = backEntry.getName();
+
+            getSupportFragmentManager().popBackStack();
+            getSupportFragmentManager().executePendingTransactions();
+        } else {
+            finish();
+        }*/
         super.onBackPressed();
+        try {
 
+            Fragment fragment = getVisibleFragment();
+            if (fragment != null && fragment instanceof FragmentCategoryList) {
+                getSupportActionBar().show();
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+        }
     }
 }

@@ -854,8 +854,9 @@ public class FragmentAuthentication extends Fragment implements IAuthenitication
     @Override
     public void getResponseSuccess(AuthenticationResponse response) {
        // Log.e("DEBUG",""+response.toString());
+        btnLogin.revertAnimation();
+        btnSignUp.revertAnimation();
         if(response.getSuccess()){
-            btnLogin.revertAnimation();
             if (Util.isNetworkConnectivity(getActivity())) {
                 SharedPreference.getInstance(getActivity()).setBoolean(C.IS_LOGIN,true);
                 SharedPreference.getInstance(getActivity()).setBoolean(C.IS_LOGIN_GUEST,false);
@@ -867,6 +868,7 @@ public class FragmentAuthentication extends Fragment implements IAuthenitication
             }
         }
         else {
+
             util.setSnackbarMessage(getActivity(), response.getMessage(), LLView, true);
 
         }
@@ -874,8 +876,9 @@ public class FragmentAuthentication extends Fragment implements IAuthenitication
 
     @Override
     public void getResponseSuccessOfCreateGuestUser(GuestUserCreateResponse response) {
+        btnLogin.revertAnimation();
+        btnSignUp.revertAnimation();
         if(response.getSuccess()){
-            btnLogin.revertAnimation();
             if (Util.isNetworkConnectivity(getActivity())) {
                 SharedPreference.getInstance(getActivity()).setBoolean(C.IS_LOGIN_GUEST,true);
 

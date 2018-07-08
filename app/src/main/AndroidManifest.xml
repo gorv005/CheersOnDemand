@@ -73,10 +73,10 @@
             </intent-filter>
         </service>
 
-        <activity android:name=".view.ActivityFilters" android:screenOrientation="portrait">
-
-
-        </activity>
+        <activity
+            android:name=".view.ActivityFilters"
+            android:screenOrientation="portrait"></activity>
+        <activity android:name=".view.ActivitySearchProducts" android:screenOrientation="portrait"></activity>
     </application>
 
 </manifest>

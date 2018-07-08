@@ -531,6 +531,8 @@ public class FragmentProductDescription extends Fragment implements View.OnClick
             case R.id.tvSeeMore:
                 Bundle bundle = new Bundle();
                 bundle.putString(C.CAT_ID, "" + product.getId());
+                bundle.putString(C.SUB_CAT_ID,"");
+
                 bundle.putInt(C.SOURCE, C.FRAGMENT_PRODUCT_DESC);
                 ((ActivityContainer) getActivity()).fragmnetLoader(C.FRAGMENT_PRODUCT_LISTING, bundle);
                 break;

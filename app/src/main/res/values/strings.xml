@@ -146,6 +146,8 @@
     <string name="no_address_have_been">No adresses have been saved to the address list yet !</string>
     <string name="add_an_address">Add an address</string>
     <string name="sub_category">Sub Category</string>
+    <string name="categories">Categories</string>
+    <string name="enter_search_name_brand">Search Name, Brand or Type</string>
     <!--
         <string name="default_web_client_id">999387565226-hdnnhm6rhgik5ljvm06shotsi7j9883c.apps.googleusercontent.com</string>
     -->

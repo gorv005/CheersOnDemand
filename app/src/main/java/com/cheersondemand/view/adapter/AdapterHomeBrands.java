@@ -3,12 +3,12 @@ package com.cheersondemand.view.adapter;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.cheersondemand.R;
 import com.cheersondemand.model.Categories;
@@ -86,7 +86,28 @@ public class ItemViewHolder extends RecyclerView.ViewHolder {
             itemViewHolder.tvBrandName.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Toast.makeText(context, itemViewHolder.tvBrandName.getText().toString(), Toast.LENGTH_SHORT).show();
+                    Intent intent=new Intent(context,ActivityContainer.class);
+                    Bundle bundle=new Bundle();
+                    bundle.putString(C.CAT_ID,""+horizontalList.get(position).getId());
+                    bundle.putString(C.SUB_CAT_ID,"");
+
+                    bundle.putInt(C.SOURCE,C.FRAGMENT_CATEGORIES_HOME);
+                    intent.putExtra(C.FRAGMENT_ACTION,C.FRAGMENT_PRODUCT_LISTING);
+                    intent.putExtra(C.BUNDLE,bundle);
+                    context.startActivity(intent);                }
+            });
+            itemViewHolder.ivProductImage.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent=new Intent(context,ActivityContainer.class);
+                    Bundle bundle=new Bundle();
+                    bundle.putString(C.CAT_ID,""+horizontalList.get(position).getId());
+                    bundle.putString(C.SUB_CAT_ID,"");
+
+                    bundle.putInt(C.SOURCE,C.FRAGMENT_CATEGORIES_HOME);
+                    intent.putExtra(C.FRAGMENT_ACTION,C.FRAGMENT_PRODUCT_LISTING);
+                    intent.putExtra(C.BUNDLE,bundle);
+                    context.startActivity(intent);
                 }
             });
         }

@@ -82,6 +82,8 @@ public class ItemViewHolder extends RecyclerView.ViewHolder {
                    // Toast.makeText(context, "click", Toast.LENGTH_SHORT).show();
                     Bundle bundle=new Bundle();
                     bundle.putString(C.CAT_ID,""+horizontalList.get(position).getId());
+                    bundle.putString(C.SUB_CAT_ID,"");
+
                     bundle.putInt(C.SOURCE,C.FRAGMENT_CATEGORIES);
 
                     ((ActivityContainer)context).fragmnetLoader(C.FRAGMENT_PRODUCT_LISTING,bundle);
