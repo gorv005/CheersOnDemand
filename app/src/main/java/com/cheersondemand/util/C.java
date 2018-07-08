@@ -73,4 +73,6 @@ public interface C {
     int FRAGMENT_CATEGORIES_HOME=21;
     String SUB_CAT_ID = "subCatId";
     String MSG ="" ;
+    String MIN_RANGE ="minRange" ;
+   String MAX_RANGE = "maxRange";
 }

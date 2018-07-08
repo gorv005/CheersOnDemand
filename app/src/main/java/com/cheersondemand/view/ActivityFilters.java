@@ -36,15 +36,14 @@ import butterknife.ButterKnife;
 
 public class ActivityFilters extends AppCompatActivity implements View.OnClickListener, OnFilterNameSelectionChangeListener {
 
+    public List<Brand> brandList;
+    public List<Categories> categoriesList;
+    public List<SubCategory> subCategoriesList;
     @BindView(R.id.tvTitle)
     TextView tvTitle;
     @BindView(R.id.toolbar)
     Toolbar toolbar;
     Fragment fragment;
-    public List<Brand> brandList;
-    public List<Categories> categoriesList;
-    public List<SubCategory> subCategoriesList;
-
     @BindView(R.id.btnCancel)
     Button btnCancel;
     @BindView(R.id.btnApplyFilter)
@@ -52,6 +51,7 @@ public class ActivityFilters extends AppCompatActivity implements View.OnClickLi
     Bundle bundleg;
     @BindView(R.id.tvClearAll)
     TextView tvClearAll;
+    String minRange = "0", maxRange = "5000";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -81,11 +81,13 @@ public class ActivityFilters extends AppCompatActivity implements View.OnClickLi
         }
 
         subCategoriesList = (List<SubCategory>) bundleg.getSerializable(C.SUB_CATEGORY_LIST);
-        if(subCategoriesList!=null) {
+        if (subCategoriesList != null) {
             for (int i = 0; i < subCategoriesList.size(); i++) {
                 subCategoriesList.get(i).setPos(i);
             }
         }
+        minRange=bundleg.getString(C.MIN_RANGE);
+        maxRange=bundleg.getString(C.MAX_RANGE);
         tvClearAll.setOnClickListener(this);
         btnApplyFilter.setOnClickListener(this);
         btnCancel.setOnClickListener(this);
@@ -142,33 +144,62 @@ public class ActivityFilters extends AppCompatActivity implements View.OnClickLi
     public List<Brand> getBrandList() {
         return brandList;
     }
+
     public List<SubCategory> getSubCatList() {
         return subCategoriesList;
     }
 
 
     void getCategoryList() {
-      //  Fragment fragment = getVisibleFragment();
+        //  Fragment fragment = getVisibleFragment();
         if (fragment != null && fragment instanceof FragmentCategoryFilter) {
             categoriesList = ((FragmentCategoryFilter) fragment).getCategoriesList();
 
         }
     }
+
+
+    public String minRange() {
+        return minRange;
+    }
+
+    public String maxRange() {
+        return maxRange;
+    }
+
+    void getMinRange() {
+        //  Fragment fragment = getVisibleFragment();
+        if (fragment != null && fragment instanceof FragmentPriceRangeFilter) {
+            minRange = ((FragmentPriceRangeFilter) fragment).getMinRange();
+
+        }
+    }
+
+    void getMaxRange() {
+        //  Fragment fragment = getVisibleFragment();
+        if (fragment != null && fragment instanceof FragmentPriceRangeFilter) {
+            maxRange = ((FragmentPriceRangeFilter) fragment).getMaxRange();
+
+        }
+    }
+
     void getSubCategoryList() {
-       // Fragment fragment = getVisibleFragment();
+        // Fragment fragment = getVisibleFragment();
         if (fragment != null && fragment instanceof FragmentSubcategoryFilter) {
             subCategoriesList = ((FragmentSubcategoryFilter) fragment).getSubCategoriesList();
 
         }
     }
-   public List<Categories> getCategoryListFilter() {
-      //  Fragment fragment = getVisibleFragment();
+
+    public List<Categories> getCategoryListFilter() {
+        //  Fragment fragment = getVisibleFragment();
         if (fragment != null && fragment instanceof FragmentCategoryFilter) {
             categoriesList = ((FragmentCategoryFilter) fragment).getCategoriesList();
 
         }
         return categoriesList;
     }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == android.R.id.home)
@@ -176,8 +207,9 @@ public class ActivityFilters extends AppCompatActivity implements View.OnClickLi
         return super.onOptionsItemSelected(item);
 
     }
+
     public void getBrandsList() {
-     //   Fragment fragment = getVisibleFragment();
+        //   Fragment fragment = getVisibleFragment();
         if (fragment != null && fragment instanceof FragmentBrandsFilter) {
             brandList = ((FragmentBrandsFilter) fragment).getBrandList();
 
@@ -189,6 +221,8 @@ public class ActivityFilters extends AppCompatActivity implements View.OnClickLi
         getCategoryList();
         getBrandsList();
         getSubCategoryList();
+        getMaxRange();
+        getMinRange();
         fragmnetLoader(versionNameIndex, bundle);
     }
 
@@ -197,6 +231,8 @@ public class ActivityFilters extends AppCompatActivity implements View.OnClickLi
         getBrandsList();
         getCategoriesList();
         getSubCategoryList();
+        getMaxRange();
+        getMinRange();
         Intent intent;
         Bundle bundle;
         switch (v.getId()) {
@@ -207,7 +243,8 @@ public class ActivityFilters extends AppCompatActivity implements View.OnClickLi
                 bundle.putSerializable(C.BRANDS_LIST, (Serializable) brandList);
                 bundle.putSerializable(C.CATEGORY_LIST, (Serializable) categoriesList);
                 bundle.putSerializable(C.SUB_CATEGORY_LIST, (Serializable) subCategoriesList);
-
+                bundle.putString(C.MIN_RANGE,minRange);
+                bundle.putString(C.MAX_RANGE,maxRange);
                 intent.putExtra(C.BUNDLE, bundle);
                 setResult(RESULT_OK, intent);
                 finish();
@@ -216,19 +253,22 @@ public class ActivityFilters extends AppCompatActivity implements View.OnClickLi
 
                 intent = new Intent();
                 bundle = new Bundle();
-                for (int i=0;i<brandList.size();i++){
+                for (int i = 0; i < brandList.size(); i++) {
                     brandList.get(i).setSelected(false);
                 }
-                for (int i=0;i<categoriesList.size();i++){
+                for (int i = 0; i < categoriesList.size(); i++) {
                     categoriesList.get(i).setSelected(false);
                 }
-                for (int i=0;i<subCategoriesList.size();i++){
+                for (int i = 0; i < subCategoriesList.size(); i++) {
                     subCategoriesList.get(i).setSelected(false);
                 }
+                minRange="0";
+                maxRange="5000";
                 bundle.putSerializable(C.BRANDS_LIST, (Serializable) brandList);
                 bundle.putSerializable(C.CATEGORY_LIST, (Serializable) categoriesList);
                 bundle.putSerializable(C.SUB_CATEGORY_LIST, (Serializable) subCategoriesList);
-
+                bundle.putString(C.MIN_RANGE,minRange);
+                bundle.putString(C.MAX_RANGE,maxRange);
                 intent.putExtra(C.BUNDLE, bundle);
                 setResult(RESULT_OK, intent);
                 finish();

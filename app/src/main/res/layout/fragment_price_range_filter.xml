@@ -42,7 +42,7 @@
        android:layout_width="match_parent"
        android:layout_height="wrap_content" app:corner_radius="10"
        app:min_value="0"
-       app:max_value="100"
+       app:max_value="5000"
        app:steps="5"
        app:bar_color="#F7BB88"
        app:bar_highlight_color="#E07416"

@@ -111,7 +111,7 @@ public class FragmentProductsListing extends Fragment implements View.OnClickLis
     LinearLayout llNoProductInCount;
     private GridLayoutManager lLayout;
     String catId, subCatId;
-    long from = 0, to = 5000;
+    String from = "0", to = "5000";
     String orderBy = "desc";
     String orderField = "created_at";
     int source;
@@ -712,6 +712,9 @@ public class FragmentProductsListing extends Fragment implements View.OnClickLis
             brandList = (List<Brand>) bundle.getSerializable(C.BRANDS_LIST);
             categoriesList = (List<Categories>) bundle.getSerializable(C.CATEGORY_LIST);
             subCatList = (List<SubCategory>) bundle.getSerializable(C.SUB_CATEGORY_LIST);
+            from=bundle.getString(C.MIN_RANGE);
+            to=bundle.getString(C.MAX_RANGE);
+
             catIdList = new ArrayList<>();
             brandId = new ArrayList<>();
             sub_cat_id = new ArrayList<>();
@@ -734,7 +737,9 @@ public class FragmentProductsListing extends Fragment implements View.OnClickLis
                 }
             }
             if (source == C.FRAGMENT_PRODUCTS_HOME && catIdList.size() == 0) {
-                catIdList.add(Integer.parseInt(catId));
+                if(catId!=null &&!catId.equals("")) {
+                    catIdList.add(Integer.parseInt(catId));
+                }
             }
 
             if (catIdList.size() > 0 || brandId.size() > 0 || sub_cat_id.size() > 0) {
@@ -754,7 +759,8 @@ public class FragmentProductsListing extends Fragment implements View.OnClickLis
         bundle.putSerializable(C.BRANDS_LIST, (Serializable) brandList);
         bundle.putSerializable(C.CATEGORY_LIST, (Serializable) categoriesList);
         bundle.putSerializable(C.SUB_CATEGORY_LIST, (Serializable) subCatList);
-
+        bundle.putString(C.MIN_RANGE,from);
+        bundle.putString(C.MAX_RANGE,to);
         intent.putExtra(C.BUNDLE, bundle);
         startActivityForResult(intent, REQUEST_CODE);
     }
