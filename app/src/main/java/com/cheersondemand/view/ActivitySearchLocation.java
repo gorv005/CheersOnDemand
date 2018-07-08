@@ -19,9 +19,10 @@ import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.cheersondemand.R;
+import com.cheersondemand.model.location.RecentLocation;
+import com.cheersondemand.model.location.RecentLocationResponse;
 import com.cheersondemand.model.location.SaveLocation;
 import com.cheersondemand.model.location.SaveLocationResponse;
-import com.cheersondemand.model.location.SelectedLocation;
 import com.cheersondemand.presenter.location.ILocationViewPresenter;
 import com.cheersondemand.presenter.location.LocationViewPresenterImpl;
 import com.cheersondemand.util.C;
@@ -38,8 +39,6 @@ import com.google.android.gms.location.places.AutocompleteFilter;
 import com.google.android.gms.location.places.Place;
 import com.google.android.gms.location.places.PlaceBuffer;
 import com.google.android.gms.location.places.Places;
-
-import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -85,11 +84,21 @@ public class ActivitySearchLocation extends AppCompatActivity implements
         util = new Util();
         iLocationViewPresenter = new LocationViewPresenterImpl(this, this);
         init();
-        setRecentSearches();
+        getRecentSearches();
     }
 
+        void  getRecentSearches(){
+            if (SharedPreference.getInstance(ActivitySearchLocation.this).getBoolean(C.IS_LOGIN_GUEST)) {
+                iLocationViewPresenter.getRecentLocation(false, "",Util.id(this) ,""+ SharedPreference.getInstance(ActivitySearchLocation.this).geGuestUser(C.GUEST_USER).getId());
+            } else {
+                String token = C.bearer+ SharedPreference.getInstance(ActivitySearchLocation.this).getUser(C.AUTH_USER).getData().getToken().getAccessToken();
+                String id = "" + SharedPreference.getInstance(ActivitySearchLocation.this).getUser(C.AUTH_USER).getData().getUser().getId();
 
-    void setRecentSearches() {
+                iLocationViewPresenter.getRecentLocation(true, token,Util.id(this) ,""+ id);
+
+            }
+        }
+   /* void setRecentSearches() {
         rlRecentSearch.setVisibility(View.VISIBLE);
         rlLocationSearch.setVisibility(View.GONE);
         List<SelectedLocation> selectedLocations = SharedPreference.getInstance(ActivitySearchLocation.this).getRecentLocations(C.LOCATION_SELECTED);
@@ -100,7 +109,7 @@ public class ActivitySearchLocation extends AppCompatActivity implements
             rvRecentSearches.setLayoutManager(mLinearLayoutManager);
             rvRecentSearches.setAdapter(adapterRecentSearches);
         }
-    }
+    }*/
 
     void init() {
         autoCompleteTextView.addTextChangedListener(new TextWatcher() {
@@ -153,11 +162,11 @@ public class ActivitySearchLocation extends AppCompatActivity implements
                     public void onItemClick(View view, int position) {
                         try {
 
-                            final SelectedLocation selectedLocation = new SelectedLocation();
+                            final RecentLocation selectedLocation = new RecentLocation();
                             final AdapterLocation.PlaceAutocomplete item = adapterLocation.getItem(position);
                             final String placeId = String.valueOf(item.placeId);
                             Log.d("TAG", "Autocomplete item selected: " + item.description);
-                            selectedLocation.setName(item.description.toString());
+                            selectedLocation.setAddress(item.description.toString());
                         /*
                              Issue a request to the Places Geo Data API to retrieve a Place object with additional details about the place.
                          */
@@ -171,7 +180,7 @@ public class ActivitySearchLocation extends AppCompatActivity implements
                                         //      Toast.makeText(getApplicationContext(), String.valueOf(places.get(0).getLatLng()), Toast.LENGTH_SHORT).show();
                                         selectedLocation.setLatitude(String.valueOf(places.get(0).getLatLng().latitude));
                                         selectedLocation.setLongitude(String.valueOf(places.get(0).getLatLng().longitude));
-                                        SharedPreference.getInstance(ActivitySearchLocation.this).addRecentSearch(C.LOCATION_SELECTED, selectedLocation);
+                                       // SharedPreference.getInstance(ActivitySearchLocation.this).addRecentSearch(C.LOCATION_SELECTED, selectedLocation);
                                         saveLocation(selectedLocation);
 
                                     } else {
@@ -196,15 +205,15 @@ public class ActivitySearchLocation extends AppCompatActivity implements
     }
 
 
-    public void saveLocation(SelectedLocation selectedLocation) {
+    public void saveLocation(RecentLocation selectedLocation) {
         SaveLocation saveLocation = new SaveLocation();
-        saveLocation.setLatitude(selectedLocation.getLatitude());
-        saveLocation.setLongitude(selectedLocation.getLongitude());
+        saveLocation.setLatitude(""+selectedLocation.getLatitude());
+        saveLocation.setLongitude(""+selectedLocation.getLongitude());
         saveLocation.setUuid(Util.id(ActivitySearchLocation.this));
         if (SharedPreference.getInstance(ActivitySearchLocation.this).getBoolean(C.IS_LOGIN_GUEST)) {
             iLocationViewPresenter.saveLocation(saveLocation, "" + SharedPreference.getInstance(ActivitySearchLocation.this).geGuestUser(C.GUEST_USER).getId());
         } else {
-            String token = "bearer " + SharedPreference.getInstance(ActivitySearchLocation.this).getUser(C.AUTH_USER).getData().getToken().getAccessToken();
+            String token = C.bearer+ SharedPreference.getInstance(ActivitySearchLocation.this).getUser(C.AUTH_USER).getData().getToken().getAccessToken();
             String id = "" + SharedPreference.getInstance(ActivitySearchLocation.this).getUser(C.AUTH_USER).getData().getUser().getId();
 
             iLocationViewPresenter.saveLocation(token, saveLocation, id);
@@ -284,6 +293,22 @@ public class ActivitySearchLocation extends AppCompatActivity implements
     public void getResponseError(String response) {
         util.setSnackbarMessage(this, response, LLView, true);
 
+    }
+
+    @Override
+    public void onRecentLocationSuccess(RecentLocationResponse response) {
+        if(response.getSuccess()){
+            rlRecentSearch.setVisibility(View.VISIBLE);
+            rlLocationSearch.setVisibility(View.GONE);
+
+            if (response.getData() != null &&response.getData().size() > 0) {
+
+                adapterRecentSearches = new AdapterRecentSearches(response.getData(), ActivitySearchLocation.this);
+                mLinearLayoutManager = new LinearLayoutManager(this);
+                rvRecentSearches.setLayoutManager(mLinearLayoutManager);
+                rvRecentSearches.setAdapter(adapterRecentSearches);
+            }
+        }
     }
 
     @Override

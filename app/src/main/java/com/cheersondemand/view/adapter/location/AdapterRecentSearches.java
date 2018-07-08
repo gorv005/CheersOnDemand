@@ -10,7 +10,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.cheersondemand.R;
-import com.cheersondemand.model.location.SelectedLocation;
+import com.cheersondemand.model.location.RecentLocation;
 import com.cheersondemand.util.ImageLoader.ImageLoader;
 import com.cheersondemand.view.ActivitySearchLocation;
 
@@ -23,7 +23,7 @@ import java.util.List;
 public class AdapterRecentSearches extends RecyclerView.Adapter<RecyclerView.ViewHolder > {
     private static final int TYPE_FOOTER = 1;
     private static final int TYPE_ITEM = 0;
-private List<SelectedLocation> horizontalList;
+private List<RecentLocation> horizontalList;
     Context context;
     ImageLoader imageLoader;
 public class ItemViewHolder extends RecyclerView.ViewHolder {
@@ -38,7 +38,7 @@ public class ItemViewHolder extends RecyclerView.ViewHolder {
 }
 
 
-    public AdapterRecentSearches(List<SelectedLocation> horizontalList, Activity context) {
+    public AdapterRecentSearches(List<RecentLocation> horizontalList, Activity context) {
         this.horizontalList = horizontalList;
         this.context=context;
         imageLoader=new ImageLoader(context);
@@ -67,7 +67,7 @@ public class ItemViewHolder extends RecyclerView.ViewHolder {
         if (holder instanceof ItemViewHolder) {
             final ItemViewHolder itemViewHolder = (ItemViewHolder) holder;
 
-            itemViewHolder.tvMainAdress.setText(horizontalList.get(position).getName());
+            itemViewHolder.tvMainAdress.setText(horizontalList.get(position).getAddress());
 
             itemViewHolder.rlRecentSearch.setOnClickListener(new View.OnClickListener() {
                 @Override

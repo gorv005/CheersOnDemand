@@ -3,6 +3,7 @@ package com.cheersondemand.intractor.location;
 import com.cheersondemand.frameworks.retrofit.ResponseResolver;
 import com.cheersondemand.frameworks.retrofit.RestError;
 import com.cheersondemand.frameworks.retrofit.WebServicesWrapper;
+import com.cheersondemand.model.location.RecentLocationResponse;
 import com.cheersondemand.model.location.SaveLocation;
 import com.cheersondemand.model.location.SaveLocationResponse;
 import com.google.gson.Gson;
@@ -72,6 +73,39 @@ public class LocationViewIntractorImpl implements ILocationViewIntractor {
                     }
                 }
             },token,saveLocation,id);
+        }
+        catch (Exception e){
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void getRecentLocation(boolean isAuth, String token, String uuid, String user_id, final OnLoginFinishedListener listener) {
+        try {
+
+            WebServicesWrapper.getInstance().getRecentLocations(new ResponseResolver<RecentLocationResponse>() {
+                @Override
+                public void onSuccess(RecentLocationResponse r, Response response) {
+                    listener.onRecentLocationSuccess(r);
+                }
+
+                @Override
+                public void onFailure(RestError error, String msg) {
+                    if(error==null ||error.getError()==null){
+
+                        msg=msg.replace("[]","null");
+                        msg=msg.replace("{}","null");
+
+                        Gson gson=new Gson();
+                        RecentLocationResponse response= gson.fromJson(msg,RecentLocationResponse.class);
+                        listener.onRecentLocationSuccess(response);
+
+                    }
+                    else {
+                        listener.onError(error.getError());
+                    }
+                }
+            },isAuth,token,uuid,user_id);
         }
         catch (Exception e){
             e.printStackTrace();
