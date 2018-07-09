@@ -75,4 +75,9 @@ public interface C {
     String MSG ="" ;
     String MIN_RANGE ="minRange" ;
    String MAX_RANGE = "maxRange";
+    String HELP_ITEM ="help_center" ;
+    int FRAGMENT_HELP_CENTER = 22;
+    int FRAGMENT_HELP_CENTER_PAGES =23 ;
+    String TAG_FRAGMENT_HELP_CENTER_PAGES ="TAG_FRAGMENT_HELP_CENTER_PAGES" ;
+
 }

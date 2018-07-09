@@ -160,6 +160,7 @@ public class FragmentProfile extends Fragment implements View.OnClickListener,IP
         llChangePassword.setOnClickListener(this);
         llWishList.setOnClickListener(this);
         llSavedAddress.setOnClickListener(this);
+        llHelp.setOnClickListener(this);
     }
 
     @Override
@@ -222,6 +223,13 @@ public class FragmentProfile extends Fragment implements View.OnClickListener,IP
                 intent3.putExtra(C.FRAGMENT_ACTION, C.FRAGMENT_ADDRESS_LIST);
                 startActivity(intent3);
 
+                break;
+
+            case R.id.llHelp:
+                Intent intent4= new Intent(getActivity(), ActivityContainer.class);
+
+                intent4.putExtra(C.FRAGMENT_ACTION, C.FRAGMENT_HELP_CENTER);
+                startActivity(intent4);
                 break;
         }
     }
