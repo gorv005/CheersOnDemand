@@ -1,0 +1,173 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@color/profile_back"
+    android:id="@+id/rlView"
+    android:layout_height="match_parent"
+    >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingLeft="20dp"
+        android:layout_marginBottom="80dp"
+
+        android:background="@color/white"
+        android:paddingRight="20dp">
+
+        <ScrollView
+            android:fillViewport="true"
+            android:scrollbars="none"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:focusable="true"
+
+                android:focusableInTouchMode="true"
+                android:orientation="vertical">
+
+                <TextView
+
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    android:fontFamily="@font/sf_ui_display_regular"
+                    android:text="@string/store_name"
+                    android:textColor="@color/profile_updated_text_color"
+                    android:textSize="14sp" />
+
+                <EditText
+                    android:id="@+id/etStoreName"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:layout_centerHorizontal="true"
+                    android:focusable="true"
+                    android:focusableInTouchMode="true"
+                    android:fontFamily="@font/sf_ui_display_regular"
+                    android:maxLines="1"
+                    android:singleLine="true"
+                    android:textColor="@color/editext_text_color"
+                    android:textColorHint="@color/editext_hint_color"
+                    android:textCursorDrawable="@drawable/edit_text_cursor_color"
+                    android:textSize="16sp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    android:fontFamily="@font/sf_ui_display_regular"
+                    android:text="@string/contact_number"
+                    android:textColor="@color/profile_updated_text_color"
+                    android:textSize="14sp" />
+
+
+                <EditText
+                    android:id="@+id/etContactNo"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:layout_centerHorizontal="true"
+                    android:fontFamily="@font/sf_ui_display_regular"
+                    android:maxLines="1"
+                    android:digits="0123456789+,;*#"
+                    android:maxLength="10"
+                    android:singleLine="true"
+                    android:textColor="@color/editext_text_color"
+                    android:textColorHint="@color/editext_hint_color"
+                    android:textCursorDrawable="@drawable/edit_text_cursor_color"
+                    android:textSize="16sp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    android:fontFamily="@font/sf_ui_display_regular"
+                    android:text="@string/address_line_1"
+                    android:textColor="@color/profile_updated_text_color"
+                    android:textSize="14sp" />
+
+                <EditText
+                    android:id="@+id/etAddLine1"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:layout_centerHorizontal="true"
+                    android:fontFamily="@font/sf_ui_display_regular"
+                    android:maxLines="1"
+                    android:singleLine="true"
+                    android:textColor="@color/editext_text_color"
+                    android:textColorHint="@color/editext_hint_color"
+                    android:textCursorDrawable="@drawable/edit_text_cursor_color"
+                    android:textSize="16sp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    android:fontFamily="@font/sf_ui_display_regular"
+                    android:text="@string/address_line_2"
+                    android:textColor="@color/profile_updated_text_color"
+                    android:textSize="14sp" />
+
+                <EditText
+                    android:id="@+id/etAddLine2"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:layout_centerHorizontal="true"
+                    android:fontFamily="@font/sf_ui_display_regular"
+                    android:maxLines="1"
+                    android:singleLine="true"
+                    android:textColor="@color/editext_text_color"
+                    android:textColorHint="@color/editext_hint_color"
+                    android:textCursorDrawable="@drawable/edit_text_cursor_color"
+                    android:textSize="16sp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    android:fontFamily="@font/sf_ui_display_regular"
+                    android:text="@string/email"
+                    android:textColor="@color/profile_updated_text_color"
+                    android:textSize="14sp" />
+
+                <EditText
+                    android:id="@+id/etEmail"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:layout_centerHorizontal="true"
+                    android:fontFamily="@font/sf_ui_display_regular"
+                    android:maxLines="1"
+                    android:singleLine="true"
+                    android:textColor="@color/editext_text_color"
+                    android:textColorHint="@color/editext_hint_color"
+                    android:textCursorDrawable="@drawable/edit_text_cursor_color"
+                    android:textSize="16sp" />
+
+
+
+            </LinearLayout>
+        </ScrollView>
+    </LinearLayout>
+
+    <Button
+        android:layout_marginBottom="20dp"
+        android:layout_alignParentBottom="true"
+        android:id="@+id/btnSubmitRequest"
+
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginEnd="20dp"
+        android:layout_marginStart="20dp"
+        android:background="@drawable/bg_button_noborder_disable"
+        android:fontFamily="@font/sf_ui_display_regular"
+        android:text="@string/submit_request"
+        android:textAllCaps="true"
+        android:textColor="@color/white"
+        android:textSize="13.4sp" />
+
+</RelativeLayout>

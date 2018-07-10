@@ -1,7 +1,10 @@
 package com.cheersondemand.view.fragments;
 
 
+import android.app.Dialog;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -226,10 +229,10 @@ public class FragmentProfile extends Fragment implements View.OnClickListener,IP
                 break;
 
             case R.id.llHelp:
-                Intent intent4= new Intent(getActivity(), ActivityContainer.class);
+              /*  Intent intent4= new Intent(getActivity(), ActivityContainer.class);
 
                 intent4.putExtra(C.FRAGMENT_ACTION, C.FRAGMENT_HELP_CENTER);
-                startActivity(intent4);
+                startActivity(intent4);*/
                 break;
         }
     }
@@ -314,4 +317,45 @@ public class FragmentProfile extends Fragment implements View.OnClickListener,IP
     public void hideProgress() {
 
     }
+
+
+
+    void dialog(){
+        final Dialog dialog = new Dialog(getActivity(), R.style.FullHeightDialog); //this is a reference to the style above
+        dialog.setContentView(R.layout.dialog); //I saved the xml file above as yesnomessage.xml
+        dialog.setCancelable(true);
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+
+//to set the message
+        TextView title =(TextView) dialog.findViewById(R.id.tvmessagedialogtitle);
+
+        TextView message =(TextView) dialog.findViewById(R.id.tvmessagedialogtext);
+        title.setText(getString(R.string.logout));
+        message.setText(getString(R.string.logout));
+//add some action to the buttons
+        String num = "0123456789";
+        Button  yes = (Button) dialog.findViewById(R.id.bmessageDialogYes);
+        yes.setOnClickListener(new View.OnClickListener() {
+
+            public void onClick(View v) {
+                /*Intent callIntent = new Intent(Intent.ACTION_CALL);
+                callIntent.setData(Uri.parse("tel: " + num));
+                dialog.dismiss();
+                startActivity(callIntent);
+*/
+            }
+        });
+
+        Button  no = (Button) dialog.findViewById(R.id.bmessageDialogNo);
+        no.setOnClickListener(new View.OnClickListener() {
+
+            public void onClick(View v) {
+                // TODO Auto-generated method stub
+                dialog.dismiss();
+            }
+        });
+
+        dialog.show();
+    }
+
 }

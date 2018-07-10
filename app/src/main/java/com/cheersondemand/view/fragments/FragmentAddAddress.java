@@ -58,6 +58,7 @@ public class FragmentAddAddress extends Fragment implements View.OnClickListener
     @BindView(R.id.rlView)
     RelativeLayout rlView;
     Util util;
+
     public FragmentAddAddress() {
         // Required empty public constructor
     }
@@ -82,6 +83,7 @@ public class FragmentAddAddress extends Fragment implements View.OnClickListener
         unbinder = ButterKnife.bind(this, view);
         return view;
     }
+
 
     @Override
     public void onResume() {

@@ -154,6 +154,10 @@
     <string name="how_it_works">How it works</string>
     <string name="terms_od_services">Terms of Service</string>
     <string name="privacy_policy">Privacy Policy</string>
+    <string name="store_name">Store Name</string>
+    <string name="contact_number">Contact Number</string>
+    <string name="submit_request">Submit Request</string>
+    <string name="become_partner">Become Partner</string>
     <!--
         <string name="default_web_client_id">999387565226-hdnnhm6rhgik5ljvm06shotsi7j9883c.apps.googleusercontent.com</string>
     -->

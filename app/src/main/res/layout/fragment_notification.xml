@@ -3,6 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:id="@+id/LLView"
     android:background="@color/profile_back"
     tools:context="com.cheersondemand.view.fragments.FragmentCart">
 
@@ -84,7 +85,7 @@
         android:layout_height="wrap_content">
 
         <android.support.v7.widget.RecyclerView
-            android:id="@+id/rvNotofications"
+            android:id="@+id/rvNotifications"
             android:padding="20dp"
             android:scrollbars="none"
             android:background="@color/white"
