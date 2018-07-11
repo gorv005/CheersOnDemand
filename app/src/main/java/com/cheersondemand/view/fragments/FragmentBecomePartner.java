@@ -253,6 +253,7 @@ public class FragmentBecomePartner extends Fragment implements View.OnClickListe
         warehouse.setAddress(etAddLine1.getText().toString() +" "+etAddLine2.getText().toString());
         warehouse.setContactNumber(etContactNo.getText().toString());
         warehouse.setEmail(etEmail.getText().toString());
+        addStore.setWarehouse(warehouse);
         iAddStoreViewPresenter.addStore(addStore);
 
     }
@@ -264,11 +265,17 @@ public class FragmentBecomePartner extends Fragment implements View.OnClickListe
             etAddLine2.setText("");
             etEmail.setText("");
             etContactNo.setText("");
+            etStoreName.clearFocus();
+            etAddLine1.clearFocus();
+            etAddLine2.clearFocus();
+            etEmail.clearFocus();
+            etContactNo.clearFocus();
             util.setSnackbarMessage(getActivity(), Response.getMessage(), rlView, true);
 
         }
         else {
-            util.setSnackbarMessage(getActivity(), Response.getMessage(), rlView, true);
+            if(Response.getErrors()!=null && Response.getErrors().size()>0)
+            util.setSnackbarMessage(getActivity(), Response.getErrors().get(0).getField(), rlView, true);
 
         }
     }

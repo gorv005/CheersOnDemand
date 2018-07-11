@@ -115,8 +115,10 @@ public class FragmentAddressList extends Fragment implements View.OnClickListene
     }
 
     @Override
-    public void onRemoveAddressSuccess(AddressResponse Response) {
+    public void onRemoveAddressSuccess(AddressAddResponse Response) {
         if (Response.getSuccess()) {
+            util.setSnackbarMessage(getActivity(), Response.getMessage(), rlView, false);
+
             addresses.remove(position);
             if(addresses.size()==0){
                 llNoProductInCount.setVisibility(View.VISIBLE);

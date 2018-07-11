@@ -1,5 +1,7 @@
 package com.cheersondemand.util;
 
+import android.os.Environment;
+
 public interface C {
     long SPLASH_LOADER_TIME = 5000;
     String BUNDLE ="bundle" ;
@@ -80,4 +82,7 @@ public interface C {
     int FRAGMENT_HELP_CENTER_PAGES =23 ;
     String TAG_FRAGMENT_HELP_CENTER_PAGES ="TAG_FRAGMENT_HELP_CENTER_PAGES" ;
 
+    public static final String IMAGE_PATH = Environment
+            .getExternalStorageDirectory().getPath() + "/COD";
+    int FRAGMENT_BECOME_PARTNER =24 ;
 }

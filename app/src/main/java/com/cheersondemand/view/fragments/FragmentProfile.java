@@ -18,6 +18,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.cheersondemand.R;
+import com.cheersondemand.model.GuestUserCreateResponse;
 import com.cheersondemand.model.authentication.AuthenticationResponse;
 import com.cheersondemand.model.logout.LogoutRequest;
 import com.cheersondemand.model.logout.LogoutResponse;
@@ -46,7 +47,7 @@ import butterknife.Unbinder;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class FragmentProfile extends Fragment implements View.OnClickListener,IProfileViewPresenter.IProfileView,IOrderViewPresenterPresenter.IOrderView {
+public class FragmentProfile extends Fragment implements View.OnClickListener, IProfileViewPresenter.IProfileView, IOrderViewPresenterPresenter.IOrderView {
 
 
     @BindView(R.id.imgProfile)
@@ -92,6 +93,9 @@ public class FragmentProfile extends Fragment implements View.OnClickListener,IP
     IProfileViewPresenter iProfileViewPresenter;
     WishListDataResponse productListResponse;
     IOrderViewPresenterPresenter iOrderViewPresenterPresenter;
+    @BindView(R.id.llBecomePartner)
+    RelativeLayout llBecomePartner;
+
     public FragmentProfile() {
         // Required empty public constructor
     }
@@ -101,42 +105,13 @@ public class FragmentProfile extends Fragment implements View.OnClickListener,IP
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         imageLoader = new ImageLoader(getActivity());
-        iProfileViewPresenter=new ProfileViewPresenterImpl(this,getActivity());
-        iOrderViewPresenterPresenter=new OrderViewPresenterImpl(this,getActivity());
+        iProfileViewPresenter = new ProfileViewPresenterImpl(this, getActivity());
+        iOrderViewPresenterPresenter = new OrderViewPresenterImpl(this, getActivity());
     }
 
     @Override
     public void onResume() {
         super.onResume();
-
-        getWishList();
-    }
-
-
-    void  getWishList(){
-        if (SharedPreference.getInstance(getActivity()).getBoolean(C.IS_LOGIN_GUEST)) {
-            String id = "" + SharedPreference.getInstance(getActivity()).geGuestUser(C.GUEST_USER).getId();
-            iOrderViewPresenterPresenter.getWishList(false,"",id, Util.id(getActivity()));
-        } else {
-            String id = "" + SharedPreference.getInstance(getActivity()).getUser(C.AUTH_USER).getData().getUser().getId();
-
-            String token = C.bearer + SharedPreference.getInstance(getActivity()).getUser(C.AUTH_USER).getData().getToken().getAccessToken();
-            iOrderViewPresenterPresenter.getWishList(true,token,id, Util.id(getActivity()));
-        }
-    }
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_profile, container, false);
-        unbinder = ButterKnife.bind(this, view);
-        return view;
-    }
-
-    @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-
         isLogin = SharedPreference.getInstance(getActivity()).getBoolean(C.IS_LOGIN);
 
         if (isLogin) {
@@ -155,7 +130,37 @@ public class FragmentProfile extends Fragment implements View.OnClickListener,IP
             tvName.setText(getString(R.string.sign_in));
             llChangePassword.setVisibility(View.GONE);
             viewChangePassword.setVisibility(View.GONE);
+            llLogout.setVisibility(View.GONE);
         }
+        getWishList();
+    }
+
+
+    void getWishList() {
+        if (SharedPreference.getInstance(getActivity()).getBoolean(C.IS_LOGIN_GUEST)) {
+            String id = "" + SharedPreference.getInstance(getActivity()).geGuestUser(C.GUEST_USER).getId();
+            iOrderViewPresenterPresenter.getWishList(false, "", id, Util.id(getActivity()));
+        } else {
+            String id = "" + SharedPreference.getInstance(getActivity()).getUser(C.AUTH_USER).getData().getUser().getId();
+
+            String token = C.bearer + SharedPreference.getInstance(getActivity()).getUser(C.AUTH_USER).getData().getToken().getAccessToken();
+            iOrderViewPresenterPresenter.getWishList(true, token, id, Util.id(getActivity()));
+        }
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        // Inflate the layout for this fragment
+        View view = inflater.inflate(R.layout.fragment_profile, container, false);
+        unbinder = ButterKnife.bind(this, view);
+        return view;
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
 
         btnEdit.setOnClickListener(this);
         llProfileView.setOnClickListener(this);
@@ -164,6 +169,7 @@ public class FragmentProfile extends Fragment implements View.OnClickListener,IP
         llWishList.setOnClickListener(this);
         llSavedAddress.setOnClickListener(this);
         llHelp.setOnClickListener(this);
+        llBecomePartner.setOnClickListener(this);
     }
 
     @Override
@@ -184,7 +190,7 @@ public class FragmentProfile extends Fragment implements View.OnClickListener,IP
                     intent.putExtra(C.FRAGMENT_ACTION, C.FRAGMENT_AUTHNITICATION);
                     bundle.putBoolean(C.IS_LOGIN_SCREEN, true);
 
-                    intent.putExtra(C.BUNDLE,bundle);
+                    intent.putExtra(C.BUNDLE, bundle);
                     startActivity(intent);
                 }
                 break;
@@ -193,15 +199,11 @@ public class FragmentProfile extends Fragment implements View.OnClickListener,IP
                 Intent intent1 = new Intent(getActivity(), ActivityContainer.class);
                 Bundle bundle1 = new Bundle();
                 intent1.putExtra(C.FRAGMENT_ACTION, C.FRAGMENT_UPDATE_PROFILE);
-                intent1.putExtra(C.BUNDLE,bundle1);
+                intent1.putExtra(C.BUNDLE, bundle1);
                 startActivity(intent1);
                 break;
             case R.id.llLogout:
-                LogoutRequest logoutRequest=new LogoutRequest();
-                logoutRequest.setToken(SharedPreference.getInstance(getActivity()).getUser(C.AUTH_USER).getData().getToken().getAccessToken());
-                logoutRequest.setDeviceToken(SharedPreference.getInstance(getActivity()).getString(C.DEVICE_TOKEN));
-
-                iProfileViewPresenter.logout(logoutRequest);
+                dialog();
                 break;
 
             case R.id.llChangePassword:
@@ -212,12 +214,12 @@ public class FragmentProfile extends Fragment implements View.OnClickListener,IP
                 }
                 break;
             case R.id.llWishList:
-                    Intent intent2 = new Intent(getActivity(), ActivityContainer.class);
-                    Bundle bundle2=new Bundle();
-                    bundle2.putSerializable(C.PRODUCT_LIST,productListResponse);
-                    intent2.putExtra(C.BUNDLE,bundle2);
-                    intent2.putExtra(C.FRAGMENT_ACTION, C.FRAGMENT_WISHLIST);
-                    startActivity(intent2);
+                Intent intent2 = new Intent(getActivity(), ActivityContainer.class);
+                Bundle bundle2 = new Bundle();
+                bundle2.putSerializable(C.PRODUCT_LIST, productListResponse);
+                intent2.putExtra(C.BUNDLE, bundle2);
+                intent2.putExtra(C.FRAGMENT_ACTION, C.FRAGMENT_WISHLIST);
+                startActivity(intent2);
 
                 break;
             case R.id.llSavedAddress:
@@ -229,29 +231,38 @@ public class FragmentProfile extends Fragment implements View.OnClickListener,IP
                 break;
 
             case R.id.llHelp:
-              /*  Intent intent4= new Intent(getActivity(), ActivityContainer.class);
+                Intent intent4 = new Intent(getActivity(), ActivityContainer.class);
 
                 intent4.putExtra(C.FRAGMENT_ACTION, C.FRAGMENT_HELP_CENTER);
-                startActivity(intent4);*/
+                startActivity(intent4);
+                break;
+            case R.id.llBecomePartner:
+                Intent intent5 = new Intent(getActivity(), ActivityContainer.class);
+                intent5.putExtra(C.FRAGMENT_ACTION, C.FRAGMENT_BECOME_PARTNER);
+                startActivity(intent5);
                 break;
         }
     }
 
     @Override
     public void getResponseSuccess(LogoutResponse response) {
-        if(response.getSuccess()){
-            SharedPreference.getInstance(getActivity()).setBoolean(C.IS_LOGIN,false);
+        if (response.getSuccess()) {
+            SharedPreference.getInstance(getActivity()).setBoolean(C.IS_LOGIN, false);
             Intent intent = new Intent(getActivity(), MainActivity.class);
-            Bundle bundle=new Bundle();
-            bundle.putBoolean(C.IS_LOGIN_SCREEN,true);
-            intent.putExtra(C.FRAGMENT_ACTION,C.FRAGMENT_AUTHNITICATION);
+            Bundle bundle = new Bundle();
+            bundle.putBoolean(C.IS_LOGIN_SCREEN, true);
+            intent.putExtra(C.FRAGMENT_ACTION, C.FRAGMENT_AUTHNITICATION);
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-            intent.putExtra(C.BUNDLE,bundle);
+            intent.putExtra(C.BUNDLE, bundle);
             getActivity().startActivity(intent);
         }
 
     }
 
+    @Override
+    public void onSuccessUpdateProfile(GuestUserCreateResponse Response) {
+
+    }
 
 
     @Override
@@ -291,16 +302,15 @@ public class FragmentProfile extends Fragment implements View.OnClickListener,IP
 
     @Override
     public void getWishListSuccess(WishListDataResponse response) {
-            if(response.getSuccess()){
-                productListResponse=response;
-                if(response.getData()!=null &&response.getData().size()>0){
-                    tvNumberWishListItems.setVisibility(View.VISIBLE);
-                    tvNumberWishListItems.setText(""+response.getData().size());
-                }
-                else {
-                    tvNumberWishListItems.setVisibility(View.GONE);
-                }
+        if (response.getSuccess()) {
+            productListResponse = response;
+            if (response.getData() != null && response.getData().size() > 0) {
+                tvNumberWishListItems.setVisibility(View.VISIBLE);
+                tvNumberWishListItems.setText("" + response.getData().size());
+            } else {
+                tvNumberWishListItems.setVisibility(View.GONE);
             }
+        }
     }
 
     @Override
@@ -319,34 +329,35 @@ public class FragmentProfile extends Fragment implements View.OnClickListener,IP
     }
 
 
-
-    void dialog(){
+    void dialog() {
         final Dialog dialog = new Dialog(getActivity(), R.style.FullHeightDialog); //this is a reference to the style above
         dialog.setContentView(R.layout.dialog); //I saved the xml file above as yesnomessage.xml
         dialog.setCancelable(true);
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
 
 //to set the message
-        TextView title =(TextView) dialog.findViewById(R.id.tvmessagedialogtitle);
+        TextView title = (TextView) dialog.findViewById(R.id.tvmessagedialogtitle);
 
-        TextView message =(TextView) dialog.findViewById(R.id.tvmessagedialogtext);
+        TextView message = (TextView) dialog.findViewById(R.id.tvmessagedialogtext);
         title.setText(getString(R.string.logout));
-        message.setText(getString(R.string.logout));
+        message.setText(getString(R.string.are_you_sure_logout));
 //add some action to the buttons
         String num = "0123456789";
-        Button  yes = (Button) dialog.findViewById(R.id.bmessageDialogYes);
+        Button yes = (Button) dialog.findViewById(R.id.bmessageDialogYes);
+        yes.setText(getString(R.string.logout));
         yes.setOnClickListener(new View.OnClickListener() {
 
             public void onClick(View v) {
-                /*Intent callIntent = new Intent(Intent.ACTION_CALL);
-                callIntent.setData(Uri.parse("tel: " + num));
-                dialog.dismiss();
-                startActivity(callIntent);
-*/
+                LogoutRequest logoutRequest = new LogoutRequest();
+                logoutRequest.setToken(SharedPreference.getInstance(getActivity()).getUser(C.AUTH_USER).getData().getToken().getAccessToken());
+                logoutRequest.setDeviceToken(SharedPreference.getInstance(getActivity()).getString(C.DEVICE_TOKEN));
+
+                iProfileViewPresenter.logout(logoutRequest);
             }
         });
 
-        Button  no = (Button) dialog.findViewById(R.id.bmessageDialogNo);
+        Button no = (Button) dialog.findViewById(R.id.bmessageDialogNo);
+        no.setText(getString(R.string.cancel));
         no.setOnClickListener(new View.OnClickListener() {
 
             public void onClick(View v) {

@@ -111,9 +111,9 @@ public class AddressViewIntractorImpl implements IAddressViewIntractor {
     public void RemoveAddAddress(String token, String userId, String id,final OnFinishedListener listener) {
         try {
 
-            WebServicesWrapper.getInstance().removeAddress(new ResponseResolver<AddressResponse>() {
+            WebServicesWrapper.getInstance().removeAddress(new ResponseResolver<AddressAddResponse>() {
                 @Override
-                public void onSuccess(AddressResponse r, Response response) {
+                public void onSuccess(AddressAddResponse r, Response response) {
                     listener.onRemoveAddressSucess(r);
                 }
 
@@ -122,7 +122,7 @@ public class AddressViewIntractorImpl implements IAddressViewIntractor {
                     if(error==null ||error.getError()==null){
 
                         Gson gson=new Gson();
-                        AddressResponse response= gson.fromJson(msg,AddressResponse.class);
+                        AddressAddResponse response= gson.fromJson(msg,AddressAddResponse.class);
                         listener.onRemoveAddressSucess(response);
 
                     }

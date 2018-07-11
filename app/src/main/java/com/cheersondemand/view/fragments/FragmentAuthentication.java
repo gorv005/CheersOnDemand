@@ -211,8 +211,8 @@ public class FragmentAuthentication extends Fragment implements IAuthenitication
         Typeface typeface = ResourcesCompat.getFont(getActivity(), R.font.sf_ui_display_regular);
         etPasswordLogin.setTypeface(typeface);
         etPassword.setTypeface(typeface);
-        etEmailLogin.setText("gorv005@yopmail.com");
-        etPasswordLogin.setText("Admin@123");
+        /*etEmailLogin.setText("gorv005@yopmail.com");
+        etPasswordLogin.setText("Admin@123");*/
         if(isLoginScreen){
             viewA.setVisibility(View.GONE);
             viewB.setVisibility(View.VISIBLE);
@@ -460,10 +460,10 @@ public class FragmentAuthentication extends Fragment implements IAuthenitication
                 break;
             case R.id.skip_and_continue_login:
                 if (Util.isNetworkConnectivity(getActivity())) {
-                  gotoHome();
-                   /* CategoryRequest categoryRequest=new CategoryRequest();
+                  //gotoHome();
+                    GenRequest categoryRequest=new GenRequest();
                     categoryRequest.setUuid(Util.id(getActivity()));
-                    iAutheniticationPresenter.createGuestUser(categoryRequest);*/
+                    iAutheniticationPresenter.createGuestUser(categoryRequest);
                 }
                 break;
             case R.id.btnSignUp:

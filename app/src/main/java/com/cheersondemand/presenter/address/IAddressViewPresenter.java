@@ -21,7 +21,7 @@ public interface IAddressViewPresenter {
     void onDestroy();
 
     interface IAddressView {
-        void onRemoveAddressSuccess(AddressResponse Response);
+        void onRemoveAddressSuccess(AddressAddResponse Response);
 
         void onAddAddressSuccess(AddressAddResponse Response);
 

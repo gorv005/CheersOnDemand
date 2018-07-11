@@ -3,6 +3,7 @@ package com.cheersondemand.util;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.support.design.widget.Snackbar;
@@ -144,7 +145,7 @@ public class Util {
     public static void setImage(Context context, String url, ImageView imageView){
         Glide.with(context)
                 .load(url)
-               // .placeholder(R.drawable.placeholder)
+                //.placeholder(R.drawable.default_placeholder)
     //.error(R.drawable.imagenotfound)
                 .into(imageView);
     }
@@ -189,4 +190,20 @@ public class Util {
             e.printStackTrace();
         }
     }
+
+    public static Bitmap scaleDown(Bitmap realImage, float maxImageSize,
+                                   boolean filter) {
+
+        float ratio = Math.min(
+                (float) maxImageSize / realImage.getWidth(),
+                (float) maxImageSize / realImage.getHeight());
+        int width = Math.round((float) ratio * realImage.getWidth());
+        int height = Math.round((float) ratio * realImage.getHeight());
+
+        Bitmap newBitmap = Bitmap.createScaledBitmap(realImage, width,
+                height, filter);
+        //  Bitmap newBitmap=   Bitmap.createScaledBitmap(realImage,(int)(realImage.getWidth()*0.9), (int)(realImage.getHeight()*0.9), true);
+        return newBitmap;
+    }
+
 }

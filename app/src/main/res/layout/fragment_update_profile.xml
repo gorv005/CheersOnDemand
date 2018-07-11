@@ -4,6 +4,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@color/profile_back"
     android:layout_height="match_parent"
+    android:id="@+id/rlView"
     tools:context="com.cheersondemand.view.fragments.FragmentUpdateProfile">
 
 
@@ -38,6 +39,7 @@
                 app:riv_oval="false" />
 
             <ImageView
+                android:id="@+id/ivCamera"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
                 android:layout_centerInParent="true"

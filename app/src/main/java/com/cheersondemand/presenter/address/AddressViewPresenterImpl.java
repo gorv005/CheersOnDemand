@@ -23,9 +23,9 @@ public class AddressViewPresenterImpl implements IAddressViewPresenter, IAddress
     }
 
     @Override
-    public void onRemoveAddressSucess(AddressResponse Response) {
+    public void onRemoveAddressSucess(AddressAddResponse Response) {
         if (mView != null) {
-            //mView.hideProgress();
+            mView.hideProgress();
             mView.onRemoveAddressSuccess(Response);
         }
     }

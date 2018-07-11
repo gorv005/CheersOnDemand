@@ -118,16 +118,19 @@ public class FragmentNotification extends Fragment implements View.OnClickListen
         if (Response.getSuccess()) {
             notifications = Response.getData();
             if(notifications!=null && notifications.size()>0) {
+                llNoProductInCount.setVisibility(View.GONE);
+
                 adapterNotification = new AdapterNotification(notifications, getActivity());
                 rvNotifications.setAdapter(adapterNotification);
             }
             else {
-                util.setSnackbarMessage(getActivity(), Response.getMessage(), LLView, true);
-
+               // util.setSnackbarMessage(getActivity(), Response.getMessage(), LLView, true);
+                llNoProductInCount.setVisibility(View.VISIBLE);
             }
         }
         else {
             util.setSnackbarMessage(getActivity(), Response.getMessage(), LLView, true);
+            llNoProductInCount.setVisibility(View.VISIBLE);
 
         }
     }

@@ -12,7 +12,7 @@ import com.cheersondemand.model.address.AddressResponse;
 
 public interface IAddressViewIntractor {
     interface OnFinishedListener {
-        void onRemoveAddressSucess(AddressResponse Response);
+        void onRemoveAddressSucess(AddressAddResponse Response);
         void onAddAddressSucess(AddressAddResponse Response);
         void onEditAddressSucess(AddressAddResponse Response);
         void onAddressListSucess(AddressResponse Response);

@@ -355,7 +355,7 @@ public class FragmentAddAddress extends Fragment implements View.OnClickListener
     }
 
     @Override
-    public void onRemoveAddressSuccess(AddressResponse response) {
+    public void onRemoveAddressSuccess(AddressAddResponse response) {
         if(response.getSuccess()){
             util.setSnackbarMessage(getActivity(), response.getMessage(), rlView, false);
         }
@@ -409,11 +409,13 @@ public class FragmentAddAddress extends Fragment implements View.OnClickListener
 
     @Override
     public void showProgress() {
+        util.showDialog(C.MSG,getActivity());
 
     }
 
     @Override
     public void hideProgress() {
+        util.hideDialog();
 
     }
 }
