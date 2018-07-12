@@ -14,12 +14,9 @@ import com.cheersondemand.util.C;
 import com.cheersondemand.util.SharedPreference;
 import com.cheersondemand.view.fragments.FragmentAuthentication;
 import com.cheersondemand.view.fragments.FragmentSplash;
-import com.crashlytics.android.Crashlytics;
 import com.google.firebase.iid.FirebaseInstanceId;
 
 import java.util.List;
-
-import io.fabric.sdk.android.Fabric;
 
 public class    MainActivity extends AppCompatActivity {
     private Bundle bundle;
@@ -29,7 +26,7 @@ public class    MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Fabric.with(this, new Crashlytics());
+      //  Fabric.with(this, new Crashlytics());
         getWindow().getDecorView().setSystemUiVisibility(
                 View.SYSTEM_UI_FLAG_LAYOUT_STABLE
                         | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);

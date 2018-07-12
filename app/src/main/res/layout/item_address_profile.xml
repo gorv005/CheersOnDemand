@@ -15,12 +15,20 @@
         android:id="@+id/rlAddName"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
-        <ImageView
+        <RelativeLayout
             android:id="@+id/location"
-            android:src="@drawable/unlike"
+
+            android:layout_centerVertical="true"
+            android:background="@drawable/offer_per_back"
+            android:layout_width="35dp"
+            android:layout_height="35dp">
+        <ImageView
+            android:src="@drawable/placeholder_6"
             android:layout_marginTop="5dp"
+            android:layout_centerInParent="true"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
+        </RelativeLayout>
         <TextView
             android:layout_toRightOf="@id/location"
             android:id="@+id/tvName"
@@ -38,7 +46,7 @@
     <TextView
         android:layout_below="@id/rlAddName"
         android:id="@+id/tvSubAddress"
-        android:layout_marginLeft="30dp"
+        android:layout_marginLeft="50dp"
         android:textColor="@color/profile_text_color"
         android:fontFamily="@font/sf_ui_display_regular"
         android:text="Name"

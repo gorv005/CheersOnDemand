@@ -39,6 +39,11 @@ List<StoreList> filterList;
         if(store!=null){
             lastCheckedPosition=store.getId();
         }
+        else {
+            if(sideMenuItems!=null && sideMenuItems.size()>0) {
+                lastCheckedPosition = sideMenuItems.get(0).getId();
+            }
+        }
     }
 
 

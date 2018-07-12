@@ -152,14 +152,14 @@ public class FragmentForgotPassword extends Fragment implements View.OnClickList
                 tvSuccessMsg.setTextColor(ContextCompat.getColor(getActivity(), R.color.green));
             }
         else {
-            util.setSnackbarMessage(getActivity(), getString(R.string.product_already_in_cart), LLView, true);
+            util.setSnackbarMessage(getActivity(), response.getMessage(), LLView, true);
 
         }
     }
 
     @Override
     public void getResponseError(String response) {
-        util.setSnackbarMessage(getActivity(), getString(R.string.product_already_in_cart), LLView, true);
+        util.setSnackbarMessage(getActivity(), response, LLView, true);
 
     }
 

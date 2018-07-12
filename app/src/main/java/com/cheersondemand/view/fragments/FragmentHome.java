@@ -27,7 +27,6 @@ import com.cheersondemand.model.SectionDataModel;
 import com.cheersondemand.model.SingleItemModel;
 import com.cheersondemand.model.SubCategoryResponse;
 import com.cheersondemand.model.authentication.GenRequest;
-import com.cheersondemand.model.location.SelectedLocation;
 import com.cheersondemand.model.order.CreateOrderResponse;
 import com.cheersondemand.model.order.addtocart.AddToCartRequest;
 import com.cheersondemand.model.order.addtocart.AddToCartResponse;
@@ -84,7 +83,7 @@ public class FragmentHome extends Fragment implements IHomeViewPresenterPresente
     IOrderViewPresenterPresenter iOrderViewPresenterPresenter;
 
     StoreList store;
-    List<SelectedLocation> selectedLocation;
+    String selectedLocation;
     @BindView(R.id.rlSearch)
     RelativeLayout rlSearch;
     @BindView(R.id.tvLocationName)
@@ -138,15 +137,7 @@ public class FragmentHome extends Fragment implements IHomeViewPresenterPresente
     @Override
     public void onResume() {
         super.onResume();
-        store = SharedPreference.getInstance(getActivity()).getStore(C.SELECTED_STORE);
-        if (store != null) {
-            tvStoreName.setText(store.getName());
-
-        }
-        selectedLocation = SharedPreference.getInstance(getActivity()).getRecentLocations(C.LOCATION_SELECTED);
-        if (selectedLocation != null && selectedLocation.size() > 0) {
-            tvLocationName.setText(selectedLocation.get(selectedLocation.size() - 1).getName());
-        }
+       setStoreLocation();
        /* CategoryRequest categoryRequest = new CategoryRequest();
         categoryRequest.setUuid(Util.id(getActivity()));*/
         // iHomeViewPresenterPresenter.getCategories(categoryRequest);
@@ -161,10 +152,25 @@ public class FragmentHome extends Fragment implements IHomeViewPresenterPresente
         }
     }
 
+    void  setStoreLocation(){
+        store = SharedPreference.getInstance(getActivity()).getStore(C.SELECTED_STORE);
+        if (store != null) {
+            tvStoreName.setText(store.getName());
+
+        }
+        selectedLocation = SharedPreference.getInstance(getActivity()).getString(C.LOCATION_SELECTED);
+        if (selectedLocation != null ) {
+            tvLocationName.setText(selectedLocation);
+        }
+    }
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        ivNotification.setOnClickListener(this);
+        if (SharedPreference.getInstance(getActivity()).getBoolean(C.IS_LOGIN_GUEST)) {
+            ivNotification.setVisibility(View.INVISIBLE);
+        }
+
+            ivNotification.setOnClickListener(this);
         llLocationSelect.setOnClickListener(this);
         llStoreSelect.setOnClickListener(this);
       //  etSearchProduct.setOnClickListener(this);
@@ -191,6 +197,7 @@ public class FragmentHome extends Fragment implements IHomeViewPresenterPresente
 
         rvProducts.setLayoutManager(horizontalLayout1);
         rvProducts.setHasFixedSize(true);
+        setStoreLocation();
 
   /*      adapterHomeBrands = new AdapterHomeBrands(setHomeBrands(), getActivity());
         rvBrands.setAdapter(adapterHomeBrands);

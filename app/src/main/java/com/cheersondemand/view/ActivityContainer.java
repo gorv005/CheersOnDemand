@@ -186,6 +186,12 @@ public class ActivityContainer extends AppCompatActivity {
 
 
 
+    public  void deleteNotification(int pos){
+        Fragment fragment=getVisibleFragment();
+        if(fragment!=null && fragment instanceof FragmentNotification ){
+            ((FragmentNotification)fragment).deleteNotification(pos);
+        }
+    }
     public void removeCoupon(){
         Fragment fragment=getVisibleFragment();
         if(fragment!=null && fragment instanceof FragmentCart ){

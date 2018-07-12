@@ -152,6 +152,9 @@ public class ActivitySearchProducts extends Activity implements View.OnClickList
                 adapterRecentProductSearch = new AdapterRecentProductSearches(response.getData().getRecentSearch(), this);
                 lvRecentSearches.setAdapter(adapterRecentProductSearch);
             }
+            else {
+                rlRecentSearch.setVisibility(View.GONE);
+            }
             if (response.getData() != null && response.getData().getCategories() != null && response.getData().getCategories().size() > 0) {
 
                 List<Categories> categories = new ArrayList<>();

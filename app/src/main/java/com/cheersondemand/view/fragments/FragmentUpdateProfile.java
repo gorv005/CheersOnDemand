@@ -13,6 +13,7 @@ import android.media.ExifInterface;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -249,15 +250,18 @@ public class FragmentUpdateProfile extends Fragment implements View.OnClickListe
         if (fileUri != null) {
             File file = new File(getRealPathFromURI(fileUri));
            // File file = new File(fileUri.getPath());
+
             RequestBody name = RequestBody.create(MediaType.parse("text/plain"), etName.getText().toString());
             RequestBody phone = RequestBody.create(MediaType.parse("text/plain"), etPhoneNo.getText().toString());
-            RequestBody requestFile = RequestBody.create(MediaType.parse(getActivity().getContentResolver().getType(fileUri)), file);
+            RequestBody requestFile = RequestBody.create(MediaType.parse("image/*"), file);
+
+          //  RequestBody requestFile = RequestBody.create(MediaType.parse(getActivity().getContentResolver().getType(fileUri)), file);
             MultipartBody.Part body = MultipartBody.Part.createFormData("profile_picture", "image.jpg", requestFile);
 
 
             iProfileViewPresenter.updateProfile(token, id, body, name, phone);
         }
-        if(fileUri ==null && isRemoved){
+      else  if(fileUri ==null && isRemoved){
             RequestBody name = RequestBody.create(MediaType.parse("text/plain"), etName.getText().toString());
             RequestBody phone = RequestBody.create(MediaType.parse("text/plain"), etPhoneNo.getText().toString());
             MultipartBody.Part body = MultipartBody.Part.createFormData("profile_picture", "image.jpg", null);
@@ -286,11 +290,30 @@ public class FragmentUpdateProfile extends Fragment implements View.OnClickListe
         cursor.close();
         return result;
     }*/
+
+ /*   public String getRealPathFromURI(Uri uri) {
+        Cursor cursor = getActivity().getContentResolver().query(uri, null, null, null, null);
+        cursor.moveToFirst();
+        int idx = cursor.getColumnIndex(MediaStore.Images.ImageColumns.DATA);
+        return cursor.getString(idx);
+    }*/
+    private String getRealPathFromURI(Uri contentURI) {
+        Cursor cursor = getActivity().getContentResolver().query(contentURI, null, null, null, null);
+        if (cursor == null) {
+            return contentURI.getPath();
+        } else {
+            cursor.moveToFirst();
+            int idx = cursor.getColumnIndex(MediaStore.Images.ImageColumns.DATA);
+            return cursor.getString(idx);
+        }
+    }
+/*
     private String getRealPathFromURI(Uri contentUri) {
         Cursor cursor = null;
         try {
             String[] proj = { MediaStore.Images.Media.DATA };
             cursor = getActivity().getContentResolver().query(contentUri,  proj, null, null, null);
+
             int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
             cursor.moveToFirst();
             return cursor.getString(column_index);
@@ -303,6 +326,7 @@ public class FragmentUpdateProfile extends Fragment implements View.OnClickListe
             }
         }
     }
+*/
     private void showPictureDialog() {
         AlertDialog.Builder pictureDialog = new AlertDialog.Builder(getActivity());
         pictureDialog.setTitle("Select Action");
@@ -436,6 +460,7 @@ public class FragmentUpdateProfile extends Fragment implements View.OnClickListe
                 intent.putExtra(MediaStore.EXTRA_OUTPUT, tempFileUri);
             } else {
                 Uri tempFileUri = Uri.fromFile(file);
+                fileUri=tempFileUri;
                 intent.putExtra(MediaStore.EXTRA_OUTPUT, tempFileUri);
             }
             // intent.putExtra(MediaStore.EXTRA_OUTPUT, fileUri);
@@ -502,7 +527,13 @@ public class FragmentUpdateProfile extends Fragment implements View.OnClickListe
             UserResponse response = gson.fromJson(json, UserResponse.class);
             authenticationResponse.getData().setUser(response);
             SharedPreference.getInstance(getActivity()).setUser(C.AUTH_USER, authenticationResponse);
-            getActivity().finish();
+            Handler handler = new Handler();
+            handler.postDelayed(new Runnable() {
+                public void run() {
+                    // Actions to do after 10 seconds
+                    getActivity().finish();
+                }
+            }, 2000);
         } else {
             util.setSnackbarMessage(getActivity(), Response.getMessage(), rlView, true);
 

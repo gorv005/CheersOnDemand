@@ -14,8 +14,8 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.cheersondemand.R;
@@ -57,7 +57,7 @@ public class ActivitySearchLocation extends AppCompatActivity implements
     @BindView(R.id.rlRecentSearch)
     LinearLayout rlRecentSearch;
     @BindView(R.id.imgBack)
-    ImageView imgBack;
+    RelativeLayout imgBack;
     @BindView(R.id.etLocation)
     EditText autoCompleteTextView;
     @BindView(R.id.LLView)
@@ -180,7 +180,6 @@ public class ActivitySearchLocation extends AppCompatActivity implements
                                         //      Toast.makeText(getApplicationContext(), String.valueOf(places.get(0).getLatLng()), Toast.LENGTH_SHORT).show();
                                         selectedLocation.setLatitude(String.valueOf(places.get(0).getLatLng().latitude));
                                         selectedLocation.setLongitude(String.valueOf(places.get(0).getLatLng().longitude));
-                                       // SharedPreference.getInstance(ActivitySearchLocation.this).addRecentSearch(C.LOCATION_SELECTED, selectedLocation);
                                         saveLocation(selectedLocation);
 
                                     } else {
@@ -206,6 +205,8 @@ public class ActivitySearchLocation extends AppCompatActivity implements
 
 
     public void saveLocation(RecentLocation selectedLocation) {
+        SharedPreference.getInstance(ActivitySearchLocation.this).setString(C.LOCATION_SELECTED, selectedLocation.getAddress());
+
         SaveLocation saveLocation = new SaveLocation();
         saveLocation.setLatitude(""+selectedLocation.getLatitude());
         saveLocation.setLongitude(""+selectedLocation.getLongitude());

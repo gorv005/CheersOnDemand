@@ -7,10 +7,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.cheersondemand.R;
 import com.cheersondemand.model.notification.Notifications;
+import com.cheersondemand.view.ActivityContainer;
 
 import java.util.List;
 
@@ -25,7 +25,7 @@ public class AdapterNotification extends RecyclerView.Adapter<AdapterNotificatio
     Context context;
     List<Notifications> horizontalList;
     private final int COUNT = 30;
-    private final int[] itemsOffset = new int[COUNT];
+   // private final int[] itemsOffset ;
 
     @Override
     public int getItemViewType(int position) {
@@ -35,7 +35,7 @@ public class AdapterNotification extends RecyclerView.Adapter<AdapterNotificatio
     public AdapterNotification(List<Notifications> horizontalList, Activity context) {
         this.horizontalList = horizontalList;
         this.context=context;
-
+       // itemsOffset = new int[horizontalList.size()];
     }
     @Override
     public long getItemId(int position) {
@@ -49,22 +49,22 @@ public class AdapterNotification extends RecyclerView.Adapter<AdapterNotificatio
         View itemView = LayoutInflater.from(parent.getContext()).inflate(layoutId, parent, false);
         final ViewHolder viewHolder = new ViewHolder(itemView);
 
-        View.OnClickListener onClick = new View.OnClickListener() {
+        /*View.OnClickListener onClick = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 viewHolder.swipeLayout.animateReset();
             }
-        };
+        };*/
 
        /* if (viewHolder.leftView != null) {
             viewHolder.leftView.setClickable(true);
             viewHolder.leftView.setOnClickListener(onClick);
         }*/
 
-        if (viewHolder.rightView != null) {
+       /* if (viewHolder.rightView != null) {
             viewHolder.rightView.setClickable(true);
             viewHolder.rightView.setOnClickListener(onClick);
-        }
+        }*/
 
         viewHolder.swipeLayout.setOnSwipeListener(new SwipeLayout.OnSwipeListener() {
             @Override
@@ -73,10 +73,10 @@ public class AdapterNotification extends RecyclerView.Adapter<AdapterNotificatio
 
             @Override
             public void onSwipeClampReached(SwipeLayout swipeLayout, boolean moveToRight) {
-                Toast.makeText(swipeLayout.getContext(),
+             /*   Toast.makeText(swipeLayout.getContext(),
                         (moveToRight ? "Left" : "Right") + " clamp reached",
                         Toast.LENGTH_SHORT)
-                        .show();
+                        .show();*/
                // viewHolder.textViewPos.setText("TADA!");
             }
 
@@ -93,20 +93,25 @@ public class AdapterNotification extends RecyclerView.Adapter<AdapterNotificatio
     }
 
     @Override
-    public void onBindViewHolder(ViewHolder holder, int position) {
+    public void onBindViewHolder(ViewHolder holder, final int position) {
         holder.tvNotificationStatus.setText(horizontalList.get(position).getTitle());
         holder.tvNotificationDesc.setText(horizontalList.get(position).getMessage());
         holder.tvDays.setText(horizontalList.get(position).getCreatedAt());
-
-        holder.swipeLayout.setOffset(itemsOffset[position]);
+        holder.rightView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ((ActivityContainer)context).deleteNotification(position);
+            }
+        });
+      //  holder.swipeLayout.setOffset(itemsOffset[position]);
     }
 
-    @Override
+  /*  @Override
     public void onViewDetachedFromWindow(ViewHolder holder) {
         if (holder.getAdapterPosition() != RecyclerView.NO_POSITION) {
             itemsOffset[holder.getAdapterPosition()] = holder.swipeLayout.getOffset();
         }
-    }
+    }*/
 
     @Override
     public void onViewRecycled(ViewHolder holder) {
@@ -115,7 +120,7 @@ public class AdapterNotification extends RecyclerView.Adapter<AdapterNotificatio
 
     @Override
     public int getItemCount() {
-        return COUNT;
+        return horizontalList.size();
     }
 
     static class ViewHolder extends RecyclerView.ViewHolder {

@@ -2,6 +2,7 @@ package com.cheersondemand.intractor.notifications;
 
 import android.content.Context;
 
+import com.cheersondemand.model.GuestUserCreateResponse;
 import com.cheersondemand.model.notification.NotificationResponse;
 
 /**
@@ -11,8 +12,8 @@ import com.cheersondemand.model.notification.NotificationResponse;
 public interface INotificationViewIntractor {
     interface OnFinishedListener {
         void onSuccessNotificationList(NotificationResponse Response);
-        void onDeleteNotificationList(NotificationResponse Response);
-        void onClearAllNotificationList(NotificationResponse Response);
+        void onDeleteNotificationList(GuestUserCreateResponse Response);
+        void onClearAllNotificationList(GuestUserCreateResponse Response);
 
         void onError(String response);
         Context getAPPContext();

@@ -4,6 +4,7 @@ import android.content.Context;
 
 import com.cheersondemand.intractor.notifications.INotificationViewIntractor;
 import com.cheersondemand.intractor.notifications.NotificationViewIntractorImpl;
+import com.cheersondemand.model.GuestUserCreateResponse;
 import com.cheersondemand.model.notification.NotificationResponse;
 
 
@@ -29,7 +30,7 @@ public class NotificationViewPresenterImpl implements INotificationViewPresenter
     }
 
     @Override
-    public void onDeleteNotificationList(NotificationResponse Response) {
+    public void onDeleteNotificationList(GuestUserCreateResponse Response) {
         if (mView != null) {
             mView.hideProgress();
             mView.onDeleteNotificationList(Response);
@@ -37,7 +38,7 @@ public class NotificationViewPresenterImpl implements INotificationViewPresenter
     }
 
     @Override
-    public void onClearAllNotificationList(NotificationResponse Response) {
+    public void onClearAllNotificationList(GuestUserCreateResponse Response) {
         if (mView != null) {
             mView.hideProgress();
             mView.onClearAllNotificationList(Response);
@@ -60,7 +61,7 @@ public class NotificationViewPresenterImpl implements INotificationViewPresenter
     @Override
     public void getNotificationList(String token, String userId, String page, String perPage) {
         if (mView != null) {
-
+            mView.showProgress();
             iNotificationViewIntractor.getNotificationList(token,userId,page,perPage, this);
         }
     }
@@ -68,6 +69,7 @@ public class NotificationViewPresenterImpl implements INotificationViewPresenter
     @Override
     public void deleteNotification(String token, String userId, String notification_id) {
         if (mView != null) {
+            mView.showProgress();
 
             iNotificationViewIntractor.deleteNotification(token,userId,notification_id, this);
         }
@@ -76,6 +78,7 @@ public class NotificationViewPresenterImpl implements INotificationViewPresenter
     @Override
     public void clearAllNotification(String token, String userId) {
         if (mView != null) {
+            mView.showProgress();
 
             iNotificationViewIntractor.clearAllNotification(token,userId, this);
         }

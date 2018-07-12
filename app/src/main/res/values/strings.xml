@@ -68,7 +68,7 @@
     <string name="confirm_new_password">Confirm New Password</string>
     <string name="reset_password">RESET PASSWORD</string>
     <string name="forgot_password_">Forgot Password</string>
-    <string name="enter_your_register_email">Enter your registered Email and we’ll sent you a link to reset your password</string>
+    <string name="enter_your_register_email">Enter your registered Email and we’ll sent you a link to reset your password.</string>
     <string name="send_link">SEND LINK</string>
     <string name="continue_to_login">Continue to Login</string>
     <string name="Select_store">Select Store</string>

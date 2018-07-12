@@ -25,6 +25,7 @@ import com.cheersondemand.model.logout.LogoutResponse;
 import com.cheersondemand.model.order.CreateOrderResponse;
 import com.cheersondemand.model.order.addtocart.AddToCartResponse;
 import com.cheersondemand.model.order.updatecart.UpdateCartResponse;
+import com.cheersondemand.model.profile.ProfileUpdateRequest;
 import com.cheersondemand.model.wishlist.WishListDataResponse;
 import com.cheersondemand.model.wishlist.WishListResponse;
 import com.cheersondemand.presenter.home.order.IOrderViewPresenterPresenter;
@@ -95,7 +96,10 @@ public class FragmentProfile extends Fragment implements View.OnClickListener, I
     IOrderViewPresenterPresenter iOrderViewPresenterPresenter;
     @BindView(R.id.llBecomePartner)
     RelativeLayout llBecomePartner;
-
+    Util util;
+    @BindView(R.id.rlView)
+    RelativeLayout rlView;
+    boolean isNotification;
     public FragmentProfile() {
         // Required empty public constructor
     }
@@ -104,6 +108,7 @@ public class FragmentProfile extends Fragment implements View.OnClickListener, I
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        util = new Util();
         imageLoader = new ImageLoader(getActivity());
         iProfileViewPresenter = new ProfileViewPresenterImpl(this, getActivity());
         iOrderViewPresenterPresenter = new OrderViewPresenterImpl(this, getActivity());
@@ -170,6 +175,20 @@ public class FragmentProfile extends Fragment implements View.OnClickListener, I
         llSavedAddress.setOnClickListener(this);
         llHelp.setOnClickListener(this);
         llBecomePartner.setOnClickListener(this);
+        if(SharedPreference.getInstance(getActivity()).getBoolean(C.IS_NOTIFICATION)){
+            switchButton.setChecked(true);
+        }
+        else {
+            switchButton.setChecked(false);
+
+        }
+       switchButton.setOnCheckedChangeListener(new SwitchButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(SwitchButton view, boolean isChecked) {
+                isNotification=isChecked;
+                updateProfile((isChecked));
+            }
+        });
     }
 
     @Override
@@ -259,9 +278,28 @@ public class FragmentProfile extends Fragment implements View.OnClickListener, I
 
     }
 
+
+    void updateProfile(boolean isNotified) {
+        ProfileUpdateRequest profileUpdateRequest = new ProfileUpdateRequest();
+        profileUpdateRequest.setIsNotificationEnabled(isNotified);
+
+        String id = "" + SharedPreference.getInstance(getActivity()).getUser(C.AUTH_USER).getData().getUser().getId();
+
+        String token = C.bearer + SharedPreference.getInstance(getActivity()).getUser(C.AUTH_USER).getData().getToken().getAccessToken();
+        iProfileViewPresenter.updateProfile(token, id, profileUpdateRequest);
+
+    }
+
     @Override
     public void onSuccessUpdateProfile(GuestUserCreateResponse Response) {
+        if (Response.getSuccess()) {
+            SharedPreference.getInstance(getActivity()).setBoolean(C.IS_NOTIFICATION,isNotification);
+            util.setSnackbarMessage(getActivity(), getString(R.string.profile_updated), rlView, false);
 
+        } else {
+            util.setSnackbarMessage(getActivity(), Response.getMessage(), rlView, true);
+
+        }
     }
 
 

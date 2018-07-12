@@ -229,14 +229,14 @@ public class FragmentChangePassword extends Fragment implements View.OnClickList
             llPasswordChangelayout.setVisibility(View.GONE);
         }
         else {
-            util.setSnackbarMessage(getActivity(), getString(R.string.product_already_in_cart), rlView, true);
+            util.setSnackbarMessage(getActivity(), response.getMessage(), rlView, true);
 
         }
     }
 
     @Override
     public void getResponseError(String response) {
-        util.setSnackbarMessage(getActivity(), getString(R.string.product_already_in_cart), rlView, true);
+        util.setSnackbarMessage(getActivity(), response, rlView, true);
 
     }
 

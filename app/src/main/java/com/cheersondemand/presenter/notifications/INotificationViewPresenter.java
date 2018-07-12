@@ -1,5 +1,6 @@
 package com.cheersondemand.presenter.notifications;
 
+import com.cheersondemand.model.GuestUserCreateResponse;
 import com.cheersondemand.model.notification.NotificationResponse;
 
 /**
@@ -17,8 +18,8 @@ public interface INotificationViewPresenter {
     interface INotificationView {
 
         void onSuccessNotificationList(NotificationResponse Response);
-        void onDeleteNotificationList(NotificationResponse Response);
-        void onClearAllNotificationList(NotificationResponse Response);
+        void onDeleteNotificationList(GuestUserCreateResponse Response);
+        void onClearAllNotificationList(GuestUserCreateResponse Response);
         public void getResponseError(String response);
         void showProgress();
 

@@ -12,8 +12,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 
 import com.cheersondemand.R;
+import com.cheersondemand.model.GuestUserCreateResponse;
 import com.cheersondemand.model.notification.NotificationResponse;
 import com.cheersondemand.model.notification.Notifications;
 import com.cheersondemand.presenter.notifications.INotificationViewPresenter;
@@ -49,14 +52,19 @@ public class FragmentNotification extends Fragment implements View.OnClickListen
     AdapterNotification adapterNotification;
     LinearLayoutManager layoutManager;
     @BindView(R.id.LLView)
-    LinearLayout LLView;
+    RelativeLayout LLView;
+    int totalPages;
+    int pastVisibleItems, visibleItemCount, totalItemCount;
+    boolean loading = true;
+    @BindView(R.id.progressbar)
+    ProgressBar progressbar;
 
     public FragmentNotification() {
         // Required empty public constructor
     }
 
     long page = 1, perPage = 10;
-
+    int posItem;
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -77,17 +85,34 @@ public class FragmentNotification extends Fragment implements View.OnClickListen
     public void onResume() {
         super.onResume();
         ActivityContainer.tvTitle.setText(R.string.notification);
-        getNotificationList("" + page, "" + perPage);
+
+        getNotificationList("" + page);
     }
 
 
-    void getNotificationList(String page, String perPage) {
+    void getNotificationList(String page) {
         String id = "" + SharedPreference.getInstance(getActivity()).getUser(C.AUTH_USER).getData().getUser().getId();
 
         String token = C.bearer + SharedPreference.getInstance(getActivity()).getUser(C.AUTH_USER).getData().getToken().getAccessToken();
-        iNotificationViewPresenter.getNotificationList(token, id, page, perPage);
+        iNotificationViewPresenter.getNotificationList(token, id, page, ""+perPage);
     }
 
+   public void deleteNotification(int pos){
+       posItem=pos;
+        String id = "" + SharedPreference.getInstance(getActivity()).getUser(C.AUTH_USER).getData().getUser().getId();
+
+        String token = C.bearer + SharedPreference.getInstance(getActivity()).getUser(C.AUTH_USER).getData().getToken().getAccessToken();
+
+        iNotificationViewPresenter.deleteNotification(token,id,""+notifications.get(pos).getId());
+    }
+    public void clearAllNotification(){
+
+        String id = "" + SharedPreference.getInstance(getActivity()).getUser(C.AUTH_USER).getData().getUser().getId();
+
+        String token = C.bearer + SharedPreference.getInstance(getActivity()).getUser(C.AUTH_USER).getData().getToken().getAccessToken();
+
+        iNotificationViewPresenter.clearAllNotification(token,id);
+    }
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
@@ -95,6 +120,29 @@ public class FragmentNotification extends Fragment implements View.OnClickListen
         layoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
         rvNotifications.setLayoutManager(layoutManager);
         rvNotifications.setHasFixedSize(true);
+        rvNotifications.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                if (dy > 0) {
+                    visibleItemCount = layoutManager.getChildCount();
+                    totalItemCount = layoutManager.getItemCount();
+                    pastVisibleItems = layoutManager.findFirstVisibleItemPosition();
+                    if (loading && page <= totalPages) {
+                        if ((visibleItemCount + pastVisibleItems) >= totalItemCount) {
+                            loading = false;
+                            progressbar.setVisibility(View.VISIBLE);
+                            getNotificationList(""+page++);
+                        }
+                    }
+                }
+            }
+        });
+        ActivityContainer.tvClearAll.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                clearAllNotification();
+            }
+        });
     }
 
     @Override
@@ -116,17 +164,29 @@ public class FragmentNotification extends Fragment implements View.OnClickListen
     public void onSuccessNotificationList(NotificationResponse Response) {
 
         if (Response.getSuccess()) {
-            notifications = Response.getData();
-            if(notifications!=null && notifications.size()>0) {
-                llNoProductInCount.setVisibility(View.GONE);
+            progressbar.setVisibility(View.GONE);
+            if (notifications != null && notifications.size() > 0 && page != 1) {
+                notifications.addAll(Response.getData());
+                adapterNotification.notifyDataSetChanged();
+            }
+           else{
+                if (Response.getData() != null && Response.getData().size() > 0) {
+                    llNoProductInCount.setVisibility(View.GONE);
+                    ActivityContainer.tvClearAll.setVisibility(View.VISIBLE);
 
-                adapterNotification = new AdapterNotification(notifications, getActivity());
-                rvNotifications.setAdapter(adapterNotification);
+                    if (Response.getMeta() != null && Response.getMeta().getPagination() != null) {
+                        totalPages = Response.getMeta().getPagination().getTotalPages();
+                    }
+                    notifications=Response.getData();
+                    adapterNotification = new AdapterNotification(notifications, getActivity());
+                    rvNotifications.setAdapter(adapterNotification);
+                } else {
+                    // util.setSnackbarMessage(getActivity(), Response.getMessage(), LLView, true);
+                    llNoProductInCount.setVisibility(View.VISIBLE);
+                }
             }
-            else {
-               // util.setSnackbarMessage(getActivity(), Response.getMessage(), LLView, true);
-                llNoProductInCount.setVisibility(View.VISIBLE);
-            }
+            loading = true;
+
         }
         else {
             util.setSnackbarMessage(getActivity(), Response.getMessage(), LLView, true);
@@ -136,35 +196,51 @@ public class FragmentNotification extends Fragment implements View.OnClickListen
     }
 
     @Override
-    public void onDeleteNotificationList(NotificationResponse Response) {
+    public void onDeleteNotificationList(GuestUserCreateResponse Response) {
         if (Response.getSuccess()) {
+            notifications.remove(posItem);
+            adapterNotification.notifyDataSetChanged();
             util.setSnackbarMessage(getActivity(), Response.getMessage(), LLView, false);
-            
+            if(notifications!=null && notifications.size()==0){
+                ActivityContainer.tvClearAll.setVisibility(View.GONE);
+            }
+        }
+        else {
+            util.setSnackbarMessage(getActivity(), Response.getMessage(), LLView, true);
+
         }
     }
 
     @Override
-    public void onClearAllNotificationList(NotificationResponse Response) {
+    public void onClearAllNotificationList(GuestUserCreateResponse Response) {
         if (Response.getSuccess()) {
             util.setSnackbarMessage(getActivity(), Response.getMessage(), LLView, false);
             notifications.clear();
             adapterNotification.notifyDataSetChanged();
+            ActivityContainer.tvClearAll.setVisibility(View.GONE);
+
+        }
+        else {
+            util.setSnackbarMessage(getActivity(), Response.getMessage(), LLView, true);
 
         }
     }
 
     @Override
     public void getResponseError(String response) {
+        util.setSnackbarMessage(getActivity(), response, LLView, true);
 
     }
 
     @Override
     public void showProgress() {
+        util.showDialog(C.MSG,getActivity());
 
     }
 
     @Override
     public void hideProgress() {
+        util.hideDialog();
 
     }
 }

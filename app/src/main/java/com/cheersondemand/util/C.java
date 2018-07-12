@@ -85,4 +85,5 @@ public interface C {
     public static final String IMAGE_PATH = Environment
             .getExternalStorageDirectory().getPath() + "/COD";
     int FRAGMENT_BECOME_PARTNER =24 ;
+    String IS_NOTIFICATION ="is_notification" ;
 }

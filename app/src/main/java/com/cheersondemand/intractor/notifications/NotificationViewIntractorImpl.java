@@ -3,6 +3,7 @@ package com.cheersondemand.intractor.notifications;
 import com.cheersondemand.frameworks.retrofit.ResponseResolver;
 import com.cheersondemand.frameworks.retrofit.RestError;
 import com.cheersondemand.frameworks.retrofit.WebServicesWrapper;
+import com.cheersondemand.model.GuestUserCreateResponse;
 import com.cheersondemand.model.notification.NotificationResponse;
 import com.google.gson.Gson;
 
@@ -49,9 +50,9 @@ public class NotificationViewIntractorImpl implements INotificationViewIntractor
     public void deleteNotification(String token, String userId, String notification_id, final OnFinishedListener listener) {
         try {
 
-            WebServicesWrapper.getInstance().deleteNotification(new ResponseResolver<NotificationResponse>() {
+            WebServicesWrapper.getInstance().deleteNotification(new ResponseResolver<GuestUserCreateResponse>() {
                 @Override
-                public void onSuccess(NotificationResponse r, Response response) {
+                public void onSuccess(GuestUserCreateResponse r, Response response) {
                     listener.onDeleteNotificationList(r);
                 }
 
@@ -60,7 +61,7 @@ public class NotificationViewIntractorImpl implements INotificationViewIntractor
                     if(error==null ||error.getError()==null){
 
                         Gson gson=new Gson();
-                        NotificationResponse response= gson.fromJson(msg,NotificationResponse.class);
+                        GuestUserCreateResponse response= gson.fromJson(msg,GuestUserCreateResponse.class);
                         listener.onDeleteNotificationList(response);
 
                     }
@@ -79,9 +80,9 @@ public class NotificationViewIntractorImpl implements INotificationViewIntractor
     public void clearAllNotification(String token, String userId, final OnFinishedListener listener) {
         try {
 
-            WebServicesWrapper.getInstance().clearAllNotification(new ResponseResolver<NotificationResponse>() {
+            WebServicesWrapper.getInstance().clearAllNotification(new ResponseResolver<GuestUserCreateResponse>() {
                 @Override
-                public void onSuccess(NotificationResponse r, Response response) {
+                public void onSuccess(GuestUserCreateResponse r, Response response) {
                     listener.onClearAllNotificationList(r);
                 }
 
@@ -90,7 +91,7 @@ public class NotificationViewIntractorImpl implements INotificationViewIntractor
                     if(error==null ||error.getError()==null){
 
                         Gson gson=new Gson();
-                        NotificationResponse response= gson.fromJson(msg,NotificationResponse.class);
+                        GuestUserCreateResponse response= gson.fromJson(msg,GuestUserCreateResponse.class);
                         listener.onClearAllNotificationList(response);
 
                     }

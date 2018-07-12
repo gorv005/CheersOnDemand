@@ -1,4 +1,4 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -7,6 +7,10 @@
     android:background="@color/profile_back"
     tools:context="com.cheersondemand.view.fragments.FragmentCart">
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:orientation="vertical"
+        android:layout_height="match_parent">
     <TextView
         android:layout_width="match_parent"
         android:background="@color/white"
@@ -86,7 +90,6 @@
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/rvNotifications"
-            android:padding="20dp"
             android:scrollbars="none"
             android:background="@color/white"
             android:layout_width="match_parent"
@@ -94,4 +97,15 @@
             android:layout_centerVertical="true"
             android:layout_centerHorizontal="true" />
     </RelativeLayout>
-</LinearLayout>
+    </LinearLayout>
+    <ProgressBar
+
+        android:id="@+id/progressbar"
+        style="?android:attr/progressBarStyleLarge"
+        android:layout_width="30dp"
+        android:layout_marginBottom="5dp"
+        android:layout_centerHorizontal="true"
+        android:layout_alignParentBottom="true"
+        android:layout_height="30dp"
+        android:visibility="gone" />
+</RelativeLayout>
