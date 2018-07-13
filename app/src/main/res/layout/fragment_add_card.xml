@@ -1,0 +1,316 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:orientation="vertical"
+    android:id="@+id/llBack"
+    android:background="@color/profile_back"
+    android:layout_height="match_parent"
+    >
+
+    <LinearLayout
+
+        android:layout_marginRight="15dp"
+        android:layout_marginLeft="15dp"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+    <RelativeLayout
+        android:id="@+id/rlMain"
+        android:layout_marginTop="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <RelativeLayout
+            android:id="@+id/rl_card_front"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/card_height"
+            android:background="@drawable/shape_2_copy_4"
+            android:padding="16dp">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                >
+
+
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/layer_25" />
+
+                <LinearLayout
+                    android:layout_centerVertical="true"
+                    android:orientation="vertical"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/card_number"
+                    android:textAllCaps="true"
+                    android:fontFamily="@font/sf_ui_display_regular"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/small_text" />
+                <TextView
+                    android:fontFamily="@font/sf_ui_display_bold"
+                    android:id="@+id/tv_card_number"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text=""
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/medium_text" />
+
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_alignParentBottom="true"
+                    android:orientation="vertical"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/activity_vertical_margin"
+                    android:text="@string/card_name_sample"
+                    android:textAllCaps="true"
+                    android:fontFamily="@font/sf_ui_display_regular"
+
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/small_text" />
+
+                    <TextView
+                        android:id="@+id/tv_member_name"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginRight="70dp"
+                        android:fontFamily="@font/sf_ui_display_bold"
+                        android:maxLines="1"
+                        android:text=""
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/medium_text" />
+                </LinearLayout>
+            </RelativeLayout>
+            <LinearLayout
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentRight="true"
+                android:layout_marginRight="@dimen/items_inbetween_small"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:id="@+id/linearLayout">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="@dimen/items_inbetween_small"
+                    android:text="@string/expires"
+                    android:textAllCaps="true"
+                    android:fontFamily="@font/sf_ui_display_regular"
+
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/small_text" />
+
+                <TextView
+                    android:id="@+id/tv_validity"
+                    android:fontFamily="@font/sf_ui_display_bold"
+
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text=""
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/medium_text" />
+
+            </LinearLayout>
+
+            <ImageView
+                android:id="@+id/ivType"
+                android:layout_width="50dp"
+                android:layout_height="40dp"
+                android:layout_alignParentTop="true"
+                android:layout_alignStart="@+id/linearLayout"
+                android:visibility="visible" />
+
+        </RelativeLayout>
+        <RelativeLayout
+            android:visibility="gone"
+            android:id="@+id/rl_card_back"
+            android:layout_width="match_parent"
+            android:padding="16dp"
+            android:layout_height="@dimen/card_height"
+            android:background="@drawable/shape_2_copy_4"
+            >
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:paddingLeft="@dimen/activity_horizontal_margin">
+
+                <TextView
+                    android:id="@+id/tv_cvv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="35dp"
+                    android:text=""
+                    android:minWidth="50dp"
+                    android:layout_gravity="right"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/header_text" />
+
+
+
+
+            </LinearLayout>
+
+        </RelativeLayout>
+
+    </RelativeLayout>
+        <ScrollView
+            android:fillViewport="true"
+            android:scrollbars="none"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:focusable="true"
+
+            android:focusableInTouchMode="true"
+            android:orientation="vertical">
+
+            <TextView
+
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:fontFamily="@font/sf_ui_display_regular"
+                android:text="@string/card_number"
+                android:textColor="@color/thumb_ripple_color"
+                android:textSize="14sp" />
+
+            <EditText
+                android:id="@+id/etCardNumber"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_centerHorizontal="true"
+                android:focusable="true"
+                android:maxLength="16"
+                android:focusableInTouchMode="true"
+                android:fontFamily="@font/sf_ui_display_regular"
+                android:maxLines="1"
+                android:singleLine="true"
+                android:textColor="@color/editext_text_color"
+                android:textColorHint="@color/editext_hint_color"
+                android:textCursorDrawable="@drawable/edit_text_cursor_color"
+                android:textSize="16sp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:fontFamily="@font/sf_ui_display_regular"
+                android:text="@string/card_name_sample"
+                android:textColor="@color/thumb_ripple_color"
+                android:textSize="14sp" />
+
+            <EditText
+                android:id="@+id/etCardHolderName"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_centerHorizontal="true"
+                android:fontFamily="@font/sf_ui_display_regular"
+                android:maxLines="1"
+                android:ellipsize="end"
+                android:maxLength="22"
+                android:singleLine="true"
+                android:textColor="@color/editext_text_color"
+                android:textColorHint="@color/editext_hint_color"
+                android:textCursorDrawable="@drawable/edit_text_cursor_color"
+                android:textSize="16sp" />
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:orientation="horizontal"
+                android:layout_height="wrap_content">
+                <LinearLayout
+                    android:layout_weight="1"
+                    android:orientation="vertical"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:fontFamily="@font/sf_ui_display_regular"
+                android:text="@string/expires_mm_yy"
+                android:textColor="@color/thumb_ripple_color"
+                android:textSize="14sp" />
+
+            <EditText
+                android:id="@+id/etExpire"
+                android:layout_width="100dp"
+                android:layout_height="50dp"
+                android:layout_centerHorizontal="true"
+                android:fontFamily="@font/sf_ui_display_regular"
+                android:maxLines="1"
+                android:maxLength="5"
+                android:inputType="number"
+                android:singleLine="true"
+                android:textColor="@color/editext_text_color"
+                android:textColorHint="@color/editext_hint_color"
+                android:textCursorDrawable="@drawable/edit_text_cursor_color"
+                android:textSize="16sp" />
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_weight="1"
+                    android:orientation="vertical"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:fontFamily="@font/sf_ui_display_regular"
+                android:text="@string/cvv"
+                android:textColor="@color/thumb_ripple_color"
+                android:textSize="14sp" />
+
+            <EditText
+                android:id="@+id/etCvv"
+                android:layout_width="70dp"
+                android:layout_height="50dp"
+                android:layout_centerHorizontal="true"
+                android:fontFamily="@font/sf_ui_display_regular"
+                android:maxLines="1"
+                android:maxLength="3"
+                android:inputType="number"
+                android:singleLine="true"
+                android:textColor="@color/editext_text_color"
+                android:textColorHint="@color/editext_hint_color"
+                android:textCursorDrawable="@drawable/edit_text_cursor_color"
+                android:textSize="16sp" />
+                </LinearLayout>
+            </LinearLayout>
+            <Button
+                android:layout_marginBottom="20dp"
+                android:layout_alignParentBottom="true"
+                android:id="@+id/btnSaveAdd"
+                android:layout_marginTop="15dp"
+                android:layout_width="150dp"
+                android:layout_height="45dp"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginEnd="20dp"
+                android:layout_marginStart="20dp"
+                android:background="@drawable/bg_button_noborder_disable"
+                android:fontFamily="@font/sf_ui_display_regular"
+                android:text="@string/add_card"
+                android:textAllCaps="true"
+                android:textColor="@color/white"
+                android:textSize="13.4sp" />
+
+        </LinearLayout>
+        </ScrollView>
+        </LinearLayout>
+</LinearLayout>

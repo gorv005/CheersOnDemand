@@ -173,6 +173,7 @@ public class FragmentProfile extends Fragment implements View.OnClickListener, I
         llChangePassword.setOnClickListener(this);
         llWishList.setOnClickListener(this);
         llSavedAddress.setOnClickListener(this);
+        llPaymentInfo.setOnClickListener(this);
         llHelp.setOnClickListener(this);
         llBecomePartner.setOnClickListener(this);
         if(SharedPreference.getInstance(getActivity()).getBoolean(C.IS_NOTIFICATION)){
@@ -248,7 +249,12 @@ public class FragmentProfile extends Fragment implements View.OnClickListener, I
                 startActivity(intent3);
 
                 break;
+            case R.id.llPaymentInfo:
+                Intent intent7 = new Intent(getActivity(), ActivityContainer.class);
+                intent7.putExtra(C.FRAGMENT_ACTION, C.FRAGMENT_CARD_LIST);
+                startActivity(intent7);
 
+                break;
             case R.id.llHelp:
                 Intent intent4 = new Intent(getActivity(), ActivityContainer.class);
 

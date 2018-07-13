@@ -33,7 +33,16 @@ import java.util.UUID;
 public class Util {
     Snackbar snackbar;
     ProgressDialog progressDialog=null;
+    public static final String VISA_PREFIX = "4";
+    public static final String MASTERCARD_PREFIX = "51,52,53,54,55,";
+    public static final String DISCOVER_PREFIX = "6011";
+    public static final String AMEX_PREFIX = "34,37,";
+    public static final int NONE = 0;
 
+    public static final int VISA = 1;
+    public static final int MASTERCARD = 2;
+    public static final int DISCOVER = 3;
+    public static final int AMEX = 4;
     public static boolean isNetworkConnectivity(Activity activity) {
         ConnectivityManager cm = (ConnectivityManager) activity
                 .getSystemService(Context.CONNECTIVITY_SERVICE);
@@ -204,6 +213,44 @@ public class Util {
                 height, filter);
         //  Bitmap newBitmap=   Bitmap.createScaledBitmap(realImage,(int)(realImage.getWidth()*0.9), (int)(realImage.getHeight()*0.9), true);
         return newBitmap;
+    }
+
+    public static int getCardType(String cardNumber) {
+
+        if (cardNumber.substring(0, 1).equals(VISA_PREFIX))
+            return VISA;
+        else if (MASTERCARD_PREFIX.contains(cardNumber.substring(0, 2) + ","))
+            return MASTERCARD;
+        else if (AMEX_PREFIX.contains(cardNumber.substring(0, 2) + ","))
+            return AMEX;
+        else if (cardNumber.substring(0, 4).equals(DISCOVER_PREFIX))
+            return DISCOVER;
+
+        return NONE;
+    }
+    public static void setCardType(int type,ImageView ivType,Context context)
+    {
+        switch(type)
+        {
+            case VISA:
+                ivType.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.ic_visa));
+                break;
+            case MASTERCARD:
+                ivType.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.ic_mastercard));
+                break;
+            case AMEX:
+                ivType.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.ic_amex));
+                break;
+            case DISCOVER:
+                ivType.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.ic_discover));
+                break;
+            case NONE:
+                ivType.setImageResource(android.R.color.transparent);
+                break;
+
+        }
+
+
     }
 
 }

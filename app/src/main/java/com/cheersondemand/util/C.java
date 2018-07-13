@@ -86,4 +86,7 @@ public interface C {
             .getExternalStorageDirectory().getPath() + "/COD";
     int FRAGMENT_BECOME_PARTNER =24 ;
     String IS_NOTIFICATION ="is_notification" ;
+    int FRAGMENT_ADD_CARD =25 ;
+    String TAG_FRAGMENT_FRAGMENT_ADD_CARD ="TAG_FRAGMENT_FRAGMENT_ADD_CARD" ;
+    int FRAGMENT_CARD_LIST = 26;
 }

@@ -20,8 +20,10 @@ import com.cheersondemand.model.address.Address;
 import com.cheersondemand.model.order.updatecart.UpdateCartRequest;
 import com.cheersondemand.util.C;
 import com.cheersondemand.view.fragments.FragmentAddAddress;
+import com.cheersondemand.view.fragments.FragmentAddCard;
 import com.cheersondemand.view.fragments.FragmentAddressList;
 import com.cheersondemand.view.fragments.FragmentBecomePartner;
+import com.cheersondemand.view.fragments.FragmentCardList;
 import com.cheersondemand.view.fragments.FragmentCart;
 import com.cheersondemand.view.fragments.FragmentCategoryList;
 import com.cheersondemand.view.fragments.FragmentChangePassword;
@@ -150,6 +152,16 @@ public class ActivityContainer extends AppCompatActivity {
                 fragment = new FragmentHelpCenterPages();
                 fragmentTransaction.replace(R.id.container, fragment);
                  fragmentTransaction.addToBackStack(C.TAG_FRAGMENT_HELP_CENTER_PAGES);
+                break;
+            case C.FRAGMENT_ADD_CARD:
+                fragment = new FragmentAddCard();
+                fragmentTransaction.replace(R.id.container, fragment);
+                fragmentTransaction.addToBackStack(C.TAG_FRAGMENT_FRAGMENT_ADD_CARD);
+                break;
+            case C.FRAGMENT_CARD_LIST:
+                fragment = new FragmentCardList();
+                fragmentTransaction.replace(R.id.container, fragment);
+               // fragmentTransaction.addToBackStack(C.TAG_FRAGMENT_FRAGMENT_ADD_CARD);
                 break;
             case C.FRAGMENT_CART:
                 fragment = new FragmentCart();

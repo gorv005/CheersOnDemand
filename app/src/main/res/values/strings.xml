@@ -160,6 +160,27 @@
     <string name="become_partner">Become Partner</string>
     <string name="are_you_sure_logout">Are you sure you want to logout from Cheers On Demand ?</string>
     <string name="profile_updated">Profile has been updated successfully</string>
+
+
+    //CARD
+    <string name="card_header">NFN CARD</string>
+    <string name="card_number_sample">XXXX XXXX XXXX </string>
+    <string name="card_validity_label">VALID UPTO</string>
+    <string name="card_validity_sample">MM/YY</string>
+    <string name="card_name_sample">Card Holder</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="card_holders_name">Card Holder\'s Name</string>
+    <string name="card_number">Card Number</string>
+    <string name="card_validity">Expires</string>
+    <string name="card_cvv">CVV/CVC Number</string>
+    <string name="expires">expires</string>
+    <string name="expires_mm_yy">Expiry (MM/YY)</string>
+    <string name="cvv">CVV</string>
+    <string name="add_card">Add Card</string>
+    <string name="new_card">New Card</string>
+    <string name="space"><![CDATA[&#160;]]></string>
+    <string name="add_new_card">Add New Card</string>
     <!--
         <string name="default_web_client_id">999387565226-hdnnhm6rhgik5ljvm06shotsi7j9883c.apps.googleusercontent.com</string>
     -->
