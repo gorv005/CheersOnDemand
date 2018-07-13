@@ -7,6 +7,7 @@ import com.cheersondemand.intractor.card.ICardViewIntractor;
 import com.cheersondemand.model.card.AddCardRequest;
 import com.cheersondemand.model.card.CardAddResponse;
 import com.cheersondemand.model.card.CardListResponse;
+import com.cheersondemand.model.card.DeleteCardRequest;
 
 
 public class CardViewPresenterImpl implements ICardViewPresenter, ICardViewIntractor.OnFinishedListener {
@@ -66,6 +67,14 @@ public class CardViewPresenterImpl implements ICardViewPresenter, ICardViewIntra
             mView.showProgress();
 
             iCardViewIntractor.getCardList(token,userId, this);
+        }
+    }
+
+    @Override
+    public void deleteCard(String token, String userId, DeleteCardRequest deleteCardRequest) {
+        if (mView != null) {
+            mView.showProgress();
+            iCardViewIntractor.deleteCard(token,userId,deleteCardRequest, this);
         }
     }
 

@@ -6,6 +6,7 @@ import com.cheersondemand.frameworks.retrofit.WebServicesWrapper;
 import com.cheersondemand.model.card.AddCardRequest;
 import com.cheersondemand.model.card.CardAddResponse;
 import com.cheersondemand.model.card.CardListResponse;
+import com.cheersondemand.model.card.DeleteCardRequest;
 import com.google.gson.Gson;
 
 import retrofit2.Response;
@@ -16,6 +17,36 @@ import retrofit2.Response;
 
 public class CardViewIntractorImpl implements ICardViewIntractor {
 
+
+    @Override
+    public void deleteCard(String token, String userId, DeleteCardRequest deleteCardRequest, final OnFinishedListener listener) {
+        try {
+
+            WebServicesWrapper.getInstance().deleteCard(new ResponseResolver<CardAddResponse>() {
+                @Override
+                public void onSuccess(CardAddResponse r, Response response) {
+                    listener.onSuccessAddCard(r);
+                }
+
+                @Override
+                public void onFailure(RestError error, String msg) {
+                    if(error==null ||error.getError()==null){
+
+                        Gson gson=new Gson();
+                        CardAddResponse response= gson.fromJson(msg,CardAddResponse.class);
+                        listener.onSuccessAddCard(response);
+
+                    }
+                    else {
+                        listener.onError(error.getError());
+                    }
+                }
+            },token,userId,deleteCardRequest);
+        }
+        catch (Exception e){
+            e.printStackTrace();
+        }
+    }
 
     @Override
     public void addCard(String token, String userId, AddCardRequest addCardRequest, final OnFinishedListener listener) {

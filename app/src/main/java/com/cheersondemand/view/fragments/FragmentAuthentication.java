@@ -870,7 +870,7 @@ public class FragmentAuthentication extends Fragment implements IAuthenitication
             if (Util.isNetworkConnectivity(getActivity())) {
                 SharedPreference.getInstance(getActivity()).setBoolean(C.IS_LOGIN,true);
                 SharedPreference.getInstance(getActivity()).setBoolean(C.IS_LOGIN_GUEST,false);
-
+                SharedPreference.getInstance(getActivity()).setBoolean(C.IS_NOTIFICATION,response.getData().getUser().getIsNotificationEnabled());
                 SharedPreference.getInstance(getActivity()).setUser(C.AUTH_USER,response);
                 SharedPreference.getInstance(getActivity()).setString(C.ORDER_ID,response.getData().getUser().getOrderId());
 

@@ -17,6 +17,7 @@ import com.cheersondemand.R;
 import com.cheersondemand.model.card.CardAddResponse;
 import com.cheersondemand.model.card.CardList;
 import com.cheersondemand.model.card.CardListResponse;
+import com.cheersondemand.model.card.DeleteCardRequest;
 import com.cheersondemand.presenter.card.CardViewPresenterImpl;
 import com.cheersondemand.presenter.card.ICardViewPresenter;
 import com.cheersondemand.util.C;
@@ -49,6 +50,7 @@ public class FragmentCardList extends Fragment implements ICardViewPresenter.ICa
     List<CardList> cardList;
     @BindView(R.id.btnAddNewCard)
     Button btnAddNewCard;
+    private int posItem;
 
     public FragmentCardList() {
         // Required empty public constructor
@@ -94,6 +96,17 @@ public class FragmentCardList extends Fragment implements ICardViewPresenter.ICa
         iCardViewPresenter.getCardList(token, id);
     }
 
+
+    public void deleteCard(int pos){
+        posItem=pos;
+        String id = "" + SharedPreference.getInstance(getActivity()).getUser(C.AUTH_USER).getData().getUser().getId();
+
+        String token = C.bearer + SharedPreference.getInstance(getActivity()).getUser(C.AUTH_USER).getData().getToken().getAccessToken();
+
+        DeleteCardRequest deleteCardRequest=new DeleteCardRequest();
+        deleteCardRequest.setCardId(cardList.get(posItem).getCardId());
+        iCardViewPresenter.deleteCard(token,id,deleteCardRequest);
+    }
     @Override
     public void onDestroyView() {
         super.onDestroyView();
@@ -116,7 +129,17 @@ public class FragmentCardList extends Fragment implements ICardViewPresenter.ICa
 
     @Override
     public void onSuccessAddCard(CardAddResponse response) {
+        if (response.getSuccess()) {
+            util.setSnackbarMessage(getActivity(), response.getMessage(), LLView, false);
 
+            cardList.remove(posItem);
+            adapterCard.notifyDataSetChanged();
+
+        }
+        else {
+            util.setSnackbarMessage(getActivity(), response.getMessage(), LLView, true);
+
+        }
     }
 
     @Override
