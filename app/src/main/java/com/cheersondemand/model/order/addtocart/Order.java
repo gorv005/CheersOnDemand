@@ -42,6 +42,9 @@ public class Order {
     @SerializedName("is_address_available")
     @Expose
     private Boolean isAddressAvailable;
+    @SerializedName("delivered_on")
+    @Expose
+    private String deliveredOn;
     @SerializedName("is_store_open")
     @Expose
     private Boolean isStoreOpen;
@@ -154,7 +157,13 @@ public class Order {
         this.orderItems = orderItems;
     }
 
+    public String getDeliveredOn() {
+        return deliveredOn;
+    }
 
+    public void setDeliveredOn(String deliveredOn) {
+        this.deliveredOn = deliveredOn;
+    }
 
     public String getDeliveryAddress() {
         return deliveryAddress;

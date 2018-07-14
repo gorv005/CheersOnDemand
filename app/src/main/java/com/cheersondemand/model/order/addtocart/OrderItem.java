@@ -28,6 +28,9 @@ public class OrderItem {
     @SerializedName("product_name")
     @Expose
     private String productName;
+    @SerializedName("product_image")
+    @Expose
+    private String productImage;
     @SerializedName("is_deliverable")
     @Expose
     private Boolean isDeliverable;
@@ -81,7 +84,13 @@ public class OrderItem {
         this.productName = productName;
     }
 
+    public String getProductImage() {
+        return productImage;
+    }
 
+    public void setProductImage(String productImage) {
+        this.productImage = productImage;
+    }
 
     public String getRemainingStockMessage() {
         return remainingStockMessage;

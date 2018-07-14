@@ -2,14 +2,17 @@ package com.cheersondemand.view.fragments;
 
 
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.text.Editable;
 import android.text.InputFilter;
 import android.text.Spanned;
 import android.text.TextUtils;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,9 +24,19 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.cheersondemand.R;
+import com.cheersondemand.model.card.AddCardRequest;
+import com.cheersondemand.model.card.CardAddResponse;
+import com.cheersondemand.model.card.CardListResponse;
+import com.cheersondemand.presenter.card.CardViewPresenterImpl;
+import com.cheersondemand.presenter.card.ICardViewPresenter;
+import com.cheersondemand.util.C;
 import com.cheersondemand.util.FlipAnimation;
+import com.cheersondemand.util.SharedPreference;
 import com.cheersondemand.util.Util;
 import com.cheersondemand.view.ActivityContainer;
+import com.stripe.android.Stripe;
+import com.stripe.android.TokenCallback;
+import com.stripe.android.model.Token;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -32,7 +45,7 @@ import butterknife.Unbinder;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class FragmentAddCard extends Fragment {
+public class FragmentAddCard extends Fragment implements ICardViewPresenter.ICardView,View.OnClickListener{
 
 
     @BindView(R.id.tv_card_number)
@@ -68,8 +81,17 @@ public class FragmentAddCard extends Fragment {
     LinearLayout llBack;
     int type;
     private boolean isDelete;
+    ICardViewPresenter iCardViewPresenter;
+    Util util;
     public FragmentAddCard() {
         // Required empty public constructor
+    }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        iCardViewPresenter=new CardViewPresenterImpl(this,getActivity());
+        util=new Util();
     }
 
     @Override
@@ -90,6 +112,7 @@ public class FragmentAddCard extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        btnSaveAdd.setOnClickListener(this);
         init();
     }
 
@@ -101,7 +124,18 @@ public class FragmentAddCard extends Fragment {
 
 
 
+    void addCard(String stripe_token){
+        String id = "" + SharedPreference.getInstance(getActivity()).getUser(C.AUTH_USER).getData().getUser().getId();
+
+        String token = C.bearer + SharedPreference.getInstance(getActivity()).getUser(C.AUTH_USER).getData().getToken().getAccessToken();
+
+        AddCardRequest addCardRequest=new AddCardRequest();
+        addCardRequest.setStripeToken(stripe_token);
+        iCardViewPresenter.addCard(token,id,addCardRequest);
+    }
     void init(){
+        btnSaveAdd.setEnabled(false);
+
         etExpire.setFilters(new InputFilter[] { filter });
 
         etCvv.setOnFocusChangeListener(new View.OnFocusChangeListener() {
@@ -172,6 +206,7 @@ public class FragmentAddCard extends Fragment {
                     }
 
                     }
+                    validationFields();
                 }
         });
         etCardHolderName.addTextChangedListener(new TextWatcher() {
@@ -195,6 +230,7 @@ public class FragmentAddCard extends Fragment {
                         tvMemberName.setText(editable.toString());
 
                 }
+                validationFields();
             }
         });
 
@@ -240,7 +276,7 @@ public class FragmentAddCard extends Fragment {
                         else
                             tvValidity.setText(stringBuilder);
                     }
-
+                validationFields();
                 }
 
 
@@ -266,6 +302,7 @@ public class FragmentAddCard extends Fragment {
                         tvCvv.setText(editable.toString());
 
                 }
+                validationFields();
             }
         });
 
@@ -303,4 +340,117 @@ public class FragmentAddCard extends Fragment {
         rlMain.startAnimation(flipAnimation);
     }
 
+    void validationFields() {
+        if (etCardNumber.getText().length() >= 14 && etCardNumber.length() <= 16) {
+
+            if (etExpire.getText().length() == 5) {
+
+                if (etCardHolderName.getText().length() >=1) {
+                    if (etCvv.getText().length() ==3) {
+                        btnSaveAdd.setBackground(ContextCompat.getDrawable(getActivity(), R.drawable.bg_button_enable));
+                        btnSaveAdd.setEnabled(true);
+                    }
+                    else {
+                        btnSaveAdd.setBackground(ContextCompat.getDrawable(getActivity(), R.drawable.button_disable));
+                        btnSaveAdd.setEnabled(false);
+                    }
+
+                }
+                else {
+                    btnSaveAdd.setBackground(ContextCompat.getDrawable(getActivity(), R.drawable.button_disable));
+                    btnSaveAdd.setEnabled(false);
+                }
+
+
+            } else {
+
+                btnSaveAdd.setBackground(ContextCompat.getDrawable(getActivity(), R.drawable.button_disable));
+                btnSaveAdd.setEnabled(false);
+
+            }
+        } else {
+
+            btnSaveAdd.setBackground(ContextCompat.getDrawable(getActivity(), R.drawable.button_disable));
+            btnSaveAdd.setEnabled(false);
+
+        }
+
+
+    }
+
+
+    private void addCardToStripe(String cardNumber, String month,String year,String cvv) {
+        showProgress();
+         com.stripe.android.model.Card stripeCard = new com.stripe.android.model.Card(cardNumber, Integer.parseInt(month), Integer.parseInt(year), null);
+        Stripe stripe = new Stripe(getActivity(), C.STRIPE_APP_KEY);
+        stripe.createToken(stripeCard, new TokenCallback() {
+            @Override
+            public void onError(Exception error) {
+                hideProgress();
+                util.setSnackbarMessage(getActivity(), error.getLocalizedMessage(), llBack, true);
+
+            }
+
+            @Override
+            public void onSuccess(Token token) {
+                hideProgress();
+               // card.setStripeTokenId(token.getId());
+                Log.e("DEBUG","Stripe token : " + token.getId());
+                addCard(token.getId());
+            }
+        });
+    }
+
+    @Override
+    public void onSuccessCardList(CardListResponse response) {
+
+    }
+
+    @Override
+    public void onSuccessAddCard(CardAddResponse response) {
+        if (response.getSuccess()) {
+            util.setSnackbarMessage(getActivity(), response.getMessage(), llBack, false);
+            Handler handler = new Handler();
+
+            handler.postDelayed(new Runnable() {
+                public void run() {
+                    // Actions to do after 10 seconds
+                    getActivity().onBackPressed();
+                }
+            }, 2000);
+
+
+        }
+        else {
+            util.setSnackbarMessage(getActivity(), response.getMessage(), llBack, true);
+
+        }
+    }
+
+    @Override
+    public void getResponseError(String response) {
+        util.setSnackbarMessage(getActivity(), response, llBack, true);
+
+    }
+
+    @Override
+    public void showProgress() {
+        util.showDialog(C.MSG,getActivity());
+    }
+
+    @Override
+    public void hideProgress() {
+        util.hideDialog();
+
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()){
+            case R.id.btnSaveAdd:
+                String a[]=etExpire.getText().toString().split("/");
+                addCardToStripe(etCardNumber.getText().toString(),a[0],a[1],tvCvv.getText().toString());
+                break;
+        }
+    }
 }

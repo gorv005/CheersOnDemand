@@ -9,6 +9,9 @@ import com.cheersondemand.model.card.CardListResponse;
 import com.cheersondemand.model.card.DeleteCardRequest;
 import com.google.gson.Gson;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import retrofit2.Response;
 
 /**
@@ -61,11 +64,23 @@ public class CardViewIntractorImpl implements ICardViewIntractor {
                 @Override
                 public void onFailure(RestError error, String msg) {
                     if(error==null ||error.getError()==null){
+                        try {
+                            msg=msg.replace("[]","null");
+                            msg=msg.replace("{}","null");
+                            Gson gson = new Gson();
+                            CardAddResponse response = gson.fromJson(msg, CardAddResponse.class);
+                            listener.onSuccessAddCard(response);
+                        }
+                        catch (Exception e){
+                            try {
+                                JSONObject jsonObject=new JSONObject(msg);
+                               String m= jsonObject.getString("message");
+                                listener.onError(m);
 
-                        Gson gson=new Gson();
-                        CardAddResponse response= gson.fromJson(msg,CardAddResponse.class);
-                        listener.onSuccessAddCard(response);
-
+                            } catch (JSONException e1) {
+                                e1.printStackTrace();
+                            }
+                        }
                     }
                     else {
                         listener.onError(error.getError());

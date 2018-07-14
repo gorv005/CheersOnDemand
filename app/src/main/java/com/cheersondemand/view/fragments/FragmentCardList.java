@@ -12,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import com.cheersondemand.R;
 import com.cheersondemand.model.card.CardAddResponse;
@@ -35,7 +36,7 @@ import butterknife.Unbinder;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class FragmentCardList extends Fragment implements ICardViewPresenter.ICardView,View.OnClickListener {
+public class FragmentCardList extends Fragment implements ICardViewPresenter.ICardView, View.OnClickListener {
 
 
     @BindView(R.id.rvCardList)
@@ -50,6 +51,8 @@ public class FragmentCardList extends Fragment implements ICardViewPresenter.ICa
     List<CardList> cardList;
     @BindView(R.id.btnAddNewCard)
     Button btnAddNewCard;
+    @BindView(R.id.tvNoCardAvailable)
+    TextView tvNoCardAvailable;
     private int posItem;
 
     public FragmentCardList() {
@@ -97,16 +100,17 @@ public class FragmentCardList extends Fragment implements ICardViewPresenter.ICa
     }
 
 
-    public void deleteCard(int pos){
-        posItem=pos;
+    public void deleteCard(int pos) {
+        posItem = pos;
         String id = "" + SharedPreference.getInstance(getActivity()).getUser(C.AUTH_USER).getData().getUser().getId();
 
         String token = C.bearer + SharedPreference.getInstance(getActivity()).getUser(C.AUTH_USER).getData().getToken().getAccessToken();
 
-        DeleteCardRequest deleteCardRequest=new DeleteCardRequest();
+        DeleteCardRequest deleteCardRequest = new DeleteCardRequest();
         deleteCardRequest.setCardId(cardList.get(posItem).getCardId());
-        iCardViewPresenter.deleteCard(token,id,deleteCardRequest);
+        iCardViewPresenter.deleteCard(token, id, deleteCardRequest);
     }
+
     @Override
     public void onDestroyView() {
         super.onDestroyView();
@@ -117,9 +121,14 @@ public class FragmentCardList extends Fragment implements ICardViewPresenter.ICa
     public void onSuccessCardList(CardListResponse response) {
         if (response.getSuccess()) {
             if (response.getData() != null && response.getData().size() > 0) {
+                tvNoCardAvailable.setVisibility(View.GONE);
+
                 cardList = response.getData();
                 adapterCard = new AdapterCard(cardList, getActivity());
                 rvCardList.setAdapter(adapterCard);
+            }
+            else {
+                tvNoCardAvailable.setVisibility(View.VISIBLE);
             }
         } else {
             util.setSnackbarMessage(getActivity(), response.getMessage(), LLView, true);
@@ -135,8 +144,7 @@ public class FragmentCardList extends Fragment implements ICardViewPresenter.ICa
             cardList.remove(posItem);
             adapterCard.notifyDataSetChanged();
 
-        }
-        else {
+        } else {
             util.setSnackbarMessage(getActivity(), response.getMessage(), LLView, true);
 
         }
@@ -150,7 +158,7 @@ public class FragmentCardList extends Fragment implements ICardViewPresenter.ICa
 
     @Override
     public void showProgress() {
-        util.showDialog(C.MSG,getActivity());
+        util.showDialog(C.MSG, getActivity());
 
     }
 
@@ -162,9 +170,9 @@ public class FragmentCardList extends Fragment implements ICardViewPresenter.ICa
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()){
+        switch (v.getId()) {
             case R.id.btnAddNewCard:
-                ((ActivityContainer)getActivity()).fragmnetLoader(C.FRAGMENT_ADD_CARD,null);
+                ((ActivityContainer) getActivity()).fragmnetLoader(C.FRAGMENT_ADD_CARD, null);
                 break;
         }
     }

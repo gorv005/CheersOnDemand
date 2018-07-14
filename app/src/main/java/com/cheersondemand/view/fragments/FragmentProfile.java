@@ -176,6 +176,7 @@ public class FragmentProfile extends Fragment implements View.OnClickListener, I
         llPaymentInfo.setOnClickListener(this);
         llHelp.setOnClickListener(this);
         llBecomePartner.setOnClickListener(this);
+        llOrders.setOnClickListener(this);
         if(SharedPreference.getInstance(getActivity()).getBoolean(C.IS_NOTIFICATION)){
             switchButton.setChecked(true);
         }
@@ -265,6 +266,11 @@ public class FragmentProfile extends Fragment implements View.OnClickListener, I
                 Intent intent5 = new Intent(getActivity(), ActivityContainer.class);
                 intent5.putExtra(C.FRAGMENT_ACTION, C.FRAGMENT_BECOME_PARTNER);
                 startActivity(intent5);
+                break;
+            case R.id.llOrders:
+                Intent intent6 = new Intent(getActivity(), ActivityContainer.class);
+                intent6.putExtra(C.FRAGMENT_ACTION, C.FRAGMENT_ORDER_LIST);
+                startActivity(intent6);
                 break;
         }
     }

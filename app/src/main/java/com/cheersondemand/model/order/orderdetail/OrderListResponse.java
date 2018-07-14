@@ -1,5 +1,4 @@
-package com.cheersondemand.model.card;
-
+package com.cheersondemand.model.order.orderdetail;
 
 import com.cheersondemand.model.Errors;
 import com.cheersondemand.model.productdescription.Meta;
@@ -8,7 +7,7 @@ import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
 
-public class CardAddResponse {
+public class OrderListResponse {
 
     @SerializedName("success")
     @Expose
@@ -16,9 +15,9 @@ public class CardAddResponse {
     @SerializedName("message")
     @Expose
     private String message;
-   /* @SerializedName("data")
+    @SerializedName("data")
     @Expose
-    private CardDetail data = null;*/
+    private OrderList data;
     @SerializedName("meta")
     @Expose
     private List<Meta> meta = null;
@@ -42,13 +41,13 @@ public class CardAddResponse {
         this.message = message;
     }
 
-/*    public CardDetail getData() {
+    public OrderList getData() {
         return data;
     }
 
-    public void setData(CardDetail data) {
+    public void setData(OrderList data) {
         this.data = data;
-    }*/
+    }
 
     public List<Meta> getMeta() {
         return meta;
@@ -65,4 +64,5 @@ public class CardAddResponse {
     public void setErrors(List<Errors> errors) {
         this.errors = errors;
     }
+
 }

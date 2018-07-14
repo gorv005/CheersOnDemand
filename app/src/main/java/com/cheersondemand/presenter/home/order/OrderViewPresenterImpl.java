@@ -2,8 +2,8 @@ package com.cheersondemand.presenter.home.order;
 
 import android.content.Context;
 
-import com.cheersondemand.intractor.home.order.IOrderViewIntractor;
-import com.cheersondemand.intractor.home.order.OrderViewIntractorImpl;
+import com.cheersondemand.intractor.home.cart.IOrderViewIntractor;
+import com.cheersondemand.intractor.home.cart.OrderViewIntractorImpl;
 import com.cheersondemand.model.authentication.GenRequest;
 import com.cheersondemand.model.order.CreateOrderResponse;
 import com.cheersondemand.model.order.addtocart.AddToCartRequest;

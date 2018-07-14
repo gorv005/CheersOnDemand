@@ -181,6 +181,11 @@
     <string name="new_card">New Card</string>
     <string name="space"><![CDATA[&#160;]]></string>
     <string name="add_new_card">Add New Card</string>
+    <string name="no_card_available">No card is available.</string>
+    <string name="re_order">RE-ORDER</string>
+    <string name="viewStatus">View Status</string>
+    <string name="order_no">Order No:</string>
+
     <!--
         <string name="default_web_client_id">999387565226-hdnnhm6rhgik5ljvm06shotsi7j9883c.apps.googleusercontent.com</string>
     -->
