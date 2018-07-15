@@ -92,4 +92,5 @@ public interface C {
     String STRIPE_APP_KEY = "pk_test_ISZW9qDBCzC06UHb2asnW3tz";
     String placed="placed";
     int FRAGMENT_ORDER_LIST = 27;
+    String cancelled="cancelled";
 }

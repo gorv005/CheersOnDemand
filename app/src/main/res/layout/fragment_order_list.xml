@@ -10,14 +10,14 @@
 
 
         <RelativeLayout
-            android:background="@color/brands_back_color"
+            android:background="@color/profile_back"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/rvOrders"
                 android:scrollbars="none"
-                android:background="@color/white"
+                android:background="@color/profile_back"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"

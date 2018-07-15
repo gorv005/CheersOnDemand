@@ -1,6 +1,9 @@
 package com.cheersondemand.view.fragments;
 
 
+import android.app.Dialog;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -10,7 +13,9 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import com.cheersondemand.R;
 import com.cheersondemand.model.order.addtocart.Order;
@@ -119,11 +124,15 @@ public class FragmentOrderList extends Fragment implements IOrderDetailViewPrese
 
     @Override
     public void showProgress() {
+        util.showDialog(C.MSG,getActivity());
 
     }
 
     @Override
     public void hideProgress() {
+        util.hideDialog();
 
     }
+
+
 }

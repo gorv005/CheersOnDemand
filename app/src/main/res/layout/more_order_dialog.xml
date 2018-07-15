@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+
+    >
+    <RelativeLayout
+        android:id="@+id/rlOrders"
+        android:background="@drawable/dailog_bg"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+    <TextView
+        android:id="@+id/titleOrders"
+        android:layout_height="40dp"
+        android:layout_width="match_parent"
+        android:text="4more products"
+        android:textSize="14sp"
+
+        android:textColor="@color/profile_text_color"
+        android:paddingTop="4dp"
+        android:fontFamily="@font/sf_ui_display_bold"
+        android:background="@color/profile_back"
+        android:gravity="center" />
+    <RelativeLayout
+        android:layout_below="@id/titleOrders"
+        android:background="@color/white"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/rvOrders"
+            android:scrollbars="none"
+            android:background="@color/white"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_centerHorizontal="true" />
+    </RelativeLayout>
+
+    </RelativeLayout>
+    <ImageView
+        android:layout_marginTop="50dp"
+        android:src="@drawable/cross"
+        android:id="@+id/ivCross"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@id/rlOrders"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+</RelativeLayout>

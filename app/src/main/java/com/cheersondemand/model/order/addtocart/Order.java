@@ -1,5 +1,6 @@
 package com.cheersondemand.model.order.addtocart;
 
+import com.cheersondemand.model.DeliveryAddress;
 import com.cheersondemand.model.order.updatecart.Coupon;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
@@ -59,7 +60,7 @@ public class Order {
     private Coupon coupon;
     @SerializedName("delivery_address")
     @Expose
-    private String deliveryAddress;
+    private DeliveryAddress deliveryAddress;
 
     public Integer getId() {
         return id;
@@ -165,11 +166,11 @@ public class Order {
         this.deliveredOn = deliveredOn;
     }
 
-    public String getDeliveryAddress() {
+    public DeliveryAddress getDeliveryAddress() {
         return deliveryAddress;
     }
 
-    public void setDeliveryAddress(String deliveryAddress) {
+    public void setDeliveryAddress(DeliveryAddress deliveryAddress) {
         this.deliveryAddress = deliveryAddress;
     }
 

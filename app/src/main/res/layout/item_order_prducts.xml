@@ -2,9 +2,12 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
     android:layout_marginEnd="15dp"
-    android:layout_marginStart="15dp"
-    android:layout_marginTop="15dp">
+    android:id="@+id/rlProduct"
+    android:layout_marginTop="15dp"
+    android:background="@color/profile_back"
+    android:layout_marginStart="15dp">
 
     <RelativeLayout
 android:layout_centerVertical="true"
@@ -20,7 +23,7 @@ android:layout_centerVertical="true"
             android:layout_height="wrap_content"
             android:layout_gravity="left"
             android:ellipsize="end"
-            android:fontFamily="@font/sf_ui_display_bold"
+            android:fontFamily="@font/sf_ui_display_regular"
             android:gravity="left"
             android:maxLines="1"
             android:text="@string/order_no"
@@ -42,15 +45,15 @@ android:layout_centerVertical="true"
             android:textSize="14sp" />
     </LinearLayout>
 
-    <android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    <android.support.v7.widget.CardView
         android:id="@+id/card_view"
         android:layout_marginTop="5dp"
         android:layout_width="match_parent"
         android:layout_below="@id/llOrderNo"
         android:layout_height="wrap_content"
-
+        android:layout_marginLeft="5dp"
         android:layout_marginBottom="5dp"
+        android:layout_marginRight="5dp"
         card_view:cardBackgroundColor="@color/white"
         card_view:cardCornerRadius="5dp"
         card_view:cardElevation="2dp">
@@ -62,28 +65,27 @@ android:layout_centerVertical="true"
 
             <RelativeLayout
                 android:id="@+id/rlItem"
-
+                android:padding="10dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@color/white"
-                android:padding="15dp">
+               >
 
                 <RelativeLayout
                     android:layout_width="60dp"
-                    android:layout_height="100dp"
-                    android:layout_centerVertical="true">
+                    android:layout_height="90dp"
+                    >
 
                     <ImageView
                         android:id="@+id/ivProductImage"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_centerInParent="true"
-                        android:fontFamily="@font/sf_ui_display_regular"
                         android:gravity="center"
-                        android:src="@drawable/page_1"
+                        android:layout_centerHorizontal="true"
+                        android:src="@drawable/bitmap_copy"
                         android:text="%"
                         android:textColor="@color/offer_text"
-                        android:textSize="18sp"
+
                         android:textStyle="bold" />
                 </RelativeLayout>
 
@@ -91,7 +93,7 @@ android:layout_centerVertical="true"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
-                    android:layout_marginLeft="60dp"
+                    android:layout_marginLeft="70dp"
                     android:orientation="vertical">
 
                     <TextView
@@ -101,9 +103,8 @@ android:layout_centerVertical="true"
                         android:layout_height="wrap_content"
                         android:layout_gravity="left"
                         android:ellipsize="end"
-                        android:fontFamily="@font/sf_ui_display_bold"
+                        android:fontFamily="@font/sf_ui_display_regular"
                         android:gravity="left"
-                        android:maxLines="1"
                         android:text="Bank Of0% off of fjfad"
                         android:textColor="@color/offer_text"
                         android:textSize="14sp" />
@@ -160,9 +161,9 @@ android:layout_centerVertical="true"
                         <Button
 
                             android:id="@+id/btnReorder"
-                            android:layout_width="100dp"
-                            android:layout_height="30dp"
-                            android:layout_gravity="center_horizontal"
+                            android:layout_width="110dp"
+                            android:padding="3dp"
+                            android:layout_height="30dp"                            android:layout_gravity="center_horizontal"
                             android:background="@drawable/add_to_cart_button"
                             android:fontFamily="@font/sf_ui_display_regular"
                             android:text="@string/re_order"
@@ -173,30 +174,29 @@ android:layout_centerVertical="true"
                         <Button
 
                             android:id="@+id/btnCancel"
-                            android:layout_width="100dp"
+                            android:layout_width="110dp"
+                            android:padding="3dp"
                             android:layout_height="30dp"
-                            android:layout_gravity="center_horizontal"
-
                             android:background="@drawable/bg_button_enable"
                             android:fontFamily="@font/sf_ui_display_regular"
                             android:text="@string/cancel"
                             android:textAllCaps="true"
                             android:textColor="@color/white"
-                            android:textSize="10sp" />
+                            android:textSize="12sp" />
 
                         <Button
 
                             android:id="@+id/btnViewStatus"
-                            android:layout_width="100dp"
-                            android:layout_height="30dp"
-                            android:layout_gravity="center_horizontal"
-
+                            android:layout_width="110dp"
+                            android:padding="3dp"
+                            android:layout_height="30dp"                            android:layout_gravity="center_horizontal"
+                            android:visibility="gone"
                             android:background="@drawable/bg_button_yellow"
                             android:fontFamily="@font/sf_ui_display_regular"
                             android:text="@string/viewStatus"
                             android:textAllCaps="true"
                             android:textColor="@color/white"
-                            android:textSize="10sp" />
+                            android:textSize="12sp" />
 
                         <TextView
 

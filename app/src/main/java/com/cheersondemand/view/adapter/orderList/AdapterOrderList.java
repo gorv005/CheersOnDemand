@@ -1,6 +1,10 @@
 package com.cheersondemand.view.adapter.orderList;
 
 import android.app.Activity;
+import android.app.Dialog;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,6 +16,7 @@ import android.widget.TextView;
 
 import com.cheersondemand.R;
 import com.cheersondemand.model.order.addtocart.Order;
+import com.cheersondemand.model.order.addtocart.OrderItem;
 import com.cheersondemand.util.C;
 import com.cheersondemand.util.ImageLoader.ImageLoader;
 import com.cheersondemand.util.Util;
@@ -87,10 +92,32 @@ public class ItemViewHolder extends RecyclerView.ViewHolder {
                 itemViewHolder.btnReorder.setVisibility(View.GONE);
                 itemViewHolder.btnViewStatus.setVisibility(View.GONE);
             }
+            else  if(horizontalList.get(position).getStatus().equals(C.cancelled)) {
+                itemViewHolder.tvDays.setText(horizontalList.get(position).getStatus());
+                itemViewHolder.btnCancel.setVisibility(View.GONE);
+                itemViewHolder.btnReorder.setVisibility(View.GONE);
+                itemViewHolder.btnViewStatus.setVisibility(View.GONE);
+            }
 
-            itemViewHolder.tvProductName.setText(horizontalList.get(position).getOrderItems().get(0).getProductName());
-            itemViewHolder.tvQuantity.setText(context.getString(R.string.quantity)+": "+horizontalList.get(position).getOrderItems().get(0).getQuantity());
-            Util.setImage(context,horizontalList.get(position).getOrderItems().get(0).getProductImage(),itemViewHolder.ivProductImage);
+            itemViewHolder.tvOrderNo.setText(horizontalList.get(position).getOrderNumber());
+            if(horizontalList.get(position).getOrderItems()!=null && horizontalList.get(position).getOrderItems().size()>0) {
+
+                if(horizontalList.get(position).getOrderItems().size()>1) {
+                    itemViewHolder.tvMoreProducts.setText("+"+horizontalList.get(position).getOrderItems().size()+ " "+context.getString(R.string.more_products));
+                }
+                else {
+                    itemViewHolder.tvMoreProducts.setText("");
+                }
+                itemViewHolder.tvProductName.setText(horizontalList.get(position).getOrderItems().get(0).getProductName());
+                itemViewHolder.tvQuantity.setText(context.getString(R.string.quantity) + ": " + horizontalList.get(position).getOrderItems().get(0).getQuantity());
+                Util.setImage(context, horizontalList.get(position).getOrderItems().get(0).getProductImage(), itemViewHolder.ivProductImage);
+            }
+            itemViewHolder.tvMoreProducts.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    dialog(horizontalList.get(position).getOrderItems());
+                }
+            });
             /*itemViewHolder.rlProduct.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -122,6 +149,37 @@ public class ItemViewHolder extends RecyclerView.ViewHolder {
     @Override
     public int getItemCount() {
         return horizontalList.size();
+    }
+
+    void dialog(List<OrderItem> orderItem) {
+        LinearLayoutManager layoutManager;
+
+        final Dialog dialog = new Dialog(context, R.style.FullHeightDialog); //this is a reference to the style above
+        dialog.setContentView(R.layout.more_order_dialog); //I saved the xml file above as yesnomessage.xml
+        dialog.setCancelable(true);
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+
+//to set the message
+
+        TextView title = (TextView) dialog.findViewById(R.id.titleOrders);
+        RecyclerView rvOrders=(RecyclerView)dialog.findViewById(R.id.rvOrders) ;
+        layoutManager = new LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false);
+        rvOrders.setLayoutManager(layoutManager);
+        rvOrders.setHasFixedSize(true);
+        title.setText(orderItem.size()+" "+context.getString(R.string.more_products));
+        ImageView cross = (ImageView) dialog.findViewById(R.id.ivCross);
+        AdapterOrderItems adapterOrderItems=new AdapterOrderItems(orderItem,context);
+        rvOrders.setAdapter(adapterOrderItems);
+
+        cross.setOnClickListener(new View.OnClickListener() {
+
+            public void onClick(View v) {
+                dialog.dismiss();
+
+            }
+        });
+
+        dialog.show();
     }
 
 }

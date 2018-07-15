@@ -398,6 +398,8 @@ public class FragmentProfile extends Fragment implements View.OnClickListener, I
         yes.setOnClickListener(new View.OnClickListener() {
 
             public void onClick(View v) {
+                dialog.dismiss();
+
                 LogoutRequest logoutRequest = new LogoutRequest();
                 logoutRequest.setToken(SharedPreference.getInstance(getActivity()).getUser(C.AUTH_USER).getData().getToken().getAccessToken());
                 logoutRequest.setDeviceToken(SharedPreference.getInstance(getActivity()).getString(C.DEVICE_TOKEN));
