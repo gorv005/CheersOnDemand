@@ -93,4 +93,10 @@ public interface C {
     String placed="placed";
     int FRAGMENT_ORDER_LIST = 27;
     String cancelled="cancelled";
+    String delivered="delivered";
+    String confirmed="confirmed";
+    String ORDER = "order";
+    int FRAGMENT_ORDER_DETAIL =28 ;
+    String TAG_FRAGMENT_ORDER_DETAIL = "TAG_FRAGMENT_ORDER_DETAIL";
+    String IS_REORDER = "is_reorder";
 }

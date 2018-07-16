@@ -27,7 +27,7 @@ android:layout_centerVertical="true"
             android:gravity="left"
             android:maxLines="1"
             android:text="@string/order_no"
-            android:textColor="@color/spec_desc"
+            android:textColor="@color/item_color"
             android:textSize="14sp" />
 
         <TextView
@@ -106,7 +106,7 @@ android:layout_centerVertical="true"
                         android:fontFamily="@font/sf_ui_display_regular"
                         android:gravity="left"
                         android:text="Bank Of0% off of fjfad"
-                        android:textColor="@color/offer_text"
+                        android:textColor="@color/profile_text_color"
                         android:textSize="14sp" />
 
                     <TextView
@@ -118,7 +118,7 @@ android:layout_centerVertical="true"
                         android:fontFamily="@font/sf_ui_display_regular"
                         android:gravity="left"
                         android:text="Quantity:1"
-                        android:textColor="@color/spec_desc"
+                        android:textColor="@color/item_color"
                         android:textSize="14sp" />
 
                     <LinearLayout
@@ -149,7 +149,7 @@ android:layout_centerVertical="true"
                             android:fontFamily="@font/sf_ui_display_regular"
                             android:gravity="center_vertical"
                             android:text="Bank Offer"
-                            android:textColor="@color/spec_desc"
+                            android:textColor="@color/item_color"
                             android:textSize="12sp" />
                     </LinearLayout>
 

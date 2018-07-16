@@ -23,7 +23,7 @@ import com.cheersondemand.R;
 import com.cheersondemand.util.C;
 import com.cheersondemand.util.SharedPreference;
 import com.cheersondemand.util.Util;
-import com.cheersondemand.view.ActivityHome;
+import com.cheersondemand.view.ActivitySearchLocation;
 import com.cheersondemand.view.MainActivity;
 
 import butterknife.BindView;
@@ -96,13 +96,13 @@ public class FragmentSplash extends Fragment {
 
                                 if(SharedPreference.getInstance(getActivity()).getBoolean(C.IS_LOGIN)){
 
-                                   /* Intent intent = new Intent(getActivity(), ActivitySearchLocation.class);
+                                    Intent intent = new Intent(getActivity(), ActivitySearchLocation.class);
                                     intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                                     intent.putExtra(C.FROM, C.SEARCH);
-                                    startActivity(intent);*/
-                                    Intent intent = new Intent(getActivity(), ActivityHome.class);
+                                    startActivity(intent);
+                                   /* Intent intent = new Intent(getActivity(), ActivityHome.class);
                                     intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                                    getActivity().startActivity(intent);
+                                    getActivity().startActivity(intent);*/
                                 }
                                 else {
                                     Bundle bundle = new Bundle();

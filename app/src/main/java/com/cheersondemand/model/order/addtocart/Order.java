@@ -1,17 +1,19 @@
 package com.cheersondemand.model.order.addtocart;
 
 import com.cheersondemand.model.DeliveryAddress;
+import com.cheersondemand.model.order.OrderHistory;
 import com.cheersondemand.model.order.updatecart.Coupon;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
  * Created by AB on 6/23/2018.
  */
 
-public class Order {
+public class Order implements Serializable{
 
     @SerializedName("id")
     @Expose
@@ -52,6 +54,9 @@ public class Order {
     @SerializedName("is_card_added")
     @Expose
     private Boolean isCardAdded;
+    @SerializedName("order_history")
+    @Expose
+    private List<OrderHistory> orderHistory = null;
     @SerializedName("order_items")
     @Expose
     private List<OrderItem> orderItems = null;
@@ -220,5 +225,13 @@ public class Order {
 
     public void setStoreOpen(Boolean storeOpen) {
         isStoreOpen = storeOpen;
+    }
+
+    public List<OrderHistory> getOrderHistory() {
+        return orderHistory;
+    }
+
+    public void setOrderHistory(List<OrderHistory> orderHistory) {
+        this.orderHistory = orderHistory;
     }
 }

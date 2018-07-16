@@ -137,7 +137,10 @@ public class FragmentProfile extends Fragment implements View.OnClickListener, I
             viewChangePassword.setVisibility(View.GONE);
             llLogout.setVisibility(View.GONE);
         }
-        getWishList();
+
+            getWishList();
+
+
     }
 
 

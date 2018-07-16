@@ -136,7 +136,7 @@
     <string name="address_line_2">Address Line 2</string>
     <string name="pincode">Pin Code</string>
     <string name="PhoneNumber">Phone Number</string>
-        <string name="PhoneNumber_">Phone Number:</string>
+    <string name="PhoneNumber_">Phone Number:</string>
 
     <string name="save_address">Save Address</string>
     <string name="update_address">Update Address</string>
@@ -191,6 +191,14 @@
     <string name="choose_delievryAddress">Choose Delivery Address</string>
     <string name="confirm_address">confirm address</string>
     <string name="address">Address</string>
+    <string name="placed">Placed</string>
+    <string name="delivered_on">Delivered on</string>
+    <string name="confirmed">Confirmed</string>
+    <string name="price">Price:</string>
+    <string name="order_status">Order Status</string>
+    <string name="shipingDetail">Shipping Details</string>
+    <string name="order_detail">Order Detail</string>
+    <string name="order_date">Ordered Date:</string>
 
     <!--
         <string name="default_web_client_id">999387565226-hdnnhm6rhgik5ljvm06shotsi7j9883c.apps.googleusercontent.com</string>

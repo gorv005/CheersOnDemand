@@ -17,6 +17,7 @@ import android.widget.TextView;
 
 import com.cheersondemand.R;
 import com.cheersondemand.model.address.Address;
+import com.cheersondemand.model.order.addtocart.Order;
 import com.cheersondemand.model.order.updatecart.UpdateCartRequest;
 import com.cheersondemand.util.C;
 import com.cheersondemand.view.fragments.FragmentAddAddress;
@@ -32,6 +33,8 @@ import com.cheersondemand.view.fragments.FragmentForgotPassword;
 import com.cheersondemand.view.fragments.FragmentHelpCenter;
 import com.cheersondemand.view.fragments.FragmentHelpCenterPages;
 import com.cheersondemand.view.fragments.FragmentNotification;
+import com.cheersondemand.view.fragments.FragmentOrderDetail;
+import com.cheersondemand.view.fragments.FragmentOrderList;
 import com.cheersondemand.view.fragments.FragmentProductDescription;
 import com.cheersondemand.view.fragments.FragmentProductsListing;
 import com.cheersondemand.view.fragments.FragmentProfile;
@@ -164,9 +167,14 @@ public class ActivityContainer extends AppCompatActivity {
                // fragmentTransaction.addToBackStack(C.TAG_FRAGMENT_FRAGMENT_ADD_CARD);
                 break;
             case C.FRAGMENT_ORDER_LIST:
-                fragment = new FragmentCardList();
+                fragment = new FragmentOrderList();
                 fragmentTransaction.replace(R.id.container, fragment);
                 // fragmentTransaction.addToBackStack(C.TAG_FRAGMENT_FRAGMENT_ADD_CARD);
+                break;
+            case C.FRAGMENT_ORDER_DETAIL:
+                fragment = new FragmentOrderDetail();
+                fragmentTransaction.replace(R.id.container, fragment);
+                fragmentTransaction.addToBackStack(C.TAG_FRAGMENT_ORDER_DETAIL);
                 break;
             case C.FRAGMENT_CART:
                 fragment = new FragmentCart();
@@ -232,6 +240,20 @@ public class ActivityContainer extends AppCompatActivity {
         Fragment fragment=getVisibleFragment();
         if(fragment!=null && fragment instanceof FragmentAddressList ){
             ((FragmentAddressList)fragment).removeAddress(address,pos);
+        }
+
+    }
+    public void reorder(Order order){
+        Fragment fragment=getVisibleFragment();
+        if(fragment!=null && fragment instanceof FragmentOrderList ){
+            ((FragmentOrderList)fragment).reOrder(order);
+        }
+
+    }
+    public void cancelOrder(Order order){
+        Fragment fragment=getVisibleFragment();
+        if(fragment!=null && fragment instanceof FragmentOrderList ){
+            ((FragmentOrderList)fragment).cancelOrder(order);
         }
 
     }

@@ -69,10 +69,17 @@ public class ItemViewHolder extends RecyclerView.ViewHolder {
     public void onBindViewHolder(final RecyclerView.ViewHolder  holder, final int position) {
         if (holder instanceof ItemViewHolder) {
             final ItemViewHolder itemViewHolder = (ItemViewHolder) holder;
-            itemViewHolder.tvProductName.setText(horizontalList.get(position).getProductName());
-            itemViewHolder.tvQuantity.setText("Qty:"+horizontalList.get(position).getQuantity());
-            Util.setImage(context, horizontalList.get(position).getProductImage(), itemViewHolder.ivProductImage);
-            if(position==horizontalList.size()){
+            itemViewHolder.tvProductName.setText(horizontalList.get(position+1).getProductName());
+            itemViewHolder.tvQuantity.setText("Qty:"+horizontalList.get(position+1).getQuantity());
+            if(horizontalList.get(position+1).getProductImage()==null ||  horizontalList.get(position+1).getProductImage().equals(""))
+            {
+                Util.setImage(context, horizontalList.get(position + 1).getProduct().getImage(), itemViewHolder.ivProductImage);
+            }
+            else {
+                Util.setImage(context, horizontalList.get(position + 1).getProductImage(), itemViewHolder.ivProductImage);
+
+            }
+            if((position+1)==horizontalList.size()){
                 itemViewHolder.viewLine.setVisibility(View.GONE);
             }
         }
@@ -85,7 +92,7 @@ public class ItemViewHolder extends RecyclerView.ViewHolder {
     }
     @Override
     public int getItemCount() {
-        return horizontalList.size();
+        return horizontalList.size()-1;
     }
 
 

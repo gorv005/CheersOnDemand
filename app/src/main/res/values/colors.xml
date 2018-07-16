@@ -49,5 +49,5 @@
     <color name="thumb_ripple_color">#757575</color>
     <color name="side_back">#F9F9F9</color>
     <color name="add_back">#F9FBFD</color>
-
+<color name="item_color">#8F9AAB</color>
 </resources>

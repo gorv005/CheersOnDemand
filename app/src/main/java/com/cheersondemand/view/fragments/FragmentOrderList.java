@@ -1,10 +1,8 @@
 package com.cheersondemand.view.fragments;
 
 
-import android.app.Dialog;
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -13,13 +11,13 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.RelativeLayout;
-import android.widget.TextView;
 
 import com.cheersondemand.R;
 import com.cheersondemand.model.order.addtocart.Order;
+import com.cheersondemand.model.order.orderdetail.CancelOrderRequest;
 import com.cheersondemand.model.order.orderdetail.OrderListResponse;
+import com.cheersondemand.model.order.updatecart.UpdateCartResponse;
 import com.cheersondemand.presenter.home.order.IOrderDetailViewPresenter;
 import com.cheersondemand.presenter.home.order.OrderDetailViewPresenterImpl;
 import com.cheersondemand.util.C;
@@ -100,6 +98,21 @@ public class FragmentOrderList extends Fragment implements IOrderDetailViewPrese
         iOrderDetailViewPresenter.getOrderList(token, id);
     }
 
+  public void cancelOrder(Order order) {
+      CancelOrderRequest cancelOrderRequest=new CancelOrderRequest();
+      cancelOrderRequest.setCancellationReason("Changed my mind.");
+      cancelOrderRequest.setUuid(Util.id(getActivity()));
+        String id = "" + SharedPreference.getInstance(getActivity()).getUser(C.AUTH_USER).getData().getUser().getId();
+
+        String token = C.bearer + SharedPreference.getInstance(getActivity()).getUser(C.AUTH_USER).getData().getToken().getAccessToken();
+        iOrderDetailViewPresenter.cancelOrder(token, id,""+order.getId(),cancelOrderRequest);
+    }
+    public void reOrder(Order order) {
+        String id = "" + SharedPreference.getInstance(getActivity()).getUser(C.AUTH_USER).getData().getUser().getId();
+
+        String token = C.bearer + SharedPreference.getInstance(getActivity()).getUser(C.AUTH_USER).getData().getToken().getAccessToken();
+        iOrderDetailViewPresenter.reorderOrder(token, id,""+order.getId());
+    }
     @Override
     public void onSuccessOrderList(OrderListResponse response) {
         if (response.getSuccess()) {
@@ -110,6 +123,44 @@ public class FragmentOrderList extends Fragment implements IOrderDetailViewPrese
                 adapterOrderList = new AdapterOrderList(orders, getActivity());
                 rvOrders.setAdapter(adapterOrderList);
             }
+
+        } else {
+            util.setSnackbarMessage(getActivity(), response.getMessage(), LLView, true);
+
+        }
+    }
+
+    @Override
+    public void getCartListSuccess(UpdateCartResponse response) {
+
+    }
+
+    @Override
+    public void onSuccessReorderList(OrderListResponse response) {
+        if (response.getSuccess()) {
+            util.setSnackbarMessage(getActivity(), response.getMessage(), LLView, false);
+          //  SharedPreference.getInstance(getActivity()).setBoolean(C.IS_REORDER,true);
+            Handler handler = new Handler();
+
+            handler.postDelayed(new Runnable() {
+                public void run() {
+                    // Actions to do after 10 seconds
+                    getActivity().finish();
+                }
+            }, 2000);
+        } else {
+            util.setSnackbarMessage(getActivity(), response.getMessage(), LLView, true);
+
+        }
+    }
+
+    @Override
+    public void onSuccessCancelOrder(OrderListResponse response) {
+        if (response.getSuccess()) {
+            util.setSnackbarMessage(getActivity(), response.getMessage(), LLView, false);
+            //  SharedPreference.getInstance(getActivity()).setBoolean(C.IS_REORDER,true);
+            getOrderList();
+
 
         } else {
             util.setSnackbarMessage(getActivity(), response.getMessage(), LLView, true);
