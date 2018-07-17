@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/swipe_layout"
+    android:background="@color/profile_back"
+    android:orientation="vertical">
+
+    <RelativeLayout
+
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <RelativeLayout
+            android:id="@+id/rlMain"
+            android:layout_marginTop="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <RelativeLayout
+                android:id="@+id/rl_card_front"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/card_height"
+                android:background="@drawable/shape_2_copy_4"
+                android:padding="16dp">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    >
+
+
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/layer_25" />
+
+                    <LinearLayout
+                        android:layout_centerVertical="true"
+                        android:orientation="vertical"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="@string/card_number"
+                            android:textAllCaps="true"
+                            android:fontFamily="@font/sf_ui_display_regular"
+                            android:textColor="@color/white"
+                            android:textSize="@dimen/small_text" />
+                        <TextView
+                            android:fontFamily="@font/sf_ui_display_bold"
+                            android:id="@+id/tv_card_number"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text=""
+                            android:textColor="@color/white"
+                            android:textSize="@dimen/medium_text" />
+
+                    </LinearLayout>
+                    <LinearLayout
+                        android:layout_alignParentBottom="true"
+                        android:orientation="vertical"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content">
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/activity_vertical_margin"
+                            android:text="@string/card_name_sample"
+                            android:textAllCaps="true"
+                            android:fontFamily="@font/sf_ui_display_regular"
+
+                            android:textColor="@color/white"
+                            android:textSize="@dimen/small_text" />
+
+                        <TextView
+                            android:id="@+id/tv_member_name"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginRight="70dp"
+                            android:fontFamily="@font/sf_ui_display_bold"
+                            android:maxLines="1"
+                            android:text=""
+                            android:textColor="@color/white"
+                            android:textSize="@dimen/medium_text" />
+                    </LinearLayout>
+                </RelativeLayout>
+                <LinearLayout
+                    android:layout_alignParentBottom="true"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginRight="@dimen/items_inbetween_small"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:id="@+id/linearLayout">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginRight="@dimen/items_inbetween_small"
+                        android:text="@string/expires"
+                        android:textAllCaps="true"
+                        android:fontFamily="@font/sf_ui_display_regular"
+
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/small_text" />
+
+                    <TextView
+                        android:id="@+id/tv_validity"
+                        android:fontFamily="@font/sf_ui_display_bold"
+
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text=""
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/medium_text" />
+
+                </LinearLayout>
+
+                <ImageView
+                    android:id="@+id/ivType"
+                    android:layout_width="50dp"
+                    android:layout_height="40dp"
+                    android:layout_alignParentTop="true"
+                    android:layout_alignStart="@+id/linearLayout"
+                    android:visibility="visible" />
+
+            </RelativeLayout>
+
+        </RelativeLayout>
+        <View
+            android:layout_below="@id/rlItem"
+            android:background="@color/profile_back"
+            android:layout_width="match_parent"
+            android:layout_height="2dp"/>
+    </RelativeLayout>
+
+
+</RelativeLayout>

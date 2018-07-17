@@ -99,4 +99,10 @@ public interface C {
     int FRAGMENT_ORDER_DETAIL =28 ;
     String TAG_FRAGMENT_ORDER_DETAIL = "TAG_FRAGMENT_ORDER_DETAIL";
     String IS_REORDER = "is_reorder";
+    int FRAGMENT_SELECT_ADDRESS =29 ;
+    String CART_ID ="cardId" ;
+    String IS_FROM_CHECKOUT ="is_from_checkout" ;
+
+
+    int FRAGMENT_PAYMENT_CONFIRMATION = 30;
 }

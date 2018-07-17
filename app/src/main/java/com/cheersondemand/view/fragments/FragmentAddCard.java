@@ -331,13 +331,17 @@ public class FragmentAddCard extends Fragment implements ICardViewPresenter.ICar
     {
 
 
-        FlipAnimation flipAnimation = new FlipAnimation(rlCardFront, rlCardBack);
+        try {
+            FlipAnimation flipAnimation = new FlipAnimation(rlCardFront, rlCardBack);
 
-        if (rlCardFront.getVisibility() == View.GONE)
-        {
-            flipAnimation.reverse();
+            if (rlCardFront.getVisibility() == View.GONE) {
+                flipAnimation.reverse();
+            }
+            rlMain.startAnimation(flipAnimation);
         }
-        rlMain.startAnimation(flipAnimation);
+        catch (Exception e){
+            e.printStackTrace();
+        }
     }
 
     void validationFields() {
@@ -382,6 +386,7 @@ public class FragmentAddCard extends Fragment implements ICardViewPresenter.ICar
     private void addCardToStripe(String cardNumber, String month,String year,String cvv) {
         showProgress();
          com.stripe.android.model.Card stripeCard = new com.stripe.android.model.Card(cardNumber, Integer.parseInt(month), Integer.parseInt(year), null);
+        stripeCard.setName(etCardHolderName.getText().toString());
         Stripe stripe = new Stripe(getActivity(), C.STRIPE_APP_KEY);
         stripe.createToken(stripeCard, new TokenCallback() {
             @Override

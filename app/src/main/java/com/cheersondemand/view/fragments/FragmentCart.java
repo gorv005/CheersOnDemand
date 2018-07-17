@@ -1,6 +1,7 @@
 package com.cheersondemand.view.fragments;
 
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -12,9 +13,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.cheersondemand.R;
+import com.cheersondemand.model.address.AddressAddResponse;
+import com.cheersondemand.model.address.AddressResponse;
 import com.cheersondemand.model.coupon.CouponInfoResponse;
 import com.cheersondemand.model.coupon.CouponListResponse;
 import com.cheersondemand.model.coupon.CouponRequest;
@@ -28,6 +32,8 @@ import com.cheersondemand.model.order.updatecart.UpdateCartResponse;
 import com.cheersondemand.model.wishlist.WishListDataResponse;
 import com.cheersondemand.model.wishlist.WishListRequest;
 import com.cheersondemand.model.wishlist.WishListResponse;
+import com.cheersondemand.presenter.address.AddressViewPresenterImpl;
+import com.cheersondemand.presenter.address.IAddressViewPresenter;
 import com.cheersondemand.presenter.coupon.CouponViewPresenterImpl;
 import com.cheersondemand.presenter.coupon.ICouponViewPresenter;
 import com.cheersondemand.presenter.home.order.IOrderViewPresenterPresenter;
@@ -48,7 +54,7 @@ import butterknife.Unbinder;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class FragmentCart extends Fragment implements View.OnClickListener, IOrderViewPresenterPresenter.IOrderView, ICouponViewPresenter.ICouponView {
+public class FragmentCart extends Fragment implements View.OnClickListener, IOrderViewPresenterPresenter.IOrderView, ICouponViewPresenter.ICouponView, IAddressViewPresenter.IAddressView {
 
 
     @BindView(R.id.btnBrowseProduct)
@@ -59,14 +65,16 @@ public class FragmentCart extends Fragment implements View.OnClickListener, IOrd
     @BindView(R.id.rvCartList)
     RecyclerView rvCartList;
     @BindView(R.id.LLView)
-    LinearLayout LLView;
+    RelativeLayout LLView;
     @BindView(R.id.tvMyCart)
     TextView tvMyCart;
     @BindView(R.id.viewLine)
     View viewLine;
-    private LinearLayoutManager mLinearLayoutManager;
+    @BindView(R.id.btnProceed)
+    Button btnProceed;
     IOrderViewPresenterPresenter iOrderViewPresenterPresenter;
     ICouponViewPresenter iCouponViewPresenter;
+    IAddressViewPresenter iAddressViewPresenter;
     AdapterCartList adapterCartList;
     Util util;
     CartProduct cartProduct;
@@ -76,6 +84,8 @@ public class FragmentCart extends Fragment implements View.OnClickListener, IOrd
     boolean isAdd;
     OrderItem orderItem;
     int source;
+    private LinearLayoutManager mLinearLayoutManager;
+
     public FragmentCart() {
         // Required empty public constructor
     }
@@ -84,9 +94,10 @@ public class FragmentCart extends Fragment implements View.OnClickListener, IOrd
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        source=getArguments().getInt(C.SOURCE);
+        source = getArguments().getInt(C.SOURCE);
         iOrderViewPresenterPresenter = new OrderViewPresenterImpl(this, getActivity());
         iCouponViewPresenter = new CouponViewPresenterImpl(this, getActivity());
+        iAddressViewPresenter = new AddressViewPresenterImpl(this, getActivity());
         util = new Util();
     }
 
@@ -102,12 +113,12 @@ public class FragmentCart extends Fragment implements View.OnClickListener, IOrd
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        if(source==C.FRAGMENT_PRODUCT_DESC){
+        if (source == C.FRAGMENT_PRODUCT_DESC) {
             tvMyCart.setVisibility(View.GONE);
             viewLine.setVisibility(View.GONE);
             ActivityContainer.tvTitle.setText(getString(R.string.my_cart));
         }
-
+        btnProceed.setOnClickListener(this);
         btnBrowseProduct.setOnClickListener(this);
         mLinearLayoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
         rvCartList.setLayoutManager(mLinearLayoutManager);
@@ -116,7 +127,7 @@ public class FragmentCart extends Fragment implements View.OnClickListener, IOrd
     @Override
     public void onResume() {
         super.onResume();
-        if(source==C.FRAGMENT_PRODUCT_DESC){
+        if (source == C.FRAGMENT_PRODUCT_DESC) {
             tvMyCart.setVisibility(View.GONE);
             viewLine.setVisibility(View.GONE);
             ActivityContainer.tvTitle.setText(getString(R.string.my_cart));
@@ -159,9 +170,20 @@ public class FragmentCart extends Fragment implements View.OnClickListener, IOrd
 
                 ((ActivityHome) getActivity()).setHome();
                 break;
+            case R.id.btnProceed:
+                Intent intent = new Intent(getActivity(), ActivityContainer.class);
+                intent.putExtra(C.FRAGMENT_ACTION, C.FRAGMENT_PAYMENT_CONFIRMATION);
+                startActivity(intent);
+                break;
         }
     }
 
+    void getAddressList() {
+        String id = "" + SharedPreference.getInstance(getActivity()).getUser(C.AUTH_USER).getData().getUser().getId();
+
+        String token = C.bearer + SharedPreference.getInstance(getActivity()).getUser(C.AUTH_USER).getData().getToken().getAccessToken();
+        iAddressViewPresenter.getAddresses(token, id);
+    }
 
     public void removeCoupon() {
 
@@ -340,7 +362,7 @@ public class FragmentCart extends Fragment implements View.OnClickListener, IOrd
                 cartProduct = response.getData();
 //            adapterCartList.setData(cartProduct);
                 orderItemsList = response.getData().getOrder().getOrderItems();
-                adapterCartList = new AdapterCartList(cartProduct, orderItemsList, getActivity(),source);
+                adapterCartList = new AdapterCartList(cartProduct, orderItemsList, getActivity(), source);
                 rvCartList.setAdapter(adapterCartList);
                 llNoProductInCount.setVisibility(View.GONE);
                 rvCartList.setVisibility(View.VISIBLE);
@@ -426,6 +448,46 @@ public class FragmentCart extends Fragment implements View.OnClickListener, IOrd
     }
 
     @Override
+    public void onRemoveAddressSuccess(AddressAddResponse Response) {
+
+    }
+
+    @Override
+    public void onAddAddressSuccess(AddressAddResponse Response) {
+
+    }
+
+    @Override
+    public void onEditAddressSuccess(AddressAddResponse Response) {
+
+    }
+
+    @Override
+    public void onAddressListSuccess(AddressResponse Response) {
+        if (Response.getSuccess()) {
+            if (Response.getData() != null && Response.getData().size() > 0) {
+                Intent intent = new Intent(getActivity(), ActivityContainer.class);
+                intent.putExtra(C.FRAGMENT_ACTION, C.FRAGMENT_SELECT_ADDRESS);
+                getActivity().startActivity(intent);
+            } else {
+                Intent intent = new Intent(getActivity(), ActivityContainer.class);
+                intent.putExtra(C.FRAGMENT_ACTION, C.FRAGMENT_ADD_ADDRESS);
+                Bundle bundle = new Bundle();
+                bundle.putBoolean(C.IS_EDIT, false);
+                bundle.putBoolean(C.IS_FROM_CHECKOUT, true);
+                intent.putExtra(C.BUNDLE, bundle);
+                getActivity().startActivity(intent);
+            }
+        }
+    }
+
+    @Override
+    public void onAddDeliveryAddressSuccess(AddressAddResponse Response) {
+
+    }
+
+
+    @Override
     public void getResponseError(String response) {
         util.setSnackbarMessage(getActivity(), response, LLView, true);
 
@@ -433,7 +495,7 @@ public class FragmentCart extends Fragment implements View.OnClickListener, IOrd
 
     @Override
     public void showProgress() {
-        util.showDialog(C.MSG,getActivity());
+        util.showDialog(C.MSG, getActivity());
     }
 
     @Override

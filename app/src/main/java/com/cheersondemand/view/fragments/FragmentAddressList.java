@@ -164,6 +164,11 @@ public class FragmentAddressList extends Fragment implements View.OnClickListene
     }
 
     @Override
+    public void onAddDeliveryAddressSuccess(AddressAddResponse Response) {
+
+    }
+
+    @Override
     public void getResponseError(String response) {
         util.setSnackbarMessage(getActivity(), response, rlView, true);
 
@@ -188,6 +193,8 @@ public class FragmentAddressList extends Fragment implements View.OnClickListene
                 Intent intent=new Intent(getActivity(), ActivityContainer.class);
                 Bundle bundle=new Bundle();
                 bundle.putBoolean(C.IS_EDIT,false);
+                bundle.putBoolean(C.IS_FROM_CHECKOUT, false);
+
                 intent.putExtra(C.BUNDLE,bundle);
                 intent.putExtra(C.FRAGMENT_ACTION,C.FRAGMENT_ADD_ADDRESS);
                 startActivity(intent);

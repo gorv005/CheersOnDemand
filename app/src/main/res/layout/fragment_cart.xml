@@ -1,9 +1,16 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@color/profile_back"
+    android:id="@+id/LLView"
+    android:layout_height="match_parent"
+    >
+<LinearLayout
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:id="@+id/LLView"
     android:background="@color/profile_back"
     tools:context="com.cheersondemand.view.fragments.FragmentCart">
 
@@ -86,6 +93,7 @@
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/rvCartList"
+        android:layout_marginBottom="60dp"
         android:visibility="visible"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
@@ -93,3 +101,21 @@
     </android.support.v7.widget.RecyclerView>
 
 </LinearLayout>
+
+    <Button
+        android:layout_marginBottom="10dp"
+        android:layout_alignParentBottom="true"
+        android:id="@+id/btnProceed"
+
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginEnd="20dp"
+        android:layout_marginStart="20dp"
+        android:background="@drawable/bg_button_enable"
+        android:fontFamily="@font/sf_ui_display_regular"
+        android:text="@string/proceed"
+        android:textAllCaps="true"
+        android:textColor="@color/white"
+        android:textSize="13.4sp" />
+</RelativeLayout>

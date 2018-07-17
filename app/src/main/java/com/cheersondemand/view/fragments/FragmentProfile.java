@@ -395,7 +395,6 @@ public class FragmentProfile extends Fragment implements View.OnClickListener, I
         title.setText(getString(R.string.logout));
         message.setText(getString(R.string.are_you_sure_logout));
 //add some action to the buttons
-        String num = "0123456789";
         Button yes = (Button) dialog.findViewById(R.id.bmessageDialogYes);
         yes.setText(getString(R.string.logout));
         yes.setOnClickListener(new View.OnClickListener() {

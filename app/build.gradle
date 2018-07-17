@@ -11,6 +11,8 @@ apply plugin: 'com.android.application'
 apply plugin: 'io.fabric'
 
 repositories {
+    maven { url "https://jitpack.io" }
+    mavenCentral()
     maven { url 'https://maven.fabric.io/public' }
 }
 
@@ -78,6 +80,7 @@ dependencies {
     compile('com.crashlytics.sdk.android:crashlytics:2.9.4@aar') {
         transitive = true;
     }
+    compile 'com.github.lsjwzh.RecyclerViewPager:lib:v1.1.2'
 
 }
 //apply plugin: 'com.google.gms.google-services'

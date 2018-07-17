@@ -199,6 +199,18 @@
     <string name="shipingDetail">Shipping Details</string>
     <string name="order_detail">Order Detail</string>
     <string name="order_date">Ordered Date:</string>
+    <string name="proceed">PROCEED</string>
+    <string name="yes_delete">Yes, Delete</string>
+    <string name="ok">Ok</string>
+    <string name="payment_option">Payment Options</string>
+    <string name="add_card_">Add Card</string>
+    <string name="payment">Payment</string>
+    <string name="view_detail">View Detail</string>
+    <string name="total_order">Total Order</string>
+    <string name="delivery_address">Delivery Address</string>
+    <string name="edit_change_add">Edit/Change Address</string>
+    <string name="add_new_address">Add New Address</string>
+    <string name="gift_the_product">Gift the product</string>
 
     <!--
         <string name="default_web_client_id">999387565226-hdnnhm6rhgik5ljvm06shotsi7j9883c.apps.googleusercontent.com</string>

@@ -90,6 +90,8 @@ public class ItemViewHolder extends RecyclerView.ViewHolder {
                     Intent intent=new Intent(context, ActivityContainer.class);
                     Bundle bundle=new Bundle();
                     bundle.putBoolean(C.IS_EDIT,true);
+                    bundle.putBoolean(C.IS_FROM_CHECKOUT, false);
+
                     bundle.putSerializable(C.ADDRESS,horizontalList.get(position));
 
                     intent.putExtra(C.BUNDLE,bundle);

@@ -1,13 +1,17 @@
 package com.cheersondemand.view.address;
 
 import android.app.Activity;
+import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.RadioButton;
 import android.widget.TextView;
 
@@ -71,7 +75,12 @@ public class ItemViewHolder extends RecyclerView.ViewHolder {
             }
         }
     }
-
+    public Address getSelectedAddress() {
+        if(pos!=-1) {
+            return horizontalList.get(pos);
+        }
+        return null;
+    }
     @Override
     public RecyclerView.ViewHolder  onCreateViewHolder(ViewGroup parent, int viewType) {
     if(viewType==TYPE_ITEM) {
@@ -125,7 +134,8 @@ public class ItemViewHolder extends RecyclerView.ViewHolder {
                 @Override
                 public void onClick(View v) {
                 //    Toast.makeText(context, itemViewHolder.tvBrandName.getText().toString(), Toast.LENGTH_SHORT).show();
-                    ((ActivityContainer)context).removeAddress(horizontalList.get(position),position);
+                  //  ((ActivityContainer)context).removeAddress(horizontalList.get(position),position);
+                    dialog(position);
                 }
             });
             itemViewHolder.radioButton.setOnClickListener(new View.OnClickListener() {
@@ -172,6 +182,43 @@ public class ItemViewHolder extends RecyclerView.ViewHolder {
     @Override
     public int getItemCount() {
         return horizontalList.size()+1;
+    }
+    void dialog(final int pos) {
+        final Dialog dialog = new Dialog(context, R.style.FullHeightDialog); //this is a reference to the style above
+        dialog.setContentView(R.layout.dialog); //I saved the xml file above as yesnomessage.xml
+        dialog.setCancelable(true);
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+
+//to set the message
+        TextView title = (TextView) dialog.findViewById(R.id.tvmessagedialogtitle);
+
+        TextView message = (TextView) dialog.findViewById(R.id.tvmessagedialogtext);
+        title.setText(context.getString(R.string.logout));
+        message.setText(context.getString(R.string.are_you_sure_logout));
+
+        Button yes = (Button) dialog.findViewById(R.id.bmessageDialogYes);
+        yes.setText(context.getString(R.string.yes_delete));
+        yes.setOnClickListener(new View.OnClickListener() {
+
+            public void onClick(View v) {
+                dialog.dismiss();
+
+                ((ActivityContainer)context).removeAddress(horizontalList.get(pos),pos);
+
+            }
+        });
+
+        Button no = (Button) dialog.findViewById(R.id.bmessageDialogNo);
+        no.setText(context.getString(R.string.cancel));
+        no.setOnClickListener(new View.OnClickListener() {
+
+            public void onClick(View v) {
+                // TODO Auto-generated method stub
+                dialog.dismiss();
+            }
+        });
+
+        dialog.show();
     }
 
 }

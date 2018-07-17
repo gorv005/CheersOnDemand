@@ -23,6 +23,7 @@ import com.cheersondemand.util.C;
 import com.cheersondemand.view.fragments.FragmentAddAddress;
 import com.cheersondemand.view.fragments.FragmentAddCard;
 import com.cheersondemand.view.fragments.FragmentAddressList;
+import com.cheersondemand.view.fragments.FragmentAddressSelection;
 import com.cheersondemand.view.fragments.FragmentBecomePartner;
 import com.cheersondemand.view.fragments.FragmentCardList;
 import com.cheersondemand.view.fragments.FragmentCart;
@@ -35,6 +36,7 @@ import com.cheersondemand.view.fragments.FragmentHelpCenterPages;
 import com.cheersondemand.view.fragments.FragmentNotification;
 import com.cheersondemand.view.fragments.FragmentOrderDetail;
 import com.cheersondemand.view.fragments.FragmentOrderList;
+import com.cheersondemand.view.fragments.FragmentPaymentConfirmation;
 import com.cheersondemand.view.fragments.FragmentProductDescription;
 import com.cheersondemand.view.fragments.FragmentProductsListing;
 import com.cheersondemand.view.fragments.FragmentProfile;
@@ -141,6 +143,11 @@ public class ActivityContainer extends AppCompatActivity {
                 fragmentTransaction.replace(R.id.container, fragment);
                // fragmentTransaction.addToBackStack(C.TAG_FRAGMENT_ADD_ADDRESS);
                 break;
+            case C.FRAGMENT_SELECT_ADDRESS:
+                fragment = new FragmentAddressSelection();
+                fragmentTransaction.replace(R.id.container, fragment);
+                // fragmentTransaction.addToBackStack(C.TAG_FRAGMENT_ADD_ADDRESS);
+                break;
             case C.FRAGMENT_HELP_CENTER:
                 fragment = new FragmentHelpCenter();
                 fragmentTransaction.replace(R.id.container, fragment);
@@ -168,6 +175,11 @@ public class ActivityContainer extends AppCompatActivity {
                 break;
             case C.FRAGMENT_ORDER_LIST:
                 fragment = new FragmentOrderList();
+                fragmentTransaction.replace(R.id.container, fragment);
+                // fragmentTransaction.addToBackStack(C.TAG_FRAGMENT_FRAGMENT_ADD_CARD);
+                break;
+            case C.FRAGMENT_PAYMENT_CONFIRMATION:
+                fragment = new FragmentPaymentConfirmation();
                 fragmentTransaction.replace(R.id.container, fragment);
                 // fragmentTransaction.addToBackStack(C.TAG_FRAGMENT_FRAGMENT_ADD_CARD);
                 break;

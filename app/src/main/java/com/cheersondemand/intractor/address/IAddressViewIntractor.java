@@ -2,6 +2,7 @@ package com.cheersondemand.intractor.address;
 
 import android.content.Context;
 
+import com.cheersondemand.model.address.AddDeliveryAddressRequest;
 import com.cheersondemand.model.address.AddressAddResponse;
 import com.cheersondemand.model.address.AddressRequest;
 import com.cheersondemand.model.address.AddressResponse;
@@ -16,6 +17,7 @@ public interface IAddressViewIntractor {
         void onAddAddressSucess(AddressAddResponse Response);
         void onEditAddressSucess(AddressAddResponse Response);
         void onAddressListSucess(AddressResponse Response);
+        void onAddDeliveryAddressSuccess(AddressAddResponse Response);
 
         void onError(String response);
         Context getAPPContext();
@@ -25,6 +27,8 @@ public interface IAddressViewIntractor {
     public void getAddresses(String token, String userId, OnFinishedListener listener);
     public void RemoveAddAddress(String token, String userId,String id,OnFinishedListener listener);
 
+    public void addDeliveryAddress(String token, String userId, String cardId, AddDeliveryAddressRequest addDeliveryAddressRequest,OnFinishedListener listener);
+    public void addDeliveryAddress(String token, String userId,String cardId,AddressRequest addressRequest,OnFinishedListener listener);
 
 
 }

@@ -1,6 +1,9 @@
 package com.cheersondemand.view.fragments;
 
 
+import android.app.Dialog;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -14,6 +17,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import com.cheersondemand.R;
 import com.cheersondemand.model.address.Address;
@@ -52,7 +56,7 @@ public class FragmentAddAddress extends Fragment implements View.OnClickListener
     @BindView(R.id.btnSaveAdd)
     Button btnSaveAdd;
     Unbinder unbinder;
-    boolean isEdit;
+    boolean isEdit,isFromCheckOut;
     Address address1;
     IAddressViewPresenter iAddressViewPresenter;
     @BindView(R.id.rlView)
@@ -70,6 +74,8 @@ public class FragmentAddAddress extends Fragment implements View.OnClickListener
         iAddressViewPresenter = new AddressViewPresenterImpl(this, getActivity());
         util=new Util();
         isEdit = getArguments().getBoolean(C.IS_EDIT);
+        isFromCheckOut = getArguments().getBoolean(C.IS_FROM_CHECKOUT);
+
         if (isEdit) {
             address1 = (Address) getArguments().getSerializable(C.ADDRESS);
         }
@@ -310,7 +316,12 @@ public class FragmentAddAddress extends Fragment implements View.OnClickListener
             case R.id.btnSaveAdd:
                 if (isEdit) {
                     editAddress();
-                } else {
+                }
+
+               else if(isFromCheckOut){
+                    addDeliveryAddress();
+                }
+                else {
                     addAddress();
                 }
                 break;
@@ -353,7 +364,22 @@ public class FragmentAddAddress extends Fragment implements View.OnClickListener
         String token = C.bearer + SharedPreference.getInstance(getActivity()).getUser(C.AUTH_USER).getData().getToken().getAccessToken();
         iAddressViewPresenter.AddAddress(token, id, addressRequest);
     }
+    public void addDeliveryAddress() {
+        AddressRequest addressRequest = new AddressRequest();
+        Address address = new Address();
+        address.setName(etName.getText().toString());
+        address.setFlatNo(etFlat.getText().toString());
+        address.setAddressFirst(etAddLine1.getText().toString());
+        address.setAddressSecond(etAddLine2.getText().toString());
+        address.setZipCode(etPincode.getText().toString());
+        address.setPhoneNumber(etPhoneNo.getText().toString());
+        addressRequest.setAddress(address);
+        String id = "" + SharedPreference.getInstance(getActivity()).getUser(C.AUTH_USER).getData().getUser().getId();
+        String order_id = "" + SharedPreference.getInstance(getActivity()).getString(C.ORDER_ID);
 
+        String token = C.bearer + SharedPreference.getInstance(getActivity()).getUser(C.AUTH_USER).getData().getToken().getAccessToken();
+        iAddressViewPresenter.addDeliveryAddress(token, id, order_id,addressRequest);
+    }
     @Override
     public void onRemoveAddressSuccess(AddressAddResponse response) {
         if(response.getSuccess()){
@@ -402,6 +428,16 @@ public class FragmentAddAddress extends Fragment implements View.OnClickListener
     }
 
     @Override
+    public void onAddDeliveryAddressSuccess(AddressAddResponse Response) {
+        if(Response.getSuccess()){
+
+        }
+        else {
+            dialog(Response.getMessage());
+        }
+    }
+
+    @Override
     public void getResponseError(String response) {
         util.setSnackbarMessage(getActivity(), response, rlView, true);
 
@@ -418,4 +454,30 @@ public class FragmentAddAddress extends Fragment implements View.OnClickListener
         util.hideDialog();
 
     }
+    void dialog(String msg) {
+        final Dialog dialog = new Dialog(getActivity(), R.style.FullHeightDialog); //this is a reference to the style above
+        dialog.setContentView(R.layout.dialog_ok); //I saved the xml file above as yesnomessage.xml
+        dialog.setCancelable(true);
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+
+//to set the message
+        TextView title = (TextView) dialog.findViewById(R.id.tvmessagedialogtitle);
+
+        TextView message = (TextView) dialog.findViewById(R.id.tvmessagedialogtext);
+        title.setText(getString(R.string.app_name));
+        message.setText(msg);
+
+        Button ok = (Button) dialog.findViewById(R.id.bmessageDialogOK);
+        ok.setText(getString(R.string.ok));
+        ok.setOnClickListener(new View.OnClickListener() {
+
+            public void onClick(View v) {
+                dialog.dismiss();
+
+            }
+        });
+
+        dialog.show();
+    }
+
 }

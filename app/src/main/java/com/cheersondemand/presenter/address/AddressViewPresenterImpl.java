@@ -4,6 +4,7 @@ import android.content.Context;
 
 import com.cheersondemand.intractor.address.AddressViewIntractorImpl;
 import com.cheersondemand.intractor.address.IAddressViewIntractor;
+import com.cheersondemand.model.address.AddDeliveryAddressRequest;
 import com.cheersondemand.model.address.AddressAddResponse;
 import com.cheersondemand.model.address.AddressRequest;
 import com.cheersondemand.model.address.AddressResponse;
@@ -55,6 +56,14 @@ public class AddressViewPresenterImpl implements IAddressViewPresenter, IAddress
     }
 
     @Override
+    public void onAddDeliveryAddressSuccess(AddressAddResponse Response) {
+        if (mView != null) {
+            mView.hideProgress();
+            mView.onAddDeliveryAddressSuccess(Response);
+        }
+    }
+
+    @Override
     public void onError(String response) {
         if (mView != null) {
             mView.hideProgress();
@@ -98,6 +107,22 @@ public class AddressViewPresenterImpl implements IAddressViewPresenter, IAddress
         if (mView != null) {
             mView.showProgress();
             iAddressViewIntractor.RemoveAddAddress(token,userId,id, this);
+        }
+    }
+
+    @Override
+    public void addDeliveryAddress(String token, String userId, String cardId, AddDeliveryAddressRequest addDeliveryAddressRequest) {
+        if (mView != null) {
+            mView.showProgress();
+            iAddressViewIntractor.addDeliveryAddress(token,userId,cardId,addDeliveryAddressRequest, this);
+        }
+    }
+
+    @Override
+    public void addDeliveryAddress(String token, String userId, String cardId, AddressRequest addressRequest) {
+        if (mView != null) {
+            mView.showProgress();
+            iAddressViewIntractor.addDeliveryAddress(token,userId,cardId,addressRequest, this);
         }
     }
 

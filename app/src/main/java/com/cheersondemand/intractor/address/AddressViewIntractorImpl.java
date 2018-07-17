@@ -3,6 +3,7 @@ package com.cheersondemand.intractor.address;
 import com.cheersondemand.frameworks.retrofit.ResponseResolver;
 import com.cheersondemand.frameworks.retrofit.RestError;
 import com.cheersondemand.frameworks.retrofit.WebServicesWrapper;
+import com.cheersondemand.model.address.AddDeliveryAddressRequest;
 import com.cheersondemand.model.address.AddressAddResponse;
 import com.cheersondemand.model.address.AddressRequest;
 import com.cheersondemand.model.address.AddressResponse;
@@ -131,6 +132,66 @@ public class AddressViewIntractorImpl implements IAddressViewIntractor {
                     }
                 }
             },token,userId,id);
+        }
+        catch (Exception e){
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void addDeliveryAddress(String token, String userId, String cardId, AddDeliveryAddressRequest addDeliveryAddressRequest, final OnFinishedListener listener) {
+        try {
+
+            WebServicesWrapper.getInstance().addDeliveryAddress(new ResponseResolver<AddressAddResponse>() {
+                @Override
+                public void onSuccess(AddressAddResponse r, Response response) {
+                    listener.onAddDeliveryAddressSuccess(r);
+                }
+
+                @Override
+                public void onFailure(RestError error, String msg) {
+                    if(error==null ||error.getError()==null){
+
+                        Gson gson=new Gson();
+                        AddressAddResponse response= gson.fromJson(msg,AddressAddResponse.class);
+                        listener.onAddDeliveryAddressSuccess(response);
+
+                    }
+                    else {
+                        listener.onError(error.getError());
+                    }
+                }
+            },token,userId,cardId,addDeliveryAddressRequest);
+        }
+        catch (Exception e){
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void addDeliveryAddress(String token, String userId, String cardId, AddressRequest addressRequest,final OnFinishedListener listener) {
+        try {
+
+            WebServicesWrapper.getInstance().addDeliveryAddress(new ResponseResolver<AddressAddResponse>() {
+                @Override
+                public void onSuccess(AddressAddResponse r, Response response) {
+                    listener.onAddDeliveryAddressSuccess(r);
+                }
+
+                @Override
+                public void onFailure(RestError error, String msg) {
+                    if(error==null ||error.getError()==null){
+
+                        Gson gson=new Gson();
+                        AddressAddResponse response= gson.fromJson(msg,AddressAddResponse.class);
+                        listener.onAddDeliveryAddressSuccess(response);
+
+                    }
+                    else {
+                        listener.onError(error.getError());
+                    }
+                }
+            },token,userId,cardId,addressRequest);
         }
         catch (Exception e){
             e.printStackTrace();
