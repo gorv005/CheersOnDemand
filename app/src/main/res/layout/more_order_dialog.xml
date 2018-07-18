@@ -41,7 +41,7 @@
     </RelativeLayout>
     <ImageView
         android:layout_marginTop="50dp"
-        android:src="@drawable/cross"
+        android:src="@drawable/close"
         android:id="@+id/ivCross"
         android:layout_centerHorizontal="true"
         android:layout_below="@id/rlOrders"

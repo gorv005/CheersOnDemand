@@ -33,6 +33,9 @@ import com.cheersondemand.model.order.addtocart.AddToCartResponse;
 import com.cheersondemand.model.order.updatecart.UpdateCartRequest;
 import com.cheersondemand.model.order.updatecart.UpdateCartResponse;
 import com.cheersondemand.model.store.StoreList;
+import com.cheersondemand.model.store.StoreListResponse;
+import com.cheersondemand.model.store.UpdateStore;
+import com.cheersondemand.model.store.UpdateStoreResponse;
 import com.cheersondemand.model.wishlist.WishListDataResponse;
 import com.cheersondemand.model.wishlist.WishListRequest;
 import com.cheersondemand.model.wishlist.WishListResponse;
@@ -40,6 +43,8 @@ import com.cheersondemand.presenter.home.HomeViewPresenterImpl;
 import com.cheersondemand.presenter.home.IHomeViewPresenterPresenter;
 import com.cheersondemand.presenter.home.order.IOrderViewPresenterPresenter;
 import com.cheersondemand.presenter.home.order.OrderViewPresenterImpl;
+import com.cheersondemand.presenter.store.IStoreViewPresenter;
+import com.cheersondemand.presenter.store.StoreViewPresenterImpl;
 import com.cheersondemand.util.C;
 import com.cheersondemand.util.SharedPreference;
 import com.cheersondemand.util.Util;
@@ -61,7 +66,7 @@ import butterknife.Unbinder;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class FragmentHome extends Fragment implements IHomeViewPresenterPresenter.IHomeView, IOrderViewPresenterPresenter.IOrderView, View.OnClickListener {
+public class FragmentHome extends Fragment implements IStoreViewPresenter.IStoreView,IHomeViewPresenterPresenter.IHomeView, IOrderViewPresenterPresenter.IOrderView, View.OnClickListener {
 
 
     @BindView(R.id.rvBrands)
@@ -81,7 +86,7 @@ public class FragmentHome extends Fragment implements IHomeViewPresenterPresente
     ArrayList<SectionDataModel> allSampleData;
     IHomeViewPresenterPresenter iHomeViewPresenterPresenter;
     IOrderViewPresenterPresenter iOrderViewPresenterPresenter;
-
+    IStoreViewPresenter iStoreViewPresenter;
     StoreList store;
     String selectedLocation;
     @BindView(R.id.rlSearch)
@@ -122,6 +127,7 @@ public class FragmentHome extends Fragment implements IHomeViewPresenterPresente
         allSampleData = new ArrayList<SectionDataModel>();
         iHomeViewPresenterPresenter = new HomeViewPresenterImpl(this, getActivity());
         iOrderViewPresenterPresenter = new OrderViewPresenterImpl(this, getActivity());
+        iStoreViewPresenter=new StoreViewPresenterImpl(this,getActivity());
         util = new Util();
     }
 
@@ -279,6 +285,8 @@ public class FragmentHome extends Fragment implements IHomeViewPresenterPresente
             util.setSnackbarMessage(getActivity(), response.getMessage(), rlHomeView, true);
 
         }
+        updateStore();
+
     }
 
     @Override
@@ -336,6 +344,27 @@ public class FragmentHome extends Fragment implements IHomeViewPresenterPresente
             util.setSnackbarMessage(getActivity(), response.getMessage(), rlHomeView, true);
 
         }
+    }
+    void updateStore(){
+        store = SharedPreference.getInstance(getActivity()).getStore(C.SELECTED_STORE);
+        if (store != null) {
+
+            UpdateStore updateStore = new UpdateStore();
+            updateStore.setWarehouseId(store.getId());
+            updateStore.setUuid(Util.id(getActivity()));
+            if (SharedPreference.getInstance(getActivity()).getBoolean(C.IS_LOGIN_GUEST)) {
+
+                iStoreViewPresenter.updateStore("" + SharedPreference.getInstance(getActivity()).
+                        geGuestUser(C.GUEST_USER).getId(), updateStore);
+            }
+            else {
+                String token= C.bearer+SharedPreference.getInstance(getActivity()).getUser(C.AUTH_USER).getData().getToken().getAccessToken();
+                String id=""+SharedPreference.getInstance(getActivity()).getUser(C.AUTH_USER).getData().getUser().getId();
+
+                iStoreViewPresenter.updateStore(token,id, updateStore);
+            }
+        }
+
     }
 
     void updateCart() {
@@ -419,6 +448,16 @@ public class FragmentHome extends Fragment implements IHomeViewPresenterPresente
 
     @Override
     public void getWishListSuccess(WishListDataResponse response) {
+
+    }
+
+    @Override
+    public void getStoreListSuccess(StoreListResponse response) {
+
+    }
+
+    @Override
+    public void updateStoreSuccess(UpdateStoreResponse response) {
 
     }
 

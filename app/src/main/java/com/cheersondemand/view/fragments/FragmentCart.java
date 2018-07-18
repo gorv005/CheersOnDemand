@@ -171,9 +171,10 @@ public class FragmentCart extends Fragment implements View.OnClickListener, IOrd
                 ((ActivityHome) getActivity()).setHome();
                 break;
             case R.id.btnProceed:
-                Intent intent = new Intent(getActivity(), ActivityContainer.class);
+               /* Intent intent = new Intent(getActivity(), ActivityContainer.class);
                 intent.putExtra(C.FRAGMENT_ACTION, C.FRAGMENT_PAYMENT_CONFIRMATION);
-                startActivity(intent);
+                startActivity(intent);*/
+               getAddressList();
                 break;
         }
     }
@@ -347,6 +348,7 @@ public class FragmentCart extends Fragment implements View.OnClickListener, IOrd
                 SharedPreference.getInstance(getActivity()).setString(C.ORDER_ID, null);
                 llNoProductInCount.setVisibility(View.VISIBLE);
                 rvCartList.setVisibility(View.GONE);
+                btnProceed.setVisibility(View.GONE);
             }
         } else {
             util.setSnackbarMessage(getActivity(), response.getMessage(), LLView, true);
@@ -358,7 +360,7 @@ public class FragmentCart extends Fragment implements View.OnClickListener, IOrd
     public void getCartListSuccess(UpdateCartResponse response) {
         if (response.getSuccess()) {
             if (response.getData() != null && response.getData().getOrder().getOrderItems().size() > 0) {
-
+                btnProceed.setVisibility(View.VISIBLE);
                 cartProduct = response.getData();
 //            adapterCartList.setData(cartProduct);
                 orderItemsList = response.getData().getOrder().getOrderItems();
@@ -468,6 +470,15 @@ public class FragmentCart extends Fragment implements View.OnClickListener, IOrd
             if (Response.getData() != null && Response.getData().size() > 0) {
                 Intent intent = new Intent(getActivity(), ActivityContainer.class);
                 intent.putExtra(C.FRAGMENT_ACTION, C.FRAGMENT_SELECT_ADDRESS);
+                Bundle bundle=new Bundle();
+                if(cartProduct.getOrder().getDeliveryAddress()!=null) {
+                    bundle.putInt(C.ADDRESS_ID, cartProduct.getOrder().getDeliveryAddress().getId());
+                }
+                else {
+                    bundle.putInt(C.ADDRESS_ID, 0);
+
+                }
+                intent.putExtras(bundle);
                 getActivity().startActivity(intent);
             } else {
                 Intent intent = new Intent(getActivity(), ActivityContainer.class);

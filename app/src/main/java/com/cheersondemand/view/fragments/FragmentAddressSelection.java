@@ -65,7 +65,7 @@ public class FragmentAddressSelection extends Fragment implements View.OnClickLi
     Button btnConfirmAdd;
     @BindView(R.id.llButton)
     RelativeLayout llButton;
-
+    int Address_id;
     public FragmentAddressSelection() {
         // Required empty public constructor
     }
@@ -75,6 +75,9 @@ public class FragmentAddressSelection extends Fragment implements View.OnClickLi
         super.onCreate(savedInstanceState);
         util = new Util();
         iAddressViewPresenter = new AddressViewPresenterImpl(this, getActivity());
+        if(getArguments()!=null) {
+            Address_id = getArguments().getInt(C.ADDRESS_ID);
+        }
     }
 
     @Override
@@ -170,7 +173,7 @@ public class FragmentAddressSelection extends Fragment implements View.OnClickLi
                 llButton.setVisibility(View.VISIBLE);
 
                 addresses = Response.getData();
-                adapterAddress = new AdapterAddressSelection(addresses, getActivity(),null);
+                adapterAddress = new AdapterAddressSelection(addresses, getActivity(),Address_id);
                 rvAddressList.setAdapter(adapterAddress);
             } else {
                 llNoProductInCount.setVisibility(View.VISIBLE);
@@ -186,7 +189,7 @@ public class FragmentAddressSelection extends Fragment implements View.OnClickLi
     @Override
     public void onAddDeliveryAddressSuccess(AddressAddResponse Response) {
         if(Response.getSuccess()){
-
+            ((ActivityContainer)getActivity()).fragmnetLoader(C.FRAGMENT_PAYMENT_CONFIRMATION,null);
         }
         else {
             dialog(Response.getMessage());

@@ -172,7 +172,9 @@ public class FragmentCardList extends Fragment implements ICardViewPresenter.ICa
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.btnAddNewCard:
-                ((ActivityContainer) getActivity()).fragmnetLoader(C.FRAGMENT_ADD_CARD, null);
+                Bundle bundle3=new Bundle();
+                bundle3.putBoolean(C.IS_FROM_CHECKOUT,false);
+                ((ActivityContainer) getActivity()).fragmnetLoader(C.FRAGMENT_ADD_CARD, bundle3);
                 break;
         }
     }

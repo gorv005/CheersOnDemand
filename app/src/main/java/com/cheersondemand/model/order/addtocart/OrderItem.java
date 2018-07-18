@@ -4,11 +4,13 @@ import com.cheersondemand.model.AllProduct;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+import java.io.Serializable;
+
 /**
  * Created by AB on 6/23/2018.
  */
 
-public class OrderItem {
+public class OrderItem implements Serializable{
 
     @SerializedName("id")
     @Expose

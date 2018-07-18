@@ -211,6 +211,11 @@
     <string name="edit_change_add">Edit/Change Address</string>
     <string name="add_new_address">Add New Address</string>
     <string name="gift_the_product">Gift the product</string>
+    <string name="proceed_to_pay">Proceed to pay</string>
+    <string name="save_detail_for_future">Save card details for future payments.</string>
+    <string name="thanku_for_order">Thank you so much for your order.</string>
+    <string name="goto_my_orders">Go to My Orders</string>
+    <string name="order_confirmed">Order Confirmed</string>
 
     <!--
         <string name="default_web_client_id">999387565226-hdnnhm6rhgik5ljvm06shotsi7j9883c.apps.googleusercontent.com</string>

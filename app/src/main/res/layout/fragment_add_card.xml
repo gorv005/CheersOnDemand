@@ -292,7 +292,39 @@
                 android:textCursorDrawable="@drawable/edit_text_cursor_color"
                 android:textSize="16sp" />
                 </LinearLayout>
+
+
             </LinearLayout>
+            <RelativeLayout
+                android:id="@+id/rlISDetailSave"
+                android:paddingTop="10dp"
+                android:paddingBottom="10dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <CheckBox
+                    android:layout_marginLeft="15dp"
+                    android:theme="@style/CustomCheckbox1"
+                    android:id="@+id/checkboxISSave"
+                    android:checked="true"
+                    android:layout_alignBaseline="@+id/name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+                <TextView
+                    android:padding="5dp"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="45dp"
+                    android:id="@+id/name"
+                    android:textColor="@color/spec_desc"
+                    android:fontFamily="@font/sf_ui_display_regular"
+                    android:text="@string/save_detail_for_future"
+                    android:textSize="14sp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+
+
+
+            </RelativeLayout>
+
             <Button
                 android:layout_marginBottom="20dp"
                 android:layout_alignParentBottom="true"

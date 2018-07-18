@@ -3,11 +3,13 @@ package com.cheersondemand.model.order.updatecart;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+import java.io.Serializable;
+
 /**
  * Created by AB on 6/24/2018.
  */
 
-public class Coupon {
+public class Coupon implements Serializable {
     @SerializedName("id")
     @Expose
     private Integer id;

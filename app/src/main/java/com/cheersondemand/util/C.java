@@ -105,4 +105,9 @@ public interface C {
 
 
     int FRAGMENT_PAYMENT_CONFIRMATION = 30;
+    String TAG_FRAGMENT_SELECT_ADDRESS = "TAG_FRAGMENT_SELECT_ADDRESS";
+    String CART_DATA ="cart_data" ;
+    String ADDRESS_ID = "address_id";
+    String PAYMENT_RESULT ="payment_result" ;
+    int FRAGMENT_PAYMENT_RESULT = 31;
 }

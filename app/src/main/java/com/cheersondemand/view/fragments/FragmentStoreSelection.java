@@ -177,6 +177,29 @@ public class FragmentStoreSelection extends Fragment implements IStoreViewPresen
 
     }
 
+    void updateStore(){
+        store = adapterStore.getSelectedItem();
+        if (storeList != null) {
+
+            UpdateStore updateStore = new UpdateStore();
+            updateStore.setWarehouseId(store.getId());
+            updateStore.setUuid(Util.id(getActivity()));
+            if (SharedPreference.getInstance(getActivity()).getBoolean(C.IS_LOGIN_GUEST)) {
+
+                iStoreViewPresenter.updateStore("" + SharedPreference.getInstance(getActivity()).
+                        geGuestUser(C.GUEST_USER).getId(), updateStore);
+            }
+            else {
+                String token= C.bearer+SharedPreference.getInstance(getActivity()).getUser(C.AUTH_USER).getData().getToken().getAccessToken();
+                String id=""+SharedPreference.getInstance(getActivity()).getUser(C.AUTH_USER).getData().getUser().getId();
+
+                iStoreViewPresenter.updateStore(token,id, updateStore);
+            }
+        }
+        else {
+            util.setSnackbarMessage(getActivity(), getString(R.string.plz_select_store), LLView, true);
+        }
+    }
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
@@ -187,28 +210,8 @@ public class FragmentStoreSelection extends Fragment implements IStoreViewPresen
                 getActivity().finish();
                 break;
             case R.id.btnSubmit:
-                store = adapterStore.getSelectedItem();
-                if (storeList != null) {
 
-                    UpdateStore updateStore = new UpdateStore();
-                    updateStore.setWarehouseId(store.getId());
-                    updateStore.setUuid(Util.id(getActivity()));
-                    if (SharedPreference.getInstance(getActivity()).getBoolean(C.IS_LOGIN_GUEST)) {
-
-                        iStoreViewPresenter.updateStore("" + SharedPreference.getInstance(getActivity()).
-                                geGuestUser(C.GUEST_USER).getId(), updateStore);
-                    }
-                    else {
-                        String token= C.bearer+SharedPreference.getInstance(getActivity()).getUser(C.AUTH_USER).getData().getToken().getAccessToken();
-                        String id=""+SharedPreference.getInstance(getActivity()).getUser(C.AUTH_USER).getData().getUser().getId();
-
-                        iStoreViewPresenter.updateStore(token,id, updateStore);
-                    }
-                }
-                else {
-                    util.setSnackbarMessage(getActivity(), getString(R.string.plz_select_store), LLView, true);
-                }
-
+                updateStore();
                 break;
 
         }

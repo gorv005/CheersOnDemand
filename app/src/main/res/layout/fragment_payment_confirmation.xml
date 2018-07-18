@@ -135,15 +135,6 @@
                     android:layout_gravity="center_vertical"
                     />
             </RelativeLayout>
-            <View
-                android:layout_marginLeft="15dp"
-                android:layout_marginRight="15dp"
-                android:layout_marginBottom="10dp"
-                android:background="@color/profile_back"
-                android:layout_width="match_parent"
-                android:layout_height="2.5dp"/>
-
-
             <RelativeLayout
                 android:paddingLeft="15dp"
                 android:paddingRight="15dp"
@@ -254,6 +245,7 @@
 
             </RelativeLayout>
             <RelativeLayout
+                android:id="@+id/rlCoupenApplied"
                 android:paddingLeft="15dp"
                 android:paddingRight="15dp"
                 android:background="@color/white"
@@ -360,7 +352,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
             <TextView
-                android:layout_toRightOf="@id/radio"
                 android:padding="5dp"
                 android:layout_centerVertical="true"
                 android:layout_marginLeft="45dp"
@@ -436,26 +427,38 @@
 
                 </RelativeLayout>
                 <TextView
+                    android:layout_marginRight="15dp"
+                    android:layout_marginLeft="41dp"
                     android:layout_below="@id/rlAddName"
-                    android:id="@+id/tvSubAddress"
-                    android:layout_marginLeft="50dp"
-                    android:textColor="@color/profile_updated_text_color"
+                    android:id="@+id/tvSubAddress1"
+                    android:textColor="@color/item_color"
                     android:fontFamily="@font/sf_ui_display_regular"
                     android:text="Name"
-                    android:textSize="16sp"
+                    android:textSize="14sp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+                <TextView
+                    android:layout_marginRight="15dp"
+                    android:layout_marginLeft="41dp"
+                    android:layout_below="@id/tvSubAddress1"
+                    android:id="@+id/tvSubAddress2"
+                    android:textColor="@color/item_color"
+                    android:fontFamily="@font/sf_ui_display_regular"
+                    android:text="Name"
+                    android:textSize="14sp"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content" />
 
 
                 <LinearLayout
-                    android:layout_below="@id/tvSubAddress"
+                    android:layout_below="@id/tvSubAddress2"
                     android:layout_marginTop="10dp"
 
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
                     <TextView
 
-                        android:layout_marginLeft="50dp"
+                        android:layout_marginLeft="41dp"
                         android:textColor="@color/profile_updated_text_color"
                         android:fontFamily="@font/sf_ui_display_regular"
                         android:text="@string/PhoneNumber_"
@@ -486,7 +489,7 @@
                 android:layout_below="@id/v"
                 android:weightSum="10"
                 android:id="@+id/llModify"
-
+                android:layout_marginBottom="80dp"
                 android:layout_width="match_parent"
                 android:layout_height="50dp">
 
@@ -546,4 +549,28 @@
         </RelativeLayout>
     </LinearLayout>
 </ScrollView>
+    <RelativeLayout
+        android:id="@+id/llButton"
+        android:layout_alignParentBottom="true"
+        android:background="@color/white"
+        android:layout_width="match_parent"
+        android:layout_height="70dp">
+        <Button
+
+            android:id="@+id/btnProceedToPay"
+            android:layout_centerVertical="true"
+            android:layout_width="match_parent"
+            android:layout_height="45dp"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginEnd="20dp"
+            android:layout_marginStart="20dp"
+            android:background="@drawable/bg_button_enable"
+            android:fontFamily="@font/sf_ui_display_regular"
+            android:text="@string/proceed_to_pay"
+            android:textAllCaps="true"
+            android:textColor="@color/white"
+            android:textSize="13.4sp" />
+
+    </RelativeLayout>
+
 </RelativeLayout>

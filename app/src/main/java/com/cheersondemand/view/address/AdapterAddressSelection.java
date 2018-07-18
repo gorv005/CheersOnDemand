@@ -61,13 +61,13 @@ public class ItemViewHolder extends RecyclerView.ViewHolder {
             rlAddNew = (View) view.findViewById(R.id.rlAddNew);
         }
     }
-    public AdapterAddressSelection(List<Address> horizontalList, Activity context,Address address) {
+    public AdapterAddressSelection(List<Address> horizontalList, Activity context,int address) {
         this.horizontalList = horizontalList;
 
         this.context=context;
         imageLoader=new ImageLoader(context);
-        if(address!=null){
-            lastCheckedPosition=address.getId();
+        if(address!=0){
+            lastCheckedPosition=address;
         }
         else {
             if(horizontalList!=null && horizontalList.size()>0) {

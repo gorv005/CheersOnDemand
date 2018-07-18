@@ -430,7 +430,12 @@ public class FragmentAddAddress extends Fragment implements View.OnClickListener
     @Override
     public void onAddDeliveryAddressSuccess(AddressAddResponse Response) {
         if(Response.getSuccess()){
-
+            if(Response.getSuccess()){
+                ((ActivityContainer)getActivity()).fragmnetLoader(C.FRAGMENT_PAYMENT_CONFIRMATION,null);
+            }
+            else {
+                dialog(Response.getMessage());
+            }
         }
         else {
             dialog(Response.getMessage());

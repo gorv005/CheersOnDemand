@@ -102,6 +102,10 @@ public class ItemViewHolder extends RecyclerView.ViewHolder {
                         ((ActivitySearchProducts)context).getProductDesc(horizontalList.get(position).getName(),
                                 horizontalList.get(position).getClassName(),""+horizontalList.get(position).getClassId());
                     }
+                    else if(horizontalList.get(position).getClassName().equals("ProductType")) {
+                        ((ActivitySearchProducts)context).getProductDesc(horizontalList.get(position).getName(),
+                                horizontalList.get(position).getClassName(),""+horizontalList.get(position).getClassId());
+                    }
                 }
             });
         }

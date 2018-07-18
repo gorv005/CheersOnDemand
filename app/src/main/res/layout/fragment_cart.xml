@@ -106,7 +106,7 @@
         android:layout_marginBottom="10dp"
         android:layout_alignParentBottom="true"
         android:id="@+id/btnProceed"
-
+        android:visibility="gone"
         android:layout_width="match_parent"
         android:layout_height="45dp"
         android:layout_gravity="center_horizontal"

@@ -17,6 +17,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -36,6 +37,7 @@ import com.cheersondemand.util.Util;
 import com.cheersondemand.view.ActivityContainer;
 import com.stripe.android.Stripe;
 import com.stripe.android.TokenCallback;
+import com.stripe.android.model.Card;
 import com.stripe.android.model.Token;
 
 import butterknife.BindView;
@@ -45,7 +47,7 @@ import butterknife.Unbinder;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class FragmentAddCard extends Fragment implements ICardViewPresenter.ICardView,View.OnClickListener{
+public class FragmentAddCard extends Fragment implements ICardViewPresenter.ICardView, View.OnClickListener {
 
 
     @BindView(R.id.tv_card_number)
@@ -80,9 +82,17 @@ public class FragmentAddCard extends Fragment implements ICardViewPresenter.ICar
     @BindView(R.id.llBack)
     LinearLayout llBack;
     int type;
+    @BindView(R.id.checkboxISSave)
+    CheckBox checkboxISSave;
+    @BindView(R.id.name)
+    TextView name;
+    @BindView(R.id.rlISDetailSave)
+    RelativeLayout rlISDetailSave;
     private boolean isDelete;
     ICardViewPresenter iCardViewPresenter;
     Util util;
+
+    boolean isCheckout;
     public FragmentAddCard() {
         // Required empty public constructor
     }
@@ -90,8 +100,9 @@ public class FragmentAddCard extends Fragment implements ICardViewPresenter.ICar
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        iCardViewPresenter=new CardViewPresenterImpl(this,getActivity());
-        util=new Util();
+        iCardViewPresenter = new CardViewPresenterImpl(this, getActivity());
+        util = new Util();
+        isCheckout=getArguments().getBoolean(C.IS_FROM_CHECKOUT);
     }
 
     @Override
@@ -113,6 +124,12 @@ public class FragmentAddCard extends Fragment implements ICardViewPresenter.ICar
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         btnSaveAdd.setOnClickListener(this);
+        if(isCheckout){
+            rlISDetailSave.setVisibility(View.VISIBLE);
+        }
+        else {
+            rlISDetailSave.setVisibility(View.GONE);
+        }
         init();
     }
 
@@ -123,28 +140,27 @@ public class FragmentAddCard extends Fragment implements ICardViewPresenter.ICar
     }
 
 
-
-    void addCard(String stripe_token){
+    void addCard(String stripe_token) {
         String id = "" + SharedPreference.getInstance(getActivity()).getUser(C.AUTH_USER).getData().getUser().getId();
 
         String token = C.bearer + SharedPreference.getInstance(getActivity()).getUser(C.AUTH_USER).getData().getToken().getAccessToken();
 
-        AddCardRequest addCardRequest=new AddCardRequest();
+        AddCardRequest addCardRequest = new AddCardRequest();
         addCardRequest.setStripeToken(stripe_token);
-        iCardViewPresenter.addCard(token,id,addCardRequest);
+        iCardViewPresenter.addCard(token, id, addCardRequest);
     }
-    void init(){
+
+    void init() {
         btnSaveAdd.setEnabled(false);
 
-        etExpire.setFilters(new InputFilter[] { filter });
+        etExpire.setFilters(new InputFilter[]{filter});
 
         etCvv.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View view, boolean b) {
-                if(b){
+                if (b) {
                     flipCard();
-                }
-                else {
+                } else {
                     flipCard();
                 }
             }
@@ -163,51 +179,46 @@ public class FragmentAddCard extends Fragment implements ICardViewPresenter.ICar
 
             @Override
             public void afterTextChanged(Editable editable) {
-                if(editable.toString().length()>4 &&editable.toString().length()<=8){
+                if (editable.toString().length() > 4 && editable.toString().length() <= 8) {
 
-                    tvCardNumber.setText(etCardNumber.getText().toString().substring(0,4)+"\t"+etCardNumber.getText().toString().substring(4));
+                    tvCardNumber.setText(etCardNumber.getText().toString().substring(0, 4) + "\t" + etCardNumber.getText().toString().substring(4));
                 }
-                if(editable.toString().length()>8 &&editable.toString().length()<=12){
-                    tvCardNumber.setText(etCardNumber.getText().toString().substring(0,4)+"\t"+etCardNumber.getText().toString().substring(4,8)+"\t"+etCardNumber.getText().toString().substring(8));
+                if (editable.toString().length() > 8 && editable.toString().length() <= 12) {
+                    tvCardNumber.setText(etCardNumber.getText().toString().substring(0, 4) + "\t" + etCardNumber.getText().toString().substring(4, 8) + "\t" + etCardNumber.getText().toString().substring(8));
                 }
-                if(editable.toString().length()>12 &&editable.toString().length()<=16){
-                    tvCardNumber.setText(etCardNumber.getText().toString().substring(0,4)+"\t"+
-                            etCardNumber.getText().toString().substring(4,8)+"\t"+
-                            etCardNumber.getText().toString().substring(8,12)+"\t"+etCardNumber.getText().toString().substring(12)
+                if (editable.toString().length() > 12 && editable.toString().length() <= 16) {
+                    tvCardNumber.setText(etCardNumber.getText().toString().substring(0, 4) + "\t" +
+                            etCardNumber.getText().toString().substring(4, 8) + "\t" +
+                            etCardNumber.getText().toString().substring(8, 12) + "\t" + etCardNumber.getText().toString().substring(12)
                     );
                 }
 
                 tvCardNumber.setText(etCardNumber.getText().toString());
-                if(editable.toString().length()==5) {
+                if (editable.toString().length() == 5) {
                     type = Util.getCardType(editable.toString());
 
-                }
-                else if(editable.toString().length()==14){
+                } else if (editable.toString().length() == 14) {
                     ivType.setImageResource(android.R.color.transparent);
 
-                }
-                else if(editable.toString().length()==15){
-                    if(type==Util.AMEX){
-                    Util.setCardType(type,ivType,getActivity());
-                    }
-                    else {
+                } else if (editable.toString().length() == 15) {
+                    if (type == Util.AMEX) {
+                        Util.setCardType(type, ivType, getActivity());
+                    } else {
                         ivType.setImageResource(android.R.color.transparent);
                     }
 
-                }
-                else if(editable.toString().length()==16) {
-                    if(type==Util.AMEX) {
+                } else if (editable.toString().length() == 16) {
+                    if (type == Util.AMEX) {
                         ivType.setImageResource(android.R.color.transparent);
 
-                    }
-                    else {
-                        Util.setCardType(type,ivType,getActivity());
+                    } else {
+                        Util.setCardType(type, ivType, getActivity());
 
                     }
 
-                    }
-                    validationFields();
                 }
+                validationFields();
+            }
         });
         etCardHolderName.addTextChangedListener(new TextWatcher() {
             @Override
@@ -222,8 +233,7 @@ public class FragmentAddCard extends Fragment implements ICardViewPresenter.ICar
 
             @Override
             public void afterTextChanged(Editable editable) {
-                if(tvMemberName!=null)
-                {
+                if (tvMemberName != null) {
                     if (TextUtils.isEmpty(editable.toString().trim()))
                         tvMemberName.setText("");
                     else
@@ -242,42 +252,42 @@ public class FragmentAddCard extends Fragment implements ICardViewPresenter.ICar
 
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int before, int i2) {
-                if(before==0)
-                    isDelete=false;
+                if (before == 0)
+                    isDelete = false;
                 else
-                    isDelete=true;
+                    isDelete = true;
             }
 
             @Override
             public void afterTextChanged(Editable s) {
 
 
-                    String source = s.toString();
-                    int length = source.length();
+                String source = s.toString();
+                int length = source.length();
 
-                    StringBuilder stringBuilder = new StringBuilder();
-                    stringBuilder.append(source);
+                StringBuilder stringBuilder = new StringBuilder();
+                stringBuilder.append(source);
 
-                    if (length > 0 && length == 3) {
-                        if (isDelete)
-                            stringBuilder.deleteCharAt(length - 1);
-                        else
-                            stringBuilder.insert(length - 1, "/");
+                if (length > 0 && length == 3) {
+                    if (isDelete)
+                        stringBuilder.deleteCharAt(length - 1);
+                    else
+                        stringBuilder.insert(length - 1, "/");
 
-                        etExpire.setText(stringBuilder);
-                        etExpire.setSelection(etExpire.getText().length());
+                    etExpire.setText(stringBuilder);
+                    etExpire.setSelection(etExpire.getText().length());
 
-                        // Log.d("test"+s.toString(), "afterTextChanged: append "+length);
-                    }
-
-                    if (tvValidity != null) {
-                        if (length == 0)
-                            tvValidity.setText("");
-                        else
-                            tvValidity.setText(stringBuilder);
-                    }
-                validationFields();
+                    // Log.d("test"+s.toString(), "afterTextChanged: append "+length);
                 }
+
+                if (tvValidity != null) {
+                    if (length == 0)
+                        tvValidity.setText("");
+                    else
+                        tvValidity.setText(stringBuilder);
+                }
+                validationFields();
+            }
 
 
         });
@@ -313,22 +323,21 @@ public class FragmentAddCard extends Fragment implements ICardViewPresenter.ICar
         @Override
         public CharSequence filter(CharSequence source, int start, int end, Spanned dest, int dstart, int dend) {
 
-            if ((etExpire.getText().toString() != null &&etExpire.getText().toString().length()==5) ) {
+            if ((etExpire.getText().toString() != null && etExpire.getText().toString().length() == 5)) {
                 return "";
 
             }
-            if ((etExpire.getText().toString() != null &&!etExpire.getText().toString().equals("") )&&(etExpire.getText().toString().startsWith("1") || etExpire.getText().toString().startsWith("0")) ) {
+            if ((etExpire.getText().toString() != null && !etExpire.getText().toString().equals("")) && (etExpire.getText().toString().startsWith("1") || etExpire.getText().toString().startsWith("0"))) {
                 return source.toString();
 
-            }
-          else   if (source != null && source.toString().startsWith("1") || source.toString().startsWith("0") ) {
+            } else if (source != null && source.toString().startsWith("1") || source.toString().startsWith("0")) {
                 return source.toString();
             }
             return "";
         }
     };
-    private void flipCard()
-    {
+
+    private void flipCard() {
 
 
         try {
@@ -338,8 +347,7 @@ public class FragmentAddCard extends Fragment implements ICardViewPresenter.ICar
                 flipAnimation.reverse();
             }
             rlMain.startAnimation(flipAnimation);
-        }
-        catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
@@ -349,18 +357,16 @@ public class FragmentAddCard extends Fragment implements ICardViewPresenter.ICar
 
             if (etExpire.getText().length() == 5) {
 
-                if (etCardHolderName.getText().length() >=1) {
-                    if (etCvv.getText().length() ==3) {
+                if (etCardHolderName.getText().length() >= 1) {
+                    if (etCvv.getText().length() == 3) {
                         btnSaveAdd.setBackground(ContextCompat.getDrawable(getActivity(), R.drawable.bg_button_enable));
                         btnSaveAdd.setEnabled(true);
-                    }
-                    else {
+                    } else {
                         btnSaveAdd.setBackground(ContextCompat.getDrawable(getActivity(), R.drawable.button_disable));
                         btnSaveAdd.setEnabled(false);
                     }
 
-                }
-                else {
+                } else {
                     btnSaveAdd.setBackground(ContextCompat.getDrawable(getActivity(), R.drawable.button_disable));
                     btnSaveAdd.setEnabled(false);
                 }
@@ -383,9 +389,9 @@ public class FragmentAddCard extends Fragment implements ICardViewPresenter.ICar
     }
 
 
-    private void addCardToStripe(String cardNumber, String month,String year,String cvv) {
+    private void addCardToStripe(String cardNumber, String month, String year, String cvv) {
         showProgress();
-         com.stripe.android.model.Card stripeCard = new com.stripe.android.model.Card(cardNumber, Integer.parseInt(month), Integer.parseInt(year), null);
+        Card stripeCard = new Card(cardNumber, Integer.parseInt(month), Integer.parseInt(year), null);
         stripeCard.setName(etCardHolderName.getText().toString());
         Stripe stripe = new Stripe(getActivity(), C.STRIPE_APP_KEY);
         stripe.createToken(stripeCard, new TokenCallback() {
@@ -399,8 +405,8 @@ public class FragmentAddCard extends Fragment implements ICardViewPresenter.ICar
             @Override
             public void onSuccess(Token token) {
                 hideProgress();
-               // card.setStripeTokenId(token.getId());
-                Log.e("DEBUG","Stripe token : " + token.getId());
+                // card.setStripeTokenId(token.getId());
+                Log.e("DEBUG", "Stripe token : " + token.getId());
                 addCard(token.getId());
             }
         });
@@ -425,8 +431,7 @@ public class FragmentAddCard extends Fragment implements ICardViewPresenter.ICar
             }, 2000);
 
 
-        }
-        else {
+        } else {
             util.setSnackbarMessage(getActivity(), response.getMessage(), llBack, true);
 
         }
@@ -440,7 +445,7 @@ public class FragmentAddCard extends Fragment implements ICardViewPresenter.ICar
 
     @Override
     public void showProgress() {
-        util.showDialog(C.MSG,getActivity());
+        util.showDialog(C.MSG, getActivity());
     }
 
     @Override
@@ -451,10 +456,10 @@ public class FragmentAddCard extends Fragment implements ICardViewPresenter.ICar
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()){
+        switch (v.getId()) {
             case R.id.btnSaveAdd:
-                String a[]=etExpire.getText().toString().split("/");
-                addCardToStripe(etCardNumber.getText().toString(),a[0],a[1],tvCvv.getText().toString());
+                String a[] = etExpire.getText().toString().split("/");
+                addCardToStripe(etCardNumber.getText().toString(), a[0], a[1], tvCvv.getText().toString());
                 break;
         }
     }

@@ -3,11 +3,13 @@ package com.cheersondemand.model.order;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+import java.io.Serializable;
+
 /**
  * Created by AB on 7/16/2018.
  */
 
-public class OrderHistory {
+public class OrderHistory implements Serializable{
     @SerializedName("status")
     @Expose
     private String status;
