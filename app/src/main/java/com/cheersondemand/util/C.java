@@ -103,6 +103,9 @@ public interface C {
     String CART_ID ="cardId" ;
     String IS_FROM_CHECKOUT ="is_from_checkout" ;
 
+    public static final String CARD_NUMBER_FORMAT = "XXXX XXXX XXXX XXXX";
+    public static final String CARD_NUMBER_FORMAT_AMEX = "XXXX XXXXXX XXXXX";
+    public static final char CHAR_X = 'X';
 
     int FRAGMENT_PAYMENT_CONFIRMATION = 30;
     String TAG_FRAGMENT_SELECT_ADDRESS = "TAG_FRAGMENT_SELECT_ADDRESS";
@@ -110,4 +113,8 @@ public interface C {
     String ADDRESS_ID = "address_id";
     String PAYMENT_RESULT ="payment_result" ;
     int FRAGMENT_PAYMENT_RESULT = 31;
+    String VISA = "Visa";
+    String MasterCard="MasterCard";
+    String Discover="Discover";
+    String AMEX = "American Express";
 }

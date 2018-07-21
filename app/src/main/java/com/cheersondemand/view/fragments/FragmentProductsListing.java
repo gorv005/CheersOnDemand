@@ -189,7 +189,7 @@ public class FragmentProductsListing extends Fragment implements View.OnClickLis
                     visibleItemCount = lLayout.getChildCount();
                     totalItemCount = lLayout.getItemCount();
                     pastVisibleItems = lLayout.findFirstVisibleItemPosition();
-                    if (loading && page <= totalPages) {
+                    if (loading && page <= totalPages && totalPages>1) {
                         if ((visibleItemCount + pastVisibleItems) >= totalItemCount) {
                             loading = false;
                             progressbar.setVisibility(View.VISIBLE);

@@ -1,0 +1,87 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@drawable/noti_back"
+    android:id="@+id/LLView"
+    android:layout_height="match_parent"
+    >
+    <LinearLayout
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        tools:context="com.cheersondemand.view.fragments.FragmentCart">
+
+        <LinearLayout
+            android:visibility="visible"
+
+            android:layout_marginTop="5dp"
+            android:id="@+id/llNoProductInCount"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:paddingLeft="40dp"
+            android:paddingRight="40dp">
+
+            <ImageView
+
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/bell" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:fontFamily="@font/sf_ui_display_regular"
+                android:gravity="center_horizontal"
+                android:text="@string/active_notification"
+                android:textColor="@color/profile_text_color"
+                android:textSize="16.3sp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/sf_ui_display_regular"
+                android:gravity="center_horizontal"
+
+                android:text="@string/you_will_be_notified"
+                android:textColor="@color/profile_text_color"
+                android:textSize="14.4sp" />
+
+
+            <Button
+                android:id="@+id/btnGiveAccess"
+                android:layout_width="match_parent"
+                android:layout_height="45dp"
+                android:layout_alignParentBottom="true"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginBottom="10dp"
+                android:layout_marginEnd="20dp"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="30dp"
+                android:background="@drawable/bg_button_enable"
+                android:fontFamily="@font/sf_ui_display_regular"
+                android:text="@string/give_access"
+                android:textAllCaps="false"
+                android:textColor="@color/white"
+                android:textSize="13.4sp" />
+
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/sf_ui_display_regular"
+                android:gravity="center_horizontal"
+
+                android:text="@string/no_thanks"
+                android:textColor="@color/profile_updated_text_color"
+                android:textSize="14.4sp" />
+        </LinearLayout>
+
+
+    </LinearLayout>
+
+</RelativeLayout>

@@ -46,6 +46,7 @@ public class ActivityHome extends AppCompatActivity implements View.OnClickListe
     @BindView(R.id.rlProfile)
     RelativeLayout rlProfile;
     private Fragment fragment;
+    String currentPage;
     IOrderViewPresenterPresenter iOrderViewPresenterPresenter;
     static {
         AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);
@@ -63,7 +64,7 @@ public class ActivityHome extends AppCompatActivity implements View.OnClickListe
         rlProfile.setOnClickListener(this);
         rlHome.setOnClickListener(this);
         iOrderViewPresenterPresenter=new OrderViewPresenterImpl(this,this);
-
+        currentPage=getString(R.string.home);
     }
 
     public void fragmnetLoader(int fragmentType, Bundle bundle) {
@@ -98,16 +99,22 @@ public class ActivityHome extends AppCompatActivity implements View.OnClickListe
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.rlHome:
-               setHome();
+                if(!currentPage.equals(getString(R.string.home))) {
+                    setHome();
+                }
 
                 break;
             case R.id.rlCart:
-               setCart();
+                if(!currentPage.equals(getString(R.string.my_cart))) {
 
+                    setCart();
+                }
                 break;
             case R.id.rlProfile:
-               setProfile();
+                if(!currentPage.equals(getString(R.string.profile))) {
 
+                    setProfile();
+                }
                 break;
         }
     }
@@ -188,13 +195,17 @@ public class ActivityHome extends AppCompatActivity implements View.OnClickListe
         }
     }
     public     void setHome(){
-            ivHome.setImageResource(R.drawable.ic_bar_home_enabled);
+        currentPage=getString(R.string.home);
+
+        ivHome.setImageResource(R.drawable.ic_bar_home_enabled);
             ivCart.setImageResource(R.drawable.ic_bar_cart);
             ivProfile.setImageResource(R.drawable.ic_bar_profile);
             fragmnetLoader(C.FRAGMENT_PRODUCTS_HOME, null);
         }
 
         public void setCart(){
+            currentPage=getString(R.string.my_cart);
+
             ivCart.setImageResource(R.drawable.cart_enable);
             ivProfile.setImageResource(R.drawable.ic_bar_profile);
             ivHome.setImageResource(R.drawable.home_disable);
@@ -204,6 +215,8 @@ public class ActivityHome extends AppCompatActivity implements View.OnClickListe
 
         }
         public void setProfile(){
+            currentPage=getString(R.string.profile);
+
             ivProfile.setImageResource(R.drawable.profile_enabled);
             ivCart.setImageResource(R.drawable.ic_bar_cart);
             ivHome.setImageResource(R.drawable.home_disable);

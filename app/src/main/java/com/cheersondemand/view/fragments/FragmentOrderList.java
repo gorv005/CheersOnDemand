@@ -1,6 +1,9 @@
 package com.cheersondemand.view.fragments;
 
 
+import android.app.Dialog;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
@@ -11,21 +14,28 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import com.cheersondemand.R;
 import com.cheersondemand.model.order.addtocart.Order;
 import com.cheersondemand.model.order.orderdetail.CancelOrderRequest;
 import com.cheersondemand.model.order.orderdetail.OrderListResponse;
 import com.cheersondemand.model.order.updatecart.UpdateCartResponse;
+import com.cheersondemand.model.productdescription.Offers;
 import com.cheersondemand.presenter.home.order.IOrderDetailViewPresenter;
 import com.cheersondemand.presenter.home.order.OrderDetailViewPresenterImpl;
 import com.cheersondemand.util.C;
 import com.cheersondemand.util.SharedPreference;
 import com.cheersondemand.util.Util;
 import com.cheersondemand.view.ActivityContainer;
+import com.cheersondemand.view.adapter.orderList.AdapterCancelOrderReason;
 import com.cheersondemand.view.adapter.orderList.AdapterOrderList;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
@@ -98,14 +108,14 @@ public class FragmentOrderList extends Fragment implements IOrderDetailViewPrese
         iOrderDetailViewPresenter.getOrderList(token, id);
     }
 
-  public void cancelOrder(Order order) {
+  public void cancelOrder(String reason,String orderId) {
       CancelOrderRequest cancelOrderRequest=new CancelOrderRequest();
-      cancelOrderRequest.setCancellationReason("Changed my mind.");
+      cancelOrderRequest.setCancellationReason(reason);
       cancelOrderRequest.setUuid(Util.id(getActivity()));
         String id = "" + SharedPreference.getInstance(getActivity()).getUser(C.AUTH_USER).getData().getUser().getId();
 
         String token = C.bearer + SharedPreference.getInstance(getActivity()).getUser(C.AUTH_USER).getData().getToken().getAccessToken();
-        iOrderDetailViewPresenter.cancelOrder(token, id,""+order.getId(),cancelOrderRequest);
+        iOrderDetailViewPresenter.cancelOrder(token, id,""+orderId,cancelOrderRequest);
     }
     public void reOrder(Order order) {
         String id = "" + SharedPreference.getInstance(getActivity()).getUser(C.AUTH_USER).getData().getUser().getId();
@@ -184,6 +194,64 @@ public class FragmentOrderList extends Fragment implements IOrderDetailViewPrese
         util.hideDialog();
 
     }
+    public void dialogCancelOrder(final Order order) {
+        LinearLayoutManager layoutManager;
 
+        final Dialog dialog = new Dialog(getActivity(), R.style.FullHeightDialog); //this is a reference to the style above
+        dialog.setContentView(R.layout.cancel_order_dialog); //I saved the xml file above as yesnomessage.xml
+        dialog.setCancelable(true);
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+
+//to set the message
+
+        TextView title = (TextView) dialog.findViewById(R.id.titleOrders);
+        Button btnCancelOrder = (Button) dialog.findViewById(R.id.btnCancelOrder);
+        final EditText etOtherReason = (EditText) dialog.findViewById(R.id.etOtherReason);
+
+        RecyclerView rvOrders=(RecyclerView)dialog.findViewById(R.id.rvCancelReason) ;
+        layoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
+        rvOrders.setLayoutManager(layoutManager);
+        rvOrders.setHasFixedSize(true);
+        ImageView cross = (ImageView) dialog.findViewById(R.id.ivCross);
+        final AdapterCancelOrderReason adapterCancelOrderReason=new AdapterCancelOrderReason(cancelList(),getActivity());
+        rvOrders.setAdapter(adapterCancelOrderReason);
+
+        cross.setOnClickListener(new View.OnClickListener() {
+
+            public void onClick(View v) {
+                dialog.dismiss();
+
+            }
+        });
+        btnCancelOrder.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                if(adapterCancelOrderReason.getSelectedId()!=-1) {
+                    cancelOrder(cancelList().get(adapterCancelOrderReason.getSelectedId()).getName(),""+order.getId());
+                    dialog.dismiss();
+                }
+                else if(etOtherReason.getText().toString().length()>0){
+                    cancelOrder(etOtherReason.getText().toString(),""+order.getId());
+                    dialog.dismiss();
+
+                }
+                else {
+                    util.setSnackbarMessage(getActivity(), getString(R.string.please_select_one_option), LLView, true);
+
+                }
+
+            }
+        });
+        dialog.show();
+    }
+    List<Offers> cancelList() {
+        List<Offers> offersList = new ArrayList<>();
+        offersList.add(new Offers(1, getString(R.string.item_goes_dammaged), ""));
+        offersList.add(new Offers(2, getString(R.string.change_my_mind), ""));
+        offersList.add(new Offers(2, getString(R.string.will_bundle), ""));
+
+        return offersList;
+    }
 
 }

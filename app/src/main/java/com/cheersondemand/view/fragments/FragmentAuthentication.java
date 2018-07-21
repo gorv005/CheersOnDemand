@@ -473,10 +473,13 @@ public class FragmentAuthentication extends Fragment implements IAuthenitication
                 }
                 break;
             case R.id.btnSignUp:
+                Util.hideKeyboard(getActivity());
                 btnSignUp.startAnimation();
               signUp();
                 break;
             case R.id.btnLogin:
+                Util.hideKeyboard(getActivity());
+
                 btnLogin.startAnimation();
                login();
                 break;
@@ -866,7 +869,12 @@ public class FragmentAuthentication extends Fragment implements IAuthenitication
        // Log.e("DEBUG",""+response.toString());
         btnLogin.revertAnimation();
         btnSignUp.revertAnimation();
-        if(response.getSuccess()){
+
+        if(response.getError()!=null){
+            util.setSnackbarMessage(getActivity(), response.getError(), LLView, true);
+
+        }
+        else if(response.getSuccess()){
             if (Util.isNetworkConnectivity(getActivity())) {
                 SharedPreference.getInstance(getActivity()).setBoolean(C.IS_LOGIN,true);
                 SharedPreference.getInstance(getActivity()).setBoolean(C.IS_LOGIN_GUEST,false);

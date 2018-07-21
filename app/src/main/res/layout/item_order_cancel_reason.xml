@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:id="@+id/llCancelView"
+    android:background="@color/white"
+    android:orientation="vertical"
+    >
+
+    <RelativeLayout
+        android:layout_centerVertical="true"
+
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        >
+
+
+        <LinearLayout
+            android:layout_centerVertical="true"
+            android:layout_marginRight="30dp"
+            android:layout_marginLeft="30dp"
+            android:orientation="vertical"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+        <TextView
+
+            android:id="@+id/tvName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="14sp"
+            android:maxLines="1"
+            android:gravity="left"
+            android:layout_marginRight="50dp"
+            android:layout_gravity="left"
+            android:ellipsize="end"
+            android:fontFamily="@font/sf_ui_display_bold"
+            android:textColor="@color/profile_email_color"
+            android:text="Bank"
+            />
+
+        </LinearLayout>
+        <ImageView
+                android:id="@+id/imgSelected"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="23sp"
+            android:textStyle="bold"
+            android:layout_marginRight="30dp"
+            android:layout_centerVertical="true"
+            android:layout_alignParentEnd="true"
+            android:fontFamily="@font/sf_ui_display_regular"
+            android:src="@drawable/tick_1"
+            android:text=">"
+            />
+
+
+    </RelativeLayout>
+    <View
+        android:background="@color/profile_email_color"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"/>
+
+
+</LinearLayout>

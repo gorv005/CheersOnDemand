@@ -1,11 +1,65 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
+    android:orientation="vertical"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@color/profile_back"
     android:layout_height="match_parent"
     android:id="@+id/rlView"
     tools:context="com.cheersondemand.view.fragments.FragmentUpdateProfile">
+  <LinearLayout
+      android:layout_width="match_parent"
+      android:orientation="vertical"
+      android:layout_height="wrap_content">
+    <RelativeLayout
+        android:background="@color/white"
+        android:paddingTop="30dp"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <RelativeLayout
+            android:id="@+id/imgBack"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="15dp"
+            android:layout_width="25dp"
+            android:layout_height="25dp">
+            <ImageView
+                android:layout_centerInParent="true"
+                android:layout_width="wrap_content"
+                android:src="@drawable/left_arrow_1"
+                android:layout_height="wrap_content" />
+
+        </RelativeLayout>
+        <LinearLayout
+            android:id="@+id/lvDescCheck"
+            android:layout_centerHorizontal="true"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+            <ImageView
+                android:id="@+id/ivCheckout"
+                android:layout_marginRight="15dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_cart"
+
+                />
+            <ImageView
+                android:layout_marginRight="15dp"
+
+                android:id="@+id/ivCart"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_cart_1"
+
+                />
+
+        </LinearLayout>
+
+
+    </RelativeLayout>
 
 
     <ScrollView
@@ -103,16 +157,15 @@
             android:layout_width="match_parent"
             android:layout_height="2dp"/>
 
-        <ListView
+        <com.cheersondemand.util.NonScrollListView
             android:paddingLeft="15dp"
             android:paddingRight="15dp"
             android:id="@+id/lvOffers"
             android:scrollbars="none"
-            android:visibility="gone"
             android:layout_width="match_parent"
-            android:layout_height="100dp">
+            android:layout_height="wrap_content"/>
 
-        </ListView>
+
         <View
             android:layout_marginTop="5dp"
             android:layout_centerVertical="true"
@@ -356,7 +409,7 @@
 
 
     </ScrollView>
-
+  </LinearLayout>
     <LinearLayout
         android:weightSum="2"
         android:paddingRight="15dp"
@@ -399,5 +452,6 @@
 
 
     </LinearLayout>
+
 
 </RelativeLayout>

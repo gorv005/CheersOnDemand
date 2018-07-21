@@ -11,6 +11,7 @@ import android.support.v4.content.ContextCompat;
 import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.ImageView;
 import android.widget.ListAdapter;
 import android.widget.ListView;
@@ -199,7 +200,16 @@ public class Util {
             e.printStackTrace();
         }
     }
-
+    public static void hideKeyboard(Activity activity) {
+        InputMethodManager imm = (InputMethodManager) activity.getSystemService(Activity.INPUT_METHOD_SERVICE);
+        //Find the currently focused view, so we can grab the correct window token from it.
+        View view = activity.getCurrentFocus();
+        //If no view currently has focus, create a new one, just so we can grab a window token from it
+        if (view == null) {
+            view = new View(activity);
+        }
+        imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+    }
     public static Bitmap scaleDown(Bitmap realImage, float maxImageSize,
                                    boolean filter) {
 
@@ -215,6 +225,20 @@ public class Util {
         return newBitmap;
     }
 
+    public static int getCardTypeUsingBrandName(String cardType) {
+
+        if (cardType.equalsIgnoreCase(C.VISA))
+            return VISA;
+        if (cardType.equalsIgnoreCase(C.MasterCard))
+            return MASTERCARD;
+        else if (cardType.equalsIgnoreCase(C.AMEX))
+            return AMEX;
+        if (cardType.equalsIgnoreCase(C.Discover))
+            return DISCOVER;
+
+        return NONE;
+    }
+
     public static int getCardType(String cardNumber) {
 
         if (cardNumber.substring(0, 1).equals(VISA_PREFIX))
@@ -228,18 +252,20 @@ public class Util {
 
         return NONE;
     }
+
+
     public static void setCardType(int type,ImageView ivType,Context context)
     {
         switch(type)
         {
             case VISA:
-                ivType.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.ic_visa));
+                ivType.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.ic_visa_card));
                 break;
             case MASTERCARD:
-                ivType.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.ic_mastercard));
+                ivType.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.ic_mastercard_card));
                 break;
             case AMEX:
-                ivType.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.ic_amex));
+                ivType.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.ic_amex_card));
                 break;
             case DISCOVER:
                 ivType.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.ic_discover));
@@ -252,5 +278,18 @@ public class Util {
 
 
     }
+    public static String handleCardNumber(String inputCardNumber, String seperator) {
+        String unformattedText = inputCardNumber.replace(seperator, "");
+        int cardType = getCardType(inputCardNumber);
+        String format = (cardType == AMEX) ? C.CARD_NUMBER_FORMAT_AMEX : C.CARD_NUMBER_FORMAT;
+        StringBuilder sbFormattedNumber = new StringBuilder();
+        for(int iIdx = 0, jIdx = 0; (iIdx < format.length()) && (unformattedText.length() > jIdx); iIdx++) {
+            if(format.charAt(iIdx) == C.CHAR_X)
+                sbFormattedNumber.append(unformattedText.charAt(jIdx++));
+            else
+                sbFormattedNumber.append(format.charAt(iIdx));
+        }
 
+        return sbFormattedNumber.toString();
+    }
 }

@@ -166,7 +166,7 @@
                     android:layout_alignParentEnd="true"
                     android:fontFamily="@font/sf_ui_display_regular"
                     android:textColor="@color/item_color"
-                    android:text="@string/amount"
+                    android:text=""
                     />
 
 
@@ -190,7 +190,7 @@
                     android:layout_alignParentStart="true"
                     android:fontFamily="@font/sf_ui_display_regular"
                     android:textColor="@color/item_color"
-                    android:text="@string/taxes"
+                    android:text=""
                     />
 
                 <TextView
@@ -203,7 +203,7 @@
                     android:layout_alignParentEnd="true"
                     android:fontFamily="@font/sf_ui_display_regular"
                     android:textColor="@color/item_color"
-                    android:text="@string/amount"
+                    android:text=""
                     />
 
 
@@ -239,7 +239,7 @@
                     android:layout_alignParentEnd="true"
                     android:fontFamily="@font/sf_ui_display_regular"
                     android:textColor="@color/item_color"
-                    android:text="@string/amount"
+                    android:text=""
                     />
 
 
@@ -276,7 +276,7 @@
                     android:layout_alignParentEnd="true"
                     android:fontFamily="@font/sf_ui_display_regular"
                     android:textColor="@color/item_color"
-                    android:text="@string/amount"
+                    android:text=""
                     />
 
 
@@ -323,7 +323,7 @@
                     android:layout_alignParentEnd="true"
                     android:fontFamily="@font/sf_ui_display_regular"
                     android:textColor="@color/view_all_color"
-                    android:text="@string/amount"
+                    android:text=""
                     />
 
 
@@ -347,15 +347,16 @@
                 android:layout_marginLeft="15dp"
                 android:theme="@style/CustomCheckbox1"
                 android:id="@+id/checkbox"
-                android:checked="true"
+                android:checked="false"
+                android:layout_centerVertical="true"
                 android:layout_alignBaseline="@+id/name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
             <TextView
-                android:padding="5dp"
                 android:layout_centerVertical="true"
                 android:layout_marginLeft="45dp"
                 android:id="@+id/name"
+
                 android:textColor="@color/brand_text_color"
                 android:fontFamily="@font/sf_ui_display_regular"
                 android:text="@string/gift_the_product"
@@ -418,7 +419,7 @@
                         android:layout_marginLeft="15dp"
                         android:textColor="@color/profile_text_color"
                         android:fontFamily="@font/sf_ui_display_regular"
-                        android:text="Name"
+                        android:text=""
                         android:textSize="16sp"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content" />
@@ -433,7 +434,7 @@
                     android:id="@+id/tvSubAddress1"
                     android:textColor="@color/item_color"
                     android:fontFamily="@font/sf_ui_display_regular"
-                    android:text="Name"
+                    android:text=""
                     android:textSize="14sp"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content" />
@@ -444,7 +445,7 @@
                     android:id="@+id/tvSubAddress2"
                     android:textColor="@color/item_color"
                     android:fontFamily="@font/sf_ui_display_regular"
-                    android:text="Name"
+                    android:text=""
                     android:textSize="14sp"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content" />
@@ -460,16 +461,6 @@
 
                         android:layout_marginLeft="41dp"
                         android:textColor="@color/profile_updated_text_color"
-                        android:fontFamily="@font/sf_ui_display_regular"
-                        android:text="@string/PhoneNumber_"
-                        android:textSize="16sp"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content" />
-                    <TextView
-
-                        android:id="@+id/tvPhone"
-                        android:layout_marginLeft="5dp"
-                        android:textColor="@color/profile_text_color"
                         android:fontFamily="@font/sf_ui_display_regular"
                         android:text="@string/PhoneNumber_"
                         android:textSize="16sp"
@@ -570,6 +561,20 @@
             android:textAllCaps="true"
             android:textColor="@color/white"
             android:textSize="13.4sp" />
+
+        <TextView
+
+            android:id="@+id/tvPhone"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignEnd="@+id/btnProceedToPay"
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="82dp"
+            android:layout_marginEnd="121dp"
+            android:fontFamily="@font/sf_ui_display_regular"
+            android:text=""
+            android:textColor="@color/profile_text_color"
+            android:textSize="16sp" />
 
     </RelativeLayout>
 

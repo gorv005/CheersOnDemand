@@ -1,39 +1,27 @@
 {
   "project_info": {
-    "project_number": "999387565226",
-    "firebase_url": "https://cheersondemand-a0539.firebaseio.com",
-    "project_id": "cheersondemand-a0539",
-    "storage_bucket": "cheersondemand-a0539.appspot.com"
+    "project_number": "318594772761",
+    "firebase_url": "https://cheersondemand.firebaseio.com",
+    "project_id": "cheersondemand",
+    "storage_bucket": "cheersondemand.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:999387565226:android:3a6b15abbd925692",
+        "mobilesdk_app_id": "1:318594772761:android:3a6b15abbd925692",
         "android_client_info": {
           "package_name": "com.cheersondemand"
         }
       },
       "oauth_client": [
         {
-          "client_id": "999387565226-hdnnhm6rhgik5ljvm06shotsi7j9883c.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.cheersondemand",
-            "certificate_hash": "4816885739882fba9d64d75a210fcdc77acbdf61"
-          }
-        },
-        {
-          "client_id": "999387565226-n1p0mbnj65kskkchiu7im6q6kth3u1up.apps.googleusercontent.com",
-          "client_type": 3
-        },
-        {
-          "client_id": "999387565226-n1p0mbnj65kskkchiu7im6q6kth3u1up.apps.googleusercontent.com",
+          "client_id": "318594772761-5tjtlcpgbstrbg3gopc3p67f1uugu6dk.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyBA_W29VdWt_URYg-sIHj2Nwk13tD-EjuA"
+          "current_key": "AIzaSyCbh5cB0aRwBBGiwOGxRm7-S0FdYURBcqU"
         }
       ],
       "services": {
@@ -41,13 +29,8 @@
           "status": 1
         },
         "appinvite_service": {
-          "status": 2,
-          "other_platform_oauth_client": [
-            {
-              "client_id": "999387565226-n1p0mbnj65kskkchiu7im6q6kth3u1up.apps.googleusercontent.com",
-              "client_type": 3
-            }
-          ]
+          "status": 1,
+          "other_platform_oauth_client": []
         },
         "ads_service": {
           "status": 2

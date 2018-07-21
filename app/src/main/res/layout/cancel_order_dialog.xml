@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+
+    >
+    <RelativeLayout
+        android:id="@+id/rlOrders"
+        android:background="@drawable/dailog_bg"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+    <TextView
+        android:id="@+id/titleOrders"
+        android:layout_height="40dp"
+        android:layout_width="match_parent"
+        android:text="@string/why_you_want_to_cancel_order"
+        android:textSize="14sp"
+
+        android:textColor="@color/profile_text_color"
+        android:paddingTop="4dp"
+        android:fontFamily="@font/sf_ui_display_bold"
+        android:background="@color/profile_back"
+        android:gravity="center" />
+    <RelativeLayout
+        android:id="@+id/rvCancel"
+        android:layout_below="@id/titleOrders"
+        android:background="@color/white"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/rvCancelReason"
+            android:scrollbars="none"
+            android:background="@color/white"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_centerHorizontal="true" />
+    </RelativeLayout>
+<LinearLayout
+    android:padding="15dp"
+    android:orientation="vertical"
+    android:layout_below="@id/rvCancel"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <TextView
+        android:id="@+id/tvOther"
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:text="@string/other"
+        android:textSize="14sp"
+
+        android:textColor="@color/latest_add_color"
+        android:paddingTop="4dp"
+        android:gravity="left" />
+
+    <EditText
+        android:id="@+id/etOtherReason"
+        android:gravity="top"
+        android:layout_gravity="top"
+        android:textColor="@color/profile_text_color"
+        android:textColorHint="@color/profile_email_color"
+        android:background="@drawable/edit_text_other_back"
+        android:layout_marginTop="5dp"
+        android:maxLength="250"
+        android:hint="@string/reason_for_cancel"
+        android:fontFamily="@font/sf_ui_display_regular"
+        android:layout_width="match_parent"
+        android:layout_height="100dp" />
+    <Button
+
+        android:id="@+id/btnCancelOrder"
+        android:layout_weight="1"
+        android:layout_width="150dp"
+        android:layout_height="40dp"
+        android:layout_marginTop="15dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginLeft="5dp"
+        android:background="@drawable/bg_button_enable"
+        android:fontFamily="@font/sf_ui_display_regular"
+        android:text="@string/cancel_order"
+        android:textAllCaps="true"
+        android:textColor="@color/white"
+        android:textSize="13.4sp" />
+
+</LinearLayout>
+    </RelativeLayout>
+    <ImageView
+        android:layout_marginTop="50dp"
+        android:src="@drawable/close"
+        android:id="@+id/ivCross"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@id/rlOrders"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+</RelativeLayout>

@@ -50,7 +50,8 @@ import java.util.List;
 import butterknife.ButterKnife;
 
 public class ActivityContainer extends AppCompatActivity {
-  public static TextView tvTitle,tvClearAll;
+    public static TextView tvTitle, tvClearAll;
+
     private Fragment fragment;
 
     @Override
@@ -61,8 +62,8 @@ public class ActivityContainer extends AppCompatActivity {
 
         setContentView(R.layout.activity_container);
         ButterKnife.bind(this);
-        tvTitle=(TextView)findViewById(R.id.tvTitle);
-        tvClearAll=(TextView)findViewById(R.id.tvClearAll);
+        tvTitle = (TextView) findViewById(R.id.tvTitle);
+        tvClearAll = (TextView) findViewById(R.id.tvClearAll);
 
         final Drawable upArrow = getResources().getDrawable(R.drawable.left_arrow_1);
         upArrow.setColorFilter(getResources().getColor(R.color.profile_text_color), PorterDuff.Mode.SRC_ATOP);
@@ -76,6 +77,15 @@ public class ActivityContainer extends AppCompatActivity {
         fragmnetLoader(fragmentAction, bundle);
     }
 
+    public void hideToolBar() {
+        getSupportActionBar().hide();
+
+    }
+
+    public void showToolBar() {
+        getSupportActionBar().show();
+
+    }
 
     public void fragmnetLoader(int fragmentType, Bundle bundle) {
         FragmentManager fragmentManager = getSupportFragmentManager();
@@ -120,6 +130,7 @@ public class ActivityContainer extends AppCompatActivity {
                 //fragmentTransaction.addToBackStack(C.TAG_FRAGMENT_PRODUCTS_HOME);
                 break;
             case C.FRAGMENT_PRODUCT_DESC:
+                getSupportActionBar().hide();
                 fragment = new FragmentProductDescription();
                 fragmentTransaction.replace(R.id.container, fragment);
                 //fragmentTransaction.addToBackStack(C.TAG_FRAGMENT_PRODUCTS_HOME);
@@ -148,12 +159,12 @@ public class ActivityContainer extends AppCompatActivity {
             case C.FRAGMENT_ADD_ADDRESS:
                 fragment = new FragmentAddAddress();
                 fragmentTransaction.replace(R.id.container, fragment);
-               // fragmentTransaction.addToBackStack(C.TAG_FRAGMENT_ADD_ADDRESS);
+                // fragmentTransaction.addToBackStack(C.TAG_FRAGMENT_ADD_ADDRESS);
                 break;
             case C.FRAGMENT_SELECT_ADDRESS:
                 fragment = new FragmentAddressSelection();
                 fragmentTransaction.replace(R.id.container, fragment);
-                 fragmentTransaction.addToBackStack(C.TAG_FRAGMENT_SELECT_ADDRESS);
+                fragmentTransaction.addToBackStack(C.TAG_FRAGMENT_SELECT_ADDRESS);
                 break;
             case C.FRAGMENT_HELP_CENTER:
                 fragment = new FragmentHelpCenter();
@@ -168,7 +179,7 @@ public class ActivityContainer extends AppCompatActivity {
             case C.FRAGMENT_HELP_CENTER_PAGES:
                 fragment = new FragmentHelpCenterPages();
                 fragmentTransaction.replace(R.id.container, fragment);
-                 fragmentTransaction.addToBackStack(C.TAG_FRAGMENT_HELP_CENTER_PAGES);
+                fragmentTransaction.addToBackStack(C.TAG_FRAGMENT_HELP_CENTER_PAGES);
                 break;
             case C.FRAGMENT_ADD_CARD:
                 fragment = new FragmentAddCard();
@@ -178,7 +189,7 @@ public class ActivityContainer extends AppCompatActivity {
             case C.FRAGMENT_CARD_LIST:
                 fragment = new FragmentCardList();
                 fragmentTransaction.replace(R.id.container, fragment);
-               // fragmentTransaction.addToBackStack(C.TAG_FRAGMENT_FRAGMENT_ADD_CARD);
+                // fragmentTransaction.addToBackStack(C.TAG_FRAGMENT_FRAGMENT_ADD_CARD);
                 break;
             case C.FRAGMENT_ORDER_LIST:
                 fragment = new FragmentOrderList();
@@ -204,7 +215,7 @@ public class ActivityContainer extends AppCompatActivity {
                 getSupportActionBar().hide();
                 fragment = new FragmentProductsListing();
                 fragmentTransaction.replace(R.id.container, fragment);
-                if(bundle.getInt(C.SOURCE)!=C.FRAGMENT_PRODUCTS_HOME && bundle.getInt(C.SOURCE)!=C.FRAGMENT_CATEGORIES_HOME) {
+                if (bundle.getInt(C.SOURCE) != C.FRAGMENT_PRODUCTS_HOME && bundle.getInt(C.SOURCE) != C.FRAGMENT_CATEGORIES_HOME) {
                     fragmentTransaction.addToBackStack(C.TAG_FRAGMENT_PRODUCT_LISTING);
                 }
                 break;
@@ -229,115 +240,116 @@ public class ActivityContainer extends AppCompatActivity {
     }
 
 
+    public void deleteNotification(int pos) {
+        Fragment fragment = getVisibleFragment();
+        if (fragment != null && fragment instanceof FragmentNotification) {
+            ((FragmentNotification) fragment).deleteNotification(pos);
+        }
+    }
 
-    public  void deleteNotification(int pos){
-        Fragment fragment=getVisibleFragment();
-        if(fragment!=null && fragment instanceof FragmentNotification ){
-            ((FragmentNotification)fragment).deleteNotification(pos);
+    public void deleteCard(int pos) {
+        Fragment fragment = getVisibleFragment();
+        if (fragment != null && fragment instanceof FragmentCardList) {
+            ((FragmentCardList) fragment).deleteCard(pos);
         }
     }
-    public  void deleteCard(int pos){
-        Fragment fragment=getVisibleFragment();
-        if(fragment!=null && fragment instanceof FragmentCardList ){
-            ((FragmentCardList)fragment).deleteCard(pos);
-        }
-    }
-    public void removeCoupon(){
-        Fragment fragment=getVisibleFragment();
-        if(fragment!=null && fragment instanceof FragmentCart ){
-            ((FragmentCart)fragment).removeCoupon();
-        }
-    }
-    public void removeFromCart(UpdateCartRequest updateCartRequest){
-        Fragment fragment=getVisibleFragment();
-        if(fragment!=null && fragment instanceof FragmentCart ){
-            ((FragmentCart)fragment).removeProduct(updateCartRequest);
-        }
 
+    public void removeCoupon() {
+        Fragment fragment = getVisibleFragment();
+        if (fragment != null && fragment instanceof FragmentCart) {
+            ((FragmentCart) fragment).removeCoupon();
+        }
     }
-    public void removeAddress(Address address,int pos){
-        Fragment fragment=getVisibleFragment();
-        if(fragment!=null && fragment instanceof FragmentAddressList ){
-            ((FragmentAddressList)fragment).removeAddress(address,pos);
+
+    public void removeFromCart(UpdateCartRequest updateCartRequest) {
+        Fragment fragment = getVisibleFragment();
+        if (fragment != null && fragment instanceof FragmentCart) {
+            ((FragmentCart) fragment).removeProduct(updateCartRequest);
         }
 
     }
-    public void reorder(Order order){
-        Fragment fragment=getVisibleFragment();
-        if(fragment!=null && fragment instanceof FragmentOrderList ){
-            ((FragmentOrderList)fragment).reOrder(order);
+
+    public void removeAddress(Address address, int pos) {
+        Fragment fragment = getVisibleFragment();
+        if (fragment != null && fragment instanceof FragmentAddressList) {
+            ((FragmentAddressList) fragment).removeAddress(address, pos);
         }
 
     }
-    public void cancelOrder(Order order){
-        Fragment fragment=getVisibleFragment();
-        if(fragment!=null && fragment instanceof FragmentOrderList ){
-            ((FragmentOrderList)fragment).cancelOrder(order);
+
+    public void reorder(Order order) {
+        Fragment fragment = getVisibleFragment();
+        if (fragment != null && fragment instanceof FragmentOrderList) {
+            ((FragmentOrderList) fragment).reOrder(order);
         }
 
     }
-    public void addToCart(int secPos,int pos,boolean isAdd){
-        Fragment fragment=getVisibleFragment();
-        if(fragment!=null && fragment instanceof FragmentProductDescription){
-            ((FragmentProductDescription)fragment).addToCart(secPos,pos,isAdd);
-    
-        }
-        else if(fragment!=null && fragment instanceof FragmentProductsListing){
-            ((FragmentProductsListing)fragment).addToCart(secPos,pos,isAdd);
 
+    public void cancelOrder(Order order) {
+        Fragment fragment = getVisibleFragment();
+        if (fragment != null && fragment instanceof FragmentOrderList) {
+            ((FragmentOrderList) fragment).dialogCancelOrder(order);
         }
-        else if(fragment!=null && fragment instanceof FragmentWishList){
-            ((FragmentWishList)fragment).addToCart(secPos,pos,isAdd);
 
-        }
     }
-    public void updateCart(int secPos,int pos,boolean isAdd){
-        Fragment fragment=getVisibleFragment();
-        if(fragment!=null && fragment instanceof FragmentProductDescription){
-            ((FragmentProductDescription)fragment).updateCart(secPos,pos,isAdd);
 
-        }
-        else if(fragment!=null && fragment instanceof FragmentProductsListing){
-            ((FragmentProductsListing)fragment).updateCart(secPos,pos,isAdd);
+    public void addToCart(int secPos, int pos, boolean isAdd) {
+        Fragment fragment = getVisibleFragment();
+        if (fragment != null && fragment instanceof FragmentProductDescription) {
+            ((FragmentProductDescription) fragment).addToCart(secPos, pos, isAdd);
 
-        }
-        else if(fragment!=null && fragment instanceof FragmentCart){
-            ((FragmentCart)fragment).updateCart(secPos,pos,isAdd);
+        } else if (fragment != null && fragment instanceof FragmentProductsListing) {
+            ((FragmentProductsListing) fragment).addToCart(secPos, pos, isAdd);
 
-        }
-        else if(fragment!=null && fragment instanceof FragmentWishList){
-            ((FragmentWishList)fragment).updateCart(secPos,pos,isAdd);
+        } else if (fragment != null && fragment instanceof FragmentWishList) {
+            ((FragmentWishList) fragment).addToCart(secPos, pos, isAdd);
 
         }
     }
 
- public void applyCoupon(String couponName){
+    public void updateCart(int secPos, int pos, boolean isAdd) {
+        Fragment fragment = getVisibleFragment();
+        if (fragment != null && fragment instanceof FragmentProductDescription) {
+            ((FragmentProductDescription) fragment).updateCart(secPos, pos, isAdd);
 
-     Fragment fragment=getVisibleFragment();
-     if(fragment!=null && fragment instanceof FragmentCoupons){
-         ((FragmentCoupons)fragment).applyCoupon(couponName);
+        } else if (fragment != null && fragment instanceof FragmentProductsListing) {
+            ((FragmentProductsListing) fragment).updateCart(secPos, pos, isAdd);
 
-     }
- }
-    public void wishListUpdate(int secPos,int pos,boolean isAdd){
-        Fragment fragment=getVisibleFragment();
-         if(fragment!=null && fragment instanceof FragmentProductDescription){
-            ((FragmentProductDescription)fragment).wishListUpdate(secPos,pos,isAdd);
+        } else if (fragment != null && fragment instanceof FragmentCart) {
+            ((FragmentCart) fragment).updateCart(secPos, pos, isAdd);
 
-        }
-        else if(fragment!=null && fragment instanceof FragmentProductsListing){
-            ((FragmentProductsListing)fragment).wishListUpdate(secPos,pos,isAdd);
+        } else if (fragment != null && fragment instanceof FragmentWishList) {
+            ((FragmentWishList) fragment).updateCart(secPos, pos, isAdd);
 
         }
-         else if(fragment!=null && fragment instanceof FragmentCart){
-             ((FragmentCart)fragment).wishListUpdate(secPos,pos,isAdd);
-
-         }
-         else if(fragment!=null && fragment instanceof FragmentWishList){
-             ((FragmentWishList)fragment).wishListUpdate(secPos,pos,isAdd);
-
-         }
     }
+
+    public void applyCoupon(String couponName) {
+
+        Fragment fragment = getVisibleFragment();
+        if (fragment != null && fragment instanceof FragmentCoupons) {
+            ((FragmentCoupons) fragment).applyCoupon(couponName);
+
+        }
+    }
+
+    public void wishListUpdate(int secPos, int pos, boolean isAdd) {
+        Fragment fragment = getVisibleFragment();
+        if (fragment != null && fragment instanceof FragmentProductDescription) {
+            ((FragmentProductDescription) fragment).wishListUpdate(secPos, pos, isAdd);
+
+        } else if (fragment != null && fragment instanceof FragmentProductsListing) {
+            ((FragmentProductsListing) fragment).wishListUpdate(secPos, pos, isAdd);
+
+        } else if (fragment != null && fragment instanceof FragmentCart) {
+            ((FragmentCart) fragment).wishListUpdate(secPos, pos, isAdd);
+
+        } else if (fragment != null && fragment instanceof FragmentWishList) {
+            ((FragmentWishList) fragment).wishListUpdate(secPos, pos, isAdd);
+
+        }
+    }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == android.R.id.home)
@@ -367,7 +379,7 @@ public class ActivityContainer extends AppCompatActivity {
             if (fragment != null && fragment instanceof FragmentCategoryList) {
                 getSupportActionBar().show();
             }
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }

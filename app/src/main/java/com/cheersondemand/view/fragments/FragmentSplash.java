@@ -30,6 +30,8 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 
+import static android.Manifest.permission.ACCESS_COARSE_LOCATION;
+import static android.Manifest.permission.ACCESS_FINE_LOCATION;
 import static android.Manifest.permission.WRITE_EXTERNAL_STORAGE;
 
 /**
@@ -200,6 +202,8 @@ public class FragmentSplash extends Fragment {
         ActivityCompat.requestPermissions(getActivity(), new String[]
                 {
                         WRITE_EXTERNAL_STORAGE,
+                        ACCESS_FINE_LOCATION,
+                        ACCESS_COARSE_LOCATION
 
                 }, RequestPermissionCode);
 
@@ -215,9 +219,11 @@ public class FragmentSplash extends Fragment {
                 if (grantResults.length > 0) {
 
                     boolean ExternalStorage = grantResults[0] == PackageManager.PERMISSION_GRANTED;
+                    boolean locationAccess = grantResults[1] == PackageManager.PERMISSION_GRANTED;
+                    boolean CourseAccess = grantResults[2] == PackageManager.PERMISSION_GRANTED;
 
 
-                    if (ExternalStorage) {
+                    if (ExternalStorage && locationAccess && CourseAccess) {
 
                         Toast.makeText(getActivity(), "Permission Granted", Toast.LENGTH_LONG).show();
                     } else {
@@ -233,8 +239,12 @@ public class FragmentSplash extends Fragment {
     public boolean CheckingPermissionIsEnabledOrNot() {
 
         int FirstPermissionResult = ContextCompat.checkSelfPermission(getActivity(), WRITE_EXTERNAL_STORAGE);
+        int SecondPermissionResult = ContextCompat.checkSelfPermission(getActivity(), ACCESS_FINE_LOCATION);
+        int ThirdPermissionResult  = ContextCompat.checkSelfPermission(getActivity(), ACCESS_COARSE_LOCATION);
 
-        return FirstPermissionResult == PackageManager.PERMISSION_GRANTED;
+        return FirstPermissionResult == PackageManager.PERMISSION_GRANTED &&
+                SecondPermissionResult == PackageManager.PERMISSION_GRANTED &&
+                ThirdPermissionResult == PackageManager.PERMISSION_GRANTED;
     }
 
     @Override

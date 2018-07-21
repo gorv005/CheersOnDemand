@@ -39,10 +39,11 @@
     </style>
     <style name="CustomCheckbox1" parent="@style/Widget.AppCompat.CompoundButton.CheckBox">
         <item name="android:colorControlNormal">@color/spec_desc</item>
+<!--
         <item name="android:colorControlActivated">@color/profile_back</item>
-        <!--
-                <item name="android:colorControlHighlight">#c51162</item>
-        -->
+-->
+                <item name="android:colorControlHighlight">@color/profile_text_color</item>
+
     </style>
     <style name="MaterialDialogSheet" parent="@android:style/Theme.Dialog">
         <item name="android:windowIsTranslucent">true</item>

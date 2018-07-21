@@ -1,6 +1,7 @@
 package com.cheersondemand.view.fragments;
 
 
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
@@ -179,7 +180,7 @@ public class FragmentAddCard extends Fragment implements ICardViewPresenter.ICar
 
             @Override
             public void afterTextChanged(Editable editable) {
-                if (editable.toString().length() > 4 && editable.toString().length() <= 8) {
+               /* if (editable.toString().length() > 4 && editable.toString().length() <= 8) {
 
                     tvCardNumber.setText(etCardNumber.getText().toString().substring(0, 4) + "\t" + etCardNumber.getText().toString().substring(4));
                 }
@@ -192,8 +193,14 @@ public class FragmentAddCard extends Fragment implements ICardViewPresenter.ICar
                             etCardNumber.getText().toString().substring(8, 12) + "\t" + etCardNumber.getText().toString().substring(12)
                     );
                 }
+*/              if(etCardNumber.getText().toString().length()>4) {
+                    tvCardNumber.setText(Util.handleCardNumber(etCardNumber.getText().toString(), " "));
+                }
+                else {
+                    tvCardNumber.setText(etCardNumber.getText().toString());
+                }
 
-                tvCardNumber.setText(etCardNumber.getText().toString());
+              //  tvCardNumber.setText(etCardNumber.getText().toString());
                 if (editable.toString().length() == 5) {
                     type = Util.getCardType(editable.toString());
 

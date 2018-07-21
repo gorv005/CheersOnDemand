@@ -11,6 +11,7 @@ import android.widget.TextView;
 import com.cheersondemand.R;
 import com.cheersondemand.model.card.CardList;
 import com.cheersondemand.util.ImageLoader.ImageLoader;
+import com.cheersondemand.util.Util;
 
 import java.util.List;
 
@@ -71,6 +72,7 @@ public class ItemViewHolder extends RecyclerView.ViewHolder {
             itemViewHolder.tv_card_number.setText( context.getString(R.string.card_number_sample)+" "+horizontalList.get(position).getLast4());
             itemViewHolder.tv_member_name.setText(horizontalList.get(position).getCardHolderName());
             itemViewHolder.tv_validity.setText(horizontalList.get(position).getExpMonth()+"/"+horizontalList.get(position).getExpYear());
+            Util.setCardType(Util.getCardTypeUsingBrandName(horizontalList.get(position).getBrand()),itemViewHolder.ivType,context);
 
         }
 

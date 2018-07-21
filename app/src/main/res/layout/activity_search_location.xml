@@ -97,6 +97,7 @@
         android:layout_height="match_parent">
 
         <RelativeLayout
+            android:id="@+id/rlCurrentLocation"
             android:background="@color/white"
             android:paddingTop="10dp"
             android:paddingLeft="15dp"

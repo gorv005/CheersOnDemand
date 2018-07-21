@@ -2,6 +2,7 @@ package com.cheersondemand.view.fragments;
 
 
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -12,13 +13,16 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.ListView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.cheersondemand.R;
 import com.cheersondemand.model.AllProduct;
 import com.cheersondemand.model.authentication.GenRequest;
+import com.cheersondemand.model.coupon.CouponInfo;
+import com.cheersondemand.model.coupon.CouponInfoResponse;
+import com.cheersondemand.model.coupon.CouponListResponse;
 import com.cheersondemand.model.order.CreateOrderResponse;
 import com.cheersondemand.model.order.addtocart.AddToCartRequest;
 import com.cheersondemand.model.order.addtocart.AddToCartResponse;
@@ -29,12 +33,15 @@ import com.cheersondemand.model.productdescription.SimilarProductsResponse;
 import com.cheersondemand.model.wishlist.WishListDataResponse;
 import com.cheersondemand.model.wishlist.WishListRequest;
 import com.cheersondemand.model.wishlist.WishListResponse;
+import com.cheersondemand.presenter.coupon.CouponViewPresenterImpl;
+import com.cheersondemand.presenter.coupon.ICouponViewPresenter;
 import com.cheersondemand.presenter.home.order.IOrderViewPresenterPresenter;
 import com.cheersondemand.presenter.home.order.OrderViewPresenterImpl;
 import com.cheersondemand.presenter.productDescription.IProductDescViewPresenter;
 import com.cheersondemand.presenter.productDescription.ProductDescViewPresenterImpl;
 import com.cheersondemand.util.C;
 import com.cheersondemand.util.ImageLoader.ImageLoader;
+import com.cheersondemand.util.NonScrollListView;
 import com.cheersondemand.util.SharedPreference;
 import com.cheersondemand.util.Util;
 import com.cheersondemand.view.ActivityContainer;
@@ -51,12 +58,12 @@ import butterknife.Unbinder;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class FragmentProductDescription extends Fragment implements View.OnClickListener, IProductDescViewPresenter.IProductDescView, IOrderViewPresenterPresenter.IOrderView {
+public class FragmentProductDescription extends Fragment implements View.OnClickListener, IProductDescViewPresenter.IProductDescView, IOrderViewPresenterPresenter.IOrderView, ICouponViewPresenter.ICouponView {
 
     @BindView(R.id.imgProduct)
     ImageView imgProduct;
     @BindView(R.id.lvOffers)
-    ListView lvOffers;
+    NonScrollListView lvOffers;
     @BindView(R.id.tvType)
     TextView tvType;
     @BindView(R.id.tvQuantity)
@@ -90,7 +97,7 @@ public class FragmentProductDescription extends Fragment implements View.OnClick
     Button btnAddToCart;
     @BindView(R.id.btnBuyNow)
     Button btnBuyNow;
-    AllProduct product,productDes;
+    AllProduct product, productDes;
     @BindView(R.id.rlImage)
     RelativeLayout rlImage;
     @BindView(R.id.rlSimilar)
@@ -101,12 +108,22 @@ public class FragmentProductDescription extends Fragment implements View.OnClick
     ImageView imgLike;
     @BindView(R.id.rlLike)
     RelativeLayout rlLike;
+    @BindView(R.id.imgBack)
+    RelativeLayout imgBack;
+    @BindView(R.id.ivCheckout)
+    ImageView ivCheckout;
+    @BindView(R.id.ivCart)
+    ImageView ivCart;
+    @BindView(R.id.lvDescCheck)
+    LinearLayout lvDescCheck;
+    List<AllProduct> allProductList;
+    Util util;
+    ICouponViewPresenter iCouponViewPresenter;
+    List<CouponInfo> couponInfoList;
     private int productPos;
     private int secPos;
     private boolean isAdd;
-    List<AllProduct> allProductList;
-    Util util;
-    private boolean isProductDes=false;
+    private boolean isProductDes = false, isBuyNow = false;
 
     public FragmentProductDescription() {
         // Required empty public constructor
@@ -120,6 +137,8 @@ public class FragmentProductDescription extends Fragment implements View.OnClick
         productDes = (AllProduct) getArguments().getSerializable(C.PRODUCT);
         iProductDescViewPresenter = new ProductDescViewPresenterImpl(this, getActivity());
         iOrderViewPresenterPresenter = new OrderViewPresenterImpl(this, getActivity());
+        iCouponViewPresenter = new CouponViewPresenterImpl(this, getActivity());
+
         util = new Util();
     }
 
@@ -149,6 +168,7 @@ public class FragmentProductDescription extends Fragment implements View.OnClick
     public void onResume() {
         super.onResume();
         getSimilarProducts();
+        getCouponList();
         ActivityContainer.tvTitle.setText(productDes.getName());
     }
 
@@ -165,17 +185,15 @@ public class FragmentProductDescription extends Fragment implements View.OnClick
     void setDetail() {
         //  imageLoader.DisplayImage(product.getImage(), imgProduct);
         Util.setImage(getActivity(), product.getImage(), imgProduct);
-        if(product.getIsWishlisted()){
+        if (product.getIsWishlisted()) {
             imgLike.setImageResource(R.drawable.like);
-        }
-        else {
+        } else {
             imgLike.setImageResource(R.drawable.unlike);
 
         }
-        if(product.getIsInCart()){
+        if (product.getIsInCart()) {
             btnAddToCart.setText(getString(R.string.added_to_cart));
-        }
-        else {
+        } else {
             btnAddToCart.setText(getString(R.string.add_to_cart));
 
         }
@@ -186,9 +204,7 @@ public class FragmentProductDescription extends Fragment implements View.OnClick
         tvRegion.setText(product.getRegion());
         tvQuantity.setText("0.0");
         tvDesc.setText(product.getDescription());
-        adapterOffers = new AdapterOffers(getActivity(), offersList());
-        lvOffers.setAdapter(adapterOffers);
-        Util.setListViewHeightBasedOnChildren(lvOffers);
+
     }
 
     List<Offers> offersList() {
@@ -381,22 +397,43 @@ public class FragmentProductDescription extends Fragment implements View.OnClick
         }
     }
 
+    void getCouponList() {
+        String order_id = SharedPreference.getInstance(getActivity()).getString(C.ORDER_ID);
+
+        if (SharedPreference.getInstance(getActivity()).getBoolean(C.IS_LOGIN_GUEST)) {
+            String id = "" + SharedPreference.getInstance(getActivity()).geGuestUser(C.GUEST_USER).getId();
+
+            iCouponViewPresenter.getListOfCoupons(false, "", Util.id(getActivity()), order_id);
+        } else {
+            String id = "" + SharedPreference.getInstance(getActivity()).getUser(C.AUTH_USER).getData().getUser().getId();
+            String token = C.bearer + SharedPreference.getInstance(getActivity()).getUser(C.AUTH_USER).getData().getToken().getAccessToken();
+            iCouponViewPresenter.getListOfCoupons(true, token, Util.id(getActivity()), order_id);
+        }
+    }
+
     @Override
     public void getAddToCartSucess(AddToCartResponse response) {
         if (response.getSuccess()) {
             util.setSnackbarMessage(getActivity(), response.getMessage(), rlView, false);
 
-            if(isProductDes){
+            if (isProductDes) {
                 btnAddToCart.setText(getString(R.string.added_to_cart));
                 productDes.setIsInCart(true);
-                isProductDes=false;
-            }
-            else {
+                isProductDes = false;
+            } else if (isBuyNow) {
+                Handler handler = new Handler();
+                handler.postDelayed(new Runnable() {
+                    public void run() {
+                        // Actions to do after 10 seconds
+                        gotoCart();
+                    }
+                }, 2000);
+            } else {
                 updateCart();
             }
         } else {
             util.setSnackbarMessage(getActivity(), response.getMessage(), rlView, true);
-            isProductDes=false;
+            isProductDes = false;
 
         }
     }
@@ -464,19 +501,18 @@ public class FragmentProductDescription extends Fragment implements View.OnClick
     public void addTowishListSuccess(WishListResponse response) {
         if (response.getSuccess()) {
             util.setSnackbarMessage(getActivity(), response.getMessage(), rlView, false);
-            if(isProductDes) {
-                isProductDes=false;
+            if (isProductDes) {
+                isProductDes = false;
 
                 productDes.setIsWishlisted(true);
                 imgLike.setImageResource(R.drawable.like);
-            }
-            else {
+            } else {
                 product.setIsWishlisted(true);
                 adapterSimilarProducts.notifyDataSetChanged();
             }
         } else {
             util.setSnackbarMessage(getActivity(), response.getMessage(), rlView, true);
-            isProductDes=false;
+            isProductDes = false;
 
         }
     }
@@ -485,20 +521,19 @@ public class FragmentProductDescription extends Fragment implements View.OnClick
     public void removeFromWishListSuccess(WishListResponse response) {
         if (response.getSuccess()) {
             util.setSnackbarMessage(getActivity(), response.getMessage(), rlView, false);
-            if(isProductDes) {
-                isProductDes=false;
+            if (isProductDes) {
+                isProductDes = false;
                 productDes.setIsWishlisted(false);
                 imgLike.setImageResource(R.drawable.unlike);
 
-            }
-            else {
+            } else {
                 product.setIsWishlisted(false);
 
                 adapterSimilarProducts.notifyDataSetChanged();
             }
         } else {
             util.setSnackbarMessage(getActivity(), response.getMessage(), rlView, true);
-            isProductDes=false;
+            isProductDes = false;
 
         }
     }
@@ -509,19 +544,50 @@ public class FragmentProductDescription extends Fragment implements View.OnClick
     }
 
     @Override
+    public void onSuccessCouponInfo(CouponInfoResponse response) {
+
+    }
+
+    @Override
+    public void onSuccessCouponList(CouponListResponse response) {
+        if (response.getSuccess()) {
+            couponInfoList = response.getData();
+
+            adapterOffers = new AdapterOffers(getActivity(), couponInfoList);
+            if (couponInfoList != null && couponInfoList.size() > 0) {
+                lvOffers.setAdapter(adapterOffers);
+                Util.setListViewHeightBasedOnChildren(lvOffers);
+
+            } else {
+                lvOffers.setVisibility(View.GONE);
+
+            }
+        } else {
+            lvOffers.setVisibility(View.GONE);
+        }
+    }
+
+    @Override
+    public void onSuccessCartAfterCoupon(UpdateCartResponse response) {
+
+    }
+
+    @Override
     public void getResponseError(String response) {
-        isProductDes=false;
+        isProductDes = false;
         util.setSnackbarMessage(getActivity(), response, rlView, true);
 
     }
 
     @Override
     public void showProgress() {
+        //  util.showDialog(C.MSG,getActivity());
 
     }
 
     @Override
     public void hideProgress() {
+        // util.hideDialog();
 
     }
 
@@ -531,20 +597,19 @@ public class FragmentProductDescription extends Fragment implements View.OnClick
             case R.id.tvSeeMore:
                 Bundle bundle = new Bundle();
                 bundle.putString(C.CAT_ID, "" + product.getId());
-                bundle.putString(C.SUB_CAT_ID,"");
+                bundle.putString(C.SUB_CAT_ID, "");
 
                 bundle.putInt(C.SOURCE, C.FRAGMENT_PRODUCT_DESC);
                 ((ActivityContainer) getActivity()).fragmnetLoader(C.FRAGMENT_PRODUCT_LISTING, bundle);
                 break;
             case R.id.rlLike:
-                isProductDes=true;
+                isProductDes = true;
                 WishListRequest wishListRequest = new WishListRequest();
                 wishListRequest.setProductId(productDes.getId());
                 wishListRequest.setUuid(Util.id(getActivity()));
-                if(productDes.getIsWishlisted()) {
+                if (productDes.getIsWishlisted()) {
                     updateWishList(wishListRequest, false);
-                }
-                else {
+                } else {
                     updateWishList(wishListRequest, true);
 
                 }
@@ -552,7 +617,7 @@ public class FragmentProductDescription extends Fragment implements View.OnClick
 
             case R.id.btnAddToCart:
 
-                if(!productDes.getIsInCart()) {
+                if (!productDes.getIsInCart()) {
                     isProductDes = true;
                     product = productDes;
 
@@ -561,17 +626,44 @@ public class FragmentProductDescription extends Fragment implements View.OnClick
                     } else {
                         addToCart();
                     }
-                }
-                else {
+                } else {
                     util.setSnackbarMessage(getActivity(), getString(R.string.product_already_in_cart), rlView, true);
 
                 }
                 break;
             case R.id.btnBuyNow:
-                Bundle bundle1=new Bundle();
-                bundle1.putInt(C.SOURCE,C.FRAGMENT_PRODUCT_DESC);
-                ((ActivityContainer)getActivity()).fragmnetLoader(C.FRAGMENT_CART,bundle1);
+
+                if (!productDes.getIsInCart()) {
+                    isBuyNow = true;
+                    product = productDes;
+
+                    if (SharedPreference.getInstance(getActivity()).getString(C.ORDER_ID) == null) {
+                        createOrder();
+                    } else {
+                        addToCart();
+                    }
+                } else {
+                    gotoCart();
+
+                }
+
+                break;
+            case R.id.imgBack:
+                getActivity().onBackPressed();
+                break;
+            case R.id.ivCart:
+                gotoCart();
+                break;
+            case R.id.ivCheckout:
+                // getActivity().onBackPressed();
                 break;
         }
+    }
+
+
+    void gotoCart() {
+        Bundle bundle1 = new Bundle();
+        bundle1.putInt(C.SOURCE, C.FRAGMENT_PRODUCT_DESC);
+        ((ActivityContainer) getActivity()).fragmnetLoader(C.FRAGMENT_CART, bundle1);
     }
 }

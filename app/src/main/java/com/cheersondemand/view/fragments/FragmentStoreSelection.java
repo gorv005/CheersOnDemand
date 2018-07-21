@@ -11,6 +11,7 @@ import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -27,6 +28,7 @@ import com.cheersondemand.presenter.store.StoreViewPresenterImpl;
 import com.cheersondemand.util.C;
 import com.cheersondemand.util.SharedPreference;
 import com.cheersondemand.util.Util;
+import com.cheersondemand.view.ActivityContainer;
 import com.cheersondemand.view.ActivityHome;
 import com.cheersondemand.view.adapter.store.AdapterStore;
 
@@ -63,6 +65,13 @@ public class FragmentStoreSelection extends Fragment implements IStoreViewPresen
     int from;
     List<StoreList> storeList;
     StoreList store;
+    @BindView(R.id.btnChangeLocation)
+    Button btnChangeLocation;
+    @BindView(R.id.llNoStore)
+    LinearLayout llNoStore;
+    @BindView(R.id.rlStoreView)
+    RelativeLayout rlStoreView;
+
     public FragmentStoreSelection() {
         // Required empty public constructor
     }
@@ -73,7 +82,7 @@ public class FragmentStoreSelection extends Fragment implements IStoreViewPresen
         super.onCreate(savedInstanceState);
         util = new Util();
         iStoreViewPresenter = new StoreViewPresenterImpl(this, getActivity());
-       from= getArguments().getInt(C.FROM);
+        from = getArguments().getInt(C.FROM);
     }
 
     @Override
@@ -92,14 +101,16 @@ public class FragmentStoreSelection extends Fragment implements IStoreViewPresen
         imgBack.setOnClickListener(this);
         btnBack.setOnClickListener(this);
         btnSubmit.setOnClickListener(this);
-        if(SharedPreference.getInstance(getActivity()).getBoolean(C.IS_LOGIN_GUEST)) {
+        btnChangeLocation.setOnClickListener(this);
+        rlStoreView.setVisibility(View.GONE);
+        llNoStore.setVisibility(View.GONE);
+        if (SharedPreference.getInstance(getActivity()).getBoolean(C.IS_LOGIN_GUEST)) {
             iStoreViewPresenter.getStoreList(Util.id(getActivity()));
-        }
-        else {
+        } else {
 
-            String token="bearer "+SharedPreference.getInstance(getActivity()).getUser(C.AUTH_USER).getData().getToken().getAccessToken();
+            String token = "bearer " + SharedPreference.getInstance(getActivity()).getUser(C.AUTH_USER).getData().getToken().getAccessToken();
 
-            iStoreViewPresenter.getStoreList(token,Util.id(getActivity()));
+            iStoreViewPresenter.getStoreList(token, Util.id(getActivity()));
 
         }
         etStoreName.addTextChangedListener(new TextWatcher() {
@@ -129,31 +140,38 @@ public class FragmentStoreSelection extends Fragment implements IStoreViewPresen
 
     @Override
     public void getStoreListSuccess(StoreListResponse response) {
-        if(response.getSuccess()) {
-            storeList=response.getData();
-            if(storeList!=null && storeList.size()>0) {
-                StoreList storeList1=SharedPreference.getInstance(getActivity()).getStore(C.SELECTED_STORE);
-                adapterStore = new AdapterStore(getActivity(), storeList,storeList1);
+        if (response.getSuccess()) {
+            storeList = response.getData();
+            if (storeList != null && storeList.size() > 0) {
+                rlStoreView.setVisibility(View.VISIBLE);
+                ((ActivityContainer)getActivity()).hideToolBar();
+                StoreList storeList1 = SharedPreference.getInstance(getActivity()).getStore(C.SELECTED_STORE);
+                adapterStore = new AdapterStore(getActivity(), storeList, storeList1);
                 lvStoreList.setAdapter(adapterStore);
             }
-        }
-        else {
-            util.setSnackbarMessage(getActivity(), response.getMessage(), LLView, true);
+            else {
+                ((ActivityContainer)getActivity()).showToolBar();
+                llNoStore.setVisibility(View.VISIBLE);
+            }
+        } else {
+           // util.setSnackbarMessage(getActivity(), response.getMessage(), LLView, true);
+            llNoStore.setVisibility(View.VISIBLE);
+            ((ActivityContainer)getActivity()).showToolBar();
+
 
         }
     }
 
     @Override
     public void updateStoreSuccess(UpdateStoreResponse response) {
-        if(response.getSuccess()) {
+        if (response.getSuccess()) {
             SharedPreference.getInstance(getActivity()).setStore(C.SELECTED_STORE, store);
             if (from == C.SEARCH) {
                 gotoHome();
             } else if (from == C.HOME) {
                 getActivity().finish();
             }
-        }
-        else {
+        } else {
             util.setSnackbarMessage(getActivity(), response.getMessage(), LLView, true);
 
         }
@@ -167,7 +185,7 @@ public class FragmentStoreSelection extends Fragment implements IStoreViewPresen
 
     @Override
     public void showProgress() {
-        util.showDialog(C.MSG,getActivity());
+        util.showDialog(C.MSG, getActivity());
 
     }
 
@@ -177,7 +195,7 @@ public class FragmentStoreSelection extends Fragment implements IStoreViewPresen
 
     }
 
-    void updateStore(){
+    void updateStore() {
         store = adapterStore.getSelectedItem();
         if (storeList != null) {
 
@@ -188,18 +206,17 @@ public class FragmentStoreSelection extends Fragment implements IStoreViewPresen
 
                 iStoreViewPresenter.updateStore("" + SharedPreference.getInstance(getActivity()).
                         geGuestUser(C.GUEST_USER).getId(), updateStore);
-            }
-            else {
-                String token= C.bearer+SharedPreference.getInstance(getActivity()).getUser(C.AUTH_USER).getData().getToken().getAccessToken();
-                String id=""+SharedPreference.getInstance(getActivity()).getUser(C.AUTH_USER).getData().getUser().getId();
+            } else {
+                String token = C.bearer + SharedPreference.getInstance(getActivity()).getUser(C.AUTH_USER).getData().getToken().getAccessToken();
+                String id = "" + SharedPreference.getInstance(getActivity()).getUser(C.AUTH_USER).getData().getUser().getId();
 
-                iStoreViewPresenter.updateStore(token,id, updateStore);
+                iStoreViewPresenter.updateStore(token, id, updateStore);
             }
-        }
-        else {
+        } else {
             util.setSnackbarMessage(getActivity(), getString(R.string.plz_select_store), LLView, true);
         }
     }
+
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
@@ -212,6 +229,9 @@ public class FragmentStoreSelection extends Fragment implements IStoreViewPresen
             case R.id.btnSubmit:
 
                 updateStore();
+                break;
+            case R.id.btnChangeLocation:
+                getActivity().onBackPressed();
                 break;
 
         }

@@ -201,7 +201,7 @@
     <string name="order_date">Ordered Date:</string>
     <string name="proceed">PROCEED</string>
     <string name="yes_delete">Yes, Delete</string>
-    <string name="ok">Ok</string>
+    <string name="ok">OK</string>
     <string name="payment_option">Payment Options</string>
     <string name="add_card_">Add Card</string>
     <string name="payment">Payment</string>
@@ -216,6 +216,26 @@
     <string name="thanku_for_order">Thank you so much for your order.</string>
     <string name="goto_my_orders">Go to My Orders</string>
     <string name="order_confirmed">Order Confirmed</string>
+    <string name="home">Home</string>
+    <string name="find_best_deal">Find the Best Deals around you</string>
+    <string name="require_location">Cheers On Demand requires location access to show the best recommendations from around you.</string>
+    <string name="give_access">Give Access</string>
+    <string name="no_thanks">No, Thanks !</string>
+    <string name="active_notification">Activate Notifications</string>
+    <string name="you_will_be_notified">You’ll be notified whenever we have something new in the store and on Offers and Sales !</string>
+    <string name="coming_soon">Coming Soon.</string>
+    <string name="store_not_available">Unfortunately, it look like CheersOnDemand isn’t available in your area yet. We’ll make sure you’re the first to know when we launch near you.</string>
+    <string name="change_location">Change Location</string>
+    <string name="minimum_cart_value">Minimum Cart Value:</string>
+    <string name="maximum_cart_value">Maximum Cart Value:</string>
+    <string name="why_you_want_to_cancel_order">Why you want to cancel order?</string>
+    <string name="other">Other</string>
+    <string name="reason_for_cancel">Reason for cancel...</string>
+    <string name="cancel_order">CANCEL ORDER</string>
+    <string name="item_goes_dammaged">Item got damaged.</string>
+    <string name="change_my_mind">Changed my mind.</string>
+    <string name="will_bundle">Will bundle with another order.</string>
+    <string name="please_select_one_option">Please select one option from above list.</string>
 
     <!--
         <string name="default_web_client_id">999387565226-hdnnhm6rhgik5ljvm06shotsi7j9883c.apps.googleusercontent.com</string>

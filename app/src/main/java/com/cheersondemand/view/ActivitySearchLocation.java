@@ -1,6 +1,8 @@
 package com.cheersondemand.view;
 
 import android.content.Intent;
+import android.location.Address;
+import android.location.Location;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -28,6 +30,7 @@ import com.cheersondemand.presenter.location.LocationViewPresenterImpl;
 import com.cheersondemand.util.C;
 import com.cheersondemand.util.SharedPreference;
 import com.cheersondemand.util.Util;
+import com.cheersondemand.util.location.LocationHelper;
 import com.cheersondemand.view.adapter.location.AdapterLocation;
 import com.cheersondemand.view.adapter.location.AdapterRecentSearches;
 import com.cheersondemand.view.adapter.location.RecyclerItemClickListener;
@@ -62,14 +65,18 @@ public class ActivitySearchLocation extends AppCompatActivity implements
     EditText autoCompleteTextView;
     @BindView(R.id.LLView)
     LinearLayout LLView;
-    // private EditText mAutocompleteTextView;
-    private GoogleApiClient mGoogleApiClient;
-    private AdapterLocation adapterLocation;
-    private LinearLayoutManager mLinearLayoutManager;
     ILocationViewPresenter iLocationViewPresenter;
     AdapterRecentSearches adapterRecentSearches;
     int from;
     Util util;
+    LocationHelper locationHelper;
+    @BindView(R.id.rlCurrentLocation)
+    RelativeLayout rlCurrentLocation;
+    // private EditText mAutocompleteTextView;
+    private GoogleApiClient mGoogleApiClient;
+    private AdapterLocation adapterLocation;
+    private LinearLayoutManager mLinearLayoutManager;
+    private Location mLastLocation;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -81,23 +88,30 @@ public class ActivitySearchLocation extends AppCompatActivity implements
         buildAPIClient();
         ButterKnife.bind(this);
         imgBack.setOnClickListener(this);
+        rlCurrentLocation.setOnClickListener(this);
         util = new Util();
         iLocationViewPresenter = new LocationViewPresenterImpl(this, this);
         init();
+        locationHelper = new LocationHelper(this);
+        if (locationHelper.checkPlayServices()) {
+
+            // Building the GoogleApi client
+            locationHelper.buildGoogleApiClient();
+        }
         getRecentSearches();
     }
 
-        void  getRecentSearches(){
-            if (SharedPreference.getInstance(ActivitySearchLocation.this).getBoolean(C.IS_LOGIN_GUEST)) {
-                iLocationViewPresenter.getRecentLocation(false, "",Util.id(this) ,""+ SharedPreference.getInstance(ActivitySearchLocation.this).geGuestUser(C.GUEST_USER).getId());
-            } else {
-                String token = C.bearer+ SharedPreference.getInstance(ActivitySearchLocation.this).getUser(C.AUTH_USER).getData().getToken().getAccessToken();
-                String id = "" + SharedPreference.getInstance(ActivitySearchLocation.this).getUser(C.AUTH_USER).getData().getUser().getId();
+    void getRecentSearches() {
+        if (SharedPreference.getInstance(ActivitySearchLocation.this).getBoolean(C.IS_LOGIN_GUEST)) {
+            iLocationViewPresenter.getRecentLocation(false, "", Util.id(this), "" + SharedPreference.getInstance(ActivitySearchLocation.this).geGuestUser(C.GUEST_USER).getId());
+        } else {
+            String token = C.bearer + SharedPreference.getInstance(ActivitySearchLocation.this).getUser(C.AUTH_USER).getData().getToken().getAccessToken();
+            String id = "" + SharedPreference.getInstance(ActivitySearchLocation.this).getUser(C.AUTH_USER).getData().getUser().getId();
 
-                iLocationViewPresenter.getRecentLocation(true, token,Util.id(this) ,""+ id);
+            iLocationViewPresenter.getRecentLocation(true, token, Util.id(this), "" + id);
 
-            }
         }
+    }
    /* void setRecentSearches() {
         rlRecentSearch.setVisibility(View.VISIBLE);
         rlLocationSearch.setVisibility(View.GONE);
@@ -112,6 +126,11 @@ public class ActivitySearchLocation extends AppCompatActivity implements
     }*/
 
     void init() {
+        if (SharedPreference.getInstance(this).getBoolean(C.IS_LOGIN_GUEST)) {
+            imgBack.setVisibility(View.VISIBLE);
+        } else {
+            imgBack.setVisibility(View.GONE);
+        }
         autoCompleteTextView.addTextChangedListener(new TextWatcher() {
 
             public void onTextChanged(CharSequence s, int start, int before,
@@ -145,7 +164,7 @@ public class ActivitySearchLocation extends AppCompatActivity implements
 
         AutocompleteFilter autocompleteFilter = new AutocompleteFilter.Builder()
                 .setTypeFilter(Place.TYPE_COUNTRY)
-                .setCountry("US")
+               // .setCountry("US")
                 .setTypeFilter(AutocompleteFilter.TYPE_FILTER_ADDRESS)
                 .build();
         adapterLocation = new AdapterLocation(this, R.layout.item_address,
@@ -208,13 +227,13 @@ public class ActivitySearchLocation extends AppCompatActivity implements
         SharedPreference.getInstance(ActivitySearchLocation.this).setString(C.LOCATION_SELECTED, selectedLocation.getAddress());
 
         SaveLocation saveLocation = new SaveLocation();
-        saveLocation.setLatitude(""+selectedLocation.getLatitude());
-        saveLocation.setLongitude(""+selectedLocation.getLongitude());
+        saveLocation.setLatitude("" + selectedLocation.getLatitude());
+        saveLocation.setLongitude("" + selectedLocation.getLongitude());
         saveLocation.setUuid(Util.id(ActivitySearchLocation.this));
         if (SharedPreference.getInstance(ActivitySearchLocation.this).getBoolean(C.IS_LOGIN_GUEST)) {
             iLocationViewPresenter.saveLocation(saveLocation, "" + SharedPreference.getInstance(ActivitySearchLocation.this).geGuestUser(C.GUEST_USER).getId());
         } else {
-            String token = C.bearer+ SharedPreference.getInstance(ActivitySearchLocation.this).getUser(C.AUTH_USER).getData().getToken().getAccessToken();
+            String token = C.bearer + SharedPreference.getInstance(ActivitySearchLocation.this).getUser(C.AUTH_USER).getData().getToken().getAccessToken();
             String id = "" + SharedPreference.getInstance(ActivitySearchLocation.this).getUser(C.AUTH_USER).getData().getUser().getId();
 
             iLocationViewPresenter.saveLocation(token, saveLocation, id);
@@ -251,10 +270,12 @@ public class ActivitySearchLocation extends AppCompatActivity implements
     @Override
     public void onResume() {
         super.onResume();
-        /*if (!mGoogleApiClient.isConnected() && !mGoogleApiClient.isConnecting()) {
+        locationHelper.checkPlayServices();
+
+        if (!mGoogleApiClient.isConnected() && !mGoogleApiClient.isConnecting()) {
             Log.v("Google API", "Connecting");
             mGoogleApiClient.connect();
-        }*/
+        }
     }
 
     @Override
@@ -264,6 +285,39 @@ public class ActivitySearchLocation extends AppCompatActivity implements
             Log.v("Google API", "Dis-Connecting");
             mGoogleApiClient.disconnect();
         }*/
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        locationHelper.onActivityResult(requestCode, resultCode, data);
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
+                                           @NonNull int[] grantResults) {
+        // redirects to utils
+        locationHelper.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        location();
+    }
+
+    void location() {
+        locationHelper.checkpermission();
+
+        mLastLocation = locationHelper.getLocation();
+        if (mLastLocation != null) {
+
+            final RecentLocation selectedLocation = new RecentLocation();
+            Address address = locationHelper.getAddress(mLastLocation.getLatitude(), mLastLocation.getLongitude());
+            selectedLocation.setAddress(address.getLocality() + ", " + address.getAdminArea() + ", " + address.getCountryName());
+
+            selectedLocation.setLatitude("" + mLastLocation.getLatitude());
+            selectedLocation.setLongitude("" + mLastLocation.getLongitude());
+            saveLocation(selectedLocation);
+        } else {
+
+            util.setSnackbarMessage(this, "Couldn't get the location. Make sure location is enabled on the device", LLView, true);
+
+        }
     }
 
     @Override
@@ -298,11 +352,11 @@ public class ActivitySearchLocation extends AppCompatActivity implements
 
     @Override
     public void onRecentLocationSuccess(RecentLocationResponse response) {
-        if(response.getSuccess()){
+        if (response.getSuccess()) {
             rlRecentSearch.setVisibility(View.VISIBLE);
             rlLocationSearch.setVisibility(View.GONE);
 
-            if (response.getData() != null &&response.getData().size() > 0) {
+            if (response.getData() != null && response.getData().size() > 0) {
 
                 adapterRecentSearches = new AdapterRecentSearches(response.getData(), ActivitySearchLocation.this);
                 mLinearLayoutManager = new LinearLayoutManager(this);
@@ -314,13 +368,22 @@ public class ActivitySearchLocation extends AppCompatActivity implements
 
     @Override
     public void showProgress() {
-        util.showDialog(C.MSG,this);
-
+        try {
+            util.showDialog(C.MSG, this);
+        }
+        catch (Exception e){
+            e.printStackTrace();
+        }
     }
 
     @Override
     public void hideProgress() {
-        util.hideDialog();
+        try {
+
+            util.hideDialog();
+        }catch (Exception e){
+            e.printStackTrace();
+        }
 
     }
 
@@ -329,6 +392,9 @@ public class ActivitySearchLocation extends AppCompatActivity implements
         switch (v.getId()) {
             case R.id.imgBack:
                 onBackPressed();
+                break;
+            case R.id.rlCurrentLocation:
+                location();
                 break;
         }
     }

@@ -7,12 +7,12 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.text.Editable;
+import android.text.InputType;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -24,6 +24,8 @@ import com.cheersondemand.model.changepassword.PasswordResponse;
 import com.cheersondemand.presenter.password.IPasswordViewPresenter;
 import com.cheersondemand.presenter.password.PasswordViewPresenterImpl;
 import com.cheersondemand.util.C;
+import com.cheersondemand.util.CustomEditText;
+import com.cheersondemand.util.DrawableClickListener;
 import com.cheersondemand.util.SharedPreference;
 import com.cheersondemand.util.Util;
 import com.cheersondemand.view.ActivityContainer;
@@ -31,6 +33,9 @@ import com.cheersondemand.view.ActivityContainer;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
+
+import static android.text.InputType.TYPE_CLASS_TEXT;
+import static android.text.InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -41,11 +46,11 @@ public class FragmentChangePassword extends Fragment implements View.OnClickList
     @BindView(R.id.tvPasswordError)
     TextView tvPasswordError;
     @BindView(R.id.etCurrentPassword)
-    EditText etCurrentPassword;
+    CustomEditText etCurrentPassword;
     @BindView(R.id.etNewPassword)
-    EditText etNewPassword;
+    CustomEditText etNewPassword;
     @BindView(R.id.etReenterPassword)
-    EditText etReenterPassword;
+    CustomEditText etReenterPassword;
     @BindView(R.id.btnChangePassword)
     Button btnChangePassword;
     Unbinder unbinder;
@@ -58,6 +63,7 @@ public class FragmentChangePassword extends Fragment implements View.OnClickList
     @BindView(R.id.rlView)
     RelativeLayout rlView;
     Util util;
+    boolean isPasswordVisibleCurrent=false,isPasswordVisibleNew=false,isPasswordVisibleConfirmNew=false;
     IPasswordViewPresenter iPasswordViewPresenter;
     public FragmentChangePassword() {
         // Required empty public constructor
@@ -96,7 +102,91 @@ public class FragmentChangePassword extends Fragment implements View.OnClickList
     }
 
     void initFields() {
+
+
         btnChangePassword.setEnabled(false);
+
+        etCurrentPassword.setDrawableClickListener(new DrawableClickListener() {
+
+
+            public void onClick(DrawablePosition target) {
+                switch (target) {
+                    case RIGHT:
+                        //Do something here
+                        if(!isPasswordVisibleCurrent) {
+                            isPasswordVisibleCurrent=true;
+                            etCurrentPassword.setInputType(TYPE_CLASS_TEXT | TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
+                            etCurrentPassword.setCompoundDrawablesWithIntrinsicBounds( 0, 0, R.drawable.ic_eye_visible, 0);
+
+                        }
+                        else {
+                            isPasswordVisibleCurrent=false;
+                            etCurrentPassword.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
+                            etCurrentPassword.setCompoundDrawablesWithIntrinsicBounds( 0, 0, R.drawable.ic_eye, 0);
+
+                        }
+                        break;
+
+                    default:
+                        break;
+                }
+            }
+
+        });
+        etNewPassword.setDrawableClickListener(new DrawableClickListener() {
+
+
+            public void onClick(DrawablePosition target) {
+                switch (target) {
+                    case RIGHT:
+                        //Do something here
+                        if(!isPasswordVisibleNew) {
+                            isPasswordVisibleNew=true;
+                            etCurrentPassword.setInputType(TYPE_CLASS_TEXT | TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
+                            etCurrentPassword.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_eye_visible, 0);
+
+                        }
+                        else {
+                            isPasswordVisibleNew=false;
+                            etCurrentPassword.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
+                            etCurrentPassword.setCompoundDrawablesWithIntrinsicBounds( 0, 0, R.drawable.ic_eye, 0);
+
+                        }
+                        break;
+
+                    default:
+                        break;
+                }
+            }
+
+        });
+        etReenterPassword.setDrawableClickListener(new DrawableClickListener() {
+
+
+            public void onClick(DrawablePosition target) {
+                switch (target) {
+                    case RIGHT:
+                        //Do something here
+                        if(!isPasswordVisibleConfirmNew) {
+                            isPasswordVisibleConfirmNew=true;
+                            etCurrentPassword.setInputType(TYPE_CLASS_TEXT | TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
+                            etCurrentPassword.setCompoundDrawablesWithIntrinsicBounds( 0, 0, R.drawable.ic_eye_visible, 0);
+
+                        }
+                        else {
+                            isPasswordVisibleConfirmNew=false;
+                            etCurrentPassword.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
+                            etCurrentPassword.setCompoundDrawablesWithIntrinsicBounds( 0, 0, R.drawable.ic_eye, 0);
+
+                        }
+                        break;
+
+                    default:
+                        break;
+                }
+            }
+
+        });
         etCurrentPassword.addTextChangedListener(new TextWatcher() {
 
             public void afterTextChanged(Editable s) {
@@ -110,7 +200,10 @@ public class FragmentChangePassword extends Fragment implements View.OnClickList
 
             public void onTextChanged(CharSequence s, int start, int before,
                                       int count) {
+                    if(etCurrentPassword.getText().toString().length()>0){
+                        etCurrentPassword.setCompoundDrawablesWithIntrinsicBounds( R.drawable.password_key, 0, R.drawable.ic_eye, 0);
 
+                    }
 
                 validationFields();
 
@@ -131,7 +224,10 @@ public class FragmentChangePassword extends Fragment implements View.OnClickList
             public void onTextChanged(CharSequence s, int start, int before,
                                       int count) {
 
+                if(etNewPassword.getText().toString().length()>0){
+                    etNewPassword.setCompoundDrawablesWithIntrinsicBounds( R.drawable.password_key, 0, R.drawable.ic_eye, 0);
 
+                }
                 validationFields();
 
 
@@ -151,7 +247,10 @@ public class FragmentChangePassword extends Fragment implements View.OnClickList
             public void onTextChanged(CharSequence s, int start, int before,
                                       int count) {
 
+                if(etReenterPassword.getText().toString().length()>0){
+                    etReenterPassword.setCompoundDrawablesWithIntrinsicBounds( R.drawable.password_key, 0, R.drawable.ic_eye, 0);
 
+                }
                 validationFields();
 
 
