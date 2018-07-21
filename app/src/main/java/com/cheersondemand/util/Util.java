@@ -229,16 +229,28 @@ public class Util {
 
         if (cardType.equalsIgnoreCase(C.VISA))
             return VISA;
-        if (cardType.equalsIgnoreCase(C.MasterCard))
+       else if (cardType.equalsIgnoreCase(C.MasterCard))
             return MASTERCARD;
         else if (cardType.equalsIgnoreCase(C.AMEX))
             return AMEX;
-        if (cardType.equalsIgnoreCase(C.Discover))
+      else   if (cardType.equalsIgnoreCase(C.Discover))
             return DISCOVER;
 
         return NONE;
     }
+    public static String getCardTypeUsingBrandName(int cardType) {
 
+        if (cardType==VISA)
+            return C.VISA;
+        else if (cardType==MASTERCARD)
+            return C.MasterCard;
+        else if (cardType==AMEX)
+            return C.AMEX;
+      else   if (cardType==DISCOVER)
+            return C.Discover;
+
+        return "";
+    }
     public static int getCardType(String cardNumber) {
 
         if (cardNumber.substring(0, 1).equals(VISA_PREFIX))

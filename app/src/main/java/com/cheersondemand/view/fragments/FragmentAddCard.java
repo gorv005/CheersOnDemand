@@ -1,7 +1,6 @@
 package com.cheersondemand.view.fragments;
 
 
-import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
@@ -28,6 +27,7 @@ import android.widget.TextView;
 import com.cheersondemand.R;
 import com.cheersondemand.model.card.AddCardRequest;
 import com.cheersondemand.model.card.CardAddResponse;
+import com.cheersondemand.model.card.CardList;
 import com.cheersondemand.model.card.CardListResponse;
 import com.cheersondemand.presenter.card.CardViewPresenterImpl;
 import com.cheersondemand.presenter.card.ICardViewPresenter;
@@ -414,7 +414,29 @@ public class FragmentAddCard extends Fragment implements ICardViewPresenter.ICar
                 hideProgress();
                 // card.setStripeTokenId(token.getId());
                 Log.e("DEBUG", "Stripe token : " + token.getId());
-                addCard(token.getId());
+                if(isCheckout) {
+                    if (checkboxISSave.isChecked()) {
+                        addCard(token.getId());
+                    }
+                    else {
+                        CardList cardList=new CardList();
+                        cardList.setCardId(null);
+                        cardList.setCardHolderName(etCardHolderName.getText().toString());
+                        cardList.setExpMonth(Integer.parseInt(etExpire.getText().toString().split("/")[0]));
+                        cardList.setExpYear(Integer.parseInt(etExpire.getText().toString().split("/")[1]));
+                        cardList.setLast4(etCardNumber.getText().toString().substring(etCardNumber.getText().toString().length() - 4));
+                        cardList.setCardNumber(etCardNumber.getText().toString());
+                        cardList.setStripeToken(token.getId());
+                        cardList.setBrand(Util.getCardTypeUsingBrandName(type));
+                        cardList.setIsDefaultSource(true);
+                        SharedPreference.getInstance(getActivity()).addCard(C.CARD_DATA,cardList);
+                        getActivity().onBackPressed();
+                    }
+                }
+                else {
+                    addCard(token.getId());
+
+                }
             }
         });
     }

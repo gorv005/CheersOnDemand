@@ -142,6 +142,7 @@ public class ActivityContainer extends AppCompatActivity {
                 break;
             case C.FRAGMENT_PAYMENT_RESULT:
                 getSupportActionBar().hide();
+                fragmentManager.popBackStack(C.TAG_FRAGMENT_SELECT_ADDRESS, FragmentManager.POP_BACK_STACK_INCLUSIVE);
                 fragment = new FragmentPaymentResult();
                 fragmentTransaction.replace(R.id.container, fragment);
                 //fragmentTransaction.addToBackStack(C.TAG_FRAGMENT_PRODUCTS_HOME);
@@ -159,12 +160,16 @@ public class ActivityContainer extends AppCompatActivity {
             case C.FRAGMENT_ADD_ADDRESS:
                 fragment = new FragmentAddAddress();
                 fragmentTransaction.replace(R.id.container, fragment);
-                // fragmentTransaction.addToBackStack(C.TAG_FRAGMENT_ADD_ADDRESS);
+                if (bundle.getBoolean(C.IS_FROM_CHECKOUT)) {
+                     fragmentTransaction.addToBackStack(C.TAG_FRAGMENT_ADD_ADDRESS);
+                }
                 break;
             case C.FRAGMENT_SELECT_ADDRESS:
                 fragment = new FragmentAddressSelection();
                 fragmentTransaction.replace(R.id.container, fragment);
-                fragmentTransaction.addToBackStack(C.TAG_FRAGMENT_SELECT_ADDRESS);
+                if (!bundle.getBoolean(C.IS_FROM_CHECKOUT)) {
+                    fragmentTransaction.addToBackStack(C.TAG_FRAGMENT_SELECT_ADDRESS);
+                }
                 break;
             case C.FRAGMENT_HELP_CENTER:
                 fragment = new FragmentHelpCenter();

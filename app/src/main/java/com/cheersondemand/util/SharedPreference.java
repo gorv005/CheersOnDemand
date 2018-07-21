@@ -6,6 +6,7 @@ import android.preference.PreferenceManager;
 
 import com.cheersondemand.model.authentication.AuthenticationResponse;
 import com.cheersondemand.model.authentication.GuestUser;
+import com.cheersondemand.model.card.CardList;
 import com.cheersondemand.model.location.SelectedLocation;
 import com.cheersondemand.model.store.StoreList;
 import com.google.gson.Gson;
@@ -109,7 +110,16 @@ public class SharedPreference {
         return gson.fromJson(data, StoreList.class);
 
     }
+    public void setCard(String key, List<CardList> storeList) {
+        Gson gson = new Gson();
+        String json = gson.toJson(storeList);
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        prefs.edit().putString(key, json).apply();
 
+    }
+    void clearCardList(){
+
+    }
     public void setLocation(String key, List<SelectedLocation> storeList) {
         Gson gson = new Gson();
         String json = gson.toJson(storeList);
@@ -159,6 +169,21 @@ public class SharedPreference {
             addRecentSearch(key, selectedLocation);
         }
     }
+
+    public void removeCard(String key, CardList selectedLocation) {
+        List<CardList> selectedLocationList = getCard(key);
+        if (selectedLocationList != null) {
+            for(int i=0;i<selectedLocationList.size();i++){
+                if (selectedLocation.getCardNumber().trim().equalsIgnoreCase(selectedLocationList.get(i).getCardNumber().trim())) {
+
+                    selectedLocationList.remove(selectedLocationList.remove(i));
+                    setCard(key, selectedLocationList);
+
+                }
+            }
+            addCard(key, selectedLocation);
+        }
+    }
     public List<SelectedLocation> getRecentLocations(String key) {
         List<SelectedLocation> recentSearches;
 
@@ -185,4 +210,59 @@ public class SharedPreference {
         return gson.fromJson(data, SelectedLocation.class);
 
     }*/
+   public List<CardList> getCard(String key) {
+       List<CardList> recentSearches;
+
+       SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+
+
+       if (prefs.contains(key)) {
+           String jsonFavorites = prefs.getString(key, null);
+           if(jsonFavorites!=null) {
+               Gson gson = new Gson();
+               CardList[] recent = gson.fromJson(jsonFavorites,
+                       CardList[].class);
+                if(recent!=null) {
+                    recentSearches = Arrays.asList(recent);
+                    recentSearches = new ArrayList<CardList>(recentSearches);
+                }
+                else {
+                    return null;
+                }
+           }
+           else {
+               return null;
+           }
+       } else
+           return null;
+
+       return (List<CardList>) recentSearches;
+   }
+    public void addCard(String key,CardList cardList) {
+        boolean isFavAlready=false;
+        CardList location1=null;
+        List<CardList> recentLocations = getCard(key);
+        if (recentLocations == null) {
+            recentLocations = new ArrayList<CardList>();
+            recentLocations.add(cardList);
+            setCard(key, recentLocations);
+        }
+        else {
+            for (int i = 0; i < recentLocations.size(); i++) {
+                location1=recentLocations.get(i);
+                if (cardList.getCardNumber().equalsIgnoreCase(location1.getCardNumber())) {
+                    isFavAlready = true;
+                    break;
+                }
+            }
+            if(isFavAlready){
+                removeCard(key,location1);
+            }
+            else {
+                recentLocations.add(cardList);
+                setCard(key, recentLocations);
+            }
+        }
+
+    }
 }

@@ -58,6 +58,30 @@
             app:rvp_triggerOffset="0.1"
             app:rvp_singlePageFling="true"
             android:clipToPadding="false"/>
+
+        <LinearLayout
+            android:id="@+id/llIndicatore"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_alignParentBottom="true"
+            android:layout_margin="5dp"
+            android:gravity="center"
+            android:minHeight="15dp">
+
+            <com.cheersondemand.util.viewpager.CircleIndicator
+                android:id="@+id/custom_indicator"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:layout_centerHorizontal="true"
+                android:gravity="center"
+                android:minHeight="15dp"
+                app:ci_drawable="@drawable/indicator_red"
+                app:ci_drawable_unselected="@drawable/indicator_white"
+                app:ci_height="10dp"
+                app:ci_width="10dp" />
+        </LinearLayout>
+
     </LinearLayout>
         <TextView
             android:layout_width="match_parent"

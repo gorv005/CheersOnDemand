@@ -176,6 +176,7 @@ public class FragmentCart extends Fragment implements View.OnClickListener, IOrd
                /* Intent intent = new Intent(getActivity(), ActivityContainer.class);
                 intent.putExtra(C.FRAGMENT_ACTION, C.FRAGMENT_PAYMENT_CONFIRMATION);
                 startActivity(intent);*/
+               SharedPreference.getInstance(getActivity()).setCard(C.CARD_DATA,null);
                getAddressList();
                 break;
         }
@@ -480,7 +481,9 @@ public class FragmentCart extends Fragment implements View.OnClickListener, IOrd
                     bundle.putInt(C.ADDRESS_ID, 0);
 
                 }
-                intent.putExtras(bundle);
+                bundle.putBoolean(C.IS_FROM_CHECKOUT, true);
+
+                intent.putExtra(C.BUNDLE, bundle);
                 getActivity().startActivity(intent);
             } else {
                 Intent intent = new Intent(getActivity(), ActivityContainer.class);

@@ -38,6 +38,7 @@ import com.cheersondemand.util.C;
 import com.cheersondemand.util.NonScrollListView;
 import com.cheersondemand.util.SharedPreference;
 import com.cheersondemand.util.Util;
+import com.cheersondemand.util.viewpager.CircleIndicator;
 import com.cheersondemand.view.ActivityContainer;
 import com.cheersondemand.view.adapter.card.AdapterCardPayment;
 import com.cheersondemand.view.adapter.cart.AdapterProductAmount;
@@ -52,7 +53,7 @@ import butterknife.Unbinder;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class FragmentPaymentConfirmation extends Fragment implements ICardViewPresenter.ICardView, View.OnClickListener, IPaymentViewPresenter.IPaymentView,IOrderViewPresenterPresenter.IOrderView {
+public class FragmentPaymentConfirmation extends Fragment implements ICardViewPresenter.ICardView, View.OnClickListener, IPaymentViewPresenter.IPaymentView, IOrderViewPresenterPresenter.IOrderView {
 
 
     @BindView(R.id.tvAddCard)
@@ -126,6 +127,11 @@ public class FragmentPaymentConfirmation extends Fragment implements ICardViewPr
     Button btnProceedToPay;
     @BindView(R.id.llButton)
     RelativeLayout llButton;
+    @BindView(R.id.custom_indicator)
+    CircleIndicator customIndicator;
+    @BindView(R.id.llIndicatore)
+    LinearLayout llIndicatore;
+
 
     public FragmentPaymentConfirmation() {
         // Required empty public constructor
@@ -136,7 +142,7 @@ public class FragmentPaymentConfirmation extends Fragment implements ICardViewPr
         super.onCreate(savedInstanceState);
         iCardViewPresenter = new CardViewPresenterImpl(this, getActivity());
         iOrderViewPresenterPresenter = new OrderViewPresenterImpl(this, getActivity());
-        iPaymentViewPresenter=new PaymentViewPresenterImpl(this,getActivity());
+        iPaymentViewPresenter = new PaymentViewPresenterImpl(this, getActivity());
         util = new Util();
         //  cartProduct = (CartProduct) getActivity().getIntent().getExtras().getSerializable(C.CART_DATA);
 
@@ -163,9 +169,11 @@ public class FragmentPaymentConfirmation extends Fragment implements ICardViewPr
         LinearLayoutManager layout = new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false);
         rvCardList.setLayoutManager(layout);
         tvViewDetail.setOnClickListener(this);
+        customIndicator.setViewPager(rvCardList);
         llAddNewAddress.setOnClickListener(this);
         llEdit.setOnClickListener(this);
         btnProceedToPay.setOnClickListener(this);
+        tvAddCard.setOnClickListener(this);
     }
 
     @Override
@@ -205,8 +213,23 @@ public class FragmentPaymentConfirmation extends Fragment implements ICardViewPr
             if (response.getData() != null && response.getData().size() > 0) {
 
                 cardList = response.getData();
+
+                List<CardList> cardLists = SharedPreference.getInstance(getActivity()).getCard(C.CARD_DATA);
+                if (cardLists != null) {
+                    for (int i = 0; i < cardLists.size(); i++) {
+                        cardList.set(i, cardLists.get(i));
+                    }
+                }
+
                 adapterCardPayment = new AdapterCardPayment(cardList, getActivity());
                 rvCardList.setAdapter(adapterCardPayment);
+                for (int j = 0; j < cardList.size(); j++) {
+                    if (cardList.get(j).getIsDefaultSource()) {
+                        rvCardList.scrollToPosition(j);
+                        break;
+
+                    }
+                }
                 getCartList();
             } else {
                 // tvNoCardAvailable.setVisibility(View.VISIBLE);
@@ -218,18 +241,23 @@ public class FragmentPaymentConfirmation extends Fragment implements ICardViewPr
     }
 
 
-    void doPayment(){
+    void doPayment() {
         String order_id = SharedPreference.getInstance(getActivity()).getString(C.ORDER_ID);
 
-        PaymentRequest paymentRequest=new PaymentRequest();
+        PaymentRequest paymentRequest = new PaymentRequest();
         paymentRequest.setCartId(order_id);
         paymentRequest.setIsGift(checkbox.isChecked());
-        paymentRequest.setCardId(cardList.get(rvCardList.getCurrentPosition()).getCardId());
+        if (cardList.get(rvCardList.getCurrentPosition()).getCardId() != null) {
+            paymentRequest.setCardId(cardList.get(rvCardList.getCurrentPosition()).getCardId());
+        } else {
+            paymentRequest.setStripeToken(cardList.get(rvCardList.getCurrentPosition()).getStripeToken());
+        }
         String id = "" + SharedPreference.getInstance(getActivity()).getUser(C.AUTH_USER).getData().getUser().getId();
 
         String token = C.bearer + SharedPreference.getInstance(getActivity()).getUser(C.AUTH_USER).getData().getToken().getAccessToken();
         iPaymentViewPresenter.orderPayment(token, paymentRequest);
     }
+
     void fillDetails() {
         adapterProductAmount = new AdapterProductAmount(getActivity(), cartProduct.getOrder().getOrderItems());
         lvCharges.setAdapter(adapterProductAmount);
@@ -306,18 +334,18 @@ public class FragmentPaymentConfirmation extends Fragment implements ICardViewPr
 
     @Override
     public void onPaymentSuccess(PaymentResponse response) {
-        if(response.getSuccess()){
-            Bundle bundle2=new Bundle();
-            bundle2.putBoolean(C.PAYMENT_RESULT,true);
-            ((ActivityContainer)getActivity()).fragmnetLoader(C.FRAGMENT_PAYMENT_RESULT,bundle2);
+        if (response.getSuccess()) {
+            Bundle bundle2 = new Bundle();
+            bundle2.putBoolean(C.PAYMENT_RESULT, true);
+            ((ActivityContainer) getActivity()).fragmnetLoader(C.FRAGMENT_PAYMENT_RESULT, bundle2);
         }
     }
 
     @Override
     public void getPaymentError(String response) {
-        Bundle bundle2=new Bundle();
-        bundle2.putBoolean(C.PAYMENT_RESULT,false);
-        ((ActivityContainer)getActivity()).fragmnetLoader(C.FRAGMENT_PAYMENT_RESULT,bundle2);
+        Bundle bundle2 = new Bundle();
+        bundle2.putBoolean(C.PAYMENT_RESULT, false);
+        ((ActivityContainer) getActivity()).fragmnetLoader(C.FRAGMENT_PAYMENT_RESULT, bundle2);
     }
 
     @Override
@@ -327,7 +355,7 @@ public class FragmentPaymentConfirmation extends Fragment implements ICardViewPr
 
     @Override
     public void showProgress() {
-        util.showDialog(C.MSG,getActivity());
+        util.showDialog(C.MSG, getActivity());
 
     }
 
@@ -350,22 +378,22 @@ public class FragmentPaymentConfirmation extends Fragment implements ICardViewPr
                 }
                 break;
             case R.id.llAddNewAddress:
-                Bundle bundle1=new Bundle();
+                Bundle bundle1 = new Bundle();
 
-                bundle1.putBoolean(C.IS_EDIT,false);
-                bundle1.putBoolean(C.IS_FROM_CHECKOUT,true);
-                ((ActivityContainer)getActivity()).fragmnetLoader(C.FRAGMENT_ADD_ADDRESS,bundle1);
+                bundle1.putBoolean(C.IS_EDIT, false);
+                bundle1.putBoolean(C.IS_FROM_CHECKOUT, true);
+                ((ActivityContainer) getActivity()).fragmnetLoader(C.FRAGMENT_ADD_ADDRESS, bundle1);
                 break;
             case R.id.llEdit:
-                Bundle bundle2=new Bundle();
-                bundle2.putInt(C.ADDRESS_ID,cartProduct.getOrder().getDeliveryAddress().getId());
-                ((ActivityContainer)getActivity()).fragmnetLoader(C.FRAGMENT_SELECT_ADDRESS,bundle2);
+                Bundle bundle2 = new Bundle();
+                bundle2.putInt(C.ADDRESS_ID, cartProduct.getOrder().getDeliveryAddress().getId());
+                ((ActivityContainer) getActivity()).fragmnetLoader(C.FRAGMENT_SELECT_ADDRESS, bundle2);
                 break;
             case R.id.tvAddCard:
-                Bundle bundle3=new Bundle();
+                Bundle bundle3 = new Bundle();
 
-                bundle3.putBoolean(C.IS_FROM_CHECKOUT,true);
-                ((ActivityContainer)getActivity()).fragmnetLoader(C.FRAGMENT_ADD_CARD,bundle3);
+                bundle3.putBoolean(C.IS_FROM_CHECKOUT, true);
+                ((ActivityContainer) getActivity()).fragmnetLoader(C.FRAGMENT_ADD_CARD, bundle3);
                 break;
             case R.id.btnProceedToPay:
                 doPayment();

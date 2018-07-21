@@ -15,11 +15,11 @@
         tools:context="com.cheersondemand.view.fragments.FragmentCart">
 
         <LinearLayout
-            android:visibility="visible"
+            android:visibility="gone"
 
             android:layout_marginTop="5dp"
             android:background="@color/white"
-            android:id="@+id/llNoProductInCount"
+            android:id="@+id/llSuccessPayment"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:gravity="center"
@@ -67,6 +67,139 @@
                 android:background="@drawable/bg_button_enable"
                 android:fontFamily="@font/sf_ui_display_regular"
                 android:text="@string/goto_my_orders"
+                android:textAllCaps="false"
+                android:textColor="@color/white"
+                android:textSize="13.4sp" />
+        </LinearLayout>
+        <LinearLayout
+            android:visibility="gone"
+
+            android:layout_marginTop="5dp"
+            android:background="@color/white"
+            android:id="@+id/llFailedPayment"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:paddingLeft="40dp"
+            android:paddingRight="40dp">
+
+            <ImageView
+
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/failed" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:fontFamily="@font/sf_ui_display_regular"
+                android:gravity="center_horizontal"
+                android:text="@string/oops_tnasaction_failed"
+                android:textColor="@color/profile_text_color"
+                android:textSize="16.3sp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/sf_ui_display_regular"
+                android:gravity="center_horizontal"
+
+                android:text="@string/your_transaction_is_failed"
+                android:textColor="@color/profile_updated_text_color"
+                android:textSize="14.4sp" />
+
+            <LinearLayout
+                android:layout_marginTop="30dp"
+
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+            <Button
+                android:id="@+id/btnRetryPayment"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="45dp"
+                android:layout_marginRight="5dp"
+                android:layout_alignParentBottom="true"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginBottom="20dp"
+                android:background="@drawable/bg_button_enable"
+                android:fontFamily="@font/sf_ui_display_regular"
+                android:text="@string/retry_payment"
+                android:textAllCaps="false"
+                android:textColor="@color/white"
+                android:textSize="13.4sp" />
+            <Button
+                android:id="@+id/btnGotoMyOrdersFailed"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="45dp"
+                android:layout_marginLeft="5dp"
+                android:layout_alignParentBottom="true"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginBottom="20dp"
+                android:background="@drawable/bg_button_red_border"
+                android:fontFamily="@font/sf_ui_display_regular"
+                android:text="@string/goto_my_orders"
+                android:textAllCaps="false"
+                android:textColor="@color/red"
+                android:textSize="13.4sp" />
+            </LinearLayout>
+        </LinearLayout>
+        <LinearLayout
+            android:visibility="visible"
+
+            android:layout_marginTop="5dp"
+            android:background="@color/white"
+            android:id="@+id/llCancelPayment"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:paddingLeft="40dp"
+            android:paddingRight="40dp">
+
+            <ImageView
+
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/group_2" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:fontFamily="@font/sf_ui_display_regular"
+                android:gravity="center_horizontal"
+                android:text="@string/that_is_canceled"
+                android:textColor="@color/profile_text_color"
+                android:textSize="16.3sp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/sf_ui_display_regular"
+                android:gravity="center_horizontal"
+
+                android:text="@string/your_order_is_cancled_success"
+                android:textColor="@color/profile_updated_text_color"
+                android:textSize="14.4sp" />
+
+            <Button
+                android:id="@+id/btnGotoHome"
+                android:layout_width="match_parent"
+                android:layout_height="45dp"
+                android:layout_alignParentBottom="true"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginBottom="20dp"
+                android:layout_marginEnd="20dp"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="30dp"
+                android:background="@drawable/bg_button_enable"
+                android:fontFamily="@font/sf_ui_display_regular"
+                android:text="@string/goto_home"
                 android:textAllCaps="false"
                 android:textColor="@color/white"
                 android:textSize="13.4sp" />

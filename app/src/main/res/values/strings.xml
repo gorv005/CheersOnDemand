@@ -236,6 +236,12 @@
     <string name="change_my_mind">Changed my mind.</string>
     <string name="will_bundle">Will bundle with another order.</string>
     <string name="please_select_one_option">Please select one option from above list.</string>
+    <string name="oops_tnasaction_failed">Oops Transaction Failed</string>
+    <string name="your_transaction_is_failed">Your transaction has been failed due to some technical reason.</string>
+    <string name="retry_payment">Retry Payment</string>
+    <string name="that_is_canceled">That’s it. Canceled.</string>
+    <string name="your_order_is_cancled_success">Your order has been successfully canceled. If money is debited, it wil be refunded without any hassle.</string>
+    <string name="goto_home">Go to Home</string>
 
     <!--
         <string name="default_web_client_id">999387565226-hdnnhm6rhgik5ljvm06shotsi7j9883c.apps.googleusercontent.com</string>

@@ -216,6 +216,7 @@
                 android:layout_centerHorizontal="true"
                 android:focusable="true"
                 android:maxLength="16"
+                android:inputType="number"
                 android:focusableInTouchMode="true"
                 android:fontFamily="@font/sf_ui_display_regular"
                 android:maxLines="1"

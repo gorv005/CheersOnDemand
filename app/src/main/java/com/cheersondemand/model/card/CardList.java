@@ -18,6 +18,9 @@ public class CardList {
     @SerializedName("last4")
     @Expose
     private String last4;
+    @SerializedName("cardNumber")
+    @Expose
+    private String cardNumber;
     @SerializedName("brand")
     @Expose
     private String brand;
@@ -27,7 +30,9 @@ public class CardList {
     @SerializedName("card_holder_name")
     @Expose
     private String cardHolderName;
-
+    @SerializedName("stripe_token")
+    @Expose
+    private String stripeToken;
     public String getCardId() {
         return cardId;
     }
@@ -76,8 +81,24 @@ public class CardList {
         this.isDefaultSource = isDefaultSource;
     }
 
+    public String getCardNumber() {
+        return cardNumber;
+    }
+
+    public void setCardNumber(String cardNumber) {
+        this.cardNumber = cardNumber;
+    }
+
     public String getCardHolderName() {
         return cardHolderName;
+    }
+
+    public String getStripeToken() {
+        return stripeToken;
+    }
+
+    public void setStripeToken(String stripeToken) {
+        this.stripeToken = stripeToken;
     }
 
     public void setCardHolderName(String cardHolderName) {

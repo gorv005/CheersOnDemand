@@ -117,4 +117,5 @@ public interface C {
     String MasterCard="MasterCard";
     String Discover="Discover";
     String AMEX = "American Express";
+    String CARD_DATA = "cardData";
 }
