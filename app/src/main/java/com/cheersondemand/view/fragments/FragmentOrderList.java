@@ -249,7 +249,7 @@ public class FragmentOrderList extends Fragment implements IOrderDetailViewPrese
         List<Offers> offersList = new ArrayList<>();
         offersList.add(new Offers(1, getString(R.string.item_goes_dammaged), ""));
         offersList.add(new Offers(2, getString(R.string.change_my_mind), ""));
-        offersList.add(new Offers(2, getString(R.string.will_bundle), ""));
+        offersList.add(new Offers(3, getString(R.string.will_bundle), ""));
 
         return offersList;
     }

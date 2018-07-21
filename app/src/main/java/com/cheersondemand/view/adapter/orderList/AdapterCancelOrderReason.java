@@ -57,7 +57,7 @@ public class AdapterCancelOrderReason extends RecyclerView.Adapter<RecyclerView.
     public void onBindViewHolder(final RecyclerView.ViewHolder holder, final int position) {
         if (holder instanceof ItemViewHolder) {
             final ItemViewHolder itemViewHolder = (ItemViewHolder) holder;
-            itemViewHolder.tvName.setText(horizontalList.get(position + 1).getName());
+            itemViewHolder.tvName.setText(horizontalList.get(position).getName());
             if (selectedId == horizontalList.get(position).getId()) {
                 itemViewHolder.tvName.setTextColor(ContextCompat.getColor(context, R.color.profile_text_color));
                 itemViewHolder.imgSelected.setVisibility(View.VISIBLE);
@@ -85,7 +85,7 @@ public class AdapterCancelOrderReason extends RecyclerView.Adapter<RecyclerView.
 
     @Override
     public int getItemCount() {
-        return horizontalList.size() - 1;
+        return horizontalList.size();
     }
 
     public class ItemViewHolder extends RecyclerView.ViewHolder {

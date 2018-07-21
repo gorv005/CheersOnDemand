@@ -154,12 +154,16 @@ public class FragmentProductDescription extends Fragment implements View.OnClick
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        ((ActivityContainer)getActivity()).hideToolBar();
         horizontalLayout = new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false);
         rvSimilarDrinks.setLayoutManager(horizontalLayout);
         tvSeeMore.setOnClickListener(this);
         rlLike.setOnClickListener(this);
         btnAddToCart.setOnClickListener(this);
         btnBuyNow.setOnClickListener(this);
+        ivCheckout.setOnClickListener(this);
+        ivCart.setOnClickListener(this);
+        imgBack.setOnClickListener(this);
         setDetail();
 
     }
@@ -169,7 +173,9 @@ public class FragmentProductDescription extends Fragment implements View.OnClick
         super.onResume();
         getSimilarProducts();
         getCouponList();
-        ActivityContainer.tvTitle.setText(productDes.getName());
+        ((ActivityContainer)getActivity()).hideToolBar();
+
+      //  ActivityContainer.tvTitle.setText(productDes.getName());
     }
 
     void getSimilarProducts() {
@@ -421,11 +427,16 @@ public class FragmentProductDescription extends Fragment implements View.OnClick
                 productDes.setIsInCart(true);
                 isProductDes = false;
             } else if (isBuyNow) {
+                btnAddToCart.setText(getString(R.string.added_to_cart));
+                productDes.setIsInCart(true);
+                isProductDes = false;
+                isBuyNow=false;
                 Handler handler = new Handler();
                 handler.postDelayed(new Runnable() {
                     public void run() {
                         // Actions to do after 10 seconds
                         gotoCart();
+
                     }
                 }, 2000);
             } else {

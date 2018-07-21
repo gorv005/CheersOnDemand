@@ -13,12 +13,13 @@
       android:layout_height="wrap_content">
     <RelativeLayout
         android:background="@color/white"
-        android:paddingTop="30dp"
+        android:paddingTop="10dp"
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
         <RelativeLayout
+            android:layout_marginTop="40dp"
             android:id="@+id/imgBack"
             android:layout_centerVertical="true"
             android:layout_marginLeft="15dp"
@@ -32,6 +33,7 @@
 
         </RelativeLayout>
         <LinearLayout
+            android:layout_marginTop="40dp"
             android:id="@+id/lvDescCheck"
             android:layout_centerHorizontal="true"
             android:layout_alignParentRight="true"
