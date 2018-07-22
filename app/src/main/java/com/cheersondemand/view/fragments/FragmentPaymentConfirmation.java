@@ -169,7 +169,7 @@ public class FragmentPaymentConfirmation extends Fragment implements ICardViewPr
         LinearLayoutManager layout = new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false);
         rvCardList.setLayoutManager(layout);
         tvViewDetail.setOnClickListener(this);
-        customIndicator.setViewPager(rvCardList);
+    //    customIndicator.setViewPager(rvCardList);
         llAddNewAddress.setOnClickListener(this);
         llEdit.setOnClickListener(this);
         btnProceedToPay.setOnClickListener(this);

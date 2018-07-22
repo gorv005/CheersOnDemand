@@ -56,12 +56,21 @@
         android:layout_weight="1"
         android:layout_width="0dp"
         android:layout_height="match_parent">
+
         <ImageView
             android:id="@+id/ivCart"
             android:src="@drawable/ic_bar_cart"
             android:layout_width="wrap_content"
             android:layout_centerInParent="true"
             android:layout_height="wrap_content" />
+        <ImageView
+            android:layout_toRightOf="@id/ivCart"
+            android:layout_above="@+id/ivCart"
+            android:layout_width="10dp"
+            android:id="@+id/ivDot"
+            android:visibility="gone"
+            android:src="@drawable/red_circle"
+            android:layout_height="10dp" />
     </RelativeLayout>
 
     <RelativeLayout

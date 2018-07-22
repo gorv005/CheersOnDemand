@@ -39,6 +39,8 @@ private List<OrderItem> horizontalList;
     CartProduct cartProduct;
     AdapterProductAmount adapterProductAmount;
     int source;
+    private boolean isProceed=true;
+
     public class ItemViewHolder extends RecyclerView.ViewHolder {
     public TextView tvName,tvSubName,tvPrice,tvQuantity,tvAddToWishList;
     public CircleImageView ivProductImage;
@@ -115,6 +117,9 @@ private List<OrderItem> horizontalList;
         return position;
     }
 
+    public boolean getIsProceed(){
+        return isProceed;
+    }
 
     @Override
     public RecyclerView.ViewHolder  onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -144,10 +149,12 @@ private List<OrderItem> horizontalList;
             itemViewHolder.tvPrice.setText("$"+orderItem.getUnitPrice());
             itemViewHolder.tvQuantity.setText(""+orderItem.getQuantity());
             if(!orderItem.getIsDeliverable()){
+                isProceed=false;
                 itemViewHolder.rlCard.setBackgroundResource(R.drawable.card_border);
                 itemViewHolder.llProductNotAvailable.setVisibility(View.VISIBLE);
             }
             else {
+
                 itemViewHolder.rlCard.setBackgroundResource(0);
 
                 itemViewHolder.llProductNotAvailable.setVisibility(View.GONE);

@@ -95,7 +95,7 @@ public class OrderViewPresenterImpl implements IOrderViewPresenterPresenter, IOr
     @Override
     public void onSuccess(CartHasItemResponse response) {
         if (hasItemView != null) {
-            mView.hideProgress();
+           // hasItemView.hideProgress();
             hasItemView.getCartHasItemSuccess(response);
         }
     }

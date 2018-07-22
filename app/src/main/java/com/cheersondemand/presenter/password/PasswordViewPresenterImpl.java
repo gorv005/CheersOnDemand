@@ -24,7 +24,7 @@ public class PasswordViewPresenterImpl implements IPasswordViewPresenter, IPassw
     @Override
     public void onPasswordRequestSuccess(PasswordResponse Response) {
         if (mView != null) {
-            //mView.hideProgress();
+            mView.hideProgress();
             mView.getPasswordSuccess(Response);
         }
     }
@@ -32,7 +32,7 @@ public class PasswordViewPresenterImpl implements IPasswordViewPresenter, IPassw
     @Override
     public void onError(String response) {
         if (mView != null) {
-            //mView.hideProgress();
+            mView.hideProgress();
             mView.getResponseError(response);
         }
     }
@@ -47,7 +47,7 @@ public class PasswordViewPresenterImpl implements IPasswordViewPresenter, IPassw
     @Override
     public void changePassword(String token,String userId, PasswordRequest passwordRequest) {
         if (mView != null) {
-
+            mView.showProgress();
             iPasswordViewIntractor.changePassword(token,userId,passwordRequest, this);
         }
     }
@@ -55,6 +55,7 @@ public class PasswordViewPresenterImpl implements IPasswordViewPresenter, IPassw
     @Override
     public void forgotPassword(PasswordRequest passwordRequest) {
         if (mView != null) {
+            mView.showProgress();
 
             iPasswordViewIntractor.forgotPassword(passwordRequest, this);
         }

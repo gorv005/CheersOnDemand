@@ -83,6 +83,7 @@ public class FragmentAddressList extends Fragment implements View.OnClickListene
         layoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
         rvAddressList.setLayoutManager(layoutManager);
         rvAddressList.setHasFixedSize(true);
+        btnAddAnAddress.setOnClickListener(this);
     }
 
     @Override

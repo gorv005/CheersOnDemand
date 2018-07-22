@@ -8,6 +8,70 @@
     tools:context="com.cheersondemand.view.fragments.FragmentCart">
 
 
+    <LinearLayout
+        android:visibility="gone"
+        android:layout_marginTop="5dp"
+        android:background="@color/white"
+        android:id="@+id/llNoProductInCount"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:paddingLeft="40dp"
+        android:paddingRight="40dp">
+
+        <ImageView
+
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/no_notification" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:fontFamily="@font/sf_ui_display_regular"
+            android:gravity="center_horizontal"
+            android:text="@string/no_order_placed"
+            android:textColor="@color/profile_text_color"
+            android:textSize="16.3sp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/sf_ui_display_regular"
+            android:gravity="center_horizontal"
+
+            android:text="@string/browse_for_product_or_checkout"
+            android:textColor="@color/view_all_color"
+            android:textSize="14.4sp" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/sf_ui_display_regular"
+            android:gravity="center_horizontal"
+            android:layout_marginTop="10dp"
+            android:text="@string/enjoy_shopping"
+            android:textColor="@color/view_all_color"
+            android:textSize="14.4sp" />
+
+        <Button
+            android:id="@+id/btnContinueShopping"
+            android:layout_width="match_parent"
+            android:layout_height="45dp"
+            android:layout_alignParentBottom="true"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginBottom="20dp"
+            android:layout_marginEnd="30dp"
+            android:layout_marginStart="30dp"
+            android:layout_marginTop="30dp"
+            android:background="@drawable/bg_button_enable"
+            android:fontFamily="@font/sf_ui_display_regular"
+            android:text="@string/continue_shopping"
+            android:textAllCaps="false"
+            android:textColor="@color/white"
+            android:textSize="13.4sp" />
+    </LinearLayout>
 
         <RelativeLayout
             android:background="@color/profile_back"

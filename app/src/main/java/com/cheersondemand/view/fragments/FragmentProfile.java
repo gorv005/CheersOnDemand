@@ -467,7 +467,6 @@ public class FragmentProfile extends Fragment implements View.OnClickListener, I
             public void onClick(View v) {
                 // TODO Auto-generated method stub
                 dialog.dismiss();
-                switchButton.setChecked(isNotification);
             }
         });
 

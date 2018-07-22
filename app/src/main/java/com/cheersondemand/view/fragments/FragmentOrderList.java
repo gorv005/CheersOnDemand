@@ -2,6 +2,7 @@ package com.cheersondemand.view.fragments;
 
 
 import android.app.Dialog;
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
@@ -17,6 +18,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -32,6 +34,7 @@ import com.cheersondemand.util.C;
 import com.cheersondemand.util.SharedPreference;
 import com.cheersondemand.util.Util;
 import com.cheersondemand.view.ActivityContainer;
+import com.cheersondemand.view.ActivityHome;
 import com.cheersondemand.view.adapter.orderList.AdapterCancelOrderReason;
 import com.cheersondemand.view.adapter.orderList.AdapterOrderList;
 
@@ -45,7 +48,7 @@ import butterknife.Unbinder;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class FragmentOrderList extends Fragment implements IOrderDetailViewPresenter.IOrderDetailView {
+public class FragmentOrderList extends Fragment implements IOrderDetailViewPresenter.IOrderDetailView,View.OnClickListener {
 
 
     @BindView(R.id.rvOrders)
@@ -58,6 +61,11 @@ public class FragmentOrderList extends Fragment implements IOrderDetailViewPrese
     Util util;
     List<Order> orders;
     AdapterOrderList adapterOrderList;
+    @BindView(R.id.btnContinueShopping)
+    Button btnContinueShopping;
+    @BindView(R.id.llNoProductInCount)
+    LinearLayout llNoProductInCount;
+
     public FragmentOrderList() {
         // Required empty public constructor
     }
@@ -66,8 +74,8 @@ public class FragmentOrderList extends Fragment implements IOrderDetailViewPrese
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        iOrderDetailViewPresenter=new OrderDetailViewPresenterImpl(this,getActivity());
-        util=new Util();
+        iOrderDetailViewPresenter = new OrderDetailViewPresenterImpl(this, getActivity());
+        util = new Util();
     }
 
     @Override
@@ -83,7 +91,7 @@ public class FragmentOrderList extends Fragment implements IOrderDetailViewPrese
     @Override
     public void onResume() {
         super.onResume();
-        ((ActivityContainer)getActivity()).showToolBar();
+        ((ActivityContainer) getActivity()).showToolBar();
         ActivityContainer.tvTitle.setText(getString(R.string.my_orders));
     }
 
@@ -92,8 +100,9 @@ public class FragmentOrderList extends Fragment implements IOrderDetailViewPrese
         super.onViewCreated(view, savedInstanceState);
         layoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
         rvOrders.setLayoutManager(layoutManager);
+        btnContinueShopping.setOnClickListener(this);
         rvOrders.setHasFixedSize(true);
-        ((ActivityContainer)getActivity()).showToolBar();
+        ((ActivityContainer) getActivity()).showToolBar();
 
         getOrderList();
     }
@@ -111,33 +120,41 @@ public class FragmentOrderList extends Fragment implements IOrderDetailViewPrese
         iOrderDetailViewPresenter.getOrderList(token, id);
     }
 
-  public void cancelOrder(String reason,String orderId) {
-      CancelOrderRequest cancelOrderRequest=new CancelOrderRequest();
-      cancelOrderRequest.setCancellationReason(reason);
-      cancelOrderRequest.setUuid(Util.id(getActivity()));
+    public void cancelOrder(String reason, String orderId) {
+        CancelOrderRequest cancelOrderRequest = new CancelOrderRequest();
+        cancelOrderRequest.setCancellationReason(reason);
+        cancelOrderRequest.setUuid(Util.id(getActivity()));
         String id = "" + SharedPreference.getInstance(getActivity()).getUser(C.AUTH_USER).getData().getUser().getId();
 
         String token = C.bearer + SharedPreference.getInstance(getActivity()).getUser(C.AUTH_USER).getData().getToken().getAccessToken();
-        iOrderDetailViewPresenter.cancelOrder(token, id,""+orderId,cancelOrderRequest);
+        iOrderDetailViewPresenter.cancelOrder(token, id, "" + orderId, cancelOrderRequest);
     }
+
     public void reOrder(Order order) {
         String id = "" + SharedPreference.getInstance(getActivity()).getUser(C.AUTH_USER).getData().getUser().getId();
 
         String token = C.bearer + SharedPreference.getInstance(getActivity()).getUser(C.AUTH_USER).getData().getToken().getAccessToken();
-        iOrderDetailViewPresenter.reorderOrder(token, id,""+order.getId());
+        iOrderDetailViewPresenter.reorderOrder(token, id, "" + order.getId());
     }
+
     @Override
     public void onSuccessOrderList(OrderListResponse response) {
         if (response.getSuccess()) {
             orders = response.getData().getOrder();
 
-            if (orders!=null && orders.size() > 0) {
+            if (orders != null && orders.size() > 0) {
 
                 adapterOrderList = new AdapterOrderList(orders, getActivity());
                 rvOrders.setAdapter(adapterOrderList);
             }
+            else {
+                rvOrders.setVisibility(View.GONE);
+                llNoProductInCount.setVisibility(View.VISIBLE);
+            }
 
         } else {
+            rvOrders.setVisibility(View.GONE);
+            llNoProductInCount.setVisibility(View.VISIBLE);
             util.setSnackbarMessage(getActivity(), response.getMessage(), LLView, true);
 
         }
@@ -152,7 +169,7 @@ public class FragmentOrderList extends Fragment implements IOrderDetailViewPrese
     public void onSuccessReorderList(OrderListResponse response) {
         if (response.getSuccess()) {
             util.setSnackbarMessage(getActivity(), response.getMessage(), LLView, false);
-          //  SharedPreference.getInstance(getActivity()).setBoolean(C.IS_REORDER,true);
+            //  SharedPreference.getInstance(getActivity()).setBoolean(C.IS_REORDER,true);
             Handler handler = new Handler();
 
             handler.postDelayed(new Runnable() {
@@ -190,7 +207,7 @@ public class FragmentOrderList extends Fragment implements IOrderDetailViewPrese
 
     @Override
     public void showProgress() {
-        util.showDialog(C.MSG,getActivity());
+        util.showDialog(C.MSG, getActivity());
 
     }
 
@@ -199,6 +216,7 @@ public class FragmentOrderList extends Fragment implements IOrderDetailViewPrese
         util.hideDialog();
 
     }
+
     public void dialogCancelOrder(final Order order) {
         LinearLayoutManager layoutManager;
 
@@ -213,12 +231,12 @@ public class FragmentOrderList extends Fragment implements IOrderDetailViewPrese
         Button btnCancelOrder = (Button) dialog.findViewById(R.id.btnCancelOrder);
         final EditText etOtherReason = (EditText) dialog.findViewById(R.id.etOtherReason);
 
-        RecyclerView rvOrders=(RecyclerView)dialog.findViewById(R.id.rvCancelReason) ;
+        RecyclerView rvOrders = (RecyclerView) dialog.findViewById(R.id.rvCancelReason);
         layoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
         rvOrders.setLayoutManager(layoutManager);
         rvOrders.setHasFixedSize(true);
         ImageView cross = (ImageView) dialog.findViewById(R.id.ivCross);
-        final AdapterCancelOrderReason adapterCancelOrderReason=new AdapterCancelOrderReason(cancelList(),getActivity());
+        final AdapterCancelOrderReason adapterCancelOrderReason = new AdapterCancelOrderReason(cancelList(), getActivity());
         rvOrders.setAdapter(adapterCancelOrderReason);
 
         cross.setOnClickListener(new View.OnClickListener() {
@@ -232,16 +250,14 @@ public class FragmentOrderList extends Fragment implements IOrderDetailViewPrese
             @Override
             public void onClick(View v) {
 
-                if(adapterCancelOrderReason.getSelectedId()!=-1) {
-                    cancelOrder(cancelList().get(adapterCancelOrderReason.getSelectedId()).getName(),""+order.getId());
+                if (adapterCancelOrderReason.getSelectedId() != -1) {
+                    cancelOrder(cancelList().get(adapterCancelOrderReason.getSelectedId()).getName(), "" + order.getId());
                     dialog.dismiss();
-                }
-                else if(etOtherReason.getText().toString().length()>0){
-                    cancelOrder(etOtherReason.getText().toString(),""+order.getId());
+                } else if (etOtherReason.getText().toString().length() > 0) {
+                    cancelOrder(etOtherReason.getText().toString(), "" + order.getId());
                     dialog.dismiss();
 
-                }
-                else {
+                } else {
                     util.setSnackbarMessage(getActivity(), getString(R.string.please_select_one_option), LLView, true);
 
                 }
@@ -250,6 +266,7 @@ public class FragmentOrderList extends Fragment implements IOrderDetailViewPrese
         });
         dialog.show();
     }
+
     List<Offers> cancelList() {
         List<Offers> offersList = new ArrayList<>();
         offersList.add(new Offers(0, getString(R.string.item_goes_dammaged), ""));
@@ -259,4 +276,21 @@ public class FragmentOrderList extends Fragment implements IOrderDetailViewPrese
         return offersList;
     }
 
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()){
+            case R.id.btnContinueShopping:
+                gotoHome();
+                break;
+        }
+    }
+
+    public void gotoHome(){
+        Intent intent = new Intent(getActivity(), ActivityHome.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        Bundle bundle=new Bundle();
+        bundle.putInt(C.FRAGMENT_ACTION,C.FRAGMENT_PRODUCTS_HOME);
+        intent.putExtra(C.BUNDLE,bundle);
+        startActivity(intent);
+    }
 }

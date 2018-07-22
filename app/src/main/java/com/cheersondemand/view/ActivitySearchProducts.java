@@ -11,8 +11,8 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 
 import com.cheersondemand.R;
 import com.cheersondemand.model.Categories;
@@ -37,7 +37,7 @@ import butterknife.ButterKnife;
 public class ActivitySearchProducts extends Activity implements View.OnClickListener,ISearchViewPresenter.ISearchView {
 
     @BindView(R.id.imgBack)
-    ImageView imgBack;
+    RelativeLayout imgBack;
     @BindView(R.id.etSearch)
     EditText etSearch;
     @BindView(R.id.lvSearchResult)

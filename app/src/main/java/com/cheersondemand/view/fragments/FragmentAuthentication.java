@@ -668,7 +668,15 @@ public class FragmentAuthentication extends Fragment implements IAuthenitication
             public void onTextChanged(CharSequence s, int start, int before,
                                       int count) {
 
+                if(etPassword.getText().toString().length()>0){
+                    etPassword.setCompoundDrawablesWithIntrinsicBounds(  R.drawable.ic_password, 0, R.drawable.ic_eye, 0);
 
+                }
+                else {
+                        etPassword.setCompoundDrawablesWithIntrinsicBounds(  R.drawable.ic_password, 0, 0, 0);
+
+
+                }
                 validation();
 
 
@@ -783,7 +791,15 @@ public class FragmentAuthentication extends Fragment implements IAuthenitication
             public void onTextChanged(CharSequence s, int start, int before,
                                       int count) {
 
+                if(etPasswordLogin.getText().toString().length()>0){
+                    etPasswordLogin.setCompoundDrawablesWithIntrinsicBounds(  R.drawable.ic_password, 0, R.drawable.ic_eye, 0);
 
+                }
+                else {
+                    etPasswordLogin.setCompoundDrawablesWithIntrinsicBounds(  R.drawable.ic_password, 0, 0, 0);
+
+
+                }
                 validationLogin();
 
 

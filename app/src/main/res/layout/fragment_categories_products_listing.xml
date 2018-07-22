@@ -121,9 +121,69 @@
         android:layout_width="match_parent"
 
         android:layout_height="1dp"/>
-    <RelativeLayout
+        <LinearLayout
+            android:layout_below="@id/v"
+            android:id="@+id/llStoreSelect"
+            android:layout_weight="1"
+            android:background="@color/white"
+            android:visibility="visible"
+            android:padding="15dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/sf_ui_display_regular"
+                    android:text="@string/shopping_from"
+                    android:textColor="@color/spec_desc"
+                    android:textSize="14sp" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+            <TextView
+                android:maxLines="1"
+                android:ellipsize="end"
+                android:singleLine="true"
+                android:layout_width="wrap_content"
+                android:id="@+id/tvStoreName"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/sf_ui_display_regular"
+                android:text="@string/select_a_location"
+                android:textColor="@color/profile_text_color"
+                android:textSize="16sp" />
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="25dp">
+                <ImageView
+                    android:layout_marginLeft="10dp"
+                    android:layout_alignParentRight="true"
+                    android:layout_gravity="right"
+                    android:src="@drawable/down_arrow"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+            </RelativeLayout>
+            </LinearLayout>
+            <View
+                android:id="@+id/v1"
+                android:layout_marginTop="5dp"
+                android:background="@color/edit_text_border"
+                android:layout_width="match_parent"
+
+                android:layout_height="1dp"/>
+        </LinearLayout>
+
+        <RelativeLayout
         android:layout_marginTop="10dp"
-        android:layout_below="@id/v"
+        android:layout_below="@id/llStoreSelect"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
     <android.support.v7.widget.RecyclerView

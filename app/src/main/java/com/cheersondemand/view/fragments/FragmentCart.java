@@ -1,7 +1,10 @@
 package com.cheersondemand.view.fragments;
 
 
+import android.app.Dialog;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -85,6 +88,8 @@ public class FragmentCart extends Fragment implements View.OnClickListener, IOrd
     boolean isAdd;
     OrderItem orderItem;
     int source;
+    @BindView(R.id.tvStoreClosed)
+    TextView tvStoreClosed;
     private LinearLayoutManager mLinearLayoutManager;
 
     public FragmentCart() {
@@ -118,7 +123,7 @@ public class FragmentCart extends Fragment implements View.OnClickListener, IOrd
             tvMyCart.setVisibility(View.GONE);
             viewLine.setVisibility(View.GONE);
             ActivityContainer.tvTitle.setText(getString(R.string.my_cart));
-            ((ActivityContainer)getActivity()).showToolBar();
+            ((ActivityContainer) getActivity()).showToolBar();
         }
         btnProceed.setOnClickListener(this);
         btnBrowseProduct.setOnClickListener(this);
@@ -133,7 +138,7 @@ public class FragmentCart extends Fragment implements View.OnClickListener, IOrd
             tvMyCart.setVisibility(View.GONE);
             viewLine.setVisibility(View.GONE);
             ActivityContainer.tvTitle.setText(getString(R.string.my_cart));
-            ((ActivityContainer)getActivity()).showToolBar();
+            ((ActivityContainer) getActivity()).showToolBar();
 
         }
 
@@ -177,16 +182,47 @@ public class FragmentCart extends Fragment implements View.OnClickListener, IOrd
                /* Intent intent = new Intent(getActivity(), ActivityContainer.class);
                 intent.putExtra(C.FRAGMENT_ACTION, C.FRAGMENT_PAYMENT_CONFIRMATION);
                 startActivity(intent);*/
-               if(SharedPreference.getInstance(getActivity()).getBoolean(C.IS_LOGIN)) {
-                   SharedPreference.getInstance(getActivity()).setCard(C.CARD_DATA, null);
-                   getAddressList();
-               }
-               else {
-                   gotoLogin();
-               }
+                if (adapterCartList.getIsProceed()) {
+
+                    if (SharedPreference.getInstance(getActivity()).getBoolean(C.IS_LOGIN)) {
+                        SharedPreference.getInstance(getActivity()).setCard(C.CARD_DATA, null);
+                        getAddressList();
+                    } else {
+                        gotoLogin();
+                    }
+                } else {
+                    dialogError();
+                }
                 break;
         }
     }
+
+
+    void dialogError() {
+        final Dialog dialog = new Dialog(getActivity(), R.style.FullHeightDialog); //this is a reference to the style above
+        dialog.setContentView(R.layout.dialog_ok); //I saved the xml file above as yesnomessage.xml
+        dialog.setCancelable(true);
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+
+//to set the message
+        TextView title = (TextView) dialog.findViewById(R.id.tvmessagedialogtitle);
+
+        TextView message = (TextView) dialog.findViewById(R.id.tvmessagedialogtext);
+        title.setText(getString(R.string.app_name));
+        message.setText(getString(R.string.sorry_delivery_not_available));
+//add some action to the buttons
+        Button yes = (Button) dialog.findViewById(R.id.bmessageDialogOK);
+        yes.setText(getString(R.string.ok));
+        yes.setOnClickListener(new View.OnClickListener() {
+
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+
+        dialog.show();
+    }
+
     void gotoLogin() {
         Intent intent = new Intent(getActivity(), MainActivity.class);
         Bundle bundle = new Bundle();
@@ -196,6 +232,7 @@ public class FragmentCart extends Fragment implements View.OnClickListener, IOrd
         intent.putExtra(C.BUNDLE, bundle);
         getActivity().startActivity(intent);
     }
+
     void getAddressList() {
         String id = "" + SharedPreference.getInstance(getActivity()).getUser(C.AUTH_USER).getData().getUser().getId();
 
@@ -366,6 +403,9 @@ public class FragmentCart extends Fragment implements View.OnClickListener, IOrd
                 llNoProductInCount.setVisibility(View.VISIBLE);
                 rvCartList.setVisibility(View.GONE);
                 btnProceed.setVisibility(View.GONE);
+                tvStoreClosed.setVisibility(View.GONE);
+                ((ActivityHome)getActivity()).setDot(false);
+
             }
         } else {
             util.setSnackbarMessage(getActivity(), response.getMessage(), LLView, true);
@@ -385,6 +425,22 @@ public class FragmentCart extends Fragment implements View.OnClickListener, IOrd
                 rvCartList.setAdapter(adapterCartList);
                 llNoProductInCount.setVisibility(View.GONE);
                 rvCartList.setVisibility(View.VISIBLE);
+                if (cartProduct.getOrder() != null && cartProduct.getOrder().getStoreOpen()) {
+                    btnProceed.setEnabled(true);
+                } else {
+                    btnProceed.setEnabled(false);
+                    tvStoreClosed.setText(getString(R.string.store_closed));
+
+                    tvStoreClosed.setVisibility(View.VISIBLE);
+                }
+
+                for (int i = 0; i < cartProduct.getOrder().getOrderItems().size(); i++) {
+                    if (cartProduct.getOrder().getOrderItems().get(i).getOldUnitPrice() != null) {
+                        tvStoreClosed.setVisibility(View.VISIBLE);
+                        tvStoreClosed.setText(getString(R.string.price_change));
+                        break;
+                    }
+                }
             } else {
                 llNoProductInCount.setVisibility(View.VISIBLE);
                 rvCartList.setVisibility(View.GONE);
@@ -487,11 +543,10 @@ public class FragmentCart extends Fragment implements View.OnClickListener, IOrd
             if (Response.getData() != null && Response.getData().size() > 0) {
                 Intent intent = new Intent(getActivity(), ActivityContainer.class);
                 intent.putExtra(C.FRAGMENT_ACTION, C.FRAGMENT_SELECT_ADDRESS);
-                Bundle bundle=new Bundle();
-                if(cartProduct.getOrder().getDeliveryAddress()!=null) {
+                Bundle bundle = new Bundle();
+                if (cartProduct.getOrder().getDeliveryAddress() != null) {
                     bundle.putInt(C.ADDRESS_ID, cartProduct.getOrder().getDeliveryAddress().getId());
-                }
-                else {
+                } else {
                     bundle.putInt(C.ADDRESS_ID, 0);
 
                 }

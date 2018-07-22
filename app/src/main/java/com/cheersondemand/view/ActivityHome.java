@@ -15,8 +15,12 @@ import android.widget.RelativeLayout;
 
 import com.cheersondemand.R;
 import com.cheersondemand.model.authentication.GenRequest;
-import com.cheersondemand.model.order.addtocart.CartHasItemResponse;
+import com.cheersondemand.model.order.CreateOrderResponse;
+import com.cheersondemand.model.order.addtocart.AddToCartResponse;
 import com.cheersondemand.model.order.updatecart.UpdateCartRequest;
+import com.cheersondemand.model.order.updatecart.UpdateCartResponse;
+import com.cheersondemand.model.wishlist.WishListDataResponse;
+import com.cheersondemand.model.wishlist.WishListResponse;
 import com.cheersondemand.presenter.home.order.IOrderViewPresenterPresenter;
 import com.cheersondemand.presenter.home.order.OrderViewPresenterImpl;
 import com.cheersondemand.util.C;
@@ -32,7 +36,7 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class ActivityHome extends AppCompatActivity implements View.OnClickListener, IOrderViewPresenterPresenter.ICartHasItem {
+public class ActivityHome extends AppCompatActivity implements View.OnClickListener, IOrderViewPresenterPresenter.IOrderView {
     static {
         AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);
     }
@@ -52,6 +56,8 @@ public class ActivityHome extends AppCompatActivity implements View.OnClickListe
     String currentPage;
     int action;
     IOrderViewPresenterPresenter iOrderViewPresenterPresenter;
+    @BindView(R.id.ivDot)
+    ImageView ivDot;
     private Fragment fragment;
 
     @Override
@@ -136,6 +142,12 @@ public class ActivityHome extends AppCompatActivity implements View.OnClickListe
         }
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+     //   getCartList();
+    }
+
     private Fragment getVisibleFragment() {
         FragmentManager fragmentManager = getSupportFragmentManager();
         @SuppressLint("RestrictedApi") List<Fragment> fragments = fragmentManager.getFragments();
@@ -146,6 +158,23 @@ public class ActivityHome extends AppCompatActivity implements View.OnClickListe
         return null;
     }
 
+    void getCartList() {
+        String order_id = SharedPreference.getInstance(this).getString(C.ORDER_ID);
+
+        if (order_id != null && !order_id.equals("0")) {
+            if (SharedPreference.getInstance(this).getBoolean(C.IS_LOGIN_GUEST)) {
+                String id = "" + SharedPreference.getInstance(this).geGuestUser(C.GUEST_USER).getId();
+
+                iOrderViewPresenterPresenter.getCartList(id, order_id, Util.id(this));
+            } else {
+                String id = "" + SharedPreference.getInstance(this).getUser(C.AUTH_USER).getData().getUser().getId();
+                String token = C.bearer + SharedPreference.getInstance(this).getUser(C.AUTH_USER).getData().getToken().getAccessToken();
+                iOrderViewPresenterPresenter.getCartList(token, id, order_id, Util.id(this));
+            }
+        } else {
+            ivDot.setVisibility(View.GONE);
+        }
+    }
 
     public void getCartHasItem() {
         GenRequest genRequest = new GenRequest();
@@ -241,15 +270,65 @@ public class ActivityHome extends AppCompatActivity implements View.OnClickListe
         fragmnetLoader(C.FRAGMENT_PROFILE_HOME, null);
     }
 
-    @Override
-    public void getCartHasItemSuccess(CartHasItemResponse response) {
-        if (response.getSuccess()) {
-            SharedPreference.getInstance(this).setBoolean(C.CART_HAS_ITEM, response.getData().getHasCartProduct());
-            SharedPreference.getInstance(this).setString(C.ORDER_ID, "" + response.getData().getOrderId());
 
+
+
+    @Override
+    public void getCreateOrderSuccess(CreateOrderResponse response) {
+
+    }
+
+    @Override
+    public void getAddToCartSucess(AddToCartResponse response) {
+
+    }
+
+    @Override
+    public void getUpdateCartSuccess(UpdateCartResponse response) {
+
+    }
+
+    @Override
+    public void getRemoveItemFromCartSuccess(UpdateCartResponse response) {
+
+    }
+
+    @Override
+    public void getCartListSuccess(UpdateCartResponse response) {
+        if (response.getData() != null && response.getData().getOrder() !=null &&response.getData().getOrder().getOrderItems()!=null &&response.getData().getOrder().getOrderItems().size() > 0) {
+            // SharedPreference.getInstance(this).setBoolean(C.CART_HAS_ITEM, response.getData().getHasCartProduct());
+            //  SharedPreference.getInstance(this).setString(C.ORDER_ID, "" + response.getData().getOrderId());
+            ivDot.setVisibility(View.VISIBLE);
+        }
+        else {
+            ivDot.setVisibility(View.GONE);
         }
     }
 
+
+    public  void setDot(boolean isCartHasProduct){
+        if(isCartHasProduct) {
+            ivDot.setVisibility(View.VISIBLE);
+        }
+        else {
+            ivDot.setVisibility(View.GONE);
+
+        }
+    }
+    @Override
+    public void addTowishListSuccess(WishListResponse response) {
+
+    }
+
+    @Override
+    public void removeFromWishListSuccess(WishListResponse response) {
+
+    }
+
+    @Override
+    public void getWishListSuccess(WishListDataResponse response) {
+
+    }
 
     @Override
     public void getResponseError(String response) {

@@ -201,7 +201,11 @@ public class FragmentChangePassword extends Fragment implements View.OnClickList
             public void onTextChanged(CharSequence s, int start, int before,
                                       int count) {
                     if(etCurrentPassword.getText().toString().length()>0){
-                        etCurrentPassword.setCompoundDrawablesWithIntrinsicBounds( R.drawable.password_key, 0, R.drawable.ic_eye, 0);
+                        etCurrentPassword.setCompoundDrawablesWithIntrinsicBounds( 0, 0, R.drawable.ic_eye, 0);
+
+                    }
+                    else {
+                        etCurrentPassword.setCompoundDrawablesWithIntrinsicBounds( 0, 0, 0, 0);
 
                     }
 
@@ -225,7 +229,11 @@ public class FragmentChangePassword extends Fragment implements View.OnClickList
                                       int count) {
 
                 if(etNewPassword.getText().toString().length()>0){
-                    etNewPassword.setCompoundDrawablesWithIntrinsicBounds( R.drawable.password_key, 0, R.drawable.ic_eye, 0);
+                    etNewPassword.setCompoundDrawablesWithIntrinsicBounds( 0, 0, R.drawable.ic_eye, 0);
+
+                }
+                else {
+                    etNewPassword.setCompoundDrawablesWithIntrinsicBounds( 0, 0, 0, 0);
 
                 }
                 validationFields();
@@ -248,7 +256,11 @@ public class FragmentChangePassword extends Fragment implements View.OnClickList
                                       int count) {
 
                 if(etReenterPassword.getText().toString().length()>0){
-                    etReenterPassword.setCompoundDrawablesWithIntrinsicBounds( R.drawable.password_key, 0, R.drawable.ic_eye, 0);
+                    etReenterPassword.setCompoundDrawablesWithIntrinsicBounds( 0, 0, R.drawable.ic_eye, 0);
+
+                }
+                else {
+                    etReenterPassword.setCompoundDrawablesWithIntrinsicBounds( 0, 0, 0, 0);
 
                 }
                 validationFields();
@@ -266,8 +278,14 @@ public class FragmentChangePassword extends Fragment implements View.OnClickList
 
                 if (etReenterPassword.length() > 4 && etReenterPassword.length() < 31) {
 
-                    btnChangePassword.setBackground(ContextCompat.getDrawable(getActivity(), R.drawable.bg_button_enable));
-                    btnChangePassword.setEnabled(true);
+                    if(etNewPassword.getText().toString().equals(etReenterPassword.getText().toString())) {
+                        btnChangePassword.setBackground(ContextCompat.getDrawable(getActivity(), R.drawable.bg_button_enable));
+                        btnChangePassword.setEnabled(true);
+                    }
+                    else {
+                        btnChangePassword.setBackground(ContextCompat.getDrawable(getActivity(), R.drawable.button_disable));
+                        btnChangePassword.setEnabled(false);
+                    }
                 } else {
 
                     btnChangePassword.setBackground(ContextCompat.getDrawable(getActivity(), R.drawable.button_disable));
@@ -328,7 +346,9 @@ public class FragmentChangePassword extends Fragment implements View.OnClickList
             llPasswordChangelayout.setVisibility(View.GONE);
         }
         else {
-            util.setSnackbarMessage(getActivity(), response.getMessage(), rlView, true);
+            tvPasswordError.setVisibility(View.VISIBLE);
+            tvPasswordError.setText(response.getMessage());
+           // util.setSnackbarMessage(getActivity(), response.getMessage(), rlView, true);
 
         }
     }
@@ -341,11 +361,13 @@ public class FragmentChangePassword extends Fragment implements View.OnClickList
 
     @Override
     public void showProgress() {
+        util.showDialog(C.MSG,getActivity());
 
     }
 
     @Override
     public void hideProgress() {
+        util.hideDialog();
 
     }
 }

@@ -49,6 +49,7 @@ import com.cheersondemand.util.C;
 import com.cheersondemand.util.SharedPreference;
 import com.cheersondemand.util.Util;
 import com.cheersondemand.view.ActivityContainer;
+import com.cheersondemand.view.ActivityHome;
 import com.cheersondemand.view.ActivitySearchLocation;
 import com.cheersondemand.view.ActivitySearchProducts;
 import com.cheersondemand.view.adapter.AdapterHomeBrands;
@@ -256,6 +257,9 @@ public class FragmentHome extends Fragment implements IStoreViewPresenter.IStore
     @Override
     public void getProductWithCategoriesSuccess(ProductsWithCategoryResponse response) {
         if (response.getSuccess()) {
+            if(response.getData().getHasCartProduct()){
+                ((ActivityHome)getActivity()).setDot(response.getData().getHasCartProduct());
+            }
             shimmerBrands.stopShimmerAnimation();
             List<Categories> categories = new ArrayList<>();
 
@@ -329,6 +333,8 @@ public class FragmentHome extends Fragment implements IStoreViewPresenter.IStore
         if (response.getSuccess()) {
             util.setSnackbarMessage(getActivity(), response.getMessage(), rlHomeView, false);
             updateCart();
+            ((ActivityHome)getActivity()).setDot(true);
+
         } else {
             util.setSnackbarMessage(getActivity(), response.getMessage(), rlHomeView, true);
 

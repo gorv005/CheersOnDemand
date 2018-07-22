@@ -150,11 +150,13 @@ public class FragmentStoreSelection extends Fragment implements IStoreViewPresen
             }
             else {
                 ((ActivityContainer)getActivity()).showToolBar();
+                ActivityContainer.tvTitle.setText(getString(R.string.coming_soon_));
                 llNoStore.setVisibility(View.VISIBLE);
             }
         } else {
            // util.setSnackbarMessage(getActivity(), response.getMessage(), LLView, true);
             llNoStore.setVisibility(View.VISIBLE);
+            ActivityContainer.tvTitle.setText(getString(R.string.coming_soon_));
             ((ActivityContainer)getActivity()).showToolBar();
 
 

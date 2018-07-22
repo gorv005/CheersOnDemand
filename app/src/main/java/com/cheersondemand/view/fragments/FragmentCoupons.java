@@ -16,6 +16,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.cheersondemand.R;
@@ -55,13 +56,17 @@ public class FragmentCoupons extends Fragment implements View.OnClickListener, I
     @BindView(R.id.LLView)
     LinearLayout LLView;
     Unbinder unbinder;
-       ICouponViewPresenter iCouponViewPresenter;
-       Util util;
-       AdapterCouponList adapterCouponList;
-      List<CouponInfo>  couponInfoList;
+    ICouponViewPresenter iCouponViewPresenter;
+    Util util;
+    AdapterCouponList adapterCouponList;
+    List<CouponInfo> couponInfoList;
     LinearLayoutManager layoutManager;
     String cartValue;
-    private String couponName="";
+    @BindView(R.id.rlOr)
+    RelativeLayout rlOr;
+    @BindView(R.id.tvTagLine)
+    TextView tvTagLine;
+    private String couponName = "";
 
     public FragmentCoupons() {
         // Required empty public constructor
@@ -72,14 +77,15 @@ public class FragmentCoupons extends Fragment implements View.OnClickListener, I
         super.onResume();
         ActivityContainer.tvTitle.setText(R.string.coupon_code);
     }
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        cartValue=getArguments().getString(C.CART_VALUE);
-        couponName=getArguments().getString(C.COUPON_NAME);
+        cartValue = getArguments().getString(C.CART_VALUE);
+        couponName = getArguments().getString(C.COUPON_NAME);
 
-        iCouponViewPresenter=new CouponViewPresenterImpl(this,getActivity());
-        util=new Util();
+        iCouponViewPresenter = new CouponViewPresenterImpl(this, getActivity());
+        util = new Util();
     }
 
     @Override
@@ -103,7 +109,7 @@ public class FragmentCoupons extends Fragment implements View.OnClickListener, I
 
     }
 
-    void init(){
+    void init() {
         etCouponName.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -117,11 +123,10 @@ public class FragmentCoupons extends Fragment implements View.OnClickListener, I
 
             @Override
             public void afterTextChanged(Editable s) {
-                if(s.toString().length()==6){
+                if (s.toString().length() == 6) {
                     btnApply.setEnabled(true);
                     btnApply.setBackground(ContextCompat.getDrawable(getActivity(), R.drawable.bg_button_enable));
-                }
-                else {
+                } else {
                     btnApply.setEnabled(false);
                     btnApply.setBackground(ContextCompat.getDrawable(getActivity(), R.drawable.button_disable));
                 }
@@ -130,51 +135,52 @@ public class FragmentCoupons extends Fragment implements View.OnClickListener, I
     }
 
 
-
-   public void applyCoupon(String couponName){
-        this.couponName=couponName;
+    public void applyCoupon(String couponName) {
+        this.couponName = couponName;
         String order_id = SharedPreference.getInstance(getActivity()).getString(C.ORDER_ID);
 
-       ApplyCouponRequest applyCouponRequest=new ApplyCouponRequest();
-       applyCouponRequest.setCartId(order_id);
-       applyCouponRequest.setUuid(Util.id(getActivity()));
-       applyCouponRequest.setCartValue(cartValue);
-       applyCouponRequest.setCode(couponName);
+        ApplyCouponRequest applyCouponRequest = new ApplyCouponRequest();
+        applyCouponRequest.setCartId(order_id);
+        applyCouponRequest.setUuid(Util.id(getActivity()));
+        applyCouponRequest.setCartValue(cartValue);
+        applyCouponRequest.setCode(couponName);
         if (SharedPreference.getInstance(getActivity()).getBoolean(C.IS_LOGIN_GUEST)) {
             String id = "" + SharedPreference.getInstance(getActivity()).geGuestUser(C.GUEST_USER).getId();
 
-            iCouponViewPresenter.applyCoupon(false,"",applyCouponRequest);
+            iCouponViewPresenter.applyCoupon(false, "", applyCouponRequest);
         } else {
             String id = "" + SharedPreference.getInstance(getActivity()).getUser(C.AUTH_USER).getData().getUser().getId();
-            String token =  C.bearer + SharedPreference.getInstance(getActivity()).getUser(C.AUTH_USER).getData().getToken().getAccessToken();
-            iCouponViewPresenter.applyCoupon(true,token,applyCouponRequest);
+            String token = C.bearer + SharedPreference.getInstance(getActivity()).getUser(C.AUTH_USER).getData().getToken().getAccessToken();
+            iCouponViewPresenter.applyCoupon(true, token, applyCouponRequest);
 
         }
 
     }
-   void getCouponList(){
-       String order_id = SharedPreference.getInstance(getActivity()).getString(C.ORDER_ID);
 
-       if (SharedPreference.getInstance(getActivity()).getBoolean(C.IS_LOGIN_GUEST)) {
-           String id = "" + SharedPreference.getInstance(getActivity()).geGuestUser(C.GUEST_USER).getId();
+    void getCouponList() {
+        String order_id = SharedPreference.getInstance(getActivity()).getString(C.ORDER_ID);
 
-           iCouponViewPresenter.getListOfCoupons(false,"",Util.id(getActivity()),order_id);
-       } else {
-           String id = "" + SharedPreference.getInstance(getActivity()).getUser(C.AUTH_USER).getData().getUser().getId();
-           String token =  C.bearer + SharedPreference.getInstance(getActivity()).getUser(C.AUTH_USER).getData().getToken().getAccessToken();
-           iCouponViewPresenter.getListOfCoupons(true,token,Util.id(getActivity()),order_id);
-       }
+        if (SharedPreference.getInstance(getActivity()).getBoolean(C.IS_LOGIN_GUEST)) {
+            String id = "" + SharedPreference.getInstance(getActivity()).geGuestUser(C.GUEST_USER).getId();
+
+            iCouponViewPresenter.getListOfCoupons(false, "", Util.id(getActivity()), order_id);
+        } else {
+            String id = "" + SharedPreference.getInstance(getActivity()).getUser(C.AUTH_USER).getData().getUser().getId();
+            String token = C.bearer + SharedPreference.getInstance(getActivity()).getUser(C.AUTH_USER).getData().getToken().getAccessToken();
+            iCouponViewPresenter.getListOfCoupons(true, token, Util.id(getActivity()), order_id);
+        }
     }
+
     @Override
     public void onClick(View v) {
 
-       switch (v.getId()){
-           case R.id.btnApply:
-               if(etCouponName.getText().length()>=6) {
-                   applyCoupon(etCouponName.getText().toString());
-               }
-               break;
-       }
+        switch (v.getId()) {
+            case R.id.btnApply:
+                if (etCouponName.getText().length() >= 6) {
+                    applyCoupon(etCouponName.getText().toString());
+                }
+                break;
+        }
     }
 
     @Override
@@ -184,18 +190,25 @@ public class FragmentCoupons extends Fragment implements View.OnClickListener, I
 
     @Override
     public void onSuccessCouponList(CouponListResponse response) {
-        if(response.getSuccess()){
-            couponInfoList=response.getData();
-            for(int i=0;i<couponInfoList.size();i++){
+        if (response.getSuccess()) {
+            couponInfoList = response.getData();
+            for (int i = 0; i < couponInfoList.size(); i++) {
                 couponInfoList.get(i).setCouponName(couponName);
             }
-            adapterCouponList=new AdapterCouponList(couponInfoList,getActivity(),couponName) ;
-            if(couponInfoList!=null && couponInfoList.size()>0){
+            adapterCouponList = new AdapterCouponList(couponInfoList, getActivity(), couponName);
+            if (couponInfoList != null && couponInfoList.size() > 0) {
                 rvCouponList.setAdapter(adapterCouponList);
             }
-        }
-        else {
-            util.setSnackbarMessage(getActivity(), response.getMessage(), LLView, true);
+            else {
+                rlOr.setVisibility(View.GONE);
+                tvTagLine.setVisibility(View.GONE);
+                rvCouponList.setVisibility(View.GONE);
+            }
+        } else {
+            rlOr.setVisibility(View.GONE);
+            tvTagLine.setVisibility(View.GONE);
+            rvCouponList.setVisibility(View.GONE);
+         //   util.setSnackbarMessage(getActivity(), response.getMessage(), LLView, true);
 
         }
     }
@@ -203,19 +216,18 @@ public class FragmentCoupons extends Fragment implements View.OnClickListener, I
     @Override
     public void onSuccessCartAfterCoupon(UpdateCartResponse response) {
 
-       if(response.getSuccess()){
-           util.setSnackbarMessage(getActivity(), response.getMessage(), LLView, false);
+        if (response.getSuccess()) {
+            util.setSnackbarMessage(getActivity(), response.getMessage(), LLView, false);
 
-           for(int i=0;i<couponInfoList.size();i++){
-               couponInfoList.get(i).setCouponName(couponName);
-           }
-          //  adapterCouponList.setData(couponInfoList,couponName);
+            for (int i = 0; i < couponInfoList.size(); i++) {
+                couponInfoList.get(i).setCouponName(couponName);
+            }
+            //  adapterCouponList.setData(couponInfoList,couponName);
             adapterCouponList.notifyDataSetChanged();
-       }
-       else {
-           util.setSnackbarMessage(getActivity(), response.getMessage(), LLView, true);
+        } else {
+            util.setSnackbarMessage(getActivity(), response.getMessage(), LLView, true);
 
-       }
+        }
     }
 
     @Override
