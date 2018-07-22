@@ -43,6 +43,7 @@ import com.cheersondemand.util.SharedPreference;
 import com.cheersondemand.util.Util;
 import com.cheersondemand.view.ActivityContainer;
 import com.cheersondemand.view.ActivityHome;
+import com.cheersondemand.view.MainActivity;
 import com.cheersondemand.view.adapter.cart.AdapterCartList;
 
 import java.util.List;
@@ -176,12 +177,25 @@ public class FragmentCart extends Fragment implements View.OnClickListener, IOrd
                /* Intent intent = new Intent(getActivity(), ActivityContainer.class);
                 intent.putExtra(C.FRAGMENT_ACTION, C.FRAGMENT_PAYMENT_CONFIRMATION);
                 startActivity(intent);*/
-               SharedPreference.getInstance(getActivity()).setCard(C.CARD_DATA,null);
-               getAddressList();
+               if(SharedPreference.getInstance(getActivity()).getBoolean(C.IS_LOGIN)) {
+                   SharedPreference.getInstance(getActivity()).setCard(C.CARD_DATA, null);
+                   getAddressList();
+               }
+               else {
+                   gotoLogin();
+               }
                 break;
         }
     }
-
+    void gotoLogin() {
+        Intent intent = new Intent(getActivity(), MainActivity.class);
+        Bundle bundle = new Bundle();
+        bundle.putBoolean(C.IS_LOGIN_SCREEN, true);
+        intent.putExtra(C.FRAGMENT_ACTION, C.FRAGMENT_AUTHNITICATION);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        intent.putExtra(C.BUNDLE, bundle);
+        getActivity().startActivity(intent);
+    }
     void getAddressList() {
         String id = "" + SharedPreference.getInstance(getActivity()).getUser(C.AUTH_USER).getData().getUser().getId();
 
