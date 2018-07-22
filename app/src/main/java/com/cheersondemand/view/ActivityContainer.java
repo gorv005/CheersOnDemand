@@ -1,6 +1,8 @@
 package com.cheersondemand.view;
 
 import android.annotation.SuppressLint;
+import android.app.ActivityManager;
+import android.content.Intent;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
@@ -161,7 +163,7 @@ public class ActivityContainer extends AppCompatActivity {
                 fragment = new FragmentAddAddress();
                 fragmentTransaction.replace(R.id.container, fragment);
                 if (bundle.getBoolean(C.IS_FROM_CHECKOUT)) {
-                     fragmentTransaction.addToBackStack(C.TAG_FRAGMENT_ADD_ADDRESS);
+                    fragmentTransaction.addToBackStack(C.TAG_FRAGMENT_ADD_ADDRESS);
                 }
                 break;
             case C.FRAGMENT_SELECT_ADDRESS:
@@ -377,15 +379,38 @@ public class ActivityContainer extends AppCompatActivity {
         } else {
             finish();
         }*/
-        super.onBackPressed();
         try {
 
             Fragment fragment = getVisibleFragment();
-            if (fragment != null && fragment instanceof FragmentCategoryList) {
-                getSupportActionBar().show();
+           if (fragment != null && fragment instanceof FragmentOrderList) {
+               ActivityManager mngr = (ActivityManager) getSystemService( ACTIVITY_SERVICE );
+
+               List<ActivityManager.RunningTaskInfo> taskList = mngr.getRunningTasks(10);
+
+               if(taskList.get(0).numActivities == 1 &&
+                       taskList.get(0).topActivity.getClassName().equals(this.getClass().getName())) {
+                   gotoHome();
+               }
+               else {
+                   super.onBackPressed();
+               }
             }
+            else {
+               super.onBackPressed();
+
+           }
+
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    public void gotoHome(){
+        Intent intent = new Intent(this, ActivityHome.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        Bundle bundle=new Bundle();
+        bundle.putInt(C.FRAGMENT_ACTION,C.FRAGMENT_PROFILE_HOME);
+        intent.putExtra(C.BUNDLE,bundle);
+        startActivity(intent);
     }
 }

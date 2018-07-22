@@ -32,7 +32,11 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class ActivityHome extends AppCompatActivity implements View.OnClickListener,IOrderViewPresenterPresenter.ICartHasItem{
+public class ActivityHome extends AppCompatActivity implements View.OnClickListener, IOrderViewPresenterPresenter.ICartHasItem {
+    static {
+        AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);
+    }
+
     @BindView(R.id.ivHome)
     ImageView ivHome;
     @BindView(R.id.rlHome)
@@ -45,26 +49,39 @@ public class ActivityHome extends AppCompatActivity implements View.OnClickListe
     ImageView ivProfile;
     @BindView(R.id.rlProfile)
     RelativeLayout rlProfile;
-    private Fragment fragment;
     String currentPage;
+    int action;
     IOrderViewPresenterPresenter iOrderViewPresenterPresenter;
-    static {
-        AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);
-    }
+    private Fragment fragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
-        this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_home);
         ButterKnife.bind(this);
-        fragmnetLoader(C.FRAGMENT_PRODUCTS_HOME, null);
+
+        try {
+            Bundle bundle = getIntent().getBundleExtra(C.BUNDLE);
+            action = bundle.getInt(C.FRAGMENT_ACTION);
+            if (action == C.FRAGMENT_PROFILE_HOME) {
+                setProfile();
+            } else if (action == C.FRAGMENT_CART) {
+                setCart();
+            } else {
+                setHome();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            fragmnetLoader(C.FRAGMENT_PRODUCTS_HOME, null);
+
+        }
         rlCart.setOnClickListener(this);
         rlProfile.setOnClickListener(this);
         rlHome.setOnClickListener(this);
-        iOrderViewPresenterPresenter=new OrderViewPresenterImpl(this,this);
-        currentPage=getString(R.string.home);
+        iOrderViewPresenterPresenter = new OrderViewPresenterImpl(this, this);
+        currentPage = getString(R.string.home);
     }
 
     public void fragmnetLoader(int fragmentType, Bundle bundle) {
@@ -99,25 +116,26 @@ public class ActivityHome extends AppCompatActivity implements View.OnClickListe
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.rlHome:
-                if(!currentPage.equals(getString(R.string.home))) {
+                if (!currentPage.equals(getString(R.string.home))) {
                     setHome();
                 }
 
                 break;
             case R.id.rlCart:
-                if(!currentPage.equals(getString(R.string.my_cart))) {
+                if (!currentPage.equals(getString(R.string.my_cart))) {
 
                     setCart();
                 }
                 break;
             case R.id.rlProfile:
-                if(!currentPage.equals(getString(R.string.profile))) {
+                if (!currentPage.equals(getString(R.string.profile))) {
 
                     setProfile();
                 }
                 break;
         }
     }
+
     private Fragment getVisibleFragment() {
         FragmentManager fragmentManager = getSupportFragmentManager();
         @SuppressLint("RestrictedApi") List<Fragment> fragments = fragmentManager.getFragments();
@@ -129,109 +147,108 @@ public class ActivityHome extends AppCompatActivity implements View.OnClickListe
     }
 
 
-  public   void getCartHasItem(){
-        GenRequest genRequest=new GenRequest();
+    public void getCartHasItem() {
+        GenRequest genRequest = new GenRequest();
         genRequest.setUuid(Util.id(this));
 
         if (SharedPreference.getInstance(this).getBoolean(C.IS_LOGIN_GUEST)) {
             String id = "" + SharedPreference.getInstance(this).geGuestUser(C.GUEST_USER).getId();
 
-            iOrderViewPresenterPresenter.getCartHasItem(false,"",id,genRequest);
+            iOrderViewPresenterPresenter.getCartHasItem(false, "", id, genRequest);
         } else {
             String id = "" + SharedPreference.getInstance(this).getUser(C.AUTH_USER).getData().getUser().getId();
-            String token =  C.bearer + SharedPreference.getInstance(this).getUser(C.AUTH_USER).getData().getToken().getAccessToken();
-            iOrderViewPresenterPresenter.getCartHasItem(true,token,id,genRequest);
+            String token = C.bearer + SharedPreference.getInstance(this).getUser(C.AUTH_USER).getData().getToken().getAccessToken();
+            iOrderViewPresenterPresenter.getCartHasItem(true, token, id, genRequest);
 
         }
     }
 
-    public void removeFromCart(UpdateCartRequest updateCartRequest){
-        Fragment fragment=getVisibleFragment();
-        if(fragment!=null && fragment instanceof FragmentCart ){
-            ((FragmentCart)fragment).removeProduct(updateCartRequest);
+    public void removeFromCart(UpdateCartRequest updateCartRequest) {
+        Fragment fragment = getVisibleFragment();
+        if (fragment != null && fragment instanceof FragmentCart) {
+            ((FragmentCart) fragment).removeProduct(updateCartRequest);
         }
     }
-    public void removeCoupon(){
-        Fragment fragment=getVisibleFragment();
-        if(fragment!=null && fragment instanceof FragmentCart ){
-            ((FragmentCart)fragment).removeCoupon();
-        }
-    }
-   public void addToCart(int secPos,int pos,boolean isAdd){
-        Fragment fragment=getVisibleFragment();
-        if(fragment!=null && fragment instanceof FragmentHome ){
-            ((FragmentHome)fragment).addToCart(secPos,pos,isAdd);
-        }
-        else   if(fragment!=null && fragment instanceof FragmentProductDescription){
-            ((FragmentProductDescription)fragment).addToCart(secPos,pos,isAdd);
 
+    public void removeCoupon() {
+        Fragment fragment = getVisibleFragment();
+        if (fragment != null && fragment instanceof FragmentCart) {
+            ((FragmentCart) fragment).removeCoupon();
         }
     }
-    public void updateCart(int secPos,int pos,boolean isAdd){
-        Fragment fragment=getVisibleFragment();
-        if(fragment!=null && fragment instanceof FragmentHome ){
-            ((FragmentHome)fragment).updateCart(secPos,pos,isAdd);
-        }
-        else if(fragment!=null && fragment instanceof FragmentCart ){
-            ((FragmentCart)fragment).updateCart(secPos,pos,isAdd);
-        }
-        else   if(fragment!=null && fragment instanceof FragmentProductDescription){
-            ((FragmentProductDescription)fragment).updateCart(secPos,pos,isAdd);
+
+    public void addToCart(int secPos, int pos, boolean isAdd) {
+        Fragment fragment = getVisibleFragment();
+        if (fragment != null && fragment instanceof FragmentHome) {
+            ((FragmentHome) fragment).addToCart(secPos, pos, isAdd);
+        } else if (fragment != null && fragment instanceof FragmentProductDescription) {
+            ((FragmentProductDescription) fragment).addToCart(secPos, pos, isAdd);
 
         }
     }
 
-    public void wishListUpdate(int secPos,int pos,boolean isAdd){
-        Fragment fragment=getVisibleFragment();
-        if(fragment!=null && fragment instanceof FragmentHome ){
-            ((FragmentHome)fragment).wishListUpdate(secPos,pos,isAdd);
-        }
-        else if(fragment!=null && fragment instanceof FragmentCart ){
-            ((FragmentCart)fragment).wishListUpdate(secPos,pos,isAdd);
-        }
-        else   if(fragment!=null && fragment instanceof FragmentProductDescription){
-            ((FragmentProductDescription)fragment).wishListUpdate(secPos,pos,isAdd);
+    public void updateCart(int secPos, int pos, boolean isAdd) {
+        Fragment fragment = getVisibleFragment();
+        if (fragment != null && fragment instanceof FragmentHome) {
+            ((FragmentHome) fragment).updateCart(secPos, pos, isAdd);
+        } else if (fragment != null && fragment instanceof FragmentCart) {
+            ((FragmentCart) fragment).updateCart(secPos, pos, isAdd);
+        } else if (fragment != null && fragment instanceof FragmentProductDescription) {
+            ((FragmentProductDescription) fragment).updateCart(secPos, pos, isAdd);
 
         }
     }
-    public     void setHome(){
-        currentPage=getString(R.string.home);
+
+    public void wishListUpdate(int secPos, int pos, boolean isAdd) {
+        Fragment fragment = getVisibleFragment();
+        if (fragment != null && fragment instanceof FragmentHome) {
+            ((FragmentHome) fragment).wishListUpdate(secPos, pos, isAdd);
+        } else if (fragment != null && fragment instanceof FragmentCart) {
+            ((FragmentCart) fragment).wishListUpdate(secPos, pos, isAdd);
+        } else if (fragment != null && fragment instanceof FragmentProductDescription) {
+            ((FragmentProductDescription) fragment).wishListUpdate(secPos, pos, isAdd);
+
+        }
+    }
+
+    public void setHome() {
+        currentPage = getString(R.string.home);
 
         ivHome.setImageResource(R.drawable.ic_bar_home_enabled);
-            ivCart.setImageResource(R.drawable.ic_bar_cart);
-            ivProfile.setImageResource(R.drawable.ic_bar_profile);
-            fragmnetLoader(C.FRAGMENT_PRODUCTS_HOME, null);
-        }
+        ivCart.setImageResource(R.drawable.ic_bar_cart);
+        ivProfile.setImageResource(R.drawable.ic_bar_profile);
+        fragmnetLoader(C.FRAGMENT_PRODUCTS_HOME, null);
+    }
 
-        public void setCart(){
-            currentPage=getString(R.string.my_cart);
+    public void setCart() {
+        currentPage = getString(R.string.my_cart);
 
-            ivCart.setImageResource(R.drawable.cart_enable);
-            ivProfile.setImageResource(R.drawable.ic_bar_profile);
-            ivHome.setImageResource(R.drawable.home_disable);
-            Bundle bundle=new Bundle();
-            bundle.putInt(C.SOURCE,C.FRAGMENT_PRODUCTS_HOME);
-            fragmnetLoader(C.FRAGMENT_CART, bundle);
+        ivCart.setImageResource(R.drawable.cart_enable);
+        ivProfile.setImageResource(R.drawable.ic_bar_profile);
+        ivHome.setImageResource(R.drawable.home_disable);
+        Bundle bundle = new Bundle();
+        bundle.putInt(C.SOURCE, C.FRAGMENT_PRODUCTS_HOME);
+        fragmnetLoader(C.FRAGMENT_CART, bundle);
 
-        }
-        public void setProfile(){
-            currentPage=getString(R.string.profile);
+    }
 
-            ivProfile.setImageResource(R.drawable.profile_enabled);
-            ivCart.setImageResource(R.drawable.ic_bar_cart);
-            ivHome.setImageResource(R.drawable.home_disable);
-            fragmnetLoader(C.FRAGMENT_PROFILE_HOME, null);
-        }
+    public void setProfile() {
+        currentPage = getString(R.string.profile);
+
+        ivProfile.setImageResource(R.drawable.profile_enabled);
+        ivCart.setImageResource(R.drawable.ic_bar_cart);
+        ivHome.setImageResource(R.drawable.home_disable);
+        fragmnetLoader(C.FRAGMENT_PROFILE_HOME, null);
+    }
 
     @Override
     public void getCartHasItemSuccess(CartHasItemResponse response) {
-        if(response.getSuccess()){
-            SharedPreference.getInstance(this).setBoolean(C.CART_HAS_ITEM,response.getData().getHasCartProduct());
-            SharedPreference.getInstance(this).setString(C.ORDER_ID,""+response.getData().getOrderId());
+        if (response.getSuccess()) {
+            SharedPreference.getInstance(this).setBoolean(C.CART_HAS_ITEM, response.getData().getHasCartProduct());
+            SharedPreference.getInstance(this).setString(C.ORDER_ID, "" + response.getData().getOrderId());
 
         }
     }
-
 
 
     @Override

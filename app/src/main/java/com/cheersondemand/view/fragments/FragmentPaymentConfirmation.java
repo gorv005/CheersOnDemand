@@ -336,7 +336,7 @@ public class FragmentPaymentConfirmation extends Fragment implements ICardViewPr
     public void onPaymentSuccess(PaymentResponse response) {
         if (response.getSuccess()) {
             Bundle bundle2 = new Bundle();
-            bundle2.putBoolean(C.PAYMENT_RESULT, true);
+            bundle2.putString(C.PAYMENT_RESULT, C.PAYMENT_SUCCESS);
             ((ActivityContainer) getActivity()).fragmnetLoader(C.FRAGMENT_PAYMENT_RESULT, bundle2);
         }
     }
@@ -344,7 +344,7 @@ public class FragmentPaymentConfirmation extends Fragment implements ICardViewPr
     @Override
     public void getPaymentError(String response) {
         Bundle bundle2 = new Bundle();
-        bundle2.putBoolean(C.PAYMENT_RESULT, false);
+        bundle2.putString(C.PAYMENT_RESULT, C.PAYMENT_FAILED);
         ((ActivityContainer) getActivity()).fragmnetLoader(C.FRAGMENT_PAYMENT_RESULT, bundle2);
     }
 

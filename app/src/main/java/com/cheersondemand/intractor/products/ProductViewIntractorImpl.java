@@ -77,6 +77,37 @@ public class ProductViewIntractorImpl implements IProductsViewIntractor {
     }
 
     @Override
+    public void getAllSimilarProducts(boolean isAuthUser, String token, String uuid, String page, String per_page, String from, String to, String orderBy, String orderField, String id,final OnLoginFinishedListener listener) {
+        try {
+
+            WebServicesWrapper.getInstance().getAllSimilarProducts(new ResponseResolver<ProductListResponse>() {
+                @Override
+                public void onSuccess(ProductListResponse r, Response response) {
+                    listener.onProductListSuccess(r);
+                }
+
+                @Override
+                public void onFailure(RestError error, String msg) {
+                    if(error==null ||error.getError()==null){
+
+                        Gson gson=new Gson();
+                        ProductListResponse response= gson.fromJson(msg,ProductListResponse.class);
+                        listener.onProductListSuccess(response);
+
+                    }
+                    else {
+                        listener.onError(error.getError());
+                    }
+                }
+            },isAuthUser,token,uuid,page,per_page,from,to,orderBy,orderField,id);
+        }
+        catch (Exception e){
+            e.printStackTrace();
+        }
+    }
+
+
+    @Override
     public void getAllProducts(boolean isAuthUser, String token, String uuid, String page, String per_page, String from, String to, String orderBy, String orderField, final OnLoginFinishedListener listener) {
         try {
 

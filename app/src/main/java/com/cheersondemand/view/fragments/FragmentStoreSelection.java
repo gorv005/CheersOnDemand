@@ -13,7 +13,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
@@ -61,7 +60,7 @@ public class FragmentStoreSelection extends Fragment implements IStoreViewPresen
     @BindView(R.id.btnSubmit)
     RelativeLayout btnSubmit;
     @BindView(R.id.imgBack)
-    ImageView imgBack;
+    RelativeLayout imgBack;
     int from;
     List<StoreList> storeList;
     StoreList store;

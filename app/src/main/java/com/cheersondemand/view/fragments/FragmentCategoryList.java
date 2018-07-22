@@ -51,6 +51,7 @@ public class FragmentCategoryList extends Fragment implements IHomeViewPresenter
     @Override
     public void onResume() {
         super.onResume();
+        ((ActivityContainer)getActivity()).showToolBar();
         ActivityContainer.tvTitle.setText(R.string.Explore);
     }
     @Override
@@ -76,6 +77,8 @@ public class FragmentCategoryList extends Fragment implements IHomeViewPresenter
         layoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
         rvBrands.setLayoutManager(layoutManager);
         rvBrands.setHasFixedSize(true);
+        ((ActivityContainer)getActivity()).showToolBar();
+
         getCategories();
     }
 

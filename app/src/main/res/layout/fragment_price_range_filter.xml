@@ -7,9 +7,19 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context="com.cheersondemand.view.fragments.FragmentPriceRangeFilter">
 
+   <TextView
+       android:layout_marginTop="50dp"
+       android:padding="10dp"
+
+       android:layout_width="wrap_content"
+       android:layout_height="wrap_content"
+       android:fontFamily="@font/sf_ui_display_regular"
+       android:gravity="center_horizontal"
+       android:text="@string/please_select_price_range"
+       android:textColor="@color/profile_text_color"
+       android:textSize="16.3sp" />
 
    <LinearLayout
-       android:layout_marginTop="50dp"
 
        android:padding="10dp"
        android:orientation="horizontal"
@@ -44,9 +54,42 @@
        app:min_value="0"
        app:max_value="5000"
        app:steps="5"
-       app:bar_color="#F7BB88"
-       app:bar_highlight_color="#E07416"
-       app:left_thumb_image="@drawable/red_circle"
-       app:right_thumb_image="@drawable/red_circle"
+       app:bar_color="@color/hint_color"
+       app:bar_highlight_color="@color/red"
+       app:left_thumb_image="@drawable/oval"
+       app:right_thumb_image="@drawable/oval"
        app:data_type="_integer"/>
+
+   <RelativeLayout
+       android:id="@+id/rlStoreItem"
+       android:padding="10dp"
+       android:layout_marginTop="15dp"
+       android:layout_width="match_parent"
+       android:layout_height="wrap_content">
+      <CheckBox
+          android:padding="5dp"
+          android:theme="@style/CustomCheckbox"
+          android:id="@+id/checkbox"
+          android:layout_centerVertical="true"
+          android:layout_alignBaseline="@+id/name"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content" />
+      <TextView
+          android:layout_toRightOf="@id/radio"
+          android:padding="5dp"
+          android:layout_centerVertical="true"
+          android:layout_marginLeft="35dp"
+          android:id="@+id/name"
+
+          android:textColor="@color/brand_text_color"
+          android:fontFamily="@font/sf_ui_display_regular"
+          android:text="@string/discount_item"
+          android:textSize="16sp"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content" />
+
+
+
+   </RelativeLayout>
+
 </LinearLayout>

@@ -72,6 +72,14 @@ public class ProductViewPresenterImpl implements IProductViewPresenter, IProduct
     }
 
     @Override
+    public void getAllSimilarProducts(boolean isAuthUser, String token, String uuid, String page, String per_page, String from, String to, String orderBy, String orderField, String id) {
+        if (mView != null) {
+
+            iProductsViewIntractor.getAllSimilarProducts(isAuthUser,token,uuid,page,per_page,from,to,orderBy,orderField,id,this);
+        }
+    }
+
+    @Override
     public void getAllProductsFilter(boolean isAuthUser, String token, List<Integer> category_id, String uuid, String page, String per_page, String from, String to, String orderBy, String orderField) {
         if (mView != null) {
 

@@ -103,8 +103,15 @@ public class ItemViewHolder extends RecyclerView.ViewHolder {
                                 horizontalList.get(position).getClassName(),""+horizontalList.get(position).getClassId());
                     }
                     else if(horizontalList.get(position).getClassName().equals("ProductType")) {
-                        ((ActivitySearchProducts)context).getProductDesc(horizontalList.get(position).getName(),
-                                horizontalList.get(position).getClassName(),""+horizontalList.get(position).getClassId());
+                        Intent intent = new Intent(context, ActivityContainer.class);
+                        Bundle bundle = new Bundle();
+                        bundle.putString(C.CAT_ID, "" + horizontalList.get(position).getClassId());
+                        bundle.putString(C.SUB_CAT_ID,"");
+
+                        bundle.putInt(C.SOURCE,C.FRAGMENT_PRODUCTS_HOME);
+                        intent.putExtra(C.FRAGMENT_ACTION, C.FRAGMENT_PRODUCT_LISTING);
+                        intent.putExtra(C.BUNDLE, bundle);
+                        context.startActivity(intent);
                     }
                 }
             });

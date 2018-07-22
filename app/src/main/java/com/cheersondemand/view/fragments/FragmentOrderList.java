@@ -83,6 +83,7 @@ public class FragmentOrderList extends Fragment implements IOrderDetailViewPrese
     @Override
     public void onResume() {
         super.onResume();
+        ((ActivityContainer)getActivity()).showToolBar();
         ActivityContainer.tvTitle.setText(getString(R.string.my_orders));
     }
 
@@ -92,6 +93,8 @@ public class FragmentOrderList extends Fragment implements IOrderDetailViewPrese
         layoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
         rvOrders.setLayoutManager(layoutManager);
         rvOrders.setHasFixedSize(true);
+        ((ActivityContainer)getActivity()).showToolBar();
+
         getOrderList();
     }
 
@@ -169,8 +172,10 @@ public class FragmentOrderList extends Fragment implements IOrderDetailViewPrese
         if (response.getSuccess()) {
             util.setSnackbarMessage(getActivity(), response.getMessage(), LLView, false);
             //  SharedPreference.getInstance(getActivity()).setBoolean(C.IS_REORDER,true);
-            getOrderList();
-
+            //getOrderList();
+            Bundle bundle2 = new Bundle();
+            bundle2.putString(C.PAYMENT_RESULT, C.ORDER_CANCEL);
+            ((ActivityContainer) getActivity()).fragmnetLoader(C.FRAGMENT_PAYMENT_RESULT, bundle2);
 
         } else {
             util.setSnackbarMessage(getActivity(), response.getMessage(), LLView, true);

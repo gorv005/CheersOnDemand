@@ -118,4 +118,7 @@ public interface C {
     String Discover="Discover";
     String AMEX = "American Express";
     String CARD_DATA = "cardData";
+    String PAYMENT_SUCCESS = "paymentSuccess";
+    String PAYMENT_FAILED = "paymentFailed";
+    String ORDER_CANCEL ="orderCancel";
 }

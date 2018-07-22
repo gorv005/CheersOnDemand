@@ -213,10 +213,15 @@ public class ActivitySearchProducts extends Activity implements View.OnClickList
                 intent.putExtra(C.BUNDLE,bundle);
                 startActivity(intent);
             }
+            else {
+                util.setSnackbarMessage(this, response.getMessage(), LLView, true);
+
+            }
     }
 
     @Override
     public void getResponseError(String response) {
+        util.setSnackbarMessage(this,response, LLView, true);
 
     }
 
