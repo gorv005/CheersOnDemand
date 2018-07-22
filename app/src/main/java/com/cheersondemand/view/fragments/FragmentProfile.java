@@ -100,6 +100,9 @@ public class FragmentProfile extends Fragment implements View.OnClickListener, I
     @BindView(R.id.rlView)
     RelativeLayout rlView;
     boolean isNotification;
+    @BindView(R.id.viewConnectedAccount)
+    View viewConnectedAccount;
+
     public FragmentProfile() {
         // Required empty public constructor
     }
@@ -125,6 +128,9 @@ public class FragmentProfile extends Fragment implements View.OnClickListener, I
             tvName.setText(authenticationResponse.getData().getUser().getName());
             llChangePassword.setVisibility(View.VISIBLE);
             viewChangePassword.setVisibility(View.VISIBLE);
+            llConnectedAcc.setVisibility(View.GONE);
+            viewConnectedAccount.setVisibility(View.GONE);
+
             if (authenticationResponse.getData().getUser().getProfilePicture() != null) {
                 imageLoader.DisplayImage(authenticationResponse.getData().getUser().getProfilePicture(), imgProfile);
             }
@@ -133,12 +139,14 @@ public class FragmentProfile extends Fragment implements View.OnClickListener, I
             btnEdit.setVisibility(View.GONE);
             tvEmail.setText(getString(R.string.view_orders));
             tvName.setText(getString(R.string.sign_in));
+            llConnectedAcc.setVisibility(View.VISIBLE);
+            viewConnectedAccount.setVisibility(View.VISIBLE);
             llChangePassword.setVisibility(View.GONE);
             viewChangePassword.setVisibility(View.GONE);
             llLogout.setVisibility(View.GONE);
         }
 
-            getWishList();
+        getWishList();
 
 
     }
@@ -180,18 +188,33 @@ public class FragmentProfile extends Fragment implements View.OnClickListener, I
         llHelp.setOnClickListener(this);
         llBecomePartner.setOnClickListener(this);
         llOrders.setOnClickListener(this);
-        if(SharedPreference.getInstance(getActivity()).getBoolean(C.IS_NOTIFICATION)){
+        llConnectedAcc.setOnClickListener(this);
+        llNotification.setOnClickListener(this);
+        if (SharedPreference.getInstance(getActivity()).getBoolean(C.IS_NOTIFICATION)) {
             switchButton.setChecked(true);
+            isNotification=true;
+        } else {
+            switchButton.setChecked(false);
+            isNotification=false;
+        }
+
+
+        if(isLogin){
+            switchButton.setEnabled(true);
         }
         else {
-            switchButton.setChecked(false);
-
+            switchButton.setEnabled(false);
         }
-       switchButton.setOnCheckedChangeListener(new SwitchButton.OnCheckedChangeListener() {
+        switchButton.setOnCheckedChangeListener(new SwitchButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(SwitchButton view, boolean isChecked) {
-                isNotification=isChecked;
-                updateProfile((isChecked));
+                if(!isLogin){
+                    dialogSignIn();
+                }
+                else {
+                    isNotification = isChecked;
+                    updateProfile((isChecked));
+                }
             }
         });
     }
@@ -238,6 +261,7 @@ public class FragmentProfile extends Fragment implements View.OnClickListener, I
                 }
                 break;
             case R.id.llWishList:
+
                 Intent intent2 = new Intent(getActivity(), ActivityContainer.class);
                 Bundle bundle2 = new Bundle();
                 bundle2.putSerializable(C.PRODUCT_LIST, productListResponse);
@@ -247,17 +271,39 @@ public class FragmentProfile extends Fragment implements View.OnClickListener, I
 
                 break;
             case R.id.llSavedAddress:
-                Intent intent3 = new Intent(getActivity(), ActivityContainer.class);
+                if (isLogin) {
+                    Intent intent3 = new Intent(getActivity(), ActivityContainer.class);
 
-                intent3.putExtra(C.FRAGMENT_ACTION, C.FRAGMENT_ADDRESS_LIST);
-                startActivity(intent3);
+                    intent3.putExtra(C.FRAGMENT_ACTION, C.FRAGMENT_ADDRESS_LIST);
+                    startActivity(intent3);
+                }
+                else {
+                    dialogSignIn();
+                }
+                break;
+            case R.id.llNotification:
+                if (!isLogin) {
+                    dialogSignIn();
 
+                }
                 break;
             case R.id.llPaymentInfo:
-                Intent intent7 = new Intent(getActivity(), ActivityContainer.class);
-                intent7.putExtra(C.FRAGMENT_ACTION, C.FRAGMENT_CARD_LIST);
-                startActivity(intent7);
-
+                if (isLogin) {
+                    Intent intent7 = new Intent(getActivity(), ActivityContainer.class);
+                    intent7.putExtra(C.FRAGMENT_ACTION, C.FRAGMENT_CARD_LIST);
+                    startActivity(intent7);
+                } else {
+                    dialogSignIn();
+                }
+                break;
+            case R.id.llConnectedAcc:
+                if (isLogin) {
+                    Intent intent7 = new Intent(getActivity(), ActivityContainer.class);
+                    intent7.putExtra(C.FRAGMENT_ACTION, C.FRAGMENT_CARD_LIST);
+                    startActivity(intent7);
+                } else {
+                    dialogSignIn();
+                }
                 break;
             case R.id.llHelp:
                 Intent intent4 = new Intent(getActivity(), ActivityContainer.class);
@@ -271,9 +317,13 @@ public class FragmentProfile extends Fragment implements View.OnClickListener, I
                 startActivity(intent5);
                 break;
             case R.id.llOrders:
-                Intent intent6 = new Intent(getActivity(), ActivityContainer.class);
-                intent6.putExtra(C.FRAGMENT_ACTION, C.FRAGMENT_ORDER_LIST);
-                startActivity(intent6);
+                if (isLogin) {
+                    Intent intent6 = new Intent(getActivity(), ActivityContainer.class);
+                    intent6.putExtra(C.FRAGMENT_ACTION, C.FRAGMENT_ORDER_LIST);
+                    startActivity(intent6);
+                } else {
+                    dialogSignIn();
+                }
                 break;
         }
     }
@@ -282,17 +332,21 @@ public class FragmentProfile extends Fragment implements View.OnClickListener, I
     public void getResponseSuccess(LogoutResponse response) {
         if (response.getSuccess()) {
             SharedPreference.getInstance(getActivity()).setBoolean(C.IS_LOGIN, false);
-            Intent intent = new Intent(getActivity(), MainActivity.class);
-            Bundle bundle = new Bundle();
-            bundle.putBoolean(C.IS_LOGIN_SCREEN, true);
-            intent.putExtra(C.FRAGMENT_ACTION, C.FRAGMENT_AUTHNITICATION);
-            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-            intent.putExtra(C.BUNDLE, bundle);
-            getActivity().startActivity(intent);
+            SharedPreference.getInstance(getActivity()).clearData();
+            gotoLogin();
         }
 
     }
 
+    void gotoLogin() {
+        Intent intent = new Intent(getActivity(), MainActivity.class);
+        Bundle bundle = new Bundle();
+        bundle.putBoolean(C.IS_LOGIN_SCREEN, true);
+        intent.putExtra(C.FRAGMENT_ACTION, C.FRAGMENT_AUTHNITICATION);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        intent.putExtra(C.BUNDLE, bundle);
+        getActivity().startActivity(intent);
+    }
 
     void updateProfile(boolean isNotified) {
         ProfileUpdateRequest profileUpdateRequest = new ProfileUpdateRequest();
@@ -308,7 +362,7 @@ public class FragmentProfile extends Fragment implements View.OnClickListener, I
     @Override
     public void onSuccessUpdateProfile(GuestUserCreateResponse Response) {
         if (Response.getSuccess()) {
-            SharedPreference.getInstance(getActivity()).setBoolean(C.IS_NOTIFICATION,isNotification);
+            SharedPreference.getInstance(getActivity()).setBoolean(C.IS_NOTIFICATION, isNotification);
             util.setSnackbarMessage(getActivity(), getString(R.string.profile_updated), rlView, false);
 
         } else {
@@ -381,6 +435,44 @@ public class FragmentProfile extends Fragment implements View.OnClickListener, I
 
     }
 
+
+    void dialogSignIn() {
+        final Dialog dialog = new Dialog(getActivity(), R.style.FullHeightDialog); //this is a reference to the style above
+        dialog.setContentView(R.layout.dialog); //I saved the xml file above as yesnomessage.xml
+        dialog.setCancelable(true);
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+
+//to set the message
+        TextView title = (TextView) dialog.findViewById(R.id.tvmessagedialogtitle);
+
+        TextView message = (TextView) dialog.findViewById(R.id.tvmessagedialogtext);
+        title.setText(getString(R.string.sign_in));
+        message.setText(getString(R.string.you_need_to_sign_in));
+//add some action to the buttons
+        Button yes = (Button) dialog.findViewById(R.id.bmessageDialogYes);
+        yes.setText(getString(R.string.sign_in));
+        yes.setOnClickListener(new View.OnClickListener() {
+
+            public void onClick(View v) {
+                dialog.dismiss();
+
+                gotoLogin();
+            }
+        });
+
+        Button no = (Button) dialog.findViewById(R.id.bmessageDialogNo);
+        no.setText(getString(R.string.cancel));
+        no.setOnClickListener(new View.OnClickListener() {
+
+            public void onClick(View v) {
+                // TODO Auto-generated method stub
+                dialog.dismiss();
+                switchButton.setChecked(isNotification);
+            }
+        });
+
+        dialog.show();
+    }
 
     void dialog() {
         final Dialog dialog = new Dialog(getActivity(), R.style.FullHeightDialog); //this is a reference to the style above

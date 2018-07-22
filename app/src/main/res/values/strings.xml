@@ -247,6 +247,7 @@
     <string name="cancel_orders">Cancel Order</string>
     <string name="please_select_price_range">Select a price range</string>
     <string name="discount_item">Discounted Items</string>
+    <string name="you_need_to_sign_in">You need to Sign in first in order to use this functionality.</string>
 
     <!--
         <string name="default_web_client_id">999387565226-hdnnhm6rhgik5ljvm06shotsi7j9883c.apps.googleusercontent.com</string>

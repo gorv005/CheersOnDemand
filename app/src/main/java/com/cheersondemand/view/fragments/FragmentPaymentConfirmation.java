@@ -216,8 +216,8 @@ public class FragmentPaymentConfirmation extends Fragment implements ICardViewPr
 
                 List<CardList> cardLists = SharedPreference.getInstance(getActivity()).getCard(C.CARD_DATA);
                 if (cardLists != null) {
-                    for (int i = 0; i < cardLists.size(); i++) {
-                        cardList.set(i, cardLists.get(i));
+                    for (int i = cardLists.size(); i >= 0; i--) {
+                        cardList.set(i, cardLists.get(i-1));
                     }
                 }
 
