@@ -255,6 +255,7 @@
     <string name="sorry_delivery_not_available">Sorry delivery to this location is not available. Please use some other location.</string>
     <string name="shopping_from">Shopping from</string>
     <string name="no_order_placed">No order placed !</string>
+    <string name="server_client_id">318594772761-fqijvbpoobcral5f0mpecidfj24ol9on.apps.googleusercontent.com</string>
 
     <!--
         <string name="default_web_client_id">999387565226-hdnnhm6rhgik5ljvm06shotsi7j9883c.apps.googleusercontent.com</string>

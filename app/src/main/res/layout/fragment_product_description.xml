@@ -1,5 +1,208 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/background_light"
+    android:fitsSystemWindows="true"
+    >
+
+    <android.support.design.widget.AppBarLayout
+        android:id="@+id/appbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+        android:fitsSystemWindows="true"
+        >
+
+        <android.support.design.widget.CollapsingToolbarLayout
+            android:id="@+id/collapsing"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:fitsSystemWindows="true"
+            android:background="@color/white"
+            app:layout_scrollFlags="scroll|exitUntilCollapsed"
+            app:contentScrim="?attr/colorPrimary"
+            app:expandedTitleMarginStart="48dp"
+            app:expandedTitleMarginEnd="64dp"
+            app:title="@string/app_name"
+            >
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:orientation="vertical"
+                android:layout_height="wrap_content">
+            <RelativeLayout
+                android:id="@+id/rlImage"
+                android:layout_gravity="center_horizontal"
+                android:layout_width="220dp"
+                android:layout_height="220dp"
+                android:background="@color/profile_back"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="60dp">
+
+                <ImageView
+                    android:transitionName="@string/shared_image"
+                    android:id="@+id/imgProduct"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true"
+                    android:layout_centerVertical="true"
+                    android:layout_gravity="center"
+                    android:src="@drawable/bitmap_copy" />
+
+
+            </RelativeLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:orientation="vertical"
+                    android:layout_height="wrap_content">
+
+                    <RelativeLayout
+                        android:layout_marginTop="10dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="40dp">
+
+                        <View
+                            android:layout_centerVertical="true"
+                            android:background="@color/devider_desc"
+                            android:layout_width="match_parent"
+                            android:layout_height="2dp"/>
+
+                        <RelativeLayout
+                            android:id="@+id/rlLike"
+                            android:layout_marginEnd="30dp"
+                            android:layout_centerVertical="true"
+                            android:background="@drawable/like_back"
+                            android:layout_alignParentEnd="true"
+                            android:layout_width="35dp"
+                            android:layout_height="35dp">
+                            <ImageView
+                                android:id="@+id/imgLike"
+                                android:layout_centerInParent="true"
+                                android:src="@drawable/unlike"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content" />
+                        </RelativeLayout>
+                    </RelativeLayout>
+
+                    <TextView
+                        android:id="@+id/tvProductName"
+                        android:paddingRight="15dp"
+                        android:paddingLeft="15dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="18sp"
+                        android:layout_marginTop="5dp"
+                        android:textStyle="bold"
+                        android:fontFamily="@font/sf_ui_display_regular"
+                        android:textColor="@color/profile_text_color"
+                        android:text="Wither Hills Sauvignon Blanc "
+                        />
+                    <TextView
+                        android:id="@+id/tvProductPrice"
+                        android:paddingRight="15dp"
+                        android:paddingLeft="15dp"
+                        android:textStyle="bold"
+                        android:fontFamily="@font/sf_ui_display_regular"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="22sp"
+                        android:textColor="#c9282f"
+                        android:letterSpacing="0.04"
+                        android:text="$15600"
+                        />
+                </LinearLayout>
+            </LinearLayout>
+
+            <android.support.v7.widget.Toolbar
+                android:id="@+id/toolbar"
+                android:background="@color/white"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                app:layout_collapseMode="pin"
+                app:title="Test"
+
+                >
+                <RelativeLayout
+                    android:visibility="visible"
+
+                    android:orientation="vertical"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <RelativeLayout
+                        android:layout_marginTop="40dp"
+                        android:id="@+id/imgBack"
+                        android:layout_centerVertical="true"
+                        android:layout_width="25dp"
+                        android:layout_height="25dp">
+                        <ImageView
+                            android:layout_centerInParent="true"
+                            android:layout_width="wrap_content"
+                            android:src="@drawable/left_arrow_1"
+                            android:layout_height="wrap_content" />
+
+                    </RelativeLayout>
+                    <TextView
+                        android:layout_toRightOf="@id/imgBack"
+                        android:id="@+id/tvTitleText"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textStyle="bold"
+                        android:ellipsize="end"
+                        android:singleLine="true"
+                        android:paddingRight="20dp"
+                        android:layout_marginRight="90dp"
+                        android:text=""
+                        android:fontFamily="@font/sf_ui_display_regular"
+                        android:layout_centerVertical="true"
+                        android:textColor="@color/profile_text_color"
+                        android:textSize="15sp" />
+
+                    <LinearLayout
+                        android:layout_marginTop="40dp"
+                        android:id="@+id/lvDescCheck"
+                        android:layout_centerHorizontal="true"
+                        android:layout_alignParentRight="true"
+                        android:layout_centerVertical="true"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content">
+                        <ImageView
+                            android:id="@+id/ivCheckout"
+                            android:layout_marginRight="15dp"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:src="@drawable/ic_cart"
+
+                            />
+                        <ImageView
+                            android:layout_marginRight="15dp"
+
+                            android:id="@+id/ivCart"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:src="@drawable/ic_cart_1"
+
+                            />
+
+                    </LinearLayout>
+
+
+                </RelativeLayout>
+
+            </android.support.v7.widget.Toolbar>
+        </android.support.design.widget.CollapsingToolbarLayout>
+    </android.support.design.widget.AppBarLayout>
+    <android.support.v4.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        >
+    <RelativeLayout
     android:layout_width="match_parent"
     android:orientation="vertical"
     xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -7,68 +210,14 @@
     android:layout_height="match_parent"
     android:id="@+id/rlView"
     tools:context="com.cheersondemand.view.fragments.FragmentUpdateProfile">
-  <LinearLayout
+
+    <LinearLayout
       android:layout_width="match_parent"
       android:orientation="vertical"
       android:layout_height="wrap_content">
-    <RelativeLayout
-        android:background="@color/white"
-        android:paddingTop="10dp"
-        android:orientation="vertical"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-        <RelativeLayout
-            android:layout_marginTop="40dp"
-            android:id="@+id/imgBack"
-            android:layout_centerVertical="true"
-            android:layout_marginLeft="15dp"
-            android:layout_width="25dp"
-            android:layout_height="25dp">
-            <ImageView
-                android:layout_centerInParent="true"
-                android:layout_width="wrap_content"
-                android:src="@drawable/left_arrow_1"
-                android:layout_height="wrap_content" />
-
-        </RelativeLayout>
-        <LinearLayout
-            android:layout_marginTop="40dp"
-            android:id="@+id/lvDescCheck"
-            android:layout_centerHorizontal="true"
-            android:layout_alignParentRight="true"
-            android:layout_centerVertical="true"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
-            <ImageView
-                android:id="@+id/ivCheckout"
-                android:layout_marginRight="15dp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/ic_cart"
-
-                />
-            <ImageView
-                android:layout_marginRight="15dp"
-
-                android:id="@+id/ivCart"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/ic_cart_1"
-
-                />
-
-        </LinearLayout>
 
 
-    </RelativeLayout>
 
-
-    <ScrollView
-        android:layout_marginBottom="60dp"
-        android:layout_width="match_parent"
-        android:scrollbars="none"
-        android:layout_height="wrap_content">
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -78,80 +227,8 @@
        >
 
 
-        <RelativeLayout
-            android:id="@+id/rlImage"
-            android:layout_gravity="center_horizontal"
-            android:layout_width="220dp"
-            android:layout_height="220dp"
-            android:background="@color/profile_back"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="20dp">
 
-            <ImageView
-                android:transitionName="@string/shared_image"
-                android:id="@+id/imgProduct"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerHorizontal="true"
-                android:layout_centerVertical="true"
-                android:layout_gravity="center"
-                android:src="@drawable/bitmap_copy" />
-        </RelativeLayout>
 
-        <RelativeLayout
-            android:layout_marginTop="10dp"
-            android:layout_width="match_parent"
-            android:layout_height="40dp">
-
-            <View
-                android:layout_centerVertical="true"
-                android:background="@color/devider_desc"
-                android:layout_width="match_parent"
-                android:layout_height="2dp"/>
-
-            <RelativeLayout
-                android:id="@+id/rlLike"
-                android:layout_marginEnd="30dp"
-                android:layout_centerVertical="true"
-                android:background="@drawable/like_back"
-                android:layout_alignParentEnd="true"
-                android:layout_width="35dp"
-                android:layout_height="35dp">
-            <ImageView
-                android:id="@+id/imgLike"
-                android:layout_centerInParent="true"
-                android:src="@drawable/unlike"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
-            </RelativeLayout>
-        </RelativeLayout>
-
-        <TextView
-            android:id="@+id/tvProductName"
-            android:paddingRight="15dp"
-            android:paddingLeft="15dp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="18sp"
-            android:layout_marginTop="5dp"
-            android:textStyle="bold"
-            android:fontFamily="@font/sf_ui_display_regular"
-            android:textColor="@color/profile_text_color"
-            android:text="Wither Hills Sauvignon Blanc "
-            />
-        <TextView
-            android:id="@+id/tvProductPrice"
-            android:paddingRight="15dp"
-            android:paddingLeft="15dp"
-            android:textStyle="bold"
-            android:fontFamily="@font/sf_ui_display_regular"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="22sp"
-            android:textColor="#c9282f"
-            android:letterSpacing="0.04"
-            android:text="$15600"
-            />
         <View
             android:visibility="gone"
             android:layout_centerVertical="true"
@@ -410,12 +487,15 @@
     </LinearLayout>
 
 
-    </ScrollView>
   </LinearLayout>
+    </RelativeLayout>
+    </android.support.v4.widget.NestedScrollView>
     <LinearLayout
         android:weightSum="2"
         android:paddingRight="15dp"
         android:paddingLeft="15dp"
+        android:gravity="bottom"
+        android:layout_gravity="bottom"
         android:layout_alignParentBottom="true"
         android:orientation="horizontal"
         android:layout_width="match_parent"
@@ -456,4 +536,6 @@
     </LinearLayout>
 
 
-</RelativeLayout>
+
+
+</android.support.design.widget.CoordinatorLayout>

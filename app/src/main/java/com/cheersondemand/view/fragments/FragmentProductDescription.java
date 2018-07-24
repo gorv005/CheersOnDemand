@@ -5,9 +5,12 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.AppBarLayout;
+import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -120,6 +123,14 @@ public class FragmentProductDescription extends Fragment implements View.OnClick
     Util util;
     ICouponViewPresenter iCouponViewPresenter;
     List<CouponInfo> couponInfoList;
+    @BindView(R.id.toolbar)
+    Toolbar toolbar;
+    @BindView(R.id.collapsing)
+    CollapsingToolbarLayout collapsing;
+    @BindView(R.id.appbar)
+    AppBarLayout appbar;
+    @BindView(R.id.tvTitleText)
+    TextView tvTitleText;
     private int productPos;
     private int secPos;
     private boolean isAdd;
@@ -154,7 +165,7 @@ public class FragmentProductDescription extends Fragment implements View.OnClick
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        ((ActivityContainer)getActivity()).hideToolBar();
+        ((ActivityContainer) getActivity()).hideToolBar();
         horizontalLayout = new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false);
         rvSimilarDrinks.setLayoutManager(horizontalLayout);
         tvSeeMore.setOnClickListener(this);
@@ -165,7 +176,7 @@ public class FragmentProductDescription extends Fragment implements View.OnClick
         ivCart.setOnClickListener(this);
         imgBack.setOnClickListener(this);
         setDetail();
-
+        initCollapsingToolbar();
     }
 
     @Override
@@ -173,9 +184,9 @@ public class FragmentProductDescription extends Fragment implements View.OnClick
         super.onResume();
         getSimilarProducts();
         getCouponList();
-        ((ActivityContainer)getActivity()).hideToolBar();
+        ((ActivityContainer) getActivity()).hideToolBar();
 
-      //  ActivityContainer.tvTitle.setText(productDes.getName());
+        //  ActivityContainer.tvTitle.setText(productDes.getName());
     }
 
     void getSimilarProducts() {
@@ -430,7 +441,7 @@ public class FragmentProductDescription extends Fragment implements View.OnClick
                 btnAddToCart.setText(getString(R.string.added_to_cart));
                 productDes.setIsInCart(true);
                 isProductDes = false;
-                isBuyNow=false;
+                isBuyNow = false;
                 Handler handler = new Handler();
                 handler.postDelayed(new Runnable() {
                     public void run() {
@@ -671,6 +682,34 @@ public class FragmentProductDescription extends Fragment implements View.OnClick
         }
     }
 
+    private void initCollapsingToolbar() {
+
+        appbar.setExpanded(true);
+
+        // hiding & showing the title when toolbar expanded & collapsed
+        appbar.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
+            boolean isShow = false;
+            int scrollRange = -1;
+
+            @Override
+            public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
+                if (scrollRange == -1) {
+                    scrollRange = appBarLayout.getTotalScrollRange();
+                }
+                if (scrollRange + verticalOffset == 0) {
+                   // collapsing.setTitle("hfhfhfhhhh");
+                    tvTitleText.setVisibility(View.VISIBLE);
+
+                    tvTitleText.setText(product.getName());
+                    isShow = true;
+                } else if (isShow) {
+                    tvTitleText.setVisibility(View.GONE);
+                    collapsing.setTitle(product.getName());
+                    isShow = false;
+                }
+            }
+        });
+    }
 
     void gotoCart() {
         Bundle bundle1 = new Bundle();

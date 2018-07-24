@@ -2,6 +2,7 @@ package com.cheersondemand.view.fragments;
 
 
 import android.app.Dialog;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
@@ -9,6 +10,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.view.ContextThemeWrapper;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -111,7 +113,10 @@ public class FragmentCart extends Fragment implements View.OnClickListener, IOrd
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_cart, container, false);
+
+        Context ctx = new ContextThemeWrapper(getActivity(), R.style.ActivityTheme);
+        LayoutInflater li = inflater.cloneInContext(ctx);
+        View view = li.inflate(R.layout.fragment_cart, container, false);
         unbinder = ButterKnife.bind(this, view);
         return view;
     }

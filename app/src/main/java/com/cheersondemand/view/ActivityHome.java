@@ -8,8 +8,6 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.app.AppCompatDelegate;
 import android.view.View;
-import android.view.Window;
-import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
@@ -62,9 +60,11 @@ public class ActivityHome extends AppCompatActivity implements View.OnClickListe
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+       // setTheme(R.style.ActivityTheme);
         super.onCreate(savedInstanceState);
-        requestWindowFeature(Window.FEATURE_NO_TITLE);
-        this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+     //   requestWindowFeature(Window.FEATURE_NO_TITLE);
+       // this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+
         setContentView(R.layout.activity_home);
         ButterKnife.bind(this);
 
@@ -250,6 +250,8 @@ public class ActivityHome extends AppCompatActivity implements View.OnClickListe
     }
 
     public void setCart() {
+        setTheme(R.style.ActivityTheme);
+
         currentPage = getString(R.string.my_cart);
 
         ivCart.setImageResource(R.drawable.cart_enable);

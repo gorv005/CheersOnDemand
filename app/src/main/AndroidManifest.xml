@@ -63,10 +63,12 @@
             android:name=".view.ActivityHome"
             android:screenOrientation="portrait" />
         <activity
+            android:theme="@style/ActivityTheme"
             android:name=".view.ActivityContainer"
             android:windowSoftInputMode="adjustPan"
             android:screenOrientation="portrait" />
         <activity
+            android:theme="@style/ActivityTheme"
             android:name=".view.ActivitySearchLocation"
             android:screenOrientation="portrait" />
 
