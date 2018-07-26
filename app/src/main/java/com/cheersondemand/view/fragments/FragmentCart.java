@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.view.ContextThemeWrapper;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -176,6 +177,12 @@ public class FragmentCart extends Fragment implements View.OnClickListener, IOrd
         unbinder.unbind();
     }
 
+
+   public void  disableProceedButton(){
+        btnProceed.setEnabled(false);
+        btnProceed.setBackground(ContextCompat.getDrawable(getActivity(), R.drawable.button_disable));
+
+    }
     @Override
     public void onClick(View v) {
         switch (v.getId()) {

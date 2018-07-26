@@ -1,6 +1,7 @@
 package com.cheersondemand.view.fragments;
 
 
+import android.app.Dialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
@@ -15,6 +16,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -94,28 +96,31 @@ public class FragmentSplash extends Fragment {
                     @Override
                     public void run() {
                         if (CheckingPermissionIsEnabledOrNot()) {
-                            try {
+                            if (SharedPreference.getInstance(getActivity()).getBoolean(C.IS_NOTIFICATION_PERMISSION_ASK)) {
+                                try {
 
-                                if(SharedPreference.getInstance(getActivity()).getBoolean(C.IS_LOGIN)){
+                                    if (SharedPreference.getInstance(getActivity()).getBoolean(C.IS_LOGIN)) {
 
-                                    Intent intent = new Intent(getActivity(), ActivitySearchLocation.class);
-                                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                                    intent.putExtra(C.FROM, C.SEARCH);
-                                    startActivity(intent);
+                                        Intent intent = new Intent(getActivity(), ActivitySearchLocation.class);
+                                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                                        intent.putExtra(C.FROM, C.SEARCH);
+                                        startActivity(intent);
                                    /* Intent intent = new Intent(getActivity(), ActivityHome.class);
                                     intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                                     getActivity().startActivity(intent);*/
-                                }
-                                else {
-                                    Bundle bundle = new Bundle();
-                                    bundle.putBoolean(C.IS_LOGIN_SCREEN, false);
-                                    ((MainActivity) getActivity()).fragmnetLoader(C.FRAGMENT_AUTHNITICATION, bundle);
+                                    } else {
+                                        Bundle bundle = new Bundle();
+                                        bundle.putBoolean(C.IS_LOGIN_SCREEN, false);
+                                        ((MainActivity) getActivity()).fragmnetLoader(C.FRAGMENT_AUTHNITICATION, bundle);
+                                    }
+                                } catch (Exception e) {
+                                    e.printStackTrace();
                                 }
                             }
-                            catch (Exception e){
-                                e.printStackTrace();
+                            else {
+                                    enableNotification();
                             }
-                        } else {
+                        }else {
                             RequestPermission();
                         }
                     }
@@ -252,4 +257,45 @@ public class FragmentSplash extends Fragment {
         super.onDestroyView();
         unbinder.unbind();
     }
+
+    void enableNotification() {
+        final Dialog dialog = new Dialog(getActivity(), R.style.DialogTheme); //this is a reference to the style above
+        dialog.setContentView(R.layout.view_notification_access); //I saved the xml file above as yesnomessage.xml
+        dialog.setCancelable(false);
+      //  dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+
+//to set the message
+        Button btnGiveAccess = (Button) dialog.findViewById(R.id.btnGiveAccess);
+
+        TextView tvNoThanks = (TextView) dialog.findViewById(R.id.tvNoThanks);
+
+        btnGiveAccess.setOnClickListener(new View.OnClickListener() {
+
+            public void onClick(View v) {
+                SharedPreference.getInstance(getActivity()).setBoolean(C.IS_NOTIFICATION_PERMISSION_ASK,true);
+
+                SharedPreference.getInstance(getActivity()).setBoolean(C.IS_NOTIFICATION_ENABLE,true);
+                dialog.dismiss();
+                onResume();
+            }
+        });
+
+
+        tvNoThanks.setOnClickListener(new View.OnClickListener() {
+
+            public void onClick(View v) {
+                // TODO Auto-generated method stub
+                SharedPreference.getInstance(getActivity()).setBoolean(C.IS_NOTIFICATION_PERMISSION_ASK,true);
+
+                SharedPreference.getInstance(getActivity()).setBoolean(C.IS_NOTIFICATION_ENABLE,false);
+
+                dialog.dismiss();
+                onResume();
+
+            }
+        });
+
+        dialog.show();
+    }
+
 }

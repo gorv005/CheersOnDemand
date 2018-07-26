@@ -8,13 +8,13 @@ import com.google.gson.annotations.SerializedName;
  */
 
 public class UpdateStore {
-    @SerializedName("warehouse_id")
-    @Expose
-    private Integer warehouseId;
+
     @SerializedName("uuid")
     @Expose
     private String uuid;
-
+    @SerializedName("warehouse_id")
+    @Expose
+    private Integer warehouseId;
     public Integer getWarehouseId() {
         return warehouseId;
     }

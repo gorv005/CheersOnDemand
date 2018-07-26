@@ -51,5 +51,7 @@
     <color name="add_back">#F9FBFD</color>
     <color name="item_color">#8F9AAB</color>
     <color name="orange">#FF7F50</color>
+    <color name="warning">#FFCF47</color>
+
 
 </resources>

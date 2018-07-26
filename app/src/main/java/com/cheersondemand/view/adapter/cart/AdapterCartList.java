@@ -42,10 +42,10 @@ private List<OrderItem> horizontalList;
     private boolean isProceed=true;
 
     public class ItemViewHolder extends RecyclerView.ViewHolder {
-    public TextView tvName,tvSubName,tvPrice,tvQuantity,tvAddToWishList;
+    public TextView tvName,tvSubName,tvPrice,tvQuantity,tvAddToWishList,tvWarningMsg,tvPriceChange;
     public CircleImageView ivProductImage;
     ImageView imgProduct,ivLike;
-    View rlMinus,rlPlus,rlAddToWishList,llRemove,rlCard,llProductNotAvailable;
+    View rlMinus,rlPlus,rlAddToWishList,llRemove,rlCard,llProductNotAvailable,llProductWarning,llPrice;
     public ItemViewHolder(View view) {
         super(view);
         tvName = (TextView) view.findViewById(R.id.tvName);
@@ -53,10 +53,14 @@ private List<OrderItem> horizontalList;
         imgProduct = (ImageView) view.findViewById(R.id.imgProduct);
         ivLike = (ImageView) view.findViewById(R.id.ivLike);
         tvAddToWishList = (TextView) view.findViewById(R.id.tvAddToWishList);
-
+        tvWarningMsg = (TextView) view.findViewById(R.id.tvWarningMsg);
+        tvPriceChange= (TextView) view.findViewById(R.id.tvPriceChange);
         tvSubName = (TextView) view.findViewById(R.id.tvSubName);
         tvPrice = (TextView) view.findViewById(R.id.tvPrice);
+        llProductWarning = (View) view.findViewById(R.id.llProductWarning);
         rlMinus = (View) view.findViewById(R.id.rlMinus);
+        llPrice = (View) view.findViewById(R.id.llPrice);
+
         tvQuantity = (TextView) view.findViewById(R.id.tvQuantity);
         rlPlus = (View) view.findViewById(R.id.rlPlus);
         rlAddToWishList = (View) view.findViewById(R.id.rlAddToWishList);
@@ -153,10 +157,31 @@ private List<OrderItem> horizontalList;
                 itemViewHolder.rlCard.setBackgroundResource(R.drawable.card_border);
                 itemViewHolder.llProductNotAvailable.setVisibility(View.VISIBLE);
             }
+            else if(orderItem.getRemainingStockMessage()!=null && !orderItem.getRemainingStockMessage().equals("")&& orderItem.getRemainingStockMessage().length()> 1){
+                isProceed=false;
+                itemViewHolder.rlCard.setBackgroundResource(R.drawable.card_border_yellow);
+                itemViewHolder.llProductWarning.setVisibility(View.VISIBLE);
+                itemViewHolder.tvWarningMsg.setText(orderItem.getRemainingStockMessage());
+                if(source==C.FRAGMENT_PRODUCTS_HOME) {
+
+                    ((ActivityHome) context).disableProceedButton();
+                }
+                else {
+                    ((ActivityContainer) context).disableProceedButton();
+
+                }
+            }
+            else if(orderItem.getOldUnitPrice()!=null  && !orderItem.getOldUnitPrice().equals(orderItem.getUnitPrice())){
+                isProceed=true;
+                   itemViewHolder.llPrice.setVisibility(View.VISIBLE);
+                   itemViewHolder.tvPriceChange.setText("The price is change from "+orderItem.getOldUnitPrice()+ " to "+ orderItem.getUnitPrice());
+
+            }
             else {
 
                 itemViewHolder.rlCard.setBackgroundResource(0);
-
+                itemViewHolder.llPrice.setVisibility(View.GONE);
+                itemViewHolder.llProductWarning.setVisibility(View.GONE);
                 itemViewHolder.llProductNotAvailable.setVisibility(View.GONE);
 
             }

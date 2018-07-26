@@ -121,4 +121,7 @@ public interface C {
     String PAYMENT_SUCCESS = "paymentSuccess";
     String PAYMENT_FAILED = "paymentFailed";
     String ORDER_CANCEL ="orderCancel";
+    String IS_NOTIFICATION_ENABLE = "is_noti_enable";
+    String IS_NOTIFICATION_PERMISSION_ASK ="IS_NOTIFICATION_PERMISSION_ASK" ;
+    String STORE_MSG ="store_msg" ;
 }

@@ -8,6 +8,8 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.app.AppCompatDelegate;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
@@ -62,8 +64,8 @@ public class ActivityHome extends AppCompatActivity implements View.OnClickListe
     protected void onCreate(Bundle savedInstanceState) {
        // setTheme(R.style.ActivityTheme);
         super.onCreate(savedInstanceState);
-     //   requestWindowFeature(Window.FEATURE_NO_TITLE);
-       // this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+       requestWindowFeature(Window.FEATURE_NO_TITLE);
+        this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
         setContentView(R.layout.activity_home);
         ButterKnife.bind(this);
@@ -308,6 +310,12 @@ public class ActivityHome extends AppCompatActivity implements View.OnClickListe
     }
 
 
+        public void disableProceedButton(){
+            Fragment fragment = getVisibleFragment();
+            if (fragment != null && fragment instanceof FragmentCart) {
+                ((FragmentCart) fragment).disableProceedButton();
+            }
+        }
     public  void setDot(boolean isCartHasProduct){
         if(isCartHasProduct) {
             ivDot.setVisibility(View.VISIBLE);

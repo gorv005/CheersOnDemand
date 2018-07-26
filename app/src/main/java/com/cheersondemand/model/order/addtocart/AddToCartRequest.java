@@ -8,12 +8,13 @@ import com.google.gson.annotations.SerializedName;
  */
 
 public class AddToCartRequest {
-    @SerializedName("uuid")
-    @Expose
-    private String uuid;
+
     @SerializedName("product_id")
     @Expose
     private Integer productId;
+    @SerializedName("uuid")
+    @Expose
+    private String uuid;
     @SerializedName("quantity")
     @Expose
     private Integer quantity;

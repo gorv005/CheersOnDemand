@@ -69,7 +69,7 @@ import butterknife.Unbinder;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class FragmentHome extends Fragment implements IStoreViewPresenter.IStoreView,IHomeViewPresenterPresenter.IHomeView, IOrderViewPresenterPresenter.IOrderView, View.OnClickListener {
+public class FragmentHome extends Fragment implements IStoreViewPresenter.IStoreView, IHomeViewPresenterPresenter.IHomeView, IOrderViewPresenterPresenter.IOrderView, View.OnClickListener {
 
 
     @BindView(R.id.rvBrands)
@@ -115,6 +115,8 @@ public class FragmentHome extends Fragment implements IStoreViewPresenter.IStore
     TextView etSearchProduct;
     @BindView(R.id.rlSearchProduct)
     RelativeLayout rlSearchProduct;
+    @BindView(R.id.tvNoStoreAvailable)
+    TextView tvNoStoreAvailable;
 
     private int productPos;
     private int secPos;
@@ -130,7 +132,7 @@ public class FragmentHome extends Fragment implements IStoreViewPresenter.IStore
         allSampleData = new ArrayList<SectionDataModel>();
         iHomeViewPresenterPresenter = new HomeViewPresenterImpl(this, getActivity());
         iOrderViewPresenterPresenter = new OrderViewPresenterImpl(this, getActivity());
-        iStoreViewPresenter=new StoreViewPresenterImpl(this,getActivity());
+        iStoreViewPresenter = new StoreViewPresenterImpl(this, getActivity());
         util = new Util();
     }
 
@@ -142,7 +144,7 @@ public class FragmentHome extends Fragment implements IStoreViewPresenter.IStore
                 R.style.AppTheme);
         inflater = (LayoutInflater)
                 darkTheme.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-      //  return inflater.inflate(R.layout.fragment_home, container, false);
+        //  return inflater.inflate(R.layout.fragment_home, container, false);
         View view = inflater.inflate(R.layout.fragment_home, container, false);
         unbinder = ButterKnife.bind(this, view);
         return view;
@@ -151,7 +153,7 @@ public class FragmentHome extends Fragment implements IStoreViewPresenter.IStore
     @Override
     public void onResume() {
         super.onResume();
-       setStoreLocation();
+        setStoreLocation();
        /* CategoryRequest categoryRequest = new CategoryRequest();
         categoryRequest.setUuid(Util.id(getActivity()));*/
         // iHomeViewPresenterPresenter.getCategories(categoryRequest);
@@ -166,17 +168,28 @@ public class FragmentHome extends Fragment implements IStoreViewPresenter.IStore
         }
     }
 
-    void  setStoreLocation(){
+    void setStoreLocation() {
         store = SharedPreference.getInstance(getActivity()).getStore(C.SELECTED_STORE);
         if (store != null) {
+            shimmerBrands.setVisibility(View.VISIBLE);
+            shimmerProducts.setVisibility(View.VISIBLE);
+            tvNoStoreAvailable.setVisibility(View.GONE);
             tvStoreName.setText(store.getName());
+
+        } else {
+            shimmerBrands.setVisibility(View.GONE);
+            shimmerProducts.setVisibility(View.GONE);
+            tvNoStoreAvailable.setVisibility(View.VISIBLE);
+           // tvNoStoreAvailable.setText(SharedPreference.getInstance(getActivity()).getString(C.STORE_MSG));
+            tvStoreName.setText("---");
 
         }
         selectedLocation = SharedPreference.getInstance(getActivity()).getString(C.LOCATION_SELECTED);
-        if (selectedLocation != null ) {
+        if (selectedLocation != null) {
             tvLocationName.setText(selectedLocation);
         }
     }
+
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
@@ -184,11 +197,11 @@ public class FragmentHome extends Fragment implements IStoreViewPresenter.IStore
             ivNotification.setVisibility(View.INVISIBLE);
         }
 
-            ivNotification.setOnClickListener(this);
+        ivNotification.setOnClickListener(this);
         llLocationSelect.setOnClickListener(this);
         llStoreSelect.setOnClickListener(this);
-      //  etSearchProduct.setOnClickListener(this);
-       // rlSearchProduct.setOnClickListener(this);
+        //  etSearchProduct.setOnClickListener(this);
+        // rlSearchProduct.setOnClickListener(this);
         /*rlSearch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -264,8 +277,13 @@ public class FragmentHome extends Fragment implements IStoreViewPresenter.IStore
     @Override
     public void getProductWithCategoriesSuccess(ProductsWithCategoryResponse response) {
         if (response.getSuccess()) {
-            if(response.getData().getHasCartProduct()){
-                ((ActivityHome)getActivity()).setDot(response.getData().getHasCartProduct());
+
+            shimmerBrands.setVisibility(View.VISIBLE);
+            shimmerProducts.setVisibility(View.VISIBLE);
+            tvNoStoreAvailable.setVisibility(View.GONE);
+
+            if (response.getData().getHasCartProduct()) {
+                ((ActivityHome) getActivity()).setDot(response.getData().getHasCartProduct());
             }
             shimmerBrands.stopShimmerAnimation();
             List<Categories> categories = new ArrayList<>();
@@ -293,7 +311,11 @@ public class FragmentHome extends Fragment implements IStoreViewPresenter.IStore
 
 
         } else {
-            util.setSnackbarMessage(getActivity(), response.getMessage(), rlHomeView, true);
+            shimmerBrands.setVisibility(View.GONE);
+            shimmerProducts.setVisibility(View.GONE);
+            tvNoStoreAvailable.setVisibility(View.VISIBLE);
+            tvNoStoreAvailable.setText(response.getMessage());
+         //   util.setSnackbarMessage(getActivity(), response.getMessage(), rlHomeView, true);
 
         }
         updateStore();
@@ -340,7 +362,7 @@ public class FragmentHome extends Fragment implements IStoreViewPresenter.IStore
         if (response.getSuccess()) {
             util.setSnackbarMessage(getActivity(), response.getMessage(), rlHomeView, false);
             updateCart();
-            ((ActivityHome)getActivity()).setDot(true);
+            ((ActivityHome) getActivity()).setDot(true);
 
         } else {
             util.setSnackbarMessage(getActivity(), response.getMessage(), rlHomeView, true);
@@ -358,7 +380,8 @@ public class FragmentHome extends Fragment implements IStoreViewPresenter.IStore
 
         }
     }
-    void updateStore(){
+
+    void updateStore() {
         store = SharedPreference.getInstance(getActivity()).getStore(C.SELECTED_STORE);
         if (store != null) {
 
@@ -369,12 +392,11 @@ public class FragmentHome extends Fragment implements IStoreViewPresenter.IStore
 
                 iStoreViewPresenter.updateStore("" + SharedPreference.getInstance(getActivity()).
                         geGuestUser(C.GUEST_USER).getId(), updateStore);
-            }
-            else {
-                String token= C.bearer+SharedPreference.getInstance(getActivity()).getUser(C.AUTH_USER).getData().getToken().getAccessToken();
-                String id=""+SharedPreference.getInstance(getActivity()).getUser(C.AUTH_USER).getData().getUser().getId();
+            } else {
+                String token = C.bearer + SharedPreference.getInstance(getActivity()).getUser(C.AUTH_USER).getData().getToken().getAccessToken();
+                String id = "" + SharedPreference.getInstance(getActivity()).getUser(C.AUTH_USER).getData().getUser().getId();
 
-                iStoreViewPresenter.updateStore(token,id, updateStore);
+                iStoreViewPresenter.updateStore(token, id, updateStore);
             }
         }
 
@@ -502,7 +524,9 @@ public class FragmentHome extends Fragment implements IStoreViewPresenter.IStore
 
                 break;
             case R.id.llStoreSelect:
-                gotoStoreList();
+                if(SharedPreference.getInstance(getActivity()).getStore(C.SELECTED_STORE)!=null) {
+                    gotoStoreList();
+                }
                 break;
 
             case R.id.llLocationSelect:

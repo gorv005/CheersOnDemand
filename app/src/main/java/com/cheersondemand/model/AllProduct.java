@@ -38,7 +38,7 @@ public class AllProduct implements Serializable {
     @SerializedName("is_wishlisted")
     @Expose
     private Boolean isWishlisted;
-    @SerializedName("cart_qunatity")
+    @SerializedName("cart_quantity")
     @Expose
     private String cartQunatity;
     @SerializedName("price")

@@ -3,7 +3,6 @@ package com.cheersondemand.view.fragments;
 
 import android.content.Intent;
 import android.graphics.Typeface;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
@@ -56,14 +55,15 @@ import com.facebook.appevents.AppEventsLogger;
 import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
-import com.google.android.gms.auth.GoogleAuthException;
-import com.google.android.gms.auth.GoogleAuthUtil;
+import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.Scopes;
 import com.google.android.gms.common.api.ApiException;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.common.api.Scope;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.FirebaseApp;
@@ -75,8 +75,6 @@ import com.google.firebase.auth.GoogleAuthProvider;
 
 import org.json.JSONException;
 import org.json.JSONObject;
-
-import java.io.IOException;
 
 import br.com.simplepass.loading_button_lib.customViews.CircularProgressButton;
 import butterknife.BindView;
@@ -148,6 +146,10 @@ public class FragmentAuthentication extends Fragment implements IAuthenitication
     Util util;
     private static final int RC_SIGN_IN = 234;
     GoogleSignInClient mGoogleSignInClient;
+    GoogleApiClient mGoogleApiClient = null;
+    public static final int GOOGLE_LOGIN_REQUEST_CODE = 1;
+    public static final int GOOGLE_LOGIN_RESPONSE_OK = 2;
+    public static final int GOOGLE_LOGIN_RESPONSE_FAIL = 3;
     FirebaseAuth mAuth;
      boolean isPasswordVisibleSignUP=false;
     String accessToken;
@@ -169,11 +171,14 @@ public class FragmentAuthentication extends Fragment implements IAuthenitication
         FirebaseApp.initializeApp(getApplicationContext());
 
         mAuth = FirebaseAuth.getInstance();
-        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+     /*   GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestIdToken(getString(R.string.default_web_client_id))
                 .requestEmail()
-                .build();
-        mGoogleSignInClient = GoogleSignIn.getClient(getApplicationContext(), gso);
+                .build();*/
+
+
+       // mGoogleSignInClient = GoogleSignIn.getClient(getApplicationContext(), gso);
+        initializeGoogleLogin();
 
         util = new Util();
         iAutheniticationPresenter=new AuthenicationPresenterImpl(this,getActivity());
@@ -191,6 +196,33 @@ public class FragmentAuthentication extends Fragment implements IAuthenitication
             e.printStackTrace();
         }
     }
+
+
+    private void initializeGoogleLogin() {
+        /*GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestEmail()
+                .requestProfile()
+                .requestIdToken(getResources().getString(R.string.server_client_id))
+                .requestScopes(new Scope(Scopes.PLUS_LOGIN))
+                .build();*/
+
+        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestEmail()
+                .requestProfile()
+                .requestServerAuthCode(getResources().getString(R.string.server_client_id))
+                .requestIdToken(getResources().getString(R.string.server_client_id))
+                .requestScopes(new Scope(Scopes.PLUS_LOGIN))
+                .build();
+
+        mGoogleApiClient = new GoogleApiClient.Builder(getActivity())
+                .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
+                .build();
+
+
+
+
+    }
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -307,42 +339,39 @@ public class FragmentAuthentication extends Fragment implements IAuthenitication
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == RC_SIGN_IN) {
+            if (requestCode == GOOGLE_LOGIN_REQUEST_CODE) {
 
-           //Getting the GoogleSignIn Task
-            Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
-            try {
-                //Google Sign In was successful, authenticate with Firebase
-               final GoogleSignInAccount account = task.getResult(ApiException.class);
-                Runnable runnable = new Runnable() {
-                    @Override
-                    public void run() {
-                        try {
-                            String scope = "oauth2:"+ Scopes.EMAIL+" "+ Scopes.PROFILE;
-                             accessToken = GoogleAuthUtil.getToken(getApplicationContext(), account.getAccount(), scope, new Bundle());
-                            Log.d("DEBUG", "accessToken:"+accessToken); //accessToken:ya29.Gl...
+                String authCode = handleSignInResult(data);
+                socailLogin(authCode,"google");
 
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        } catch (GoogleAuthException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                };
-                AsyncTask.execute(runnable);
-                //authenticating with firebase
-                firebaseAuthWithGoogle(account,accessToken);
-            } catch (ApiException e) {
-                Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
             }
-        } else {
+
+            else
+         {
             callbackManager.onActivityResult(requestCode, resultCode, data);
 
         }
     }
 
 
+    private String handleSignInResult(Intent data) {
+        Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
+        if (task.isSuccessful()) {
+            // Signed in successfully, show authenticated UI.
 
+            try {
+                GoogleSignInAccount account = task.getResult(ApiException.class);
+                return account.getServerAuthCode();
+
+
+            } catch (ApiException e) {
+                e.printStackTrace();
+                return null;
+            }
+            //checking if photo is not null
+        }
+        return null;
+    }
     private void firebaseAuthWithGoogle(final GoogleSignInAccount acct, final String token) {
         // Log.d(TAG, "firebaseAuthWithGoogle:" + acct.getId());
 
@@ -392,10 +421,10 @@ public class FragmentAuthentication extends Fragment implements IAuthenitication
     //this method is called on click
     private void signIn() {
         //getting the google signin intent
-        Intent signInIntent = mGoogleSignInClient.getSignInIntent();
+        Intent signInIntent = Auth.GoogleSignInApi.getSignInIntent(mGoogleApiClient);
 
         //starting the activity for result
-        startActivityForResult(signInIntent, RC_SIGN_IN);
+        startActivityForResult(signInIntent, GOOGLE_LOGIN_REQUEST_CODE);
     }
 
     @Override
@@ -890,6 +919,10 @@ public class FragmentAuthentication extends Fragment implements IAuthenitication
             util.setSnackbarMessage(getActivity(), response.getError(), LLView, true);
 
         }
+        else if(!response.getSuccess()){
+            util.setSnackbarMessage(getActivity(), response.getErrors().get(0).getField(), LLView, true);
+
+        }
         else if(response.getSuccess()){
             if (Util.isNetworkConnectivity(getActivity())) {
                 SharedPreference.getInstance(getActivity()).setBoolean(C.IS_LOGIN,true);
@@ -971,4 +1004,6 @@ public class FragmentAuthentication extends Fragment implements IAuthenitication
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         getActivity().startActivity(intent);
     }
+
+
 }

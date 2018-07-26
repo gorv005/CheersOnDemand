@@ -25,8 +25,12 @@ import com.cheersondemand.model.location.RecentLocation;
 import com.cheersondemand.model.location.RecentLocationResponse;
 import com.cheersondemand.model.location.SaveLocation;
 import com.cheersondemand.model.location.SaveLocationResponse;
+import com.cheersondemand.model.store.StoreListResponse;
+import com.cheersondemand.model.store.UpdateStoreResponse;
 import com.cheersondemand.presenter.location.ILocationViewPresenter;
 import com.cheersondemand.presenter.location.LocationViewPresenterImpl;
+import com.cheersondemand.presenter.store.IStoreViewPresenter;
+import com.cheersondemand.presenter.store.StoreViewPresenterImpl;
 import com.cheersondemand.util.C;
 import com.cheersondemand.util.SharedPreference;
 import com.cheersondemand.util.Util;
@@ -48,7 +52,7 @@ import butterknife.ButterKnife;
 
 public class ActivitySearchLocation extends AppCompatActivity implements
         GoogleApiClient.OnConnectionFailedListener,
-        GoogleApiClient.ConnectionCallbacks, ILocationViewPresenter.ILocationView, View.OnClickListener {
+        GoogleApiClient.ConnectionCallbacks, ILocationViewPresenter.ILocationView, View.OnClickListener, IStoreViewPresenter.IStoreView {
     private static final String LOG_TAG = "ActivitySearchLocation";
     private static final int GOOGLE_API_CLIENT_ID = 0;
     @BindView(R.id.rvSearchResult)
@@ -77,6 +81,7 @@ public class ActivitySearchLocation extends AppCompatActivity implements
     private AdapterLocation adapterLocation;
     private LinearLayoutManager mLinearLayoutManager;
     private Location mLastLocation;
+    IStoreViewPresenter iStoreViewPresenter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -84,6 +89,7 @@ public class ActivitySearchLocation extends AppCompatActivity implements
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_search_location);
+        iStoreViewPresenter = new StoreViewPresenterImpl(this, this);
         from = getIntent().getIntExtra(C.FROM, 1);
         buildAPIClient();
         ButterKnife.bind(this);
@@ -328,19 +334,55 @@ public class ActivitySearchLocation extends AppCompatActivity implements
     @Override
     public void getSaveLocationSuccess(SaveLocationResponse response) {
         if (response.getSuccess()) {
-            Intent intent = new Intent(this, ActivityContainer.class);
-            Bundle bundle = new Bundle();
 
-
-            intent.putExtra(C.FRAGMENT_ACTION, C.FRAGMENT_STORE_LIST);
-            bundle.putInt(C.FROM, C.SEARCH);
-
-            intent.putExtra(C.BUNDLE, bundle);
-            startActivity(intent);
+            if(from==C.SEARCH) {
+                gotoStoreList();
+            }
+            else if(from==C.HOME){
+                getStoreList();
+            }
         } else {
             util.setSnackbarMessage(this, response.getMessage(), LLView, true);
 
         }
+
+    }
+
+
+    void  gotoStoreList(){
+        Intent intent = new Intent(this, ActivityContainer.class);
+        Bundle bundle = new Bundle();
+        intent.putExtra(C.FRAGMENT_ACTION, C.FRAGMENT_STORE_LIST);
+        bundle.putInt(C.FROM, from);
+
+        intent.putExtra(C.BUNDLE, bundle);
+        startActivity(intent);
+    }
+    void getStoreList(){
+        if (SharedPreference.getInstance(this).getBoolean(C.IS_LOGIN_GUEST)) {
+            iStoreViewPresenter.getStoreList(Util.id(this));
+        } else {
+
+            String token = "bearer " + SharedPreference.getInstance(this).getUser(C.AUTH_USER).getData().getToken().getAccessToken();
+
+            iStoreViewPresenter.getStoreList(token, Util.id(this));
+
+        }
+    }
+    @Override
+    public void getStoreListSuccess(StoreListResponse response) {
+        if (!response.getSuccess()) {
+            SharedPreference.getInstance(this).setStore(C.SELECTED_STORE, null);
+            SharedPreference.getInstance(this).setString(C.STORE_MSG,response.getMessage());
+            finish();
+        }
+        else {
+            gotoStoreList();
+        }
+    }
+
+    @Override
+    public void updateStoreSuccess(UpdateStoreResponse response) {
 
     }
 

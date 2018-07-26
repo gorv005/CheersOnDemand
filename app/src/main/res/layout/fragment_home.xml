@@ -165,9 +165,23 @@
         </LinearLayout>
     </RelativeLayout>
 
+    <TextView
+        android:layout_below="@id/rl"
+
+        android:id="@+id/tvNoStoreAvailable"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone"
+         android:gravity="center"
+        android:layout_centerInParent="true"
+        android:fontFamily="@font/sf_ui_display_regular"
+        android:text="@string/sorry_no_product"
+        android:textColor="@color/profile_text_color"
+        android:textSize="16sp" />
     <com.facebook.shimmer.ShimmerFrameLayout
         android:id="@+id/shimmerBrands"
         android:layout_below="@id/rl"
+        android:visibility="gone"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
@@ -197,6 +211,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:orientation="vertical"
+        android:visibility="gone"
         shimmer:duration="800">
         <RelativeLayout
 

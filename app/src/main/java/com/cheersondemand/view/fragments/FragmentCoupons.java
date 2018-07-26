@@ -123,7 +123,7 @@ public class FragmentCoupons extends Fragment implements View.OnClickListener, I
 
             @Override
             public void afterTextChanged(Editable s) {
-                if (s.toString().length() == 6) {
+                if (s.toString().length()>=1) {
                     btnApply.setEnabled(true);
                     btnApply.setBackground(ContextCompat.getDrawable(getActivity(), R.drawable.bg_button_enable));
                 } else {
@@ -176,7 +176,7 @@ public class FragmentCoupons extends Fragment implements View.OnClickListener, I
 
         switch (v.getId()) {
             case R.id.btnApply:
-                if (etCouponName.getText().length() >= 6) {
+                if (etCouponName.getText().length() >= 1) {
                     applyCoupon(etCouponName.getText().toString());
                 }
                 break;

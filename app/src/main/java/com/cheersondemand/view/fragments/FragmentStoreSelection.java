@@ -143,21 +143,20 @@ public class FragmentStoreSelection extends Fragment implements IStoreViewPresen
             storeList = response.getData();
             if (storeList != null && storeList.size() > 0) {
                 rlStoreView.setVisibility(View.VISIBLE);
-                ((ActivityContainer)getActivity()).hideToolBar();
+                ((ActivityContainer) getActivity()).hideToolBar();
                 StoreList storeList1 = SharedPreference.getInstance(getActivity()).getStore(C.SELECTED_STORE);
                 adapterStore = new AdapterStore(getActivity(), storeList, storeList1);
                 lvStoreList.setAdapter(adapterStore);
-            }
-            else {
-                ((ActivityContainer)getActivity()).showToolBar();
+            } else {
+                ((ActivityContainer) getActivity()).showToolBar();
                 ActivityContainer.tvTitle.setText(getString(R.string.coming_soon_));
                 llNoStore.setVisibility(View.VISIBLE);
             }
         } else {
-           // util.setSnackbarMessage(getActivity(), response.getMessage(), LLView, true);
+            // util.setSnackbarMessage(getActivity(), response.getMessage(), LLView, true);
             llNoStore.setVisibility(View.VISIBLE);
             ActivityContainer.tvTitle.setText(getString(R.string.coming_soon_));
-            ((ActivityContainer)getActivity()).showToolBar();
+            ((ActivityContainer) getActivity()).showToolBar();
 
 
         }
@@ -201,8 +200,8 @@ public class FragmentStoreSelection extends Fragment implements IStoreViewPresen
         if (storeList != null) {
 
             UpdateStore updateStore = new UpdateStore();
-            updateStore.setWarehouseId(store.getId());
             updateStore.setUuid(Util.id(getActivity()));
+            updateStore.setWarehouseId(store.getId());
             if (SharedPreference.getInstance(getActivity()).getBoolean(C.IS_LOGIN_GUEST)) {
 
                 iStoreViewPresenter.updateStore("" + SharedPreference.getInstance(getActivity()).
@@ -222,10 +221,20 @@ public class FragmentStoreSelection extends Fragment implements IStoreViewPresen
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.btnBack:
-                getActivity().finish();
+                if (from == C.SEARCH) {
+
+                    getActivity().finish();
+                } else {
+                    updateStore();
+                }
                 break;
             case R.id.imgBack:
-                getActivity().finish();
+                if (from == C.SEARCH) {
+
+                    getActivity().finish();
+                } else {
+                    updateStore();
+                }
                 break;
             case R.id.btnSubmit:
 

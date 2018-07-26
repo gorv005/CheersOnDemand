@@ -160,7 +160,7 @@ public class ActivityContainer extends AppCompatActivity {
             case C.FRAGMENT_ADD_ADDRESS:
                 fragment = new FragmentAddAddress();
                 fragmentTransaction.replace(R.id.container, fragment);
-                if (bundle.getBoolean(C.IS_FROM_CHECKOUT)) {
+                if (!bundle.getBoolean(C.IS_FROM_CHECKOUT)) {
                     fragmentTransaction.addToBackStack(C.TAG_FRAGMENT_ADD_ADDRESS);
                 }
                 break;
@@ -258,7 +258,12 @@ public class ActivityContainer extends AppCompatActivity {
             ((FragmentCardList) fragment).deleteCard(pos);
         }
     }
-
+    public void disableProceedButton(){
+        Fragment fragment = getVisibleFragment();
+        if (fragment != null && fragment instanceof FragmentCart) {
+            ((FragmentCart) fragment).disableProceedButton();
+        }
+    }
     public void removeCoupon() {
         Fragment fragment = getVisibleFragment();
         if (fragment != null && fragment instanceof FragmentCart) {
