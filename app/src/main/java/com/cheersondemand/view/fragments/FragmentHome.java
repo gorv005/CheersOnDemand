@@ -71,7 +71,7 @@ import butterknife.Unbinder;
  */
 public class FragmentHome extends Fragment implements IStoreViewPresenter.IStoreView, IHomeViewPresenterPresenter.IHomeView, IOrderViewPresenterPresenter.IOrderView, View.OnClickListener {
 
-
+    View v1,v2;
     @BindView(R.id.rvBrands)
     RecyclerView rvBrands;
     Unbinder unbinder;
@@ -363,6 +363,21 @@ public class FragmentHome extends Fragment implements IStoreViewPresenter.IStore
             util.setSnackbarMessage(getActivity(), response.getMessage(), rlHomeView, false);
             updateCart();
             ((ActivityHome) getActivity()).setDot(true);
+/*
+            v1.animate().rotationX(90).setDuration(400).setListener(new AnimatorListenerAdapter() {
+                @Override
+                public void onAnimationEnd(Animator animation) {
+                    v1.setVisibility(View.GONE);
+                    v2.setRotationX(-90);
+                    v2.setVisibility(View.VISIBLE);
+                    v2.animate().rotationX(0).setDuration(200).setListener(null);
+                    v1=null;
+                    v2=null;
+
+                }
+            });
+*/
+
 
         } else {
             util.setSnackbarMessage(getActivity(), response.getMessage(), rlHomeView, true);
@@ -432,12 +447,24 @@ public class FragmentHome extends Fragment implements IStoreViewPresenter.IStore
     @Override
     public void getRemoveItemFromCartSuccess(UpdateCartResponse response) {
         if (response.getSuccess()) {
-            util.setSnackbarMessage(getActivity(), response.getMessage(), rlHomeView, false);
 
+
+            util.setSnackbarMessage(getActivity(), response.getMessage(), rlHomeView, false);
             product.setCartQunatity(null);
             product.setIsInCart(false);
             homeCategoriesSectionList.get(secPos).getAllProducts().set(productPos, product);
             adapterHomeCategoriesSections.notified();
+        /*    v1.animate().rotationX(90).setDuration(400).setListener(new AnimatorListenerAdapter() {
+                @Override
+                public void onAnimationEnd(Animator animation) {
+                    v1.setVisibility(View.GONE);
+                    v2.setRotationX(-90);
+                    v2.setVisibility(View.VISIBLE);
+                    v2.animate().rotationX(0).setDuration(200).setListener(null);
+
+                }
+            });*/
+
 
         } else {
             util.setSnackbarMessage(getActivity(), response.getMessage(), rlHomeView, true);
@@ -542,6 +569,26 @@ public class FragmentHome extends Fragment implements IStoreViewPresenter.IStore
     }
 
 
+    public void addToCart(int secPos, int pos, boolean isAdd,View v1,View v2) {
+        this.v1=v1;
+        this.v2=v2;
+        productPos = pos;
+        this.secPos = secPos;
+        this.isAdd = isAdd;
+        if (homeCategoriesSectionList != null && homeCategoriesSectionList.size() > 0) {
+            HomeCategoriesSectionList section = homeCategoriesSectionList.get(secPos);
+
+            product = section.getAllProducts().get(pos);
+            if (SharedPreference.getInstance(getActivity()).getString(C.ORDER_ID) == null) {
+                createOrder();
+            } else {
+                addToCart();
+            }
+        }
+
+
+    }
+
     public void addToCart(int secPos, int pos, boolean isAdd) {
         productPos = pos;
         this.secPos = secPos;
@@ -599,6 +646,36 @@ public class FragmentHome extends Fragment implements IStoreViewPresenter.IStore
                 iOrderViewPresenterPresenter.removeFromWishList(token, id, wishListRequest);
 
             }
+        }
+    }
+
+    public void updateCart(int secPos, int productPos, boolean isAdd,View v1,View v2) {
+        this.v1=v1;
+        this.v2=v2;
+        this.secPos = secPos;
+        this.productPos = productPos;
+        this.isAdd = isAdd;
+        if (homeCategoriesSectionList != null && homeCategoriesSectionList.size() > 0) {
+            HomeCategoriesSectionList section = homeCategoriesSectionList.get(secPos);
+
+            product = section.getAllProducts().get(productPos);
+
+            UpdateCartRequest updateCartRequest = new UpdateCartRequest();
+            updateCartRequest.setUuid(Util.id(getActivity()));
+            updateCartRequest.setProductId(product.getId());
+            updateCartRequest.setIsIncrease(isAdd);
+            if (isAdd) {
+                updateCartRequest.setQuantity(Integer.parseInt(product.getCartQunatity()) + 1);
+                updateProduct(updateCartRequest);
+            } else {
+                if (Integer.parseInt(product.getCartQunatity()) == 1) {
+                    removeProduct(updateCartRequest);
+                } else {
+                    updateCartRequest.setQuantity(Integer.parseInt(product.getCartQunatity()) - 1);
+                    updateProduct(updateCartRequest);
+                }
+            }
+
         }
     }
 

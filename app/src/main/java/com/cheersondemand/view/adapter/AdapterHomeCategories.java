@@ -54,7 +54,8 @@ public class ItemViewHolder extends RecyclerView.ViewHolder {
 }
 
 
-    public AdapterHomeCategories(boolean isHome,List<AllProduct> horizontalList, Activity context) {
+
+    public AdapterHomeCategories(boolean isHome, List<AllProduct> horizontalList, Activity context) {
         this.horizontalList = horizontalList;
         this.context=context;
         this.isHome=isHome;

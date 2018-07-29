@@ -217,6 +217,16 @@ public class ActivityHome extends AppCompatActivity implements View.OnClickListe
 
         }
     }
+    public void addToCart(int secPos, int pos, boolean isAdd,View v1,View v2) {
+        Fragment fragment = getVisibleFragment();
+        if (fragment != null && fragment instanceof FragmentHome) {
+            ((FragmentHome) fragment).addToCart(secPos, pos, isAdd,v1,v2);
+        } else if (fragment != null && fragment instanceof FragmentProductDescription) {
+            ((FragmentProductDescription) fragment).addToCart(secPos, pos, isAdd);
+
+        }
+    }
+
 
     public void updateCart(int secPos, int pos, boolean isAdd) {
         Fragment fragment = getVisibleFragment();
@@ -229,7 +239,17 @@ public class ActivityHome extends AppCompatActivity implements View.OnClickListe
 
         }
     }
+    public void updateCart(int secPos, int pos, boolean isAdd,View v1,View v2) {
+        Fragment fragment = getVisibleFragment();
+        if (fragment != null && fragment instanceof FragmentHome) {
+            ((FragmentHome) fragment).updateCart(secPos, pos, isAdd,v1,v2);
+        } else if (fragment != null && fragment instanceof FragmentCart) {
+            ((FragmentCart) fragment).updateCart(secPos, pos, isAdd);
+        } else if (fragment != null && fragment instanceof FragmentProductDescription) {
+            ((FragmentProductDescription) fragment).updateCart(secPos, pos, isAdd);
 
+        }
+    }
     public void wishListUpdate(int secPos, int pos, boolean isAdd) {
         Fragment fragment = getVisibleFragment();
         if (fragment != null && fragment instanceof FragmentHome) {
