@@ -29,8 +29,8 @@ public interface IOrderViewPresenterPresenter {
     public void removeItemFromCart(String user_id, String order_id, UpdateCartRequest updateProductQuantityRequest);
     public void removeItemFromCart(String token,String user_id, String order_id, UpdateCartRequest updateProductQuantityRequest);
 
-    public void getCartList(String user_id, String order_id, String uuid);
-    public void getCartList(String token,String user_id, String order_id, String uuid);
+    public void getCartList(String user_id, String order_id, String uuid,boolean isFromPayment);
+    public void getCartList(String token,String user_id, String order_id, String uuid,boolean isFromPayment);
 
     public void addToWishList(String user_id, WishListRequest wishListRequest);
     public void addToWishList(String token,String user_id,WishListRequest wishListRequest);

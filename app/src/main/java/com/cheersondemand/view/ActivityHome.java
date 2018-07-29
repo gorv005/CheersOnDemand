@@ -167,11 +167,11 @@ public class ActivityHome extends AppCompatActivity implements View.OnClickListe
             if (SharedPreference.getInstance(this).getBoolean(C.IS_LOGIN_GUEST)) {
                 String id = "" + SharedPreference.getInstance(this).geGuestUser(C.GUEST_USER).getId();
 
-                iOrderViewPresenterPresenter.getCartList(id, order_id, Util.id(this));
+                iOrderViewPresenterPresenter.getCartList(id, order_id, Util.id(this),false);
             } else {
                 String id = "" + SharedPreference.getInstance(this).getUser(C.AUTH_USER).getData().getUser().getId();
                 String token = C.bearer + SharedPreference.getInstance(this).getUser(C.AUTH_USER).getData().getToken().getAccessToken();
-                iOrderViewPresenterPresenter.getCartList(token, id, order_id, Util.id(this));
+                iOrderViewPresenterPresenter.getCartList(token, id, order_id, Util.id(this),false);
             }
         } else {
             ivDot.setVisibility(View.GONE);

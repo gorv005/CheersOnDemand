@@ -79,10 +79,10 @@ public class OrderDetailViewPresenterImpl implements IOrderDetailViewPresenter, 
     }
 
     @Override
-    public void getCartList(String token, String user_id, String order_id, String uuid) {
+    public void getCartList(String token, String user_id, String order_id, String uuid,boolean isFromPayment) {
         if (mView != null) {
             mView.showProgress();
-            iOrderDetailViewIntractor.getCartList(token,user_id,order_id,uuid, this);
+            iOrderDetailViewIntractor.getCartList(token,user_id,order_id,uuid,isFromPayment, this);
         }
     }
 

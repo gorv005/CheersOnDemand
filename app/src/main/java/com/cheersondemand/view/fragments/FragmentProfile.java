@@ -182,8 +182,7 @@ public class FragmentProfile extends Fragment implements View.OnClickListener, I
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
-
+        SharedPreference.getInstance(getActivity()).setBoolean(C.IS_FROM_PAYMENT, false);
         btnEdit.setOnClickListener(this);
         llProfileView.setOnClickListener(this);
         llLogout.setOnClickListener(this);
@@ -198,26 +197,24 @@ public class FragmentProfile extends Fragment implements View.OnClickListener, I
         llNotification.setOnClickListener(this);
         if (SharedPreference.getInstance(getActivity()).getBoolean(C.IS_NOTIFICATION)) {
             switchButton.setChecked(true);
-            isNotification=true;
+            isNotification = true;
         } else {
             switchButton.setChecked(false);
-            isNotification=false;
+            isNotification = false;
         }
 
 
-        if(isLogin){
+        if (isLogin) {
             switchButton.setEnabled(true);
-        }
-        else {
+        } else {
             switchButton.setEnabled(false);
         }
         switchButton.setOnCheckedChangeListener(new SwitchButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(SwitchButton view, boolean isChecked) {
-                if(!isLogin){
+                if (!isLogin) {
                     dialogSignIn();
-                }
-                else {
+                } else {
                     isNotification = isChecked;
                     updateProfile((isChecked));
                 }
@@ -282,8 +279,7 @@ public class FragmentProfile extends Fragment implements View.OnClickListener, I
 
                     intent3.putExtra(C.FRAGMENT_ACTION, C.FRAGMENT_ADDRESS_LIST);
                     startActivity(intent3);
-                }
-                else {
+                } else {
                     dialogSignIn();
                 }
                 break;

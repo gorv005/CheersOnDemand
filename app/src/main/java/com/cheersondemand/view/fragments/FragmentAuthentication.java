@@ -3,6 +3,7 @@ package com.cheersondemand.view.fragments;
 
 import android.content.Intent;
 import android.graphics.Typeface;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
@@ -55,6 +56,8 @@ import com.facebook.appevents.AppEventsLogger;
 import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
+import com.google.android.gms.auth.GoogleAuthException;
+import com.google.android.gms.auth.GoogleAuthUtil;
 import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
@@ -75,6 +78,8 @@ import com.google.firebase.auth.GoogleAuthProvider;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.io.IOException;
 
 import br.com.simplepass.loading_button_lib.customViews.CircularProgressButton;
 import butterknife.BindView;
@@ -171,14 +176,14 @@ public class FragmentAuthentication extends Fragment implements IAuthenitication
         FirebaseApp.initializeApp(getApplicationContext());
 
         mAuth = FirebaseAuth.getInstance();
-     /*   GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestIdToken(getString(R.string.default_web_client_id))
                 .requestEmail()
-                .build();*/
+                .build();
 
 
-       // mGoogleSignInClient = GoogleSignIn.getClient(getApplicationContext(), gso);
-        initializeGoogleLogin();
+        mGoogleSignInClient = GoogleSignIn.getClient(getApplicationContext(), gso);
+     //   initializeGoogleLogin();
 
         util = new Util();
         iAutheniticationPresenter=new AuthenicationPresenterImpl(this,getActivity());
@@ -339,12 +344,36 @@ public class FragmentAuthentication extends Fragment implements IAuthenitication
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-            if (requestCode == GOOGLE_LOGIN_REQUEST_CODE) {
+        if (requestCode == RC_SIGN_IN) {
 
-                String authCode = handleSignInResult(data);
-                socailLogin(authCode,"google");
+            //Getting the GoogleSignIn Task
+            Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
+            try {
+                //Google Sign In was successful, authenticate with Firebase
+                final GoogleSignInAccount account = task.getResult(ApiException.class);
+                Runnable runnable = new Runnable() {
+                    @Override
+                    public void run() {
+                        try {
+                            String scope = "oauth2:"+ Scopes.EMAIL+" "+ Scopes.PROFILE;
+                            accessToken = GoogleAuthUtil.getToken(getApplicationContext(), account.getAccount(), scope, new Bundle());
+                            Log.d("DEBUG", "accessToken:"+accessToken); //accessToken:ya29.Gl...
+                            socailLogin(accessToken,"google");
 
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        } catch (GoogleAuthException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                };
+                AsyncTask.execute(runnable);
+                //authenticating with firebase
+                firebaseAuthWithGoogle(account,accessToken);
+            } catch (ApiException e) {
+                Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
             }
+        }
 
             else
          {
@@ -361,7 +390,7 @@ public class FragmentAuthentication extends Fragment implements IAuthenitication
 
             try {
                 GoogleSignInAccount account = task.getResult(ApiException.class);
-                return account.getServerAuthCode();
+                return account.getIdToken();
 
 
             } catch (ApiException e) {
@@ -421,10 +450,10 @@ public class FragmentAuthentication extends Fragment implements IAuthenitication
     //this method is called on click
     private void signIn() {
         //getting the google signin intent
-        Intent signInIntent = Auth.GoogleSignInApi.getSignInIntent(mGoogleApiClient);
+        Intent signInIntent = mGoogleSignInClient.getSignInIntent();
 
         //starting the activity for result
-        startActivityForResult(signInIntent, GOOGLE_LOGIN_REQUEST_CODE);
+        startActivityForResult(signInIntent, RC_SIGN_IN);
     }
 
     @Override
@@ -991,11 +1020,12 @@ public class FragmentAuthentication extends Fragment implements IAuthenitication
 
     @Override
     public void showProgress() {
-
+        util.showDialog(C.MSG, getActivity());
     }
 
     @Override
     public void hideProgress() {
+        util.hideDialog();
 
     }
 

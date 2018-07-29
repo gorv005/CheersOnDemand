@@ -188,18 +188,18 @@ public class OrderViewPresenterImpl implements IOrderViewPresenterPresenter, IOr
     }
 
     @Override
-    public void getCartList(String user_id, String order_id, String uuid) {
+    public void getCartList(String user_id, String order_id, String uuid,boolean isFromPayment) {
         if (mView != null) {
             mView.showProgress();
-            iOrderViewIntractor.getCartList(user_id,order_id,uuid, this);
+            iOrderViewIntractor.getCartList(user_id,order_id,uuid,isFromPayment, this);
         }
     }
 
     @Override
-    public void getCartList(String token, String user_id, String order_id, String uuid) {
+    public void getCartList(String token, String user_id, String order_id, String uuid,boolean isFromPayment) {
         if (mView != null) {
             mView.showProgress();
-            iOrderViewIntractor.getCartList(token,user_id,order_id,uuid, this);
+            iOrderViewIntractor.getCartList(token,user_id,order_id,uuid, isFromPayment,this);
         }
     }
 

@@ -14,13 +14,16 @@ import android.view.animation.Transformation;
 public class FlipAnimation extends Animation {
 
     private Camera camera;
+    public static final int DIRECTION_X = 1, DIRECTION_Y = 2, DIRECTION_Z = 3;
 
     private View fromView;
     private View toView;
 
     private float centerX;
     private float centerY;
+    private int rotationDirection = DIRECTION_Y;
 
+    private int translateDirection = DIRECTION_X;
     private boolean forward = true;
 
     /**
@@ -33,7 +36,7 @@ public class FlipAnimation extends Animation {
         this.fromView = fromView;
         this.toView = toView;
 
-        setDuration(700);
+        setDuration(500);
         setFillAfter(false);
         setInterpolator(new AccelerateDecelerateInterpolator());
     }
@@ -75,7 +78,21 @@ public class FlipAnimation extends Animation {
 
         final Matrix matrix = t.getMatrix();
         camera.save();
-        camera.rotateY(degrees);
+        if (translateDirection == DIRECTION_Z) {
+            camera.translate(0.0f, 0.0f, (float) (150.0 * Math.sin(radians)));
+        } else if (translateDirection == DIRECTION_Y) {
+            camera.translate(0.0f, (float) (150.0 * Math.sin(radians)), 0.0f);
+        } else {
+            camera.translate((float) (150.0 * Math.sin(radians)), 0.0f, 0.0f);
+        }
+
+        if (rotationDirection == DIRECTION_Z) {
+            camera.rotateZ(degrees);
+        } else if (rotationDirection == DIRECTION_Y) {
+            camera.rotateY(degrees);
+        } else {
+            camera.rotateX(degrees);
+        }
         camera.getMatrix(matrix);
         camera.restore();
         matrix.preTranslate(-centerX, -centerY);

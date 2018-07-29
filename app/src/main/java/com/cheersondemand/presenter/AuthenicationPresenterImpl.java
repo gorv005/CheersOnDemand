@@ -31,7 +31,7 @@ public class AuthenicationPresenterImpl implements IAutheniticationPresenter,IAu
     @Override
     public void onSuccess(AuthenticationResponse signUpResponse) {
         if(mView!=null){
-            //mView.hideProgress();
+            mView.hideProgress();
             mView.getResponseSuccess(signUpResponse);
         }
     }
@@ -68,13 +68,14 @@ public class AuthenicationPresenterImpl implements IAutheniticationPresenter,IAu
     @Override
     public void setLoginUsingEmail(LoginRequest loginUsingEmail) {
         if(mView!=null) {
-
+            mView.showProgress();
             iAuthnicationIntractor.loginUsingEmail(loginUsingEmail, this);
         }
     }
     @Override
     public void setSignUpSocail(SocialLoginRequest signUpSocail) {
         if(mView!=null) {
+            mView.showProgress();
 
             iAuthnicationIntractor.getResponseSocail(signUpSocail, this);
         }

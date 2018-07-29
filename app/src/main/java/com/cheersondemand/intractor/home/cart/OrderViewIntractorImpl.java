@@ -275,7 +275,7 @@ public class OrderViewIntractorImpl implements IOrderViewIntractor {
     }
 
     @Override
-    public void getCartList(String user_id, String order_id, String uuid, final OnLoginFinishedListener listener) {
+    public void getCartList(String user_id, String order_id, String uuid,boolean isFromPayment, final OnLoginFinishedListener listener) {
         try {
 
             WebServicesWrapper.getInstance().getCartList(new ResponseResolver<UpdateCartResponse>() {
@@ -298,7 +298,7 @@ public class OrderViewIntractorImpl implements IOrderViewIntractor {
                         listener.onError(error.getError());
                     }
                 }
-            },user_id,order_id,uuid);
+            },user_id,order_id,uuid,isFromPayment);
         }
         catch (Exception e){
             e.printStackTrace();
@@ -306,7 +306,7 @@ public class OrderViewIntractorImpl implements IOrderViewIntractor {
     }
 
     @Override
-    public void getCartList(String token, String user_id, String order_id, String uuid, final OnLoginFinishedListener listener) {
+    public void getCartList(String token, String user_id, String order_id, String uuid,boolean isFromPayment, final OnLoginFinishedListener listener) {
         try {
 
             WebServicesWrapper.getInstance().getCartList(new ResponseResolver<UpdateCartResponse>() {
@@ -329,7 +329,7 @@ public class OrderViewIntractorImpl implements IOrderViewIntractor {
                         listener.onError(error.getError());
                     }
                 }
-            },token,user_id,order_id,uuid);
+            },token,user_id,order_id,uuid,isFromPayment);
         }
         catch (Exception e){
             e.printStackTrace();

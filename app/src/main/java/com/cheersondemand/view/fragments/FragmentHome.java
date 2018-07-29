@@ -196,7 +196,7 @@ public class FragmentHome extends Fragment implements IStoreViewPresenter.IStore
         if (SharedPreference.getInstance(getActivity()).getBoolean(C.IS_LOGIN_GUEST)) {
             ivNotification.setVisibility(View.INVISIBLE);
         }
-
+        SharedPreference.getInstance(getActivity()).setBoolean(C.IS_FROM_PAYMENT,false);
         ivNotification.setOnClickListener(this);
         llLocationSelect.setOnClickListener(this);
         llStoreSelect.setOnClickListener(this);

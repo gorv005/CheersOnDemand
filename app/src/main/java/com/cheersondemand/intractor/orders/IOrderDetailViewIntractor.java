@@ -23,7 +23,7 @@ public interface IOrderDetailViewIntractor {
     }
 
     public void getOrderList(String token, String userId, OnFinishedListener listener);
-    public void getCartList(String token, String user_id, String order_id, String uuid, OnFinishedListener listener);
+    public void getCartList(String token, String user_id, String order_id, String uuid,boolean isFromPayment, OnFinishedListener listener);
     public void reorderOrder(String token, String user_id, String order_id, OnFinishedListener listener);
     public void cancelOrder(String token, String user_id, String order_id, CancelOrderRequest cancelOrderRequest, OnFinishedListener listener);
 

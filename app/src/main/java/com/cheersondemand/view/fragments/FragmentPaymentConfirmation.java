@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -38,7 +39,6 @@ import com.cheersondemand.util.C;
 import com.cheersondemand.util.NonScrollListView;
 import com.cheersondemand.util.SharedPreference;
 import com.cheersondemand.util.Util;
-import com.cheersondemand.util.viewpager.CircleIndicator;
 import com.cheersondemand.view.ActivityContainer;
 import com.cheersondemand.view.adapter.card.AdapterCardPayment;
 import com.cheersondemand.view.adapter.cart.AdapterProductAmount;
@@ -127,12 +127,12 @@ public class FragmentPaymentConfirmation extends Fragment implements ICardViewPr
     Button btnProceedToPay;
     @BindView(R.id.llButton)
     RelativeLayout llButton;
-    @BindView(R.id.custom_indicator)
-    CircleIndicator customIndicator;
+
     @BindView(R.id.llIndicatore)
     LinearLayout llIndicatore;
 
-
+    private int dotsCount;
+    private ImageView[] dots;
     public FragmentPaymentConfirmation() {
         // Required empty public constructor
     }
@@ -174,6 +174,18 @@ public class FragmentPaymentConfirmation extends Fragment implements ICardViewPr
         llEdit.setOnClickListener(this);
         btnProceedToPay.setOnClickListener(this);
         tvAddCard.setOnClickListener(this);
+        SharedPreference.getInstance(getActivity()).setBoolean(C.IS_FROM_PAYMENT,true);
+        rvCardList.addOnPageChangedListener(new RecyclerViewPager.OnPageChangedListener() {
+            @Override
+            public void OnPageChanged(int i1, int position) {
+                for (int i = 0; i < dotsCount; i++) {
+                    dots[i].setImageDrawable(getResources().getDrawable(R.drawable.nonselecteditem_dot));
+                }
+
+                dots[position].setImageDrawable(getResources().getDrawable(R.drawable.selecteditem_dot));
+
+            }
+        });
     }
 
     @Override
@@ -183,7 +195,27 @@ public class FragmentPaymentConfirmation extends Fragment implements ICardViewPr
         ActivityContainer.tvTitle.setText(getString(R.string.payment));
     }
 
+    private void setUiPageViewController() {
 
+        dotsCount = adapterCardPayment.getItemCount();
+        dots = new ImageView[dotsCount];
+
+        for (int i = 0; i < dotsCount; i++) {
+            dots[i] = new ImageView(getActivity());
+            dots[i].setImageDrawable(getResources().getDrawable(R.drawable.nonselecteditem_dot));
+
+            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
+                    LinearLayout.LayoutParams.WRAP_CONTENT,
+                    LinearLayout.LayoutParams.WRAP_CONTENT
+            );
+
+            params.setMargins(4, 0, 4, 0);
+
+            llIndicatore.addView(dots[i], params);
+        }
+
+        dots[0].setImageDrawable(getResources().getDrawable(R.drawable.selecteditem_dot));
+    }
     void getCartList() {
         String order_id = SharedPreference.getInstance(getActivity()).getString(C.ORDER_ID);
 
@@ -191,11 +223,11 @@ public class FragmentPaymentConfirmation extends Fragment implements ICardViewPr
             if (SharedPreference.getInstance(getActivity()).getBoolean(C.IS_LOGIN_GUEST)) {
                 String id = "" + SharedPreference.getInstance(getActivity()).geGuestUser(C.GUEST_USER).getId();
 
-                iOrderViewPresenterPresenter.getCartList(id, order_id, Util.id(getActivity()));
+                iOrderViewPresenterPresenter.getCartList(id, order_id, Util.id(getActivity()),true);
             } else {
                 String id = "" + SharedPreference.getInstance(getActivity()).getUser(C.AUTH_USER).getData().getUser().getId();
                 String token = C.bearer + SharedPreference.getInstance(getActivity()).getUser(C.AUTH_USER).getData().getToken().getAccessToken();
-                iOrderViewPresenterPresenter.getCartList(token, id, order_id, Util.id(getActivity()));
+                iOrderViewPresenterPresenter.getCartList(token, id, order_id, Util.id(getActivity()),true);
             }
         }
     }
@@ -230,6 +262,7 @@ public class FragmentPaymentConfirmation extends Fragment implements ICardViewPr
 
                     }
                 }
+                setUiPageViewController();
                 getCartList();
             } else {
                 // tvNoCardAvailable.setVisibility(View.VISIBLE);

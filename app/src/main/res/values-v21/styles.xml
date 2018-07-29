@@ -90,6 +90,7 @@
 
     <style name="FullHeightDialog" parent="android:style/Theme.Dialog">
         <item name="android:windowNoTitle">true</item>
+        <item name="android:maxHeight">200dp</item>
     </style>
     <style name="ActivityTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <!-- Customize your theme here. -->

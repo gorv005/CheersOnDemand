@@ -12,7 +12,7 @@ public interface IOrderDetailViewPresenter {
 
 
     public void getOrderList(String token, String userId);
-    public void getCartList(String token,String user_id, String order_id, String uuid);
+    public void getCartList(String token,String user_id, String order_id, String uuid,boolean isFromPayment);
     public void reorderOrder(String token, String user_id, String order_id);
     public void cancelOrder(String token, String user_id, String order_id, CancelOrderRequest cancelOrderRequest);
 

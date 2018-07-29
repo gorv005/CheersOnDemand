@@ -94,7 +94,7 @@ public class FragmentCart extends Fragment implements View.OnClickListener, IOrd
     @BindView(R.id.tvStoreClosed)
     TextView tvStoreClosed;
     private LinearLayoutManager mLinearLayoutManager;
-
+    boolean isFromCart;
     public FragmentCart() {
         // Required empty public constructor
     }
@@ -135,6 +135,7 @@ public class FragmentCart extends Fragment implements View.OnClickListener, IOrd
         btnBrowseProduct.setOnClickListener(this);
         mLinearLayoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
         rvCartList.setLayoutManager(mLinearLayoutManager);
+
     }
 
     @Override
@@ -153,17 +154,19 @@ public class FragmentCart extends Fragment implements View.OnClickListener, IOrd
     }
 
     void getCartList() {
+        isFromCart= SharedPreference.getInstance(getActivity()).getBoolean(C.IS_FROM_PAYMENT);
+
         String order_id = SharedPreference.getInstance(getActivity()).getString(C.ORDER_ID);
 
         if (order_id != null && !order_id.equals("0")) {
             if (SharedPreference.getInstance(getActivity()).getBoolean(C.IS_LOGIN_GUEST)) {
                 String id = "" + SharedPreference.getInstance(getActivity()).geGuestUser(C.GUEST_USER).getId();
 
-                iOrderViewPresenterPresenter.getCartList(id, order_id, Util.id(getActivity()));
+                iOrderViewPresenterPresenter.getCartList(id, order_id, Util.id(getActivity()),isFromCart);
             } else {
                 String id = "" + SharedPreference.getInstance(getActivity()).getUser(C.AUTH_USER).getData().getUser().getId();
                 String token = C.bearer + SharedPreference.getInstance(getActivity()).getUser(C.AUTH_USER).getData().getToken().getAccessToken();
-                iOrderViewPresenterPresenter.getCartList(token, id, order_id, Util.id(getActivity()));
+                iOrderViewPresenterPresenter.getCartList(token, id, order_id, Util.id(getActivity()),isFromCart);
             }
         } else {
             llNoProductInCount.setVisibility(View.VISIBLE);

@@ -45,6 +45,9 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 
+import static android.view.View.GONE;
+import static android.view.View.VISIBLE;
+
 /**
  * A simple {@link Fragment} subclass.
  */
@@ -126,10 +129,10 @@ public class FragmentAddCard extends Fragment implements ICardViewPresenter.ICar
         super.onViewCreated(view, savedInstanceState);
         btnSaveAdd.setOnClickListener(this);
         if(isCheckout){
-            rlISDetailSave.setVisibility(View.VISIBLE);
+            rlISDetailSave.setVisibility(VISIBLE);
         }
         else {
-            rlISDetailSave.setVisibility(View.GONE);
+            rlISDetailSave.setVisibility(GONE);
         }
         init();
     }
@@ -334,7 +337,20 @@ public class FragmentAddCard extends Fragment implements ICardViewPresenter.ICar
                 return "";
 
             }
-            if ((etExpire.getText().toString() != null && !etExpire.getText().toString().equals("")) && (etExpire.getText().toString().startsWith("1") || etExpire.getText().toString().startsWith("0"))) {
+
+          else   if ((etExpire.getText().toString() != null && etExpire.getText().toString().length() == 1)) {
+            if ((etExpire.getText().toString() != null && !etExpire.getText().toString().equals("")) && (etExpire.getText().toString().startsWith("1"))) {
+                if(source.toString().equals("0")||source.toString().equals("1") || source.toString().equals("2")) {
+                    return source.toString();
+                }
+                else {
+                    return "";
+                }
+            }
+            return source.toString();
+
+            }
+           else if ((etExpire.getText().toString() != null && !etExpire.getText().toString().equals("")) && (etExpire.getText().toString().startsWith("1") || etExpire.getText().toString().startsWith("0"))) {
                 return source.toString();
 
             } else if (source != null && source.toString().startsWith("1") || source.toString().startsWith("0")) {
@@ -344,13 +360,15 @@ public class FragmentAddCard extends Fragment implements ICardViewPresenter.ICar
         }
     };
 
+
+
     private void flipCard() {
 
 
         try {
             FlipAnimation flipAnimation = new FlipAnimation(rlCardFront, rlCardBack);
 
-            if (rlCardFront.getVisibility() == View.GONE) {
+            if (rlCardFront.getVisibility() == GONE) {
                 flipAnimation.reverse();
             }
             rlMain.startAnimation(flipAnimation);

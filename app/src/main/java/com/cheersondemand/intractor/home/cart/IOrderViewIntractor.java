@@ -53,9 +53,9 @@ public interface IOrderViewIntractor {
 
     public void removeItemFromCart(String token, String user_id, String order_id, UpdateCartRequest updateProductQuantityRequest, OnLoginFinishedListener listener);
 
-    public void getCartList(String user_id, String order_id, String uuid, OnLoginFinishedListener listener);
+    public void getCartList(String user_id, String order_id, String uuid, boolean isFromPayment,OnLoginFinishedListener listener);
 
-    public void getCartList(String token, String user_id, String order_id, String uuid, OnLoginFinishedListener listener);
+    public void getCartList(String token, String user_id, String order_id, String uuid,boolean isFromPayment, OnLoginFinishedListener listener);
 
     public void addToWishList(String user_id, WishListRequest wishListRequest, OnLoginFinishedListener listener);
 

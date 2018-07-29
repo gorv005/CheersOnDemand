@@ -129,7 +129,7 @@ public class FragmentOrderDetail extends Fragment implements View.OnClickListene
     void getCartList() {
         String id = "" + SharedPreference.getInstance(getActivity()).getUser(C.AUTH_USER).getData().getUser().getId();
         String token = C.bearer + SharedPreference.getInstance(getActivity()).getUser(C.AUTH_USER).getData().getToken().getAccessToken();
-        iOrderDetailViewPresenter.getCartList(token, id, "" + order.getId(), Util.id(getActivity()));
+        iOrderDetailViewPresenter.getCartList(token, id, "" + order.getId(), Util.id(getActivity()),false);
 
     }
 
@@ -207,6 +207,7 @@ public class FragmentOrderDetail extends Fragment implements View.OnClickListene
         dialog.setCancelable(true);
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
 
+
 //to set the message
 
         TextView title = (TextView) dialog.findViewById(R.id.titleOrders);
@@ -227,6 +228,15 @@ public class FragmentOrderDetail extends Fragment implements View.OnClickListene
             }
         });
 
+     /*   Window dialogWindow = dialog.getWindow();
+        WindowManager.LayoutParams lp = dialogWindow.getAttributes();
+        int dialogHeight=lp.height;
+        lp.height=200;
+
+        if(dialogHeight > 200) {
+            lp.height=200;
+            dialog.getWindow().setAttributes(lp);
+        }*/
         dialog.show();
     }
 
