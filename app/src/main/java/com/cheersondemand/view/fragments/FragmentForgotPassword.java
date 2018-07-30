@@ -21,6 +21,7 @@ import com.cheersondemand.model.changepassword.PasswordRequest;
 import com.cheersondemand.model.changepassword.PasswordResponse;
 import com.cheersondemand.presenter.password.IPasswordViewPresenter;
 import com.cheersondemand.presenter.password.PasswordViewPresenterImpl;
+import com.cheersondemand.util.C;
 import com.cheersondemand.util.Util;
 
 import br.com.simplepass.loading_button_lib.customViews.CircularProgressButton;
@@ -165,11 +166,12 @@ public class FragmentForgotPassword extends Fragment implements View.OnClickList
 
     @Override
     public void showProgress() {
-
+        util.showDialog(C.MSG, getActivity());
     }
 
     @Override
     public void hideProgress() {
+        util.hideDialog();
 
     }
 }

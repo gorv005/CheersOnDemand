@@ -142,14 +142,14 @@ public class FragmentChangePassword extends Fragment implements View.OnClickList
                         //Do something here
                         if(!isPasswordVisibleNew) {
                             isPasswordVisibleNew=true;
-                            etCurrentPassword.setInputType(TYPE_CLASS_TEXT | TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
-                            etCurrentPassword.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_eye_visible, 0);
+                            etNewPassword.setInputType(TYPE_CLASS_TEXT | TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
+                            etNewPassword.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_eye_visible, 0);
 
                         }
                         else {
                             isPasswordVisibleNew=false;
-                            etCurrentPassword.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
-                            etCurrentPassword.setCompoundDrawablesWithIntrinsicBounds( 0, 0, R.drawable.ic_eye, 0);
+                            etNewPassword.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
+                            etNewPassword.setCompoundDrawablesWithIntrinsicBounds( 0, 0, R.drawable.ic_eye, 0);
 
                         }
                         break;
@@ -169,14 +169,14 @@ public class FragmentChangePassword extends Fragment implements View.OnClickList
                         //Do something here
                         if(!isPasswordVisibleConfirmNew) {
                             isPasswordVisibleConfirmNew=true;
-                            etCurrentPassword.setInputType(TYPE_CLASS_TEXT | TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
-                            etCurrentPassword.setCompoundDrawablesWithIntrinsicBounds( 0, 0, R.drawable.ic_eye_visible, 0);
+                            etReenterPassword.setInputType(TYPE_CLASS_TEXT | TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
+                            etReenterPassword.setCompoundDrawablesWithIntrinsicBounds( 0, 0, R.drawable.ic_eye_visible, 0);
 
                         }
                         else {
                             isPasswordVisibleConfirmNew=false;
-                            etCurrentPassword.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
-                            etCurrentPassword.setCompoundDrawablesWithIntrinsicBounds( 0, 0, R.drawable.ic_eye, 0);
+                            etReenterPassword.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
+                            etReenterPassword.setCompoundDrawablesWithIntrinsicBounds( 0, 0, R.drawable.ic_eye, 0);
 
                         }
                         break;

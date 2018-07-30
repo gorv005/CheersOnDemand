@@ -66,8 +66,12 @@ public class FragmentCoupons extends Fragment implements View.OnClickListener, I
     RelativeLayout rlOr;
     @BindView(R.id.tvTagLine)
     TextView tvTagLine;
+    @BindView(R.id.tvCouponCode)
+    TextView tvCouponCode;
+    @BindView(R.id.viewLine)
+    View viewLine;
     private String couponName = "";
-
+    int source;
     public FragmentCoupons() {
         // Required empty public constructor
     }
@@ -75,14 +79,19 @@ public class FragmentCoupons extends Fragment implements View.OnClickListener, I
     @Override
     public void onResume() {
         super.onResume();
-        ActivityContainer.tvTitle.setText(R.string.coupon_code);
-    }
+        if (source == C.FRAGMENT_PRODUCT_DESC) {
+            tvCouponCode.setVisibility(View.GONE);
+            viewLine.setVisibility(View.GONE);
+            ActivityContainer.tvTitle.setText(getString(R.string.coupon_code));
+            ((ActivityContainer) getActivity()).showToolBar();
+        }    }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         cartValue = getArguments().getString(C.CART_VALUE);
         couponName = getArguments().getString(C.COUPON_NAME);
+        source = getArguments().getInt(C.SOURCE);
 
         iCouponViewPresenter = new CouponViewPresenterImpl(this, getActivity());
         util = new Util();
@@ -100,6 +109,13 @@ public class FragmentCoupons extends Fragment implements View.OnClickListener, I
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        if (source == C.FRAGMENT_PRODUCT_DESC) {
+            tvCouponCode.setVisibility(View.GONE);
+            viewLine.setVisibility(View.GONE);
+            ActivityContainer.tvTitle.setText(getString(R.string.coupon_code));
+            ((ActivityContainer) getActivity()).showToolBar();
+        }
+
         layoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
         rvCouponList.setLayoutManager(layoutManager);
         btnApply.setEnabled(false);
@@ -123,7 +139,7 @@ public class FragmentCoupons extends Fragment implements View.OnClickListener, I
 
             @Override
             public void afterTextChanged(Editable s) {
-                if (s.toString().length()>=1) {
+                if (s.toString().length() >= 1) {
                     btnApply.setEnabled(true);
                     btnApply.setBackground(ContextCompat.getDrawable(getActivity(), R.drawable.bg_button_enable));
                 } else {
@@ -195,11 +211,10 @@ public class FragmentCoupons extends Fragment implements View.OnClickListener, I
             for (int i = 0; i < couponInfoList.size(); i++) {
                 couponInfoList.get(i).setCouponName(couponName);
             }
-            adapterCouponList = new AdapterCouponList(couponInfoList, getActivity(), couponName);
+            adapterCouponList = new AdapterCouponList(source,couponInfoList, getActivity(), couponName);
             if (couponInfoList != null && couponInfoList.size() > 0) {
                 rvCouponList.setAdapter(adapterCouponList);
-            }
-            else {
+            } else {
                 rlOr.setVisibility(View.GONE);
                 tvTagLine.setVisibility(View.GONE);
                 rvCouponList.setVisibility(View.GONE);
@@ -208,7 +223,7 @@ public class FragmentCoupons extends Fragment implements View.OnClickListener, I
             rlOr.setVisibility(View.GONE);
             tvTagLine.setVisibility(View.GONE);
             rvCouponList.setVisibility(View.GONE);
-         //   util.setSnackbarMessage(getActivity(), response.getMessage(), LLView, true);
+            //   util.setSnackbarMessage(getActivity(), response.getMessage(), LLView, true);
 
         }
     }

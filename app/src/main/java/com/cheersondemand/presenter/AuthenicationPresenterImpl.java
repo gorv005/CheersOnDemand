@@ -39,7 +39,7 @@ public class AuthenicationPresenterImpl implements IAutheniticationPresenter,IAu
     @Override
     public void onSuccessCreateGuestuser(GuestUserCreateResponse guestUserCreateResponse) {
         if(mView!=null){
-            //mView.hideProgress();
+            mView.hideProgress();
             mView.getResponseSuccessOfCreateGuestUser(guestUserCreateResponse);
         }
     }
@@ -47,7 +47,7 @@ public class AuthenicationPresenterImpl implements IAutheniticationPresenter,IAu
     @Override
     public void onError(String response) {
         if(mView!=null){
-            //mView.hideProgress();
+            mView.hideProgress();
             mView.getResponseError(response);
         }
     }
@@ -84,7 +84,7 @@ public class AuthenicationPresenterImpl implements IAutheniticationPresenter,IAu
     @Override
     public void createGuestUser(GenRequest categoryRequest) {
         if(mView!=null) {
-
+            mView.showProgress();
             iAuthnicationIntractor.createGuestUser(categoryRequest, this);
         }
     }

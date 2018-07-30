@@ -27,6 +27,7 @@ import com.cheersondemand.util.C;
 import com.cheersondemand.util.SharedPreference;
 import com.cheersondemand.util.Util;
 import com.cheersondemand.view.fragments.FragmentCart;
+import com.cheersondemand.view.fragments.FragmentCoupons;
 import com.cheersondemand.view.fragments.FragmentHome;
 import com.cheersondemand.view.fragments.FragmentProductDescription;
 import com.cheersondemand.view.fragments.FragmentProfile;
@@ -112,6 +113,12 @@ public class ActivityHome extends AppCompatActivity implements View.OnClickListe
                 fragmentTransaction.replace(R.id.container, fragment);
                 //fragmentTransaction.addToBackStack(C.TAG_FRAGMENT_PRODUCTS_HOME);
                 break;
+            case C.FRAGMENT_COUPON_LIST:
+                currentPage="coupon";
+                fragment = new FragmentCoupons();
+                fragmentTransaction.replace(R.id.container, fragment);
+                //fragmentTransaction.addToBackStack(C.TAG_FRAGMENT_PRODUCTS_HOME);
+                break;
         }
         fragment.setArguments(bundle);
         fragmentTransaction.commit();
@@ -149,7 +156,14 @@ public class ActivityHome extends AppCompatActivity implements View.OnClickListe
         super.onResume();
      //   getCartList();
     }
+    public void applyCoupon(String couponName) {
 
+        Fragment fragment = getVisibleFragment();
+        if (fragment != null && fragment instanceof FragmentCoupons) {
+            ((FragmentCoupons) fragment).applyCoupon(couponName);
+
+        }
+    }
     private Fragment getVisibleFragment() {
         FragmentManager fragmentManager = getSupportFragmentManager();
         @SuppressLint("RestrictedApi") List<Fragment> fragments = fragmentManager.getFragments();
@@ -330,7 +344,18 @@ public class ActivityHome extends AppCompatActivity implements View.OnClickListe
     }
 
 
-        public void disableProceedButton(){
+    @Override
+    public void onBackPressed() {
+        Fragment fragment=getVisibleFragment();
+        if(fragment!=null && fragment instanceof FragmentCoupons){
+            setCart();
+        }
+        else {
+            super.onBackPressed();
+        }
+    }
+
+    public void disableProceedButton(){
             Fragment fragment = getVisibleFragment();
             if (fragment != null && fragment instanceof FragmentCart) {
                 ((FragmentCart) fragment).disableProceedButton();

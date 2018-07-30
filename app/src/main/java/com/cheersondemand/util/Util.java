@@ -200,6 +200,18 @@ public class Util {
             e.printStackTrace();
         }
     }
+
+    public  static  boolean isKeyBoardVisible(Context context){
+        InputMethodManager imm = (InputMethodManager) context
+                .getSystemService(Context.INPUT_METHOD_SERVICE);
+
+        if (imm.isAcceptingText()) {
+           return true;
+        } else {
+            return false;
+
+        }
+    }
     public static void hideKeyboard(Activity activity) {
         InputMethodManager imm = (InputMethodManager) activity.getSystemService(Activity.INPUT_METHOD_SERVICE);
         //Find the currently focused view, so we can grab the correct window token from it.

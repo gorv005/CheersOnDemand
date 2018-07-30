@@ -1,18 +1,23 @@
 package com.cheersondemand.view;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.DisplayMetrics;
+import android.util.TypedValue;
 import android.view.View;
+import android.view.ViewTreeObserver;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import com.cheersondemand.R;
 import com.cheersondemand.model.Categories;
@@ -34,7 +39,7 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class ActivitySearchProducts extends Activity implements View.OnClickListener,ISearchViewPresenter.ISearchView {
+public class ActivitySearchProducts extends Activity implements View.OnClickListener, ISearchViewPresenter.ISearchView {
 
     @BindView(R.id.imgBack)
     RelativeLayout imgBack;
@@ -62,6 +67,9 @@ public class ActivitySearchProducts extends Activity implements View.OnClickList
     AdapterProductSearcheResults adapterProductSearcheResults;
     AdapterRecentProductSearches adapterRecentProductSearch;
     Util util;
+    @BindView(R.id.tvRecenetSearch)
+    TextView tvRecenetSearch;
+    boolean isRecentSearch=false;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -71,7 +79,7 @@ public class ActivitySearchProducts extends Activity implements View.OnClickList
         setContentView(R.layout.activity_search_products);
         ButterKnife.bind(this);
         imgBack.setOnClickListener(this);
-        util=new Util();
+        util = new Util();
         horizontalLayout = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
         lvCategory.setLayoutManager(horizontalLayout);
         lvCategory.setHasFixedSize(true);
@@ -112,7 +120,46 @@ public class ActivitySearchProducts extends Activity implements View.OnClickList
 
             @Override
             public void afterTextChanged(Editable s) {
-                getSearchResult(etSearch.getText().toString());
+                if (etSearch.getText().toString().length() > 2) {
+                    llSearchResult.setVisibility(View.VISIBLE);
+                    getSearchResult(etSearch.getText().toString());
+                } else if (etSearch.getText().toString().length() == 0) {
+                    llSearchResult.setVisibility(View.GONE);
+                }
+            }
+        });
+
+        LLView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+            @Override
+            public void onGlobalLayout() {
+               /* if(Util.isKeyBoardVisible(ActivitySearchProducts.this)){
+
+                    rlRecentSearch.setVisibility(View.GONE);
+                    rlCategories.setVisibility(View.GONE);
+                    tvRecenetSearch.setVisibility(View.GONE);
+
+                }
+                else {
+                    if(isRecentSearch) {
+                        rlRecentSearch.setVisibility(View.VISIBLE);
+                        tvRecenetSearch.setVisibility(View.VISIBLE);
+                    }
+                    rlCategories.setVisibility(View.VISIBLE);
+                }*/
+                if ((LLView.getRootView().getHeight() - LLView.getHeight()) >
+                        LLView.getRootView().getHeight()/3) { // if more than 200 dp, it's probably a keyboard...
+                    // ... do something here
+                    rlRecentSearch.setVisibility(View.GONE);
+                    rlCategories.setVisibility(View.GONE);
+                    tvRecenetSearch.setVisibility(View.GONE);
+
+                } else {
+                    if(isRecentSearch) {
+                        rlRecentSearch.setVisibility(View.VISIBLE);
+                        tvRecenetSearch.setVisibility(View.VISIBLE);
+                    }
+                    rlCategories.setVisibility(View.VISIBLE);
+                }
             }
         });
     }
@@ -149,11 +196,15 @@ public class ActivitySearchProducts extends Activity implements View.OnClickList
         if (response.getSuccess()) {
 
             if (response.getData() != null && response.getData().getRecentSearch() != null && response.getData().getRecentSearch().size() > 0) {
+                rlRecentSearch.setVisibility(View.VISIBLE);
+                tvRecenetSearch.setVisibility(View.GONE);
+                isRecentSearch=true;
                 adapterRecentProductSearch = new AdapterRecentProductSearches(response.getData().getRecentSearch(), this);
                 lvRecentSearches.setAdapter(adapterRecentProductSearch);
-            }
-            else {
+            } else {
+                isRecentSearch=false;
                 rlRecentSearch.setVisibility(View.GONE);
+                tvRecenetSearch.setVisibility(View.GONE);
             }
             if (response.getData() != null && response.getData().getCategories() != null && response.getData().getCategories().size() > 0) {
 
@@ -174,18 +225,19 @@ public class ActivitySearchProducts extends Activity implements View.OnClickList
     }
 
 
-    public void getProductDesc(String query,String class_name,String class_id){
+    public void getProductDesc(String query, String class_name, String class_id) {
         if (SharedPreference.getInstance(this).getBoolean(C.IS_LOGIN_GUEST)) {
             String id = "" + SharedPreference.getInstance(this).geGuestUser(C.GUEST_USER).getId();
 
-            iSearchViewPresenter.getFetchRecordOfSearch(false, "", Util.id(this),query,class_name,class_id,"");
+            iSearchViewPresenter.getFetchRecordOfSearch(false, "", Util.id(this), query, class_name, class_id, "");
         } else {
             String id = "" + SharedPreference.getInstance(this).getUser(C.AUTH_USER).getData().getUser().getId();
             String token = C.bearer + SharedPreference.getInstance(this).getUser(C.AUTH_USER).getData().getToken().getAccessToken();
-            iSearchViewPresenter.getFetchRecordOfSearch(true, token, Util.id(this),query,class_name,class_id,"");
+            iSearchViewPresenter.getFetchRecordOfSearch(true, token, Util.id(this), query, class_name, class_id, "");
 
         }
     }
+
     @Override
     public void onSearchResultSuccess(SearchResultsResponse response) {
         if (response.getSuccess()) {
@@ -205,29 +257,28 @@ public class ActivitySearchProducts extends Activity implements View.OnClickList
 
     @Override
     public void onSearchProductSuccess(SearchProductResponse response) {
-            if(response.getSuccess()){
-                Intent intent = new Intent(this, ActivityContainer.class);
-                Bundle bundle=new Bundle();
-                bundle.putSerializable(C.PRODUCT,response.getData().getProduct());
-                intent.putExtra(C.FRAGMENT_ACTION,C.FRAGMENT_PRODUCT_DESC);
-                intent.putExtra(C.BUNDLE,bundle);
-                startActivity(intent);
-            }
-            else {
-                util.setSnackbarMessage(this, response.getMessage(), LLView, true);
+        if (response.getSuccess()) {
+            Intent intent = new Intent(this, ActivityContainer.class);
+            Bundle bundle = new Bundle();
+            bundle.putSerializable(C.PRODUCT, response.getData().getProduct());
+            intent.putExtra(C.FRAGMENT_ACTION, C.FRAGMENT_PRODUCT_DESC);
+            intent.putExtra(C.BUNDLE, bundle);
+            startActivity(intent);
+        } else {
+            util.setSnackbarMessage(this, response.getMessage(), LLView, true);
 
-            }
+        }
     }
 
     @Override
     public void getResponseError(String response) {
-        util.setSnackbarMessage(this,response, LLView, true);
+        util.setSnackbarMessage(this, response, LLView, true);
 
     }
 
     @Override
     public void showProgress() {
-        util.showDialog(C.MSG,this);
+        util.showDialog(C.MSG, this);
 
     }
 
@@ -244,5 +295,10 @@ public class ActivitySearchProducts extends Activity implements View.OnClickList
                 onBackPressed();
                 break;
         }
+    }
+
+    public static float dpToPx(Context context, float valueInDp) {
+        DisplayMetrics metrics = context.getResources().getDisplayMetrics();
+        return TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, valueInDp, metrics);
     }
 }

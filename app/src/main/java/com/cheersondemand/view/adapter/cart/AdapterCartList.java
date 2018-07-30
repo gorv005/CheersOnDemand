@@ -40,7 +40,7 @@ private List<OrderItem> horizontalList;
     AdapterProductAmount adapterProductAmount;
     int source;
     private boolean isProceed=true;
-
+    int isHome;
     public class ItemViewHolder extends RecyclerView.ViewHolder {
     public TextView tvName,tvSubName,tvPrice,tvQuantity,tvAddToWishList,tvWarningMsg,tvPriceChange;
     public CircleImageView ivProductImage;
@@ -96,12 +96,13 @@ private List<OrderItem> horizontalList;
 
         }
     }
-    public AdapterCartList(CartProduct cartProduct,List<OrderItem> horizontalList, Activity context,int source) {
+    public AdapterCartList(int isHome,CartProduct cartProduct,List<OrderItem> horizontalList, Activity context,int source) {
         this.horizontalList = horizontalList;
         this.context=context;
         this.cartProduct=cartProduct;
         imageLoader=new ImageLoader(context);
         this.source=source;
+        this.isHome=isHome;
     }
     public void setData(CartProduct data,List<OrderItem> horizontalList){
         this.cartProduct=data;
@@ -301,30 +302,50 @@ private List<OrderItem> horizontalList;
                 @Override
                 public void onClick(View v) {
 
+                    if(source==C.FRAGMENT_PRODUCT_DESC) {
+                        Intent intent = new Intent(context, ActivityContainer.class);
+                        intent.putExtra(C.FRAGMENT_ACTION, C.FRAGMENT_COUPON_LIST);
+                        Bundle bundle = new Bundle();
+                        bundle.putString(C.CART_VALUE, "" + cartProduct.getOrder().getSubTotal());
+                        bundle.putString(C.COUPON_NAME, "" + cartProduct.getOrder().getCoupon().getCode());
+                        bundle.putInt(C.SOURCE, source);
 
-                    Intent intent = new Intent(context, ActivityContainer.class);
-                    intent.putExtra(C.FRAGMENT_ACTION,C.FRAGMENT_COUPON_LIST);
-                    Bundle bundle=new Bundle();
-                    bundle.putString(C.CART_VALUE,""+cartProduct.getOrder().getSubTotal());
-                    bundle.putString(C.COUPON_NAME,""+cartProduct.getOrder().getCoupon().getCode());
+                        intent.putExtra(C.BUNDLE, bundle);
+                        context.startActivity(intent);
+                    }
+                    else {
+                        Bundle bundle = new Bundle();
+                        bundle.putString(C.CART_VALUE, "" + cartProduct.getOrder().getSubTotal());
+                        bundle.putString(C.COUPON_NAME, "" + cartProduct.getOrder().getCoupon().getCode());
+                        bundle.putInt(C.SOURCE, source);
 
-                    intent.putExtra(C.BUNDLE,bundle);
-                    context.startActivity(intent);
+                        ((ActivityHome)context).fragmnetLoader(C.FRAGMENT_COUPON_LIST,bundle);
+                    }
                 }
             });
           footerViewHolder.tvApplyCoupon.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
 
-
+                    if(source==C.FRAGMENT_PRODUCT_DESC) {
                     Intent intent = new Intent(context, ActivityContainer.class);
                     intent.putExtra(C.FRAGMENT_ACTION,C.FRAGMENT_COUPON_LIST);
                     Bundle bundle=new Bundle();
                     bundle.putString(C.CART_VALUE,""+cartProduct.getOrder().getSubTotal());
                     bundle.putString(C.COUPON_NAME,"");
+                        bundle.putInt(C.SOURCE, source);
 
                     intent.putExtra(C.BUNDLE,bundle);
                     context.startActivity(intent);
+                    }
+                    else {
+                        Bundle bundle=new Bundle();
+                        bundle.putString(C.CART_VALUE,""+cartProduct.getOrder().getSubTotal());
+                        bundle.putString(C.COUPON_NAME,"");
+                        bundle.putInt(C.SOURCE, source);
+
+                        ((ActivityHome)context).fragmnetLoader(C.FRAGMENT_COUPON_LIST,bundle);
+                    }
                 }
             });
        }

@@ -86,7 +86,10 @@
         <activity
             android:name=".view.ActivityFilters"
             android:screenOrientation="portrait"></activity>
-        <activity android:name=".view.ActivitySearchProducts" android:screenOrientation="portrait"></activity>
+        <activity             android:theme="@style/ActivityTheme"
+            android:name=".view.ActivitySearchProducts"
+            android:windowSoftInputMode="adjustResize"
+            android:screenOrientation="portrait"></activity>
         <provider
             android:name="android.support.v4.content.FileProvider"
             android:authorities="com.cheersondemand"

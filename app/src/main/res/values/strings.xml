@@ -43,7 +43,9 @@
     <string name="name_">Name</string>
     <string name="phone_no">Phone  No</string>
     <string name="save_profile">Save Profile</string>
-    <string name="no_product_found">No Product(s) found.</string>
+    <string name="no_product_found">No Products found</string>
+    <string name="no_product_in_cart_yet">No Products in cart yet !</string>
+
     <string name="try_search_diff">Try searching with a different terms or browse our categories.</string>
     <string name="browse_product">Browse Products</string>
     <string name="products">Products</string>
@@ -63,6 +65,8 @@
     <string name="password_change_succesfully">Password changed successfully !</string>
     <string name="you_can_browse_product">You can now go back and continue browsing products</string>
     <string name="enjoy_shopping">Enjoy Shopping !</string>
+    <string name="enjoy_shopping_">Enjoy Shopping</string>
+
     <string name="go_to_profile">Go to Profile</string>
     <string name="create_new_password">Create New Password</string>
     <string name="confirm_new_password">Confirm New Password</string>
@@ -98,7 +102,7 @@
     <string name="taxes">Taxes</string>
     <string name="delivery_charges">Delivery Charges</string>
     <string name="apply_Coupen">Apply Coupon</string>
-    <string name="coupen_applied">Coupon Applied</string>
+    <string name="coupen_applied">Applied Coupon</string>
     <string name="change_coupon">Change Coupon</string>
     <string name="total_amount">Total Amount</string>
     <string name="doller">$</string>
@@ -112,6 +116,8 @@
     <string name="applied">Applied</string>
     <string name="final_amount">Final Amount</string>
     <string name="brands_available">Brands available</string>
+    <string name="products_available">products available</string>
+
     <string name="Explore">Explore</string>
     <string name="sort">Sort</string>
     <string name="filter">Filter</string>

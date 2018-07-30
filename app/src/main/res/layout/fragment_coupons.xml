@@ -7,7 +7,7 @@
     android:background="@color/white"
    >
 
-   <!-- <TextView
+    <TextView
         android:layout_width="match_parent"
         android:background="@color/white"
         android:layout_height="60dp"
@@ -15,15 +15,18 @@
         android:layout_gravity="center"
         android:paddingTop="15dp"
         android:textStyle="bold"
+        android:id="@+id/tvCouponCode"
+
         android:fontFamily="@font/sf_ui_display_regular"
         android:gravity="center|center_vertical"
         android:textColor="@color/profile_text_color"
         android:textSize="16.3sp"
         android:text="@string/coupon_code" />
     <View
+        android:id="@+id/viewLine"
         android:background="@color/hint_color"
         android:layout_width="match_parent"
-        android:layout_height="1dp"/>-->
+        android:layout_height="1dp"/>
     <RelativeLayout
 
         android:layout_marginTop="5dp"

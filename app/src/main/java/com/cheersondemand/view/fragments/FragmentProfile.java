@@ -117,12 +117,12 @@ public class FragmentProfile extends Fragment implements View.OnClickListener, I
         imageLoader = new ImageLoader(getActivity());
         iProfileViewPresenter = new ProfileViewPresenterImpl(this, getActivity());
         iOrderViewPresenterPresenter = new OrderViewPresenterImpl(this, getActivity());
+
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        isLogin = SharedPreference.getInstance(getActivity()).getBoolean(C.IS_LOGIN);
 
         if (isLogin) {
             authenticationResponse = SharedPreference.getInstance(getActivity()).getUser(C.AUTH_USER);
@@ -183,6 +183,8 @@ public class FragmentProfile extends Fragment implements View.OnClickListener, I
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         SharedPreference.getInstance(getActivity()).setBoolean(C.IS_FROM_PAYMENT, false);
+        isLogin = SharedPreference.getInstance(getActivity()).getBoolean(C.IS_LOGIN);
+
         btnEdit.setOnClickListener(this);
         llProfileView.setOnClickListener(this);
         llLogout.setOnClickListener(this);

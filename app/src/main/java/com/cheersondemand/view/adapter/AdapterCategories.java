@@ -72,7 +72,7 @@ public class ItemViewHolder extends RecyclerView.ViewHolder {
             final ItemViewHolder itemViewHolder = (ItemViewHolder) holder;
 
             itemViewHolder.tvCatName.setText(horizontalList.get(position).getName());
-            itemViewHolder.tvNoOFBrands.setText(horizontalList.get(position).getProductsCount()+" "+context.getString(R.string.brands_available));
+            itemViewHolder.tvNoOFBrands.setText(horizontalList.get(position).getProductsCount()+" "+context.getString(R.string.products_available));
 
             Util.setImage(context,horizontalList.get(position).getImage(),((ItemViewHolder) holder).ivProductImage);
            // imageLoader.DisplayImage(horizontalList.get(position).getImage(),((ItemViewHolder) holder).ivProductImage);

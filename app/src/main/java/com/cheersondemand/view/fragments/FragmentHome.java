@@ -301,7 +301,7 @@ public class FragmentHome extends Fragment implements IStoreViewPresenter.IStore
             rvBrands.setAdapter(adapterHomeBrands);
 
             homeCategoriesSectionList = new ArrayList<>();
-            homeCategoriesSectionList.add(new HomeCategoriesSectionList("ALL Products", response.getData().getAllProducts()));
+            homeCategoriesSectionList.add(new HomeCategoriesSectionList("All products", response.getData().getAllProducts()));
 
             adapterHomeCategoriesSections = new AdapterHomeCategoriesSections(getActivity(), homeCategoriesSectionList);
             rvProducts.setAdapter(adapterHomeCategoriesSections);

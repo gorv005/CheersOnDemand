@@ -401,7 +401,7 @@ public class FragmentCart extends Fragment implements View.OnClickListener, IOrd
     @Override
     public void getRemoveItemFromCartSuccess(UpdateCartResponse response) {
         if (response.getSuccess()) {
-            util.setSnackbarMessage(getActivity(), response.getMessage(), LLView, false);
+            util.setSnackbarMessage(getActivity(), response.getMessage(), LLView, true);
             if (response.getData() != null && response.getData().getOrder().getOrderItems().size() > 0) {
                 cartProduct = response.getData();
                 orderItemsList.clear();
@@ -436,7 +436,8 @@ public class FragmentCart extends Fragment implements View.OnClickListener, IOrd
                 cartProduct = response.getData();
 //            adapterCartList.setData(cartProduct);
                 orderItemsList = response.getData().getOrder().getOrderItems();
-                adapterCartList = new AdapterCartList(cartProduct, orderItemsList, getActivity(), source);
+
+                adapterCartList = new AdapterCartList(source,cartProduct, orderItemsList, getActivity(), source);
                 rvCartList.setAdapter(adapterCartList);
                 llNoProductInCount.setVisibility(View.GONE);
                 rvCartList.setVisibility(View.VISIBLE);
@@ -523,7 +524,7 @@ public class FragmentCart extends Fragment implements View.OnClickListener, IOrd
                 orderItemsList.add(response.getData().getOrder().getOrderItems().get(i));
                 orderItemsList.get(i).setChange("couponremove");
             }*/
-            adapterCartList = new AdapterCartList(cartProduct, response.getData().getOrder().getOrderItems(), getActivity(), source);
+            adapterCartList = new AdapterCartList(source,cartProduct, response.getData().getOrder().getOrderItems(), getActivity(), source);
             rvCartList.setAdapter(adapterCartList);
             //      CartProduct s=cartProduct;
             //   orderItemsList=response.getData().getOrder().getOrderItems();

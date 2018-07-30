@@ -68,7 +68,7 @@
 
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/group_6" />
+            android:src="@drawable/no_notification" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -76,7 +76,7 @@
             android:layout_marginTop="10dp"
             android:fontFamily="@font/sf_ui_display_regular"
             android:gravity="center_horizontal"
-            android:text="@string/no_product_found"
+            android:text="@string/no_product_in_cart_yet"
             android:textColor="@color/profile_text_color"
             android:textSize="16.3sp" />
 
@@ -86,10 +86,19 @@
             android:fontFamily="@font/sf_ui_display_regular"
             android:gravity="center_horizontal"
 
-            android:text="@string/try_search_diff"
+            android:text="@string/browse_for_product_or_checkout"
             android:textColor="@color/profile_updated_text_color"
             android:textSize="14.4sp" />
 
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/sf_ui_display_regular"
+            android:gravity="center_horizontal"
+            android:layout_marginTop="10dp"
+            android:text="@string/enjoy_shopping_"
+            android:textColor="@color/profile_updated_text_color"
+            android:textSize="14.4sp" />
 
         <Button
             android:id="@+id/btnBrowseProduct"
@@ -100,10 +109,10 @@
             android:layout_marginBottom="20dp"
             android:layout_marginEnd="20dp"
             android:layout_marginStart="20dp"
-            android:layout_marginTop="30dp"
+            android:layout_marginTop="10dp"
             android:background="@drawable/bg_button_enable"
             android:fontFamily="@font/sf_ui_display_regular"
-            android:text="@string/browse_product"
+            android:text="@string/continue_shopping"
             android:textAllCaps="false"
             android:textColor="@color/white"
             android:textSize="13.4sp" />

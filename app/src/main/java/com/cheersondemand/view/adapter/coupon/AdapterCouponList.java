@@ -10,8 +10,10 @@ import android.widget.TextView;
 
 import com.cheersondemand.R;
 import com.cheersondemand.model.coupon.CouponInfo;
+import com.cheersondemand.util.C;
 import com.cheersondemand.util.ImageLoader.ImageLoader;
 import com.cheersondemand.view.ActivityContainer;
+import com.cheersondemand.view.ActivityHome;
 
 import java.util.List;
 
@@ -26,6 +28,7 @@ private List<CouponInfo> horizontalList;
     Context context;
     ImageLoader imageLoader;
     String couponName="";
+    int source;
     public class ItemViewHolder extends RecyclerView.ViewHolder {
     public TextView tvCouponTitle,tvCouponDesc,tvTermsAndCondition,tvApply,tvApplied;
     View rlCard;
@@ -45,12 +48,12 @@ private List<CouponInfo> horizontalList;
 }
 
 
-    public AdapterCouponList(List<CouponInfo> horizontalList, Activity context,String couponName) {
+    public AdapterCouponList(int source,List<CouponInfo> horizontalList, Activity context,String couponName) {
         this.horizontalList = horizontalList;
         this.context=context;
         this.couponName=couponName;
         imageLoader=new ImageLoader(context);
-
+        this.source=source;
     }
     public void setData(List<CouponInfo> horizontalList,String couponName){
         this.horizontalList.clear();
@@ -113,7 +116,13 @@ private List<CouponInfo> horizontalList;
             itemViewHolder.tvApply.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    ((ActivityContainer)context).applyCoupon(horizontalList.get(position).getCode());
+                    if(source== C.FRAGMENT_PRODUCT_DESC) {
+                        ((ActivityContainer) context).applyCoupon(horizontalList.get(position).getCode());
+                    }
+                    else {
+                        ((ActivityHome) context).applyCoupon(horizontalList.get(position).getCode());
+
+                    }
                 }
             });
         }

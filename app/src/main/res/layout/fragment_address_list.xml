@@ -36,7 +36,7 @@
 
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/group_6" />
+            android:src="@drawable/no_notification" />
 
         <TextView
             android:layout_width="wrap_content"

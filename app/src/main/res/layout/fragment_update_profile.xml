@@ -30,7 +30,7 @@
                 android:layout_height="120dp"
                 android:layout_centerHorizontal="true"
                 android:layout_centerInParent="true"
-                android:scaleType="fitCenter"
+                android:scaleType="fitXY"
                 android:src="@drawable/edit_profile_back_default"
                 app:riv_border_color="@color/edit_button_back_color"
                 app:riv_border_width="1dip"

@@ -159,7 +159,7 @@ public class FragmentAuthentication extends Fragment implements IAuthenitication
      boolean isPasswordVisibleSignUP=false;
     String accessToken;
     private Handler handler;
-
+    boolean isClicked=false;
      boolean isPasswordVisibleLogin=false;
      boolean isLoginScreen=false;
     IAutheniticationPresenter iAutheniticationPresenter;
@@ -517,17 +517,23 @@ public class FragmentAuthentication extends Fragment implements IAuthenitication
             case R.id.skip_and_continue:
                 if (Util.isNetworkConnectivity(getActivity())) {
                   //gotoHome();
-                    GenRequest categoryRequest=new GenRequest();
-                    categoryRequest.setUuid(Util.id(getActivity()));
-                   iAutheniticationPresenter.createGuestUser(categoryRequest);
+                    if(!isClicked) {
+                        isClicked=true;
+                        GenRequest categoryRequest = new GenRequest();
+                        categoryRequest.setUuid(Util.id(getActivity()));
+                        iAutheniticationPresenter.createGuestUser(categoryRequest);
+                    }
                 }
                 break;
             case R.id.skip_and_continue_login:
                 if (Util.isNetworkConnectivity(getActivity())) {
                   //gotoHome();
-                    GenRequest categoryRequest=new GenRequest();
-                    categoryRequest.setUuid(Util.id(getActivity()));
-                    iAutheniticationPresenter.createGuestUser(categoryRequest);
+                    if(!isClicked) {
+                        isClicked = true;
+                        GenRequest categoryRequest = new GenRequest();
+                        categoryRequest.setUuid(Util.id(getActivity()));
+                        iAutheniticationPresenter.createGuestUser(categoryRequest);
+                    }
                 }
                 break;
             case R.id.btnSignUp:
@@ -941,6 +947,7 @@ public class FragmentAuthentication extends Fragment implements IAuthenitication
     @Override
     public void getResponseSuccess(AuthenticationResponse response) {
        // Log.e("DEBUG",""+response.toString());
+        isClicked=false;
         btnLogin.revertAnimation();
         btnSignUp.revertAnimation();
 
@@ -960,7 +967,7 @@ public class FragmentAuthentication extends Fragment implements IAuthenitication
                 SharedPreference.getInstance(getActivity()).setUser(C.AUTH_USER,response);
                 SharedPreference.getInstance(getActivity()).setString(C.ORDER_ID,response.getData().getUser().getOrderId());
 
-                gotoSearchLocation();
+                gotoSearchLocationAuth();
             }
         }
         else {
@@ -972,6 +979,7 @@ public class FragmentAuthentication extends Fragment implements IAuthenitication
 
     @Override
     public void getResponseSuccessOfCreateGuestUser(GuestUserCreateResponse response) {
+        isClicked=false;
         btnLogin.revertAnimation();
         btnSignUp.revertAnimation();
         if(response.getSuccess()){
@@ -996,6 +1004,14 @@ public class FragmentAuthentication extends Fragment implements IAuthenitication
     }
 
 
+    void gotoSearchLocationAuth(){
+        Intent intent = new Intent(getActivity(), ActivitySearchLocation.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+
+        intent.putExtra(C.FROM, C.SEARCH);
+        startActivityForResult(intent, C.REQUEST_ADDRESS);
+    }
+
     void gotoSearchLocation(){
         Intent intent = new Intent(getActivity(), ActivitySearchLocation.class);
         intent.putExtra(C.FROM, C.SEARCH);
@@ -1003,6 +1019,7 @@ public class FragmentAuthentication extends Fragment implements IAuthenitication
     }
     @Override
     public void getResponseError(String response) {
+        isClicked=false;
         Log.e("DEBUG",""+response);
         btnLogin.revertAnimation();
         btnSignUp.revertAnimation();
