@@ -14,6 +14,7 @@ import android.widget.TextView;
 
 import com.cheersondemand.R;
 import com.cheersondemand.model.store.StoreList;
+import com.cheersondemand.util.C;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,18 +27,21 @@ public class AdapterStore extends BaseAdapter implements Filterable{
     private Activity activity;
     private List<StoreList> Items;
     int pos=-1;
+
     private int lastCheckedPosition = -1;
 List<StoreList> filterList;
     StoreListFilter filter;
     StoreList selectedStore;
-    public AdapterStore(Activity activity, List<StoreList> sideMenuItems, StoreList store) {
+    public AdapterStore(int source,Activity activity, List<StoreList> sideMenuItems, StoreList store) {
         this.activity = activity;
         this.Items = sideMenuItems;
         mInflater = LayoutInflater.from(activity);
         this.filterList=sideMenuItems;
         this.selectedStore=store;
-        if(store!=null){
-            lastCheckedPosition=store.getId();
+        if(source== C.HOME) {
+            if (store != null) {
+                lastCheckedPosition = store.getId();
+            }
         }
        /* else {
             if(sideMenuItems!=null && sideMenuItems.size()>0) {

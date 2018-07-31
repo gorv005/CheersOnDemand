@@ -145,7 +145,7 @@ public class FragmentStoreSelection extends Fragment implements IStoreViewPresen
                 rlStoreView.setVisibility(View.VISIBLE);
                 ((ActivityContainer) getActivity()).hideToolBar();
                 StoreList storeList1 = SharedPreference.getInstance(getActivity()).getStore(C.SELECTED_STORE);
-                adapterStore = new AdapterStore(getActivity(), storeList, storeList1);
+                adapterStore = new AdapterStore(from,getActivity(), storeList, storeList1);
                 lvStoreList.setAdapter(adapterStore);
             } else {
                 ((ActivityContainer) getActivity()).showToolBar();

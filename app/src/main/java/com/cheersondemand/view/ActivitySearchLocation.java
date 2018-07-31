@@ -173,7 +173,7 @@ public class ActivitySearchLocation extends AppCompatActivity implements
 
         AutocompleteFilter autocompleteFilter = new AutocompleteFilter.Builder()
                 .setTypeFilter(Place.TYPE_COUNTRY)
-                // .setCountry("US")
+                 //.setCountry("US")
                 .setTypeFilter(AutocompleteFilter.TYPE_FILTER_ADDRESS)
                 .build();
         adapterLocation = new AdapterLocation(this, R.layout.item_address,
