@@ -198,8 +198,8 @@
                     android:textSize="14sp"
                     android:layout_alignParentStart="true"
                     android:fontFamily="@font/sf_ui_display_regular"
-                    android:textColor="@color/item_color"
-                    android:text="@string/taxes"
+                    android:textColor="@color/profile_text_color"
+                    android:text="@string/tax"
                     />
 
                 <TextView

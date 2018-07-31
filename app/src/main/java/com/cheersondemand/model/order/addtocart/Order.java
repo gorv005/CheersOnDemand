@@ -30,6 +30,9 @@ public class Order implements Serializable{
     @SerializedName("sub_total")
     @Expose
     private Double subTotal;
+    @SerializedName("tax")
+    @Expose
+    private String tax;
     @SerializedName("total")
     @Expose
     private Double total;
@@ -233,5 +236,13 @@ public class Order implements Serializable{
 
     public void setOrderHistory(List<OrderHistory> orderHistory) {
         this.orderHistory = orderHistory;
+    }
+
+    public String getTax() {
+        return tax;
+    }
+
+    public void setTax(String tax) {
+        this.tax = tax;
     }
 }

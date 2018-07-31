@@ -223,11 +223,11 @@ public class FragmentPaymentConfirmation extends Fragment implements ICardViewPr
             if (SharedPreference.getInstance(getActivity()).getBoolean(C.IS_LOGIN_GUEST)) {
                 String id = "" + SharedPreference.getInstance(getActivity()).geGuestUser(C.GUEST_USER).getId();
 
-                iOrderViewPresenterPresenter.getCartList(id, order_id, Util.id(getActivity()),true);
+                iOrderViewPresenterPresenter.getCartList(id, order_id, Util.id(getActivity()),false);
             } else {
                 String id = "" + SharedPreference.getInstance(getActivity()).getUser(C.AUTH_USER).getData().getUser().getId();
                 String token = C.bearer + SharedPreference.getInstance(getActivity()).getUser(C.AUTH_USER).getData().getToken().getAccessToken();
-                iOrderViewPresenterPresenter.getCartList(token, id, order_id, Util.id(getActivity()),true);
+                iOrderViewPresenterPresenter.getCartList(token, id, order_id, Util.id(getActivity()),false);
             }
         }
     }
@@ -294,11 +294,11 @@ public class FragmentPaymentConfirmation extends Fragment implements ICardViewPr
     void fillDetails() {
         adapterProductAmount = new AdapterProductAmount(getActivity(), cartProduct.getOrder().getOrderItems());
         lvCharges.setAdapter(adapterProductAmount);
-        tvTaxes.setText(getString(R.string.doller) + "0.0");
+        tvTaxes.setText(getString(R.string.doller) +  cartProduct.getOrder().getTax());
         tvDelieveryCharges.setText(getString(R.string.doller) + "0.0");
-        tvTotalOrder.setText(getString(R.string.doller) + "" + Util.get2Decimal(cartProduct.getOrder().getTotal()));
+        tvTotalOrder.setText(getString(R.string.doller) + "" + Util.get2Decimal(cartProduct.getOrder().getSubTotal()));
 
-        tvSubTotal.setText(getString(R.string.doller) + Util.get2Decimal(cartProduct.getOrder().getSubTotal()));
+        tvSubTotal.setText(getString(R.string.doller) + Util.get2Decimal(cartProduct.getOrder().getTotal()));
         if (cartProduct.getOrder().getCoupon() != null && cartProduct.getOrder().getAppliedDiscount() > 0) {
             tvCouponAmount.setText("-" + getString(R.string.doller) + cartProduct.getOrder().getAppliedDiscount());
         } else {
