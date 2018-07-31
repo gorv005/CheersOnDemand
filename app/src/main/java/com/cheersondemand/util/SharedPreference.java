@@ -15,6 +15,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import static android.content.Context.MODE_PRIVATE;
+
 /**
  * Created by AB.garg on 08-09-2016.
  */
@@ -22,6 +24,7 @@ public class SharedPreference {
 
     private Context context;
     private static SharedPreference savePreferenceAndData;
+    private static SharedPreference savePreferenceNoti;
 
     public static SharedPreference getInstance(Context context)
     {
@@ -32,7 +35,19 @@ public class SharedPreference {
         return savePreferenceAndData;
     }
 
+    public static void SaveNoti(Context context,String key,boolean value)
+    {
+        SharedPreferences.Editor editor = context.getSharedPreferences("Noti", MODE_PRIVATE).edit();
+        editor.putBoolean(key, value);
+        editor.apply();
+    }
 
+    public static boolean getNoti(Context context,String key)
+    {
+        SharedPreferences prefs = context.getSharedPreferences("Noti", MODE_PRIVATE);
+       return prefs.getBoolean(key,false);
+
+    }
     public SharedPreference(Context context)
     {
         this.context = context;

@@ -96,7 +96,7 @@ public class FragmentSplash extends Fragment {
                     @Override
                     public void run() {
                         if (CheckingPermissionIsEnabledOrNot()) {
-                            if (SharedPreference.getInstance(getActivity()).getBoolean(C.IS_NOTIFICATION_PERMISSION_ASK)) {
+                            if (SharedPreference.getNoti(getActivity(),C.IS_NOTIFICATION_PERMISSION_ASK)) {
                                 try {
 
                                     if (SharedPreference.getInstance(getActivity()).getBoolean(C.IS_LOGIN)) {
@@ -272,7 +272,7 @@ public class FragmentSplash extends Fragment {
         btnGiveAccess.setOnClickListener(new View.OnClickListener() {
 
             public void onClick(View v) {
-                SharedPreference.getInstance(getActivity()).setBoolean(C.IS_NOTIFICATION_PERMISSION_ASK,true);
+                SharedPreference.SaveNoti(getActivity(),C.IS_NOTIFICATION_PERMISSION_ASK,true);
 
                 SharedPreference.getInstance(getActivity()).setBoolean(C.IS_NOTIFICATION_ENABLE,true);
                 dialog.dismiss();
@@ -285,7 +285,7 @@ public class FragmentSplash extends Fragment {
 
             public void onClick(View v) {
                 // TODO Auto-generated method stub
-                SharedPreference.getInstance(getActivity()).setBoolean(C.IS_NOTIFICATION_PERMISSION_ASK,true);
+                SharedPreference.SaveNoti(getActivity(),C.IS_NOTIFICATION_PERMISSION_ASK,true);
 
                 SharedPreference.getInstance(getActivity()).setBoolean(C.IS_NOTIFICATION_ENABLE,false);
 

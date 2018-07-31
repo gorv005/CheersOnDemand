@@ -276,50 +276,54 @@ public class FragmentHome extends Fragment implements IStoreViewPresenter.IStore
 
     @Override
     public void getProductWithCategoriesSuccess(ProductsWithCategoryResponse response) {
-        if (response.getSuccess()) {
+        try {
+            if (response.getSuccess()) {
 
-            shimmerBrands.setVisibility(View.VISIBLE);
-            shimmerProducts.setVisibility(View.VISIBLE);
-            tvNoStoreAvailable.setVisibility(View.GONE);
+                shimmerBrands.setVisibility(View.VISIBLE);
+                shimmerProducts.setVisibility(View.VISIBLE);
+                tvNoStoreAvailable.setVisibility(View.GONE);
 
-            if (response.getData().getHasCartProduct()) {
-                ((ActivityHome) getActivity()).setDot(response.getData().getHasCartProduct());
-            }
-            shimmerBrands.stopShimmerAnimation();
-            List<Categories> categories = new ArrayList<>();
-
-            if (response.getData().getCategories() != null && response.getData().getCategories().size() > 0) {
-                if (response.getData().getCategories().size() > 5) {
-                    for (int i = 0; i < 5; i++) {
-                        categories.add(response.getData().getCategories().get(i));
-                    }
-                } else {
-                    categories.addAll(response.getData().getCategories());
+                if (response.getData().getHasCartProduct()) {
+                    ((ActivityHome) getActivity()).setDot(response.getData().getHasCartProduct());
                 }
+                shimmerBrands.stopShimmerAnimation();
+                List<Categories> categories = new ArrayList<>();
+
+                if (response.getData().getCategories() != null && response.getData().getCategories().size() > 0) {
+                    if (response.getData().getCategories().size() > 5) {
+                        for (int i = 0; i < 5; i++) {
+                            categories.add(response.getData().getCategories().get(i));
+                        }
+                    } else {
+                        categories.addAll(response.getData().getCategories());
+                    }
+                }
+                adapterHomeBrands = new AdapterHomeBrands(categories, getActivity());
+                rvBrands.setAdapter(adapterHomeBrands);
+
+                homeCategoriesSectionList = new ArrayList<>();
+                homeCategoriesSectionList.add(new HomeCategoriesSectionList("All products", response.getData().getAllProducts()));
+
+                adapterHomeCategoriesSections = new AdapterHomeCategoriesSections(getActivity(), homeCategoriesSectionList);
+                rvProducts.setAdapter(adapterHomeCategoriesSections);
+
+                SharedPreference.getInstance(getActivity()).setBoolean(C.CART_HAS_ITEM, response.getData().getHasCartProduct());
+                SharedPreference.getInstance(getActivity()).setString(C.ORDER_ID, response.getData().getUser().getOrderId());
+
+
+            } else {
+                shimmerBrands.setVisibility(View.GONE);
+                shimmerProducts.setVisibility(View.GONE);
+                tvNoStoreAvailable.setVisibility(View.VISIBLE);
+                tvNoStoreAvailable.setText(response.getMessage());
+                //   util.setSnackbarMessage(getActivity(), response.getMessage(), rlHomeView, true);
+
             }
-            adapterHomeBrands = new AdapterHomeBrands(categories, getActivity());
-            rvBrands.setAdapter(adapterHomeBrands);
-
-            homeCategoriesSectionList = new ArrayList<>();
-            homeCategoriesSectionList.add(new HomeCategoriesSectionList("All products", response.getData().getAllProducts()));
-
-            adapterHomeCategoriesSections = new AdapterHomeCategoriesSections(getActivity(), homeCategoriesSectionList);
-            rvProducts.setAdapter(adapterHomeCategoriesSections);
-
-            SharedPreference.getInstance(getActivity()).setBoolean(C.CART_HAS_ITEM, response.getData().getHasCartProduct());
-            SharedPreference.getInstance(getActivity()).setString(C.ORDER_ID, response.getData().getUser().getOrderId());
-
-
-        } else {
-            shimmerBrands.setVisibility(View.GONE);
-            shimmerProducts.setVisibility(View.GONE);
-            tvNoStoreAvailable.setVisibility(View.VISIBLE);
-            tvNoStoreAvailable.setText(response.getMessage());
-         //   util.setSnackbarMessage(getActivity(), response.getMessage(), rlHomeView, true);
-
+            updateStore();
         }
-        updateStore();
-
+        catch (Exception e){
+            e.printStackTrace();
+        }
     }
 
     @Override

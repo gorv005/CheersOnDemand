@@ -155,8 +155,8 @@ public class Util {
     public static void setImage(Context context, String url, ImageView imageView){
         Glide.with(context)
                 .load(url)
-                //.placeholder(R.drawable.default_placeholder)
-    //.error(R.drawable.imagenotfound)
+                .placeholder(R.drawable.missing)
+   // .error(R.drawable.missing)
                 .into(imageView);
     }
 

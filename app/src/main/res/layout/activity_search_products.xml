@@ -38,11 +38,12 @@
             android:focusableInTouchMode="true"
             android:orientation="horizontal">
 
-            <EditText
+            <com.cheersondemand.util.ChatEditText
                 android:layout_marginTop="20dp"
                 android:id="@+id/etSearch"
                 android:layout_width="match_parent"
                 android:layout_height="44dp"
+                android:maxLines="1"
                 android:layout_marginRight="10dp"
                 android:fontFamily="@font/sf_ui_display_regular"
                 android:textSize="21sp"

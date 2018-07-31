@@ -39,11 +39,11 @@ List<StoreList> filterList;
         if(store!=null){
             lastCheckedPosition=store.getId();
         }
-        else {
+       /* else {
             if(sideMenuItems!=null && sideMenuItems.size()>0) {
                 lastCheckedPosition = sideMenuItems.get(0).getId();
             }
-        }
+        }*/
     }
 
 
@@ -100,6 +100,15 @@ List<StoreList> filterList;
         return null;
     }
 
+    public StoreList getNonSelectedItem() {
+        for (int i=0;i<Items.size();i++) {
+          if(getSelectedItem().getId()!=Items.get(i).getId()) {
+
+              return Items.get(i);
+          }
+        }
+        return null;
+    }
     private void initializeViews(final StoreList model, final ItemViewHolder holder, final int position) {
         ((ItemViewHolder)holder).name.setText(model.getName());
         if (model.getId() == lastCheckedPosition){

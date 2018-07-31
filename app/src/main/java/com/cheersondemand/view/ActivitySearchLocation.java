@@ -18,6 +18,7 @@ import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.cheersondemand.R;
@@ -76,6 +77,8 @@ public class ActivitySearchLocation extends AppCompatActivity implements
     LocationHelper locationHelper;
     @BindView(R.id.rlCurrentLocation)
     RelativeLayout rlCurrentLocation;
+    @BindView(R.id.tvRecentSearch)
+    TextView tvRecentSearch;
     // private EditText mAutocompleteTextView;
     private GoogleApiClient mGoogleApiClient;
     private AdapterLocation adapterLocation;
@@ -170,7 +173,7 @@ public class ActivitySearchLocation extends AppCompatActivity implements
 
         AutocompleteFilter autocompleteFilter = new AutocompleteFilter.Builder()
                 .setTypeFilter(Place.TYPE_COUNTRY)
-               // .setCountry("US")
+                // .setCountry("US")
                 .setTypeFilter(AutocompleteFilter.TYPE_FILTER_ADDRESS)
                 .build();
         adapterLocation = new AdapterLocation(this, R.layout.item_address,
@@ -335,10 +338,9 @@ public class ActivitySearchLocation extends AppCompatActivity implements
     public void getSaveLocationSuccess(SaveLocationResponse response) {
         if (response.getSuccess()) {
 
-            if(from==C.SEARCH) {
+            if (from == C.SEARCH) {
                 gotoStoreList();
-            }
-            else if(from==C.HOME){
+            } else if (from == C.HOME) {
                 getStoreList();
             }
         } else {
@@ -349,7 +351,7 @@ public class ActivitySearchLocation extends AppCompatActivity implements
     }
 
 
-    void  gotoStoreList(){
+    void gotoStoreList() {
         Intent intent = new Intent(this, ActivityContainer.class);
         Bundle bundle = new Bundle();
         intent.putExtra(C.FRAGMENT_ACTION, C.FRAGMENT_STORE_LIST);
@@ -358,7 +360,8 @@ public class ActivitySearchLocation extends AppCompatActivity implements
         intent.putExtra(C.BUNDLE, bundle);
         startActivity(intent);
     }
-    void getStoreList(){
+
+    void getStoreList() {
         if (SharedPreference.getInstance(this).getBoolean(C.IS_LOGIN_GUEST)) {
             iStoreViewPresenter.getStoreList(Util.id(this));
         } else {
@@ -369,14 +372,14 @@ public class ActivitySearchLocation extends AppCompatActivity implements
 
         }
     }
+
     @Override
     public void getStoreListSuccess(StoreListResponse response) {
         if (!response.getSuccess()) {
             SharedPreference.getInstance(this).setStore(C.SELECTED_STORE, null);
-            SharedPreference.getInstance(this).setString(C.STORE_MSG,response.getMessage());
+            SharedPreference.getInstance(this).setString(C.STORE_MSG, response.getMessage());
             finish();
-        }
-        else {
+        } else {
             gotoStoreList();
         }
     }
@@ -399,11 +402,15 @@ public class ActivitySearchLocation extends AppCompatActivity implements
             rlLocationSearch.setVisibility(View.GONE);
 
             if (response.getData() != null && response.getData().size() > 0) {
+                tvRecentSearch.setVisibility(View.VISIBLE);
 
                 adapterRecentSearches = new AdapterRecentSearches(response.getData(), ActivitySearchLocation.this);
                 mLinearLayoutManager = new LinearLayoutManager(this);
                 rvRecentSearches.setLayoutManager(mLinearLayoutManager);
                 rvRecentSearches.setAdapter(adapterRecentSearches);
+            }
+            else {
+                tvRecentSearch.setVisibility(View.GONE);
             }
         }
     }
@@ -412,8 +419,7 @@ public class ActivitySearchLocation extends AppCompatActivity implements
     public void showProgress() {
         try {
             util.showDialog(C.MSG, this);
-        }
-        catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
@@ -423,7 +429,7 @@ public class ActivitySearchLocation extends AppCompatActivity implements
         try {
 
             util.hideDialog();
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
 

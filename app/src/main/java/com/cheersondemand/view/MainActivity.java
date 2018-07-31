@@ -14,7 +14,9 @@ import com.cheersondemand.util.C;
 import com.cheersondemand.util.SharedPreference;
 import com.cheersondemand.view.fragments.FragmentAuthentication;
 import com.cheersondemand.view.fragments.FragmentSplash;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.iid.FirebaseInstanceId;
+import com.google.firebase.iid.InstanceIdResult;
 
 import java.util.List;
 
@@ -35,7 +37,9 @@ public class    MainActivity extends AppCompatActivity {
 
         bundle = getIntent().getBundleExtra(C.BUNDLE);
         fragmentAction = getIntent().getIntExtra(C.FRAGMENT_ACTION, C.FRAGMENT_SPLASH);
+        getToken();
         fragmnetLoader(fragmentAction, bundle);
+
     }
 
     @Override
@@ -45,6 +49,17 @@ public class    MainActivity extends AppCompatActivity {
 
     }
 
+    void  getToken(){
+        FirebaseInstanceId.getInstance().getInstanceId().addOnSuccessListener( MainActivity.this,  new OnSuccessListener<InstanceIdResult>() {
+            @Override
+            public void onSuccess(InstanceIdResult instanceIdResult) {
+                String updatedToken = instanceIdResult.getToken();
+                Log.e("Updated Token",updatedToken);
+                SharedPreference.getInstance(MainActivity.this).setString(C.DEVICE_TOKEN,updatedToken);
+
+            }
+        });
+    }
     public void fragmnetLoader(int fragmentType, Bundle bundle) {
         try {
             FragmentManager fragmentManager = getSupportFragmentManager();

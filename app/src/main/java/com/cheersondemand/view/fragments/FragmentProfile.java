@@ -40,7 +40,7 @@ import com.cheersondemand.util.SharedPreference;
 import com.cheersondemand.util.Util;
 import com.cheersondemand.view.ActivityContainer;
 import com.cheersondemand.view.MainActivity;
-import com.makeramen.roundedimageview.RoundedImageView;
+import com.mikhaellopez.circularimageview.CircularImageView;
 import com.suke.widget.SwitchButton;
 
 import butterknife.BindView;
@@ -54,7 +54,7 @@ public class FragmentProfile extends Fragment implements View.OnClickListener, I
 
 
     @BindView(R.id.imgProfile)
-    RoundedImageView imgProfile;
+    CircularImageView imgProfile;
     @BindView(R.id.tvName)
     TextView tvName;
     @BindView(R.id.tvEmail)
@@ -134,7 +134,12 @@ public class FragmentProfile extends Fragment implements View.OnClickListener, I
             viewConnectedAccount.setVisibility(View.GONE);
 
             if (authenticationResponse.getData().getUser().getProfilePicture() != null) {
-                imageLoader.DisplayImage(authenticationResponse.getData().getUser().getProfilePicture(), imgProfile);
+               imageLoader.DisplayImage(authenticationResponse.getData().getUser().getProfilePicture(), imgProfile);
+             //   Util.setImage(getActivity(),authenticationResponse.getData().getUser().getProfilePicture(),imgProfile);
+            }
+            else {
+                imageLoader.DisplayImage("", imgProfile);
+
             }
 
         } else {

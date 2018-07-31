@@ -81,7 +81,7 @@
     <string name="using_gps">Using GPS</string>
     <string name="recent_searches">Recent Searches</string>
     <string name="search_result">Search Results</string>
-    <string name="select_store">Select Store</string>
+    <string name="select_store">Choose your store</string>
     <string name="back">Back</string>
     <string name="submit">Submit</string>
     <string name="plz_select_store">Please select a store</string>
@@ -263,6 +263,9 @@
     <string name="no_order_placed">No order placed !</string>
     <string name="server_client_id">318594772761-fqijvbpoobcral5f0mpecidfj24ol9on.apps.googleusercontent.com</string>
     <string name="sorry_no_product">Sorry, No store is open currently or delivery is not available for your location.</string>
+    <string name="No">NO</string>
+    <string name="yes">YES</string>
+    <string name="do_you_want_to_remove_coupon">Do you want to remove coupon from cart list?</string>
 
     <!--
         <string name="default_web_client_id">999387565226-hdnnhm6rhgik5ljvm06shotsi7j9883c.apps.googleusercontent.com</string>

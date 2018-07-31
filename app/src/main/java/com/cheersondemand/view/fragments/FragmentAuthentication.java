@@ -369,9 +369,9 @@ public class FragmentAuthentication extends Fragment implements IAuthenitication
                 };
                 AsyncTask.execute(runnable);
                 //authenticating with firebase
-                firebaseAuthWithGoogle(account,accessToken);
+               // firebaseAuthWithGoogle(account,accessToken);
             } catch (ApiException e) {
-                Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
+              //  Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
             }
         }
 
@@ -450,6 +450,8 @@ public class FragmentAuthentication extends Fragment implements IAuthenitication
     //this method is called on click
     private void signIn() {
         //getting the google signin intent
+
+        mGoogleSignInClient. signOut();
         Intent signInIntent = mGoogleSignInClient.getSignInIntent();
 
         //starting the activity for result
@@ -578,10 +580,16 @@ public class FragmentAuthentication extends Fragment implements IAuthenitication
         SignUpRequest signUpRequest=new SignUpRequest();
         User user=new User();
         user.setName(etName.getText().toString());
+
+        user.setUuid(Util.id(getActivity()));
         user.setEmail(etEmail.getText().toString());
         user.setPassword(etPassword.getText().toString());
         if(SharedPreference.getInstance(getActivity()).getString(C.DEVICE_TOKEN)!=null){
             user.setDeviceToken(SharedPreference.getInstance(getActivity()).getString(C.DEVICE_TOKEN));
+
+        }
+        else {
+            user.setDeviceToken("");
 
         }
         signUpRequest.setUser(user);

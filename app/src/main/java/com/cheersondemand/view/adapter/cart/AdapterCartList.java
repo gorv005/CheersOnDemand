@@ -1,13 +1,17 @@
 package com.cheersondemand.view.adapter.cart;
 
 import android.app.Activity;
+import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -23,8 +27,6 @@ import com.cheersondemand.view.ActivityContainer;
 import com.cheersondemand.view.ActivityHome;
 
 import java.util.List;
-
-import de.hdodenhof.circleimageview.CircleImageView;
 
 /**
  * Created by AB on 6/7/2018.
@@ -43,13 +45,13 @@ private List<OrderItem> horizontalList;
     int isHome;
     public class ItemViewHolder extends RecyclerView.ViewHolder {
     public TextView tvName,tvSubName,tvPrice,tvQuantity,tvAddToWishList,tvWarningMsg,tvPriceChange;
-    public CircleImageView ivProductImage;
+    public ImageView ivProductImage;
     ImageView imgProduct,ivLike;
     View rlMinus,rlPlus,rlAddToWishList,llRemove,rlCard,llProductNotAvailable,llProductWarning,llPrice;
     public ItemViewHolder(View view) {
         super(view);
         tvName = (TextView) view.findViewById(R.id.tvName);
-        ivProductImage = (CircleImageView) view.findViewById(R.id.ivProductImage);
+        ivProductImage = (ImageView) view.findViewById(R.id.ivProductImage);
         imgProduct = (ImageView) view.findViewById(R.id.imgProduct);
         ivLike = (ImageView) view.findViewById(R.id.ivLike);
         tvAddToWishList = (TextView) view.findViewById(R.id.tvAddToWishList);
@@ -271,31 +273,27 @@ private List<OrderItem> horizontalList;
             Util.setListViewHeightBasedOnChildren(footerViewHolder.lvCharges);
             footerViewHolder.tvTaxes.setText(context.getString(R.string.doller)+"0.0");
             footerViewHolder.tvDelieveryCharges.setText(context.getString(R.string.doller)+"0.0");
-            footerViewHolder.tvTotalAmount.setText(context.getString(R.string.doller)+""+Util.get2Decimal(cartProduct.getOrder().getTotal()));
+            footerViewHolder.tvTotalAmount.setText(context.getString(R.string.doller)+""+Util.get2Decimal(cartProduct.getOrder().getSubTotal()));
 
-            footerViewHolder.tvSubTotal.setText(context.getString(R.string.subtotal)+"   "+context.getString(R.string.doller)+Util.get2Decimal(cartProduct.getOrder().getSubTotal()));
+          //  footerViewHolder.tvSubTotal.setText(context.getString(R.string.subtotal)+"   "+context.getString(R.string.doller)+Util.get2Decimal(cartProduct.getOrder().getSubTotal()));
+              footerViewHolder.tvSubTotal.setText(context.getString(R.string.doller)+""+cartProduct.getOrder().getAppliedDiscount());
+
+            footerViewHolder.tvFinalAmount.setText(context.getString(R.string.doller)+""+Util.get2Decimal(cartProduct.getOrder().getTotal()));
 
             if(cartProduct.getOrder().getCoupon()!=null && cartProduct.getOrder().getAppliedDiscount()>0){
-                footerViewHolder.rlAfterApplyCoupon.setVisibility(View.VISIBLE);
                 footerViewHolder.rlApplyCoupon.setVisibility(View.GONE);
+                footerViewHolder.rlAfterApplyCoupon.setVisibility(View.VISIBLE);
+
                 footerViewHolder.tvCouponAmount.setText("-"+context.getString(R.string.doller)+cartProduct.getOrder().getAppliedDiscount());
 
                 footerViewHolder.tvCouponName.setText(""+cartProduct.getOrder().getCoupon().getCode());
-                footerViewHolder.tvFinalAmount.setText(context.getString(R.string.doller)+""+Util.get2Decimal(cartProduct.getOrder().getSubTotal()));
 
             }
 
             footerViewHolder.ivDelete.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if(source==C.FRAGMENT_PRODUCTS_HOME) {
-
-                        ((ActivityHome) context).removeCoupon();
-                    }
-                    else {
-                        ((ActivityContainer) context).removeCoupon();
-
-                    }
+                   dialog();
                 }
             });
             footerViewHolder.tvChangeCoupon.setOnClickListener(new View.OnClickListener() {
@@ -353,6 +351,52 @@ private List<OrderItem> horizontalList;
 
 
     }
+
+
+    void dialog() {
+        final Dialog dialog = new Dialog(context, R.style.FullHeightDialog); //this is a reference to the style above
+        dialog.setContentView(R.layout.dialog); //I saved the xml file above as yesnomessage.xml
+        dialog.setCancelable(true);
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+
+//to set the message
+        TextView title = (TextView) dialog.findViewById(R.id.tvmessagedialogtitle);
+
+        TextView message = (TextView) dialog.findViewById(R.id.tvmessagedialogtext);
+        title.setText(context.getString(R.string.app_name));
+        message.setText(context.getString(R.string.do_you_want_to_remove_coupon));
+//add some action to the buttons
+        Button yes = (Button) dialog.findViewById(R.id.bmessageDialogYes);
+        yes.setText(context.getString(R.string.yes));
+        yes.setOnClickListener(new View.OnClickListener() {
+
+            public void onClick(View v) {
+                dialog.dismiss();
+                if(source==C.FRAGMENT_PRODUCTS_HOME) {
+
+                    ((ActivityHome) context).removeCoupon();
+                }
+                else {
+                    ((ActivityContainer) context).removeCoupon();
+
+                }
+
+            }
+        });
+
+        Button no = (Button) dialog.findViewById(R.id.bmessageDialogNo);
+        no.setText(context.getString(R.string.No));
+        no.setOnClickListener(new View.OnClickListener() {
+
+            public void onClick(View v) {
+                // TODO Auto-generated method stub
+                dialog.dismiss();
+            }
+        });
+
+        dialog.show();
+    }
+
     @Override
     public int getItemViewType(int position) {
         if (position == horizontalList.size() ) {

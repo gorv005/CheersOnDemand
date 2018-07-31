@@ -10,11 +10,10 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.DisplayMetrics;
 import android.util.TypedValue;
+import android.view.KeyEvent;
 import android.view.View;
-import android.view.ViewTreeObserver;
 import android.view.Window;
 import android.view.WindowManager;
-import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -27,6 +26,7 @@ import com.cheersondemand.model.search.SearchResultsResponse;
 import com.cheersondemand.presenter.search.ISearchViewPresenter;
 import com.cheersondemand.presenter.search.SearchViewPresenterImpl;
 import com.cheersondemand.util.C;
+import com.cheersondemand.util.ChatEditText;
 import com.cheersondemand.util.SharedPreference;
 import com.cheersondemand.util.Util;
 import com.cheersondemand.view.adapter.AdapterHomeBrands;
@@ -44,7 +44,7 @@ public class ActivitySearchProducts extends Activity implements View.OnClickList
     @BindView(R.id.imgBack)
     RelativeLayout imgBack;
     @BindView(R.id.etSearch)
-    EditText etSearch;
+    ChatEditText etSearch;
     @BindView(R.id.lvSearchResult)
     RecyclerView lvSearchResult;
     @BindView(R.id.llSearchResult)
@@ -106,7 +106,48 @@ public class ActivitySearchProducts extends Activity implements View.OnClickList
     }
 
 
+
     void init() {
+        etSearch.setKeyImeChangeListener(new ChatEditText.KeyImeChange(){
+            @Override
+            public void onKeyIme(int keyCode, KeyEvent event)
+            {
+                if (KeyEvent.KEYCODE_BACK == event.getKeyCode())
+                {
+                    etSearch.clearFocus();
+                    rlRecentSearch.setVisibility(View.VISIBLE);
+                    if(isRecentSearch) {
+                        tvRecenetSearch.setVisibility(View.VISIBLE);
+                    }
+                    else {
+                        tvRecenetSearch.setVisibility(View.GONE);
+
+                    }
+                    rlCategories.setVisibility(View.VISIBLE);
+                }
+            }});
+        etSearch.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if(hasFocus){
+                    rlRecentSearch.setVisibility(View.GONE);
+                    rlCategories.setVisibility(View.GONE);
+                    tvRecenetSearch.setVisibility(View.GONE);
+                }
+                else {
+                    rlRecentSearch.setVisibility(View.VISIBLE);
+                    if(isRecentSearch) {
+                        tvRecenetSearch.setVisibility(View.VISIBLE);
+                    }
+                    else {
+                        tvRecenetSearch.setVisibility(View.GONE);
+
+                    }
+                    rlCategories.setVisibility(View.VISIBLE);
+
+                }
+            }
+        });
         etSearch.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -129,39 +170,6 @@ public class ActivitySearchProducts extends Activity implements View.OnClickList
             }
         });
 
-        LLView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
-            @Override
-            public void onGlobalLayout() {
-               /* if(Util.isKeyBoardVisible(ActivitySearchProducts.this)){
-
-                    rlRecentSearch.setVisibility(View.GONE);
-                    rlCategories.setVisibility(View.GONE);
-                    tvRecenetSearch.setVisibility(View.GONE);
-
-                }
-                else {
-                    if(isRecentSearch) {
-                        rlRecentSearch.setVisibility(View.VISIBLE);
-                        tvRecenetSearch.setVisibility(View.VISIBLE);
-                    }
-                    rlCategories.setVisibility(View.VISIBLE);
-                }*/
-                if ((LLView.getRootView().getHeight() - LLView.getHeight()) >
-                        LLView.getRootView().getHeight()/3) { // if more than 200 dp, it's probably a keyboard...
-                    // ... do something here
-                    rlRecentSearch.setVisibility(View.GONE);
-                    rlCategories.setVisibility(View.GONE);
-                    tvRecenetSearch.setVisibility(View.GONE);
-
-                } else {
-                    if(isRecentSearch) {
-                        rlRecentSearch.setVisibility(View.VISIBLE);
-                        tvRecenetSearch.setVisibility(View.VISIBLE);
-                    }
-                    rlCategories.setVisibility(View.VISIBLE);
-                }
-            }
-        });
     }
 
 
@@ -300,5 +308,19 @@ public class ActivitySearchProducts extends Activity implements View.OnClickList
     public static float dpToPx(Context context, float valueInDp) {
         DisplayMetrics metrics = context.getResources().getDisplayMetrics();
         return TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, valueInDp, metrics);
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        /*try {
+            etSearch.clearFocus();
+            rlRecentSearch.setVisibility(View.VISIBLE);
+            tvRecenetSearch.setVisibility(View.VISIBLE);
+            rlCategories.setVisibility(View.VISIBLE);
+        }
+        catch (Exception e){
+            e.printStackTrace();
+        }*/
     }
 }

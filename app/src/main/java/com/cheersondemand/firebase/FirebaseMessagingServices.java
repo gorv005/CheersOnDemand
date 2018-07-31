@@ -7,8 +7,11 @@ import android.content.Intent;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.support.v4.app.NotificationCompat;
+import android.util.Log;
 
 import com.cheersondemand.R;
+import com.cheersondemand.util.C;
+import com.cheersondemand.util.SharedPreference;
 import com.cheersondemand.view.MainActivity;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
@@ -20,6 +23,13 @@ import com.google.firebase.messaging.RemoteMessage;
 public class FirebaseMessagingServices extends FirebaseMessagingService {
 
     private static final String TAG = "MyFirebaseMsgService";
+
+    @Override
+    public void onNewToken(String s) {
+        super.onNewToken(s);
+        Log.d(TAG, "Refreshed token: " + s);
+        SharedPreference.getInstance(this).setString(C.DEVICE_TOKEN,s);
+    }
 
     @Override
     public void onMessageReceived(RemoteMessage remoteMessage) {

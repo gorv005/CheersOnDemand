@@ -47,7 +47,7 @@ import com.cheersondemand.util.SharedPreference;
 import com.cheersondemand.util.Util;
 import com.cheersondemand.view.ActivityContainer;
 import com.google.gson.Gson;
-import com.makeramen.roundedimageview.RoundedImageView;
+import com.mikhaellopez.circularimageview.CircularImageView;
 
 import java.io.File;
 import java.io.IOException;
@@ -70,7 +70,7 @@ public class FragmentUpdateProfile extends Fragment implements View.OnClickListe
 
 
     @BindView(R.id.imgProfile)
-    RoundedImageView imgProfile;
+    CircularImageView imgProfile;
     @BindView(R.id.etName)
     EditText etName;
     @BindView(R.id.etEmail)
@@ -139,6 +139,7 @@ public class FragmentUpdateProfile extends Fragment implements View.OnClickListe
             ivCamera.setVisibility(View.GONE);
 
         } else {
+                imageLoader.DisplayImage("", imgProfile);
             ivCamera.setVisibility(View.VISIBLE);
         }
     }
