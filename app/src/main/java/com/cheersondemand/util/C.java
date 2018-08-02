@@ -125,4 +125,5 @@ public interface C {
     String IS_NOTIFICATION_PERMISSION_ASK ="IS_NOTIFICATION_PERMISSION_ASK" ;
     String STORE_MSG ="store_msg" ;
     String IS_FROM_PAYMENT ="isFromPayment" ;
+    int FRAGMENT_SEARCH_PRODUCT_RESULTS =32 ;
 }

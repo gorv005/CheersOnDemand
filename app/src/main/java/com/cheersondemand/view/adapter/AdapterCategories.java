@@ -13,9 +13,9 @@ import com.cheersondemand.R;
 import com.cheersondemand.model.Categories;
 import com.cheersondemand.util.C;
 import com.cheersondemand.util.ImageLoader.ImageLoader;
+import com.cheersondemand.util.ImageLoader.SquareImageView;
 import com.cheersondemand.util.Util;
 import com.cheersondemand.view.ActivityContainer;
-import com.mikhaellopez.circularimageview.CircularImageView;
 
 import java.util.List;
 
@@ -31,12 +31,12 @@ private List<Categories> horizontalList;
     ImageLoader imageLoader;
 public class ItemViewHolder extends RecyclerView.ViewHolder {
     public TextView tvCatName,tvNoOFBrands;
-    public CircularImageView ivProductImage;
+    public SquareImageView ivProductImage;
     View rlView;
     public ItemViewHolder(View view) {
         super(view);
         tvCatName = (TextView) view.findViewById(R.id.tvCatName);
-        ivProductImage = (CircularImageView) view.findViewById(R.id.ivProductImage);
+        ivProductImage = (SquareImageView) view.findViewById(R.id.ivProductImage);
         tvNoOFBrands = (TextView) view.findViewById(R.id.tvNoOFBrands);
         rlView = (View) view.findViewById(R.id.rlView);
 

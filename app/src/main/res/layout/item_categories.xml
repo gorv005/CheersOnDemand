@@ -17,19 +17,18 @@
         <RelativeLayout
             android:id="@+id/ivProductImageRl"
             android:layout_centerVertical="true"
-            android:background="@drawable/product_circular_border_cat"
             android:layout_width="60dp"
             android:layout_height="60dp">
-            <com.mikhaellopez.circularimageview.CircularImageView
+            <com.cheersondemand.util.ImageLoader.SquareImageView
                 xmlns:app="http://schemas.android.com/apk/res-auto"
                 android:id="@+id/ivProductImage"
+                android:layout_centerInParent="true"
                 android:layout_centerHorizontal="true"
-                android:layout_alignParentBottom="true"
                 android:layout_width="wrap_content"
+                android:layout_centerVertical="true"
                 android:layout_height="wrap_content"
-                android:src="@drawable/bitmap_copy"
-                app:civ_border_width="2dp"
-                app:civ_border_color="@color/white"/>
+                android:src="@drawable/missing"
+                />
 
         </RelativeLayout>
         <LinearLayout

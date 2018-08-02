@@ -146,8 +146,8 @@ public class FragmentProfile extends Fragment implements View.OnClickListener, I
             btnEdit.setVisibility(View.GONE);
             tvEmail.setText(getString(R.string.view_orders));
             tvName.setText(getString(R.string.sign_in));
-            llConnectedAcc.setVisibility(View.VISIBLE);
-            viewConnectedAccount.setVisibility(View.VISIBLE);
+            llConnectedAcc.setVisibility(View.GONE);
+            viewConnectedAccount.setVisibility(View.GONE);
             llChangePassword.setVisibility(View.GONE);
             viewChangePassword.setVisibility(View.GONE);
             llLogout.setVisibility(View.GONE);

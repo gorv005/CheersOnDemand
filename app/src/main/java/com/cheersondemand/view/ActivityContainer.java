@@ -41,6 +41,7 @@ import com.cheersondemand.view.fragments.FragmentPaymentResult;
 import com.cheersondemand.view.fragments.FragmentProductDescription;
 import com.cheersondemand.view.fragments.FragmentProductsListing;
 import com.cheersondemand.view.fragments.FragmentProfile;
+import com.cheersondemand.view.fragments.FragmentSearchProductResults;
 import com.cheersondemand.view.fragments.FragmentStoreSelection;
 import com.cheersondemand.view.fragments.FragmentUpdateProfile;
 import com.cheersondemand.view.fragments.FragmentWishList;
@@ -149,6 +150,11 @@ public class ActivityContainer extends AppCompatActivity {
                 break;
             case C.FRAGMENT_CATEGORIES:
                 fragment = new FragmentCategoryList();
+                fragmentTransaction.replace(R.id.container, fragment);
+                //fragmentTransaction.addToBackStack(C.TAG_FRAGMENT_PRODUCTS_HOME);
+                break;
+            case C.FRAGMENT_SEARCH_PRODUCT_RESULTS:
+                fragment = new FragmentSearchProductResults();
                 fragmentTransaction.replace(R.id.container, fragment);
                 //fragmentTransaction.addToBackStack(C.TAG_FRAGMENT_PRODUCTS_HOME);
                 break;

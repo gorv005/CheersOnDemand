@@ -14,12 +14,14 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.view.inputmethod.EditorInfo;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.cheersondemand.R;
 import com.cheersondemand.model.Categories;
+import com.cheersondemand.model.search.Product;
 import com.cheersondemand.model.search.SearchProductResponse;
 import com.cheersondemand.model.search.SearchResponse;
 import com.cheersondemand.model.search.SearchResultsResponse;
@@ -70,6 +72,7 @@ public class ActivitySearchProducts extends Activity implements View.OnClickList
     @BindView(R.id.tvRecenetSearch)
     TextView tvRecenetSearch;
     boolean isRecentSearch=false;
+    List<Product> searchProducts=null;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -108,6 +111,24 @@ public class ActivitySearchProducts extends Activity implements View.OnClickList
 
 
     void init() {
+
+        etSearch.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if (actionId == EditorInfo.IME_ACTION_SEARCH) {
+                    if (searchProducts!=null && searchProducts.size()==0 && etSearch.getText().toString().length() > 2) {
+                        Intent intent = new Intent(ActivitySearchProducts.this, ActivityContainer.class);
+                        Bundle bundle=new Bundle();
+                        bundle.putString(C.PRODUCT,etSearch.getText().toString());
+                        intent.putExtra(C.FRAGMENT_ACTION,C.FRAGMENT_SEARCH_PRODUCT_RESULTS);
+                        intent.putExtra(C.BUNDLE,bundle);
+                       startActivity(intent);
+                    }
+                    return true;
+                }
+                return false;
+            }
+        });
         etSearch.setKeyImeChangeListener(new ChatEditText.KeyImeChange(){
             @Override
             public void onKeyIme(int keyCode, KeyEvent event)
@@ -162,9 +183,8 @@ public class ActivitySearchProducts extends Activity implements View.OnClickList
             @Override
             public void afterTextChanged(Editable s) {
                 if (etSearch.getText().toString().length() > 2) {
-                    llSearchResult.setVisibility(View.VISIBLE);
                     getSearchResult(etSearch.getText().toString());
-                } else if (etSearch.getText().toString().length() == 0) {
+                } else {
                     llSearchResult.setVisibility(View.GONE);
                 }
             }
@@ -249,15 +269,24 @@ public class ActivitySearchProducts extends Activity implements View.OnClickList
     @Override
     public void onSearchResultSuccess(SearchResultsResponse response) {
         if (response.getSuccess()) {
+
             if (response.getData() != null && response.getData().getResultsCount() > 0) {
-                adapterProductSearcheResults = new AdapterProductSearcheResults(response.getData().getProducts(), this);
-                lvSearchResult.setAdapter(adapterProductSearcheResults);
                 llSearchResult.setVisibility(View.VISIBLE);
+                searchProducts=response.getData().getProducts();
+                if(adapterProductSearcheResults!=null){
+                    adapterProductSearcheResults.notifyDataSetChanged();
+                }
+                else {
+                    adapterProductSearcheResults = new AdapterProductSearcheResults(searchProducts, this);
+                    lvSearchResult.setAdapter(adapterProductSearcheResults);
+                }
             } else {
+                searchProducts.clear();
                 llSearchResult.setVisibility(View.GONE);
 
             }
         } else {
+            searchProducts.clear();
             llSearchResult.setVisibility(View.GONE);
 
         }

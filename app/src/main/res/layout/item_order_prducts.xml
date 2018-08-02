@@ -82,7 +82,7 @@ android:layout_centerVertical="true"
                         android:layout_height="wrap_content"
                         android:gravity="center"
                         android:layout_centerHorizontal="true"
-                        android:src="@drawable/bitmap_copy"
+                        android:src="@drawable/missing"
                         android:text="%"
                         android:textColor="@color/offer_text"
 

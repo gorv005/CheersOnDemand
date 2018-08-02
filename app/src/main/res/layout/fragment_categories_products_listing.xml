@@ -127,7 +127,9 @@
             android:layout_weight="1"
             android:background="@color/white"
             android:visibility="visible"
-            android:padding="15dp"
+            android:paddingTop="15dp"
+            android:paddingLeft="15dp"
+            android:paddingRight="15dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
@@ -182,7 +184,6 @@
         </LinearLayout>
 
         <RelativeLayout
-        android:layout_marginTop="10dp"
         android:layout_below="@id/llStoreSelect"
         android:layout_width="match_parent"
         android:layout_height="match_parent">

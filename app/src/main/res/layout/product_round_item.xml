@@ -27,7 +27,7 @@
             android:layout_alignParentBottom="true"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:src="@drawable/bitmap_copy"
+            android:src="@drawable/missing"
             app:civ_border_width="2dp"
             app:civ_border_color="@color/white"/>
 

@@ -248,8 +248,13 @@ public class FragmentStoreSelection extends Fragment implements IStoreViewPresen
     }
 
     public void gotoHome() {
-        Intent intent = new Intent(getActivity(), ActivityHome.class);
-        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-        getActivity().startActivity(intent);
+        try {
+            Intent intent = new Intent(getActivity(), ActivityHome.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            getActivity().startActivity(intent);
+        }
+        catch (Exception e){
+            e.printStackTrace();
+        }
     }
 }

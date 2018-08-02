@@ -1,0 +1,65 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@color/profile_back"
+    android:id="@+id/LLView"
+    android:layout_height="match_parent"
+    >
+    <LinearLayout
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:background="@color/profile_back"
+        tools:context="com.cheersondemand.view.fragments.FragmentCart">
+
+
+
+        <LinearLayout
+
+            android:layout_marginTop="5dp"
+            android:background="@color/white"
+            android:id="@+id/llNoProductInCount"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:paddingLeft="40dp"
+            android:paddingRight="40dp">
+
+            <ImageView
+
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/group_4" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:fontFamily="@font/sf_ui_display_regular"
+                android:gravity="center_horizontal"
+                android:text="@string/no_result_found"
+                android:textColor="@color/profile_text_color"
+                android:textSize="16.3sp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/sf_ui_display_regular"
+                android:gravity="center_horizontal"
+
+                android:text="@string/try_modify_search"
+                android:textColor="@color/profile_updated_text_color"
+                android:textSize="14.4sp" />
+
+
+
+        </LinearLayout>
+
+
+
+    </LinearLayout>
+
+</RelativeLayout>

@@ -118,7 +118,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_centerHorizontal="true"
-                            android:src="@drawable/bitmap_copy"
+                            android:src="@drawable/missing"
                             android:textColor="@color/offer_text"
 
                             android:textStyle="bold" />

@@ -267,7 +267,9 @@
     <string name="sorry_no_product">Sorry, No store is open currently or delivery is not available for your location.</string>
     <string name="No">NO</string>
     <string name="yes">YES</string>
-    <string name="do_you_want_to_remove_coupon">Do you want to remove coupon from cart list?</string>
+    <string name="do_you_want_to_remove_coupon">Do you want to remove coupon from cart?</string>
+    <string name="no_result_found">No Results Found !</string>
+    <string name="try_modify_search">Try modifying your search to get relevant results.</string>
 
     <!--
         <string name="default_web_client_id">999387565226-hdnnhm6rhgik5ljvm06shotsi7j9883c.apps.googleusercontent.com</string>
