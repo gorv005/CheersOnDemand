@@ -70,8 +70,13 @@ public class FragmentCoupons extends Fragment implements View.OnClickListener, I
     TextView tvCouponCode;
     @BindView(R.id.viewLine)
     View viewLine;
+    @BindView(R.id.imgBack)
+    RelativeLayout imgBack;
+    @BindView(R.id.rlBar)
+    RelativeLayout rlBar;
     private String couponName = "";
     int source;
+
     public FragmentCoupons() {
         // Required empty public constructor
     }
@@ -80,11 +85,12 @@ public class FragmentCoupons extends Fragment implements View.OnClickListener, I
     public void onResume() {
         super.onResume();
         if (source == C.FRAGMENT_PRODUCT_DESC) {
-            tvCouponCode.setVisibility(View.GONE);
+            rlBar.setVisibility(View.GONE);
             viewLine.setVisibility(View.GONE);
             ActivityContainer.tvTitle.setText(getString(R.string.coupon_code));
             ((ActivityContainer) getActivity()).showToolBar();
-        }    }
+        }
+    }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -110,12 +116,12 @@ public class FragmentCoupons extends Fragment implements View.OnClickListener, I
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         if (source == C.FRAGMENT_PRODUCT_DESC) {
-            tvCouponCode.setVisibility(View.GONE);
+            rlBar.setVisibility(View.GONE);
             viewLine.setVisibility(View.GONE);
             ActivityContainer.tvTitle.setText(getString(R.string.coupon_code));
             ((ActivityContainer) getActivity()).showToolBar();
         }
-
+        imgBack.setOnClickListener(this);
         layoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
         rvCouponList.setLayoutManager(layoutManager);
         btnApply.setEnabled(false);
@@ -196,6 +202,9 @@ public class FragmentCoupons extends Fragment implements View.OnClickListener, I
                     applyCoupon(etCouponName.getText().toString());
                 }
                 break;
+            case R.id.imgBack:
+                getActivity().onBackPressed();
+                break;
         }
     }
 
@@ -211,7 +220,7 @@ public class FragmentCoupons extends Fragment implements View.OnClickListener, I
             for (int i = 0; i < couponInfoList.size(); i++) {
                 couponInfoList.get(i).setCouponName(couponName);
             }
-            adapterCouponList = new AdapterCouponList(source,couponInfoList, getActivity(), couponName);
+            adapterCouponList = new AdapterCouponList(source, couponInfoList, getActivity(), couponName);
             if (couponInfoList != null && couponInfoList.size() > 0) {
                 rvCouponList.setAdapter(adapterCouponList);
             } else {

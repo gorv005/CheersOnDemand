@@ -15,6 +15,7 @@ import com.cheersondemand.model.Categories;
 import com.cheersondemand.util.C;
 import com.cheersondemand.util.ImageLoader.ImageLoader;
 import com.cheersondemand.view.ActivityContainer;
+import com.cheersondemand.view.ActivityHome;
 import com.mikhaellopez.circularimageview.CircularImageView;
 
 import java.util.List;
@@ -98,9 +99,10 @@ public class AdapterHomeBrands extends RecyclerView.Adapter<RecyclerView.ViewHol
             footerViewHolder.ivMore.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Intent intent = new Intent(context, ActivityContainer.class);
+                    /*Intent intent = new Intent(context, ActivityContainer.class);
                     intent.putExtra(C.FRAGMENT_ACTION, C.FRAGMENT_CATEGORIES);
-                    context.startActivity(intent);
+                    context.startActivity(intent);*/
+                    ((ActivityHome)context).fragmnetLoader(C.FRAGMENT_CATEGORIES,null);
                     //   Toast.makeText(context, "More", Toast.LENGTH_SHORT).show();
 
                 }

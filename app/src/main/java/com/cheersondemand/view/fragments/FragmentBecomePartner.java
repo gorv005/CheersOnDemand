@@ -202,7 +202,7 @@ public class FragmentBecomePartner extends Fragment implements View.OnClickListe
             if (etContactNo.getText().length() > 0 && etContactNo.length() == 10) {
 
                 if (etAddLine1.getText().length() > 0) {
-                    if (etAddLine2.getText().length() > 0) {
+
 
                         if (etEmail.getText().length() > 0) {
 
@@ -212,10 +212,6 @@ public class FragmentBecomePartner extends Fragment implements View.OnClickListe
                             btnSubmitRequest.setBackground(ContextCompat.getDrawable(getActivity(), R.drawable.button_disable));
                             btnSubmitRequest.setEnabled(false);
                         }
-                    } else {
-                        btnSubmitRequest.setBackground(ContextCompat.getDrawable(getActivity(), R.drawable.button_disable));
-                        btnSubmitRequest.setEnabled(false);
-                    }
 
                 } else {
                     btnSubmitRequest.setBackground(ContextCompat.getDrawable(getActivity(), R.drawable.button_disable));
@@ -250,7 +246,7 @@ public class FragmentBecomePartner extends Fragment implements View.OnClickListe
         AddStore addStore=new AddStore();
         Warehouse warehouse=new Warehouse();
         warehouse.setName(etStoreName.getText().toString());
-        warehouse.setAddress(etAddLine1.getText().toString() +" "+etAddLine2.getText().toString());
+        warehouse.setAddress(etAddLine1.getText().toString());
         warehouse.setContactNumber(etContactNo.getText().toString());
         warehouse.setEmail(etEmail.getText().toString());
         addStore.setWarehouse(warehouse);

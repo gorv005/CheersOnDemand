@@ -11,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import com.cheersondemand.R;
 import com.cheersondemand.model.BrandResponse;
@@ -22,7 +23,6 @@ import com.cheersondemand.presenter.home.IHomeViewPresenterPresenter;
 import com.cheersondemand.util.C;
 import com.cheersondemand.util.SharedPreference;
 import com.cheersondemand.util.Util;
-import com.cheersondemand.view.ActivityContainer;
 import com.cheersondemand.view.adapter.AdapterCategories;
 
 import butterknife.BindView;
@@ -32,7 +32,7 @@ import butterknife.Unbinder;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class FragmentCategoryList extends Fragment implements IHomeViewPresenterPresenter.IHomeView{
+public class FragmentCategoryList extends Fragment implements IHomeViewPresenterPresenter.IHomeView,View.OnClickListener {
 
 
     @BindView(R.id.rvBrands)
@@ -44,6 +44,15 @@ public class FragmentCategoryList extends Fragment implements IHomeViewPresenter
     AdapterCategories adapterCategories;
     Util util;
     IHomeViewPresenterPresenter iHomeViewPresenterPresenter;
+    @BindView(R.id.imgBack)
+    RelativeLayout imgBack;
+    @BindView(R.id.tvExplore)
+    TextView tvExplore;
+    @BindView(R.id.rlBar)
+    RelativeLayout rlBar;
+    @BindView(R.id.viewLine)
+    View viewLine;
+
     public FragmentCategoryList() {
         // Required empty public constructor
     }
@@ -51,14 +60,15 @@ public class FragmentCategoryList extends Fragment implements IHomeViewPresenter
     @Override
     public void onResume() {
         super.onResume();
-        ((ActivityContainer)getActivity()).showToolBar();
-        ActivityContainer.tvTitle.setText(R.string.Explore);
+        /*((ActivityContainer)getActivity()).showToolBar();
+        ActivityContainer.tvTitle.setText(R.string.Explore);*/
     }
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        util=new Util();
-        iHomeViewPresenterPresenter=new HomeViewPresenterImpl(this,getActivity());
+        util = new Util();
+        iHomeViewPresenterPresenter = new HomeViewPresenterImpl(this, getActivity());
     }
 
     @Override
@@ -77,25 +87,25 @@ public class FragmentCategoryList extends Fragment implements IHomeViewPresenter
         layoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
         rvBrands.setLayoutManager(layoutManager);
         rvBrands.setHasFixedSize(true);
-        ((ActivityContainer)getActivity()).showToolBar();
-
+        imgBack.setOnClickListener(this);
         getCategories();
     }
 
 
-    void getCategories(){
+    void getCategories() {
         String order_id = SharedPreference.getInstance(getActivity()).getString(C.ORDER_ID);
 
         if (SharedPreference.getInstance(getActivity()).getBoolean(C.IS_LOGIN_GUEST)) {
             String id = "" + SharedPreference.getInstance(getActivity()).geGuestUser(C.GUEST_USER).getId();
 
-            iHomeViewPresenterPresenter.getCategories(false,"",Util.id(getActivity()));
+            iHomeViewPresenterPresenter.getCategories(false, "", Util.id(getActivity()));
         } else {
             String id = "" + SharedPreference.getInstance(getActivity()).getUser(C.AUTH_USER).getData().getUser().getId();
-            String token =  C.bearer + SharedPreference.getInstance(getActivity()).getUser(C.AUTH_USER).getData().getToken().getAccessToken();
-            iHomeViewPresenterPresenter.getCategories(true,token,Util.id(getActivity()));
+            String token = C.bearer + SharedPreference.getInstance(getActivity()).getUser(C.AUTH_USER).getData().getToken().getAccessToken();
+            iHomeViewPresenterPresenter.getCategories(true, token, Util.id(getActivity()));
         }
     }
+
     @Override
     public void onDestroyView() {
         super.onDestroyView();
@@ -119,30 +129,38 @@ public class FragmentCategoryList extends Fragment implements IHomeViewPresenter
 
     @Override
     public void getResponseSuccess(CategoriesResponse response) {
-        if(response.getSuccess()){
-            adapterCategories  = new AdapterCategories(response.getData(),getActivity());
+        if (response.getSuccess()) {
+            adapterCategories = new AdapterCategories(response.getData(), getActivity());
             rvBrands.setAdapter(adapterCategories);
-        }
-        else {
-            util.setSnackbarMessage(getActivity(), response.getMessage(),rlView,true );
+        } else {
+            util.setSnackbarMessage(getActivity(), response.getMessage(), rlView, true);
 
         }
     }
 
     @Override
     public void getResponseError(String response) {
-        util.setSnackbarMessage(getActivity(),response,rlView,true );
+        util.setSnackbarMessage(getActivity(), response, rlView, true);
 
     }
 
     @Override
     public void showProgress() {
-        util.showDialog(C.MSG,getActivity());
+        util.showDialog(C.MSG, getActivity());
     }
 
     @Override
     public void hideProgress() {
         util.hideDialog();
 
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()){
+            case R.id.imgBack:
+                getActivity().onBackPressed();
+                break;
+        }
     }
 }

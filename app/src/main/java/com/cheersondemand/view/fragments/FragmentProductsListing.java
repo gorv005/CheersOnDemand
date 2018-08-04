@@ -898,13 +898,18 @@ public class FragmentProductsListing extends Fragment implements View.OnClickLis
                 mBottomSheetDialog.dismiss();
                 if (position == 0) {
                     orderBy = "asc";
-                    orderField = "discount_price";
+                    orderField = "price";
                 } else if (position == 1) {
                     orderBy = "desc";
-                    orderField = "discount_price";
-                } else {
+                    orderField = "price";
+                }
+                else if (position == 2) {
                     orderBy = "desc";
                     orderField = "created_at";
+                }
+                else if (position == 3) {
+                    orderBy = "desc";
+                    orderField = "sold";
                 }
                 isSort = true;
                 getProducts(1);

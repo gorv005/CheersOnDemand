@@ -148,7 +148,7 @@ public class FragmentStoreSelection extends Fragment implements IStoreViewPresen
                 adapterStore = new AdapterStore(from,getActivity(), storeList, storeList1);
                 lvStoreList.setAdapter(adapterStore);
             } else {
-                ((ActivityContainer) getActivity()).showToolBar();
+                ((ActivityContainer) getActivity()).hideToolBar();
                 ActivityContainer.tvTitle.setText(getString(R.string.coming_soon_));
                 llNoStore.setVisibility(View.VISIBLE);
             }

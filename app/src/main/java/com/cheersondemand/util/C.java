@@ -126,4 +126,5 @@ public interface C {
     String STORE_MSG ="store_msg" ;
     String IS_FROM_PAYMENT ="isFromPayment" ;
     int FRAGMENT_SEARCH_PRODUCT_RESULTS =32 ;
+    String TAG_FRAGMENT_COUPONS = "TAG_FRAGMENT_COUPONS";
 }

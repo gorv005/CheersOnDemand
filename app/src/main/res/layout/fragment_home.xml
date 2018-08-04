@@ -188,6 +188,7 @@
         android:orientation="vertical"
         shimmer:duration="800">
     <RelativeLayout
+        android:id="@+id/rlBrands"
         android:background="@color/brands_back_color"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
@@ -214,7 +215,7 @@
         android:visibility="gone"
         shimmer:duration="800">
         <RelativeLayout
-
+            android:id="@+id/rlProducts"
             android:background="@color/white"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">

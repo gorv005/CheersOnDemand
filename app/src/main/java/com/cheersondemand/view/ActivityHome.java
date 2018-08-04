@@ -27,6 +27,7 @@ import com.cheersondemand.util.C;
 import com.cheersondemand.util.SharedPreference;
 import com.cheersondemand.util.Util;
 import com.cheersondemand.view.fragments.FragmentCart;
+import com.cheersondemand.view.fragments.FragmentCategoryList;
 import com.cheersondemand.view.fragments.FragmentCoupons;
 import com.cheersondemand.view.fragments.FragmentHome;
 import com.cheersondemand.view.fragments.FragmentProductDescription;
@@ -113,11 +114,17 @@ public class ActivityHome extends AppCompatActivity implements View.OnClickListe
                 fragmentTransaction.replace(R.id.container, fragment);
                 //fragmentTransaction.addToBackStack(C.TAG_FRAGMENT_PRODUCTS_HOME);
                 break;
+            case C.FRAGMENT_CATEGORIES:
+                currentPage="Categories";
+                fragment = new FragmentCategoryList();
+                fragmentTransaction.replace(R.id.container, fragment);
+                fragmentTransaction.addToBackStack(C.TAG_FRAGMENT_CATEGORY);
+                break;
             case C.FRAGMENT_COUPON_LIST:
                 currentPage="coupon";
                 fragment = new FragmentCoupons();
                 fragmentTransaction.replace(R.id.container, fragment);
-                //fragmentTransaction.addToBackStack(C.TAG_FRAGMENT_PRODUCTS_HOME);
+                fragmentTransaction.addToBackStack(C.TAG_FRAGMENT_COUPONS);
                 break;
         }
         fragment.setArguments(bundle);

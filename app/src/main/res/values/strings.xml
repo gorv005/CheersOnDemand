@@ -28,7 +28,7 @@
     <string name="search_hint">Search for Brand, Type …</string>
     <string name="edit">Edit</string>
     <string name="wishList">Wishlist</string>
-    <string name="my_orders">My Orders</string>
+    <string name="my_orders">My Order</string>
     <string name="saved_add">Saved Addresses</string>
     <string name="payment_info">Payment Information</string>
     <string name="conn_acc">Connected Accounts</string>
@@ -45,6 +45,7 @@
     <string name="save_profile">Save Profile</string>
     <string name="no_product_found">No Products found</string>
     <string name="no_product_in_cart_yet">No Products in cart yet !</string>
+    <string name="no_product_found_">No Product(s) found.</string>
 
     <string name="try_search_diff">Try searching with a different terms or browse our categories.</string>
     <string name="browse_product">Browse Products</string>

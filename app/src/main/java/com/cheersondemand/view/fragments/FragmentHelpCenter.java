@@ -77,7 +77,7 @@ public class FragmentHelpCenter extends Fragment {
         List<HelpCenterList> helpCenterLists=new ArrayList<>();
 
         helpCenterLists.add(new HelpCenterList(getString(R.string.faq),"http://ror.anasource.com:8090/cheers_on_demand/static_pages/faq"));
-        helpCenterLists.add(new HelpCenterList(getString(R.string.about_us),"http://ror.anasource.com:8090/cheers_on_demand/static_pages/faq"));
+        helpCenterLists.add(new HelpCenterList(getString(R.string.about_us),"http://ror.anasource.com:8090/cheers_on_demand/static_pages/about-us"));
         helpCenterLists.add(new HelpCenterList(getString(R.string.contact_us),"http://ror.anasource.com:8090/cheers_on_demand/static_pages/contact-us"));
         helpCenterLists.add(new HelpCenterList(getString(R.string.how_it_works),"http://ror.anasource.com:8090/cheers_on_demand/static_pages/how-it-works"));
         helpCenterLists.add(new HelpCenterList(getString(R.string.terms_od_services),"http://ror.anasource.com:8090/cheers_on_demand/static_pages/terms-of-service"));

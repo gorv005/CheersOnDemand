@@ -6,11 +6,29 @@
     android:id="@+id/LLView"
     android:background="@color/white"
    >
-
-    <TextView
+    <RelativeLayout
+        android:id="@+id/rlBar"
         android:layout_width="match_parent"
+        android:layout_height="60dp">
+    <RelativeLayout
+        android:layout_marginTop="30dp"
+
+        android:id="@+id/imgBack"
+        android:gravity="center|center_vertical"
+        android:layout_marginLeft="15dp"
+        android:layout_width="25dp"
+        android:layout_height="25dp">
+        <ImageView
+            android:layout_centerInParent="true"
+            android:layout_width="wrap_content"
+            android:src="@drawable/left_arrow_1"
+            android:layout_height="wrap_content" />
+    </RelativeLayout>
+    <TextView
+        android:layout_marginTop="15dp"
+        android:layout_width="wrap_content"
         android:background="@color/white"
-        android:layout_height="60dp"
+        android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
         android:layout_gravity="center"
         android:paddingTop="15dp"
@@ -22,6 +40,8 @@
         android:textColor="@color/profile_text_color"
         android:textSize="16.3sp"
         android:text="@string/coupon_code" />
+
+    </RelativeLayout>
     <View
         android:id="@+id/viewLine"
         android:background="@color/hint_color"

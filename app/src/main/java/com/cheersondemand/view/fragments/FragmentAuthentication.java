@@ -290,7 +290,7 @@ public class FragmentAuthentication extends Fragment implements IAuthenitication
             public void onSuccess(LoginResult loginResult) {
                 Log.e("DEBUG", "UserID=" + loginResult.getAccessToken().getUserId() + "Token=" + loginResult.getAccessToken().getToken());
                 mAccessToken = loginResult.getAccessToken().getToken();
-                util.setSnackbarMessage(getActivity(), "Login Sucess", LLView,false);
+               // util.setSnackbarMessage(getActivity(), "Login Sucess", LLView,false);
                // getUserProfile(mAccessToken);
                 socailLogin(""+mAccessToken,"facebook");
 
@@ -418,7 +418,7 @@ public class FragmentAuthentication extends Fragment implements IAuthenitication
 
                             Log.e("DEBUG", user.getDisplayName());
                             Log.e("DEBUG", user.getEmail());
-                            util.setSnackbarMessage(getActivity(), "Login Sucess", LLView,false);
+                         //   util.setSnackbarMessage(getActivity(), "Login Sucess", LLView,false);
                             socailLogin(token,"google");
                         } else {
                             // If sign in fails, display a message to the user.

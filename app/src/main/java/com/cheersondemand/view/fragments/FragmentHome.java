@@ -71,7 +71,7 @@ import butterknife.Unbinder;
  */
 public class FragmentHome extends Fragment implements IStoreViewPresenter.IStoreView, IHomeViewPresenterPresenter.IHomeView, IOrderViewPresenterPresenter.IOrderView, View.OnClickListener {
 
-    View v1,v2;
+    View v1, v2;
     @BindView(R.id.rvBrands)
     RecyclerView rvBrands;
     Unbinder unbinder;
@@ -117,6 +117,10 @@ public class FragmentHome extends Fragment implements IStoreViewPresenter.IStore
     RelativeLayout rlSearchProduct;
     @BindView(R.id.tvNoStoreAvailable)
     TextView tvNoStoreAvailable;
+    @BindView(R.id.rlBrands)
+    RelativeLayout rlBrands;
+    @BindView(R.id.rlProducts)
+    RelativeLayout rlProducts;
 
     private int productPos;
     private int secPos;
@@ -180,7 +184,7 @@ public class FragmentHome extends Fragment implements IStoreViewPresenter.IStore
             shimmerBrands.setVisibility(View.GONE);
             shimmerProducts.setVisibility(View.GONE);
             tvNoStoreAvailable.setVisibility(View.VISIBLE);
-           // tvNoStoreAvailable.setText(SharedPreference.getInstance(getActivity()).getString(C.STORE_MSG));
+            // tvNoStoreAvailable.setText(SharedPreference.getInstance(getActivity()).getString(C.STORE_MSG));
             tvStoreName.setText("---");
 
         }
@@ -196,7 +200,7 @@ public class FragmentHome extends Fragment implements IStoreViewPresenter.IStore
         if (SharedPreference.getInstance(getActivity()).getBoolean(C.IS_LOGIN_GUEST)) {
             ivNotification.setVisibility(View.INVISIBLE);
         }
-        SharedPreference.getInstance(getActivity()).setBoolean(C.IS_FROM_PAYMENT,false);
+        SharedPreference.getInstance(getActivity()).setBoolean(C.IS_FROM_PAYMENT, false);
         ivNotification.setOnClickListener(this);
         llLocationSelect.setOnClickListener(this);
         llStoreSelect.setOnClickListener(this);
@@ -289,7 +293,8 @@ public class FragmentHome extends Fragment implements IStoreViewPresenter.IStore
                 shimmerBrands.stopShimmerAnimation();
                 List<Categories> categories = new ArrayList<>();
 
-                if (response.getData().getCategories() != null && response.getData().getCategories().size() > 0) {
+                if (response.getData() != null && response.getData().getCategories() != null && response.getData().getCategories().size() > 0) {
+                    rlBrands.setVisibility(View.VISIBLE);
                     if (response.getData().getCategories().size() > 5) {
                         for (int i = 0; i < 5; i++) {
                             categories.add(response.getData().getCategories().get(i));
@@ -297,20 +302,28 @@ public class FragmentHome extends Fragment implements IStoreViewPresenter.IStore
                     } else {
                         categories.addAll(response.getData().getCategories());
                     }
+                    adapterHomeBrands = new AdapterHomeBrands(categories, getActivity());
+                    rvBrands.setAdapter(adapterHomeBrands);
+                } else {
+                    rlBrands.setVisibility(View.GONE);
                 }
-                adapterHomeBrands = new AdapterHomeBrands(categories, getActivity());
-                rvBrands.setAdapter(adapterHomeBrands);
 
-                homeCategoriesSectionList = new ArrayList<>();
-                homeCategoriesSectionList.add(new HomeCategoriesSectionList("All products", response.getData().getAllProducts()));
+                if (response.getData() != null && response.getData().getAllProducts() != null && response.getData().getAllProducts().size() > 0) {
+                    rlProducts.setVisibility(View.VISIBLE);
+                    homeCategoriesSectionList = new ArrayList<>();
+                    homeCategoriesSectionList.add(new HomeCategoriesSectionList("All products", response.getData().getAllProducts()));
 
-                adapterHomeCategoriesSections = new AdapterHomeCategoriesSections(getActivity(), homeCategoriesSectionList);
-                rvProducts.setAdapter(adapterHomeCategoriesSections);
+                    adapterHomeCategoriesSections = new AdapterHomeCategoriesSections(getActivity(), homeCategoriesSectionList);
+                    rvProducts.setAdapter(adapterHomeCategoriesSections);
 
-                SharedPreference.getInstance(getActivity()).setBoolean(C.CART_HAS_ITEM, response.getData().getHasCartProduct());
-                SharedPreference.getInstance(getActivity()).setString(C.ORDER_ID, response.getData().getUser().getOrderId());
+                    SharedPreference.getInstance(getActivity()).setBoolean(C.CART_HAS_ITEM, response.getData().getHasCartProduct());
+                    SharedPreference.getInstance(getActivity()).setString(C.ORDER_ID, response.getData().getUser().getOrderId());
 
-
+                } else {
+                    tvNoStoreAvailable.setVisibility(View.VISIBLE);
+                    tvNoStoreAvailable.setText(getString(R.string.no_product_found_));
+                    rlProducts.setVisibility(View.GONE);
+                }
             } else {
                 shimmerBrands.setVisibility(View.GONE);
                 shimmerProducts.setVisibility(View.GONE);
@@ -320,8 +333,7 @@ public class FragmentHome extends Fragment implements IStoreViewPresenter.IStore
 
             }
             updateStore();
-        }
-        catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
@@ -555,7 +567,7 @@ public class FragmentHome extends Fragment implements IStoreViewPresenter.IStore
 
                 break;
             case R.id.llStoreSelect:
-                if(SharedPreference.getInstance(getActivity()).getStore(C.SELECTED_STORE)!=null) {
+                if (SharedPreference.getInstance(getActivity()).getStore(C.SELECTED_STORE) != null) {
                     gotoStoreList();
                 }
                 break;
@@ -573,9 +585,9 @@ public class FragmentHome extends Fragment implements IStoreViewPresenter.IStore
     }
 
 
-    public void addToCart(int secPos, int pos, boolean isAdd,View v1,View v2) {
-        this.v1=v1;
-        this.v2=v2;
+    public void addToCart(int secPos, int pos, boolean isAdd, View v1, View v2) {
+        this.v1 = v1;
+        this.v2 = v2;
         productPos = pos;
         this.secPos = secPos;
         this.isAdd = isAdd;
@@ -653,9 +665,9 @@ public class FragmentHome extends Fragment implements IStoreViewPresenter.IStore
         }
     }
 
-    public void updateCart(int secPos, int productPos, boolean isAdd,View v1,View v2) {
-        this.v1=v1;
-        this.v2=v2;
+    public void updateCart(int secPos, int productPos, boolean isAdd, View v1, View v2) {
+        this.v1 = v1;
+        this.v2 = v2;
         this.secPos = secPos;
         this.productPos = productPos;
         this.isAdd = isAdd;
