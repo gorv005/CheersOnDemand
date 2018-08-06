@@ -139,6 +139,7 @@ public class FragmentOrderList extends Fragment implements IOrderDetailViewPrese
 
     @Override
     public void onSuccessOrderList(OrderListResponse response) {
+        try {
         if (response.getSuccess()) {
             orders = response.getData().getOrder();
 
@@ -157,6 +158,10 @@ public class FragmentOrderList extends Fragment implements IOrderDetailViewPrese
             llNoProductInCount.setVisibility(View.VISIBLE);
             util.setSnackbarMessage(getActivity(), response.getMessage(), LLView, true);
 
+        }
+        }
+        catch (Exception e){
+            e.printStackTrace();
         }
     }
 
@@ -186,6 +191,7 @@ public class FragmentOrderList extends Fragment implements IOrderDetailViewPrese
 
     @Override
     public void onSuccessCancelOrder(OrderListResponse response) {
+        try {
         if (response.getSuccess()) {
             util.setSnackbarMessage(getActivity(), response.getMessage(), LLView, false);
             //  SharedPreference.getInstance(getActivity()).setBoolean(C.IS_REORDER,true);
@@ -197,6 +203,10 @@ public class FragmentOrderList extends Fragment implements IOrderDetailViewPrese
         } else {
             util.setSnackbarMessage(getActivity(), response.getMessage(), LLView, true);
 
+        }
+        }
+        catch (Exception e){
+            e.printStackTrace();
         }
     }
 

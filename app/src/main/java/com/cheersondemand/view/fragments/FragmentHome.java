@@ -332,7 +332,7 @@ public class FragmentHome extends Fragment implements IStoreViewPresenter.IStore
                 //   util.setSnackbarMessage(getActivity(), response.getMessage(), rlHomeView, true);
 
             }
-            updateStore();
+            // updateStore();
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -364,21 +364,26 @@ public class FragmentHome extends Fragment implements IStoreViewPresenter.IStore
 
     @Override
     public void getCreateOrderSuccess(CreateOrderResponse response) {
-        if (response.getSuccess()) {
-            SharedPreference.getInstance(getActivity()).setString(C.ORDER_ID, "" + response.getData().getOrder().getId());
-            addToCart();
-        } else {
-            util.setSnackbarMessage(getActivity(), response.getMessage(), rlHomeView, true);
+        try {
+            if (response.getSuccess()) {
+                SharedPreference.getInstance(getActivity()).setString(C.ORDER_ID, "" + response.getData().getOrder().getId());
+                addToCart();
+            } else {
+                util.setSnackbarMessage(getActivity(), response.getMessage(), rlHomeView, true);
 
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
     @Override
     public void getAddToCartSucess(AddToCartResponse response) {
-        if (response.getSuccess()) {
-            util.setSnackbarMessage(getActivity(), response.getMessage(), rlHomeView, false);
-            updateCart();
-            ((ActivityHome) getActivity()).setDot(true);
+        try {
+            if (response.getSuccess()) {
+                util.setSnackbarMessage(getActivity(), response.getMessage(), rlHomeView, false);
+                updateCart();
+                ((ActivityHome) getActivity()).setDot(true);
 /*
             v1.animate().rotationX(90).setDuration(400).setListener(new AnimatorListenerAdapter() {
                 @Override
@@ -395,20 +400,28 @@ public class FragmentHome extends Fragment implements IStoreViewPresenter.IStore
 */
 
 
-        } else {
-            util.setSnackbarMessage(getActivity(), response.getMessage(), rlHomeView, true);
+            } else {
+                util.setSnackbarMessage(getActivity(), response.getMessage(), rlHomeView, true);
 
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
     @Override
     public void getUpdateCartSuccess(UpdateCartResponse response) {
-        if (response.getSuccess()) {
-            util.setSnackbarMessage(getActivity(), response.getMessage(), rlHomeView, false);
-            updateCart();
-        } else {
-            util.setSnackbarMessage(getActivity(), response.getMessage(), rlHomeView, true);
+        try {
+            if (response.getSuccess()) {
+                util.setSnackbarMessage(getActivity(), response.getMessage(), rlHomeView, false);
+                updateCart();
+            } else {
+                util.setSnackbarMessage(getActivity(), response.getMessage(), rlHomeView, true);
 
+
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
@@ -462,14 +475,15 @@ public class FragmentHome extends Fragment implements IStoreViewPresenter.IStore
 
     @Override
     public void getRemoveItemFromCartSuccess(UpdateCartResponse response) {
-        if (response.getSuccess()) {
+        try {
+            if (response.getSuccess()) {
 
 
-            util.setSnackbarMessage(getActivity(), response.getMessage(), rlHomeView, false);
-            product.setCartQunatity(null);
-            product.setIsInCart(false);
-            homeCategoriesSectionList.get(secPos).getAllProducts().set(productPos, product);
-            adapterHomeCategoriesSections.notified();
+                util.setSnackbarMessage(getActivity(), response.getMessage(), rlHomeView, false);
+                product.setCartQunatity(null);
+                product.setIsInCart(false);
+                homeCategoriesSectionList.get(secPos).getAllProducts().set(productPos, product);
+                adapterHomeCategoriesSections.notified();
         /*    v1.animate().rotationX(90).setDuration(400).setListener(new AnimatorListenerAdapter() {
                 @Override
                 public void onAnimationEnd(Animator animation) {
@@ -482,45 +496,60 @@ public class FragmentHome extends Fragment implements IStoreViewPresenter.IStore
             });*/
 
 
-        } else {
-            util.setSnackbarMessage(getActivity(), response.getMessage(), rlHomeView, true);
+            } else {
+                util.setSnackbarMessage(getActivity(), response.getMessage(), rlHomeView, true);
 
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
     @Override
     public void getCartListSuccess(UpdateCartResponse response) {
-        if (response.getSuccess()) {
+        try {
+            if (response.getSuccess()) {
 
-        } else {
-            util.setSnackbarMessage(getActivity(), response.getMessage(), rlHomeView, true);
+            } else {
+                util.setSnackbarMessage(getActivity(), response.getMessage(), rlHomeView, true);
 
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
     @Override
     public void addTowishListSuccess(WishListResponse response) {
-        if (response.getSuccess()) {
-            util.setSnackbarMessage(getActivity(), response.getMessage(), rlHomeView, false);
-            product.setIsWishlisted(true);
-            adapterHomeCategoriesSections.notified();
+        try {
+            if (response.getSuccess()) {
+                util.setSnackbarMessage(getActivity(), response.getMessage(), rlHomeView, false);
+                product.setIsWishlisted(true);
+                adapterHomeCategoriesSections.notified();
 
-        } else {
-            util.setSnackbarMessage(getActivity(), response.getMessage(), rlHomeView, true);
+            } else {
+                util.setSnackbarMessage(getActivity(), response.getMessage(), rlHomeView, true);
 
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
     @Override
     public void removeFromWishListSuccess(WishListResponse response) {
-        if (response.getSuccess()) {
-            util.setSnackbarMessage(getActivity(), response.getMessage(), rlHomeView, false);
-            product.setIsWishlisted(false);
-            adapterHomeCategoriesSections.notified();
+        try {
+            if (response.getSuccess()) {
+                util.setSnackbarMessage(getActivity(), response.getMessage(), rlHomeView, false);
+                product.setIsWishlisted(false);
+                adapterHomeCategoriesSections.notified();
 
-        } else {
-            util.setSnackbarMessage(getActivity(), response.getMessage(), rlHomeView, true);
+            } else {
+                util.setSnackbarMessage(getActivity(), response.getMessage(), rlHomeView, true);
 
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
@@ -775,15 +804,23 @@ public class FragmentHome extends Fragment implements IStoreViewPresenter.IStore
     }
 
     void createOrder() {
-        if (SharedPreference.getInstance(getActivity()).getBoolean(C.IS_LOGIN_GUEST)) {
-            String id = "" + SharedPreference.getInstance(getActivity()).geGuestUser(C.GUEST_USER).getId();
 
-            iOrderViewPresenterPresenter.createOrder(id, new GenRequest(Util.id(getActivity())));
-        } else {
-            String id = "" + SharedPreference.getInstance(getActivity()).getUser(C.AUTH_USER).getData().getUser().getId();
+        store = SharedPreference.getInstance(getActivity()).getStore(C.SELECTED_STORE);
+        if (store != null) {
+            GenRequest genRequest = new GenRequest();
+            genRequest.setUuid(Util.id(getActivity()));
+            genRequest.setWarehouseId("" + store.getId());
 
-            String token = C.bearer + SharedPreference.getInstance(getActivity()).getUser(C.AUTH_USER).getData().getToken().getAccessToken();
-            iOrderViewPresenterPresenter.createOrder(token, id, new GenRequest(Util.id(getActivity())));
+            if (SharedPreference.getInstance(getActivity()).getBoolean(C.IS_LOGIN_GUEST)) {
+                String id = "" + SharedPreference.getInstance(getActivity()).geGuestUser(C.GUEST_USER).getId();
+
+                iOrderViewPresenterPresenter.createOrder(id, genRequest);
+            } else {
+                String id = "" + SharedPreference.getInstance(getActivity()).getUser(C.AUTH_USER).getData().getUser().getId();
+
+                String token = C.bearer + SharedPreference.getInstance(getActivity()).getUser(C.AUTH_USER).getData().getToken().getAccessToken();
+                iOrderViewPresenterPresenter.createOrder(token, id, genRequest);
+            }
         }
     }
 

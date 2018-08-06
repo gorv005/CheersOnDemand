@@ -68,7 +68,7 @@ public class AuthenicationPresenterImpl implements IAutheniticationPresenter,IAu
     @Override
     public void setLoginUsingEmail(LoginRequest loginUsingEmail) {
         if(mView!=null) {
-            mView.showProgress();
+          //  mView.showProgress();
             iAuthnicationIntractor.loginUsingEmail(loginUsingEmail, this);
         }
     }

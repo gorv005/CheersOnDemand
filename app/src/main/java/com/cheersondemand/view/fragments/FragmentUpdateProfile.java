@@ -135,12 +135,16 @@ public class FragmentUpdateProfile extends Fragment implements View.OnClickListe
         etEmail.clearFocus();
         etPhoneNo.clearFocus();
         if (authenticationResponse.getData().getUser().getProfilePicture() != null) {
-            imageLoader.DisplayImage(authenticationResponse.getData().getUser().getProfilePicture(), imgProfile);
+         //   imageLoader.DisplayImage(authenticationResponse.getData().getUser().getProfilePicture(), imgProfile);
+            Util.setImage(getActivity(),authenticationResponse.getData().getUser().getProfilePicture(),imgProfile);
             ivCamera.setVisibility(View.GONE);
 
         } else {
-                imageLoader.DisplayImage("", imgProfile);
+            Util.setImage(getActivity(),"",imgProfile);
+          //  imageLoader.DisplayImage("", imgProfile);
             ivCamera.setVisibility(View.VISIBLE);
+            //imgProfile.setImageResource(R.drawable.missing);
+
         }
     }
 
@@ -520,6 +524,7 @@ public class FragmentUpdateProfile extends Fragment implements View.OnClickListe
 
     @Override
     public void onSuccessUpdateProfile(GuestUserCreateResponse Response) {
+        try {
         if (Response.getSuccess()) {
             util.setSnackbarMessage(getActivity(), getString(R.string.profile_updated), rlView, false);
 
@@ -538,6 +543,10 @@ public class FragmentUpdateProfile extends Fragment implements View.OnClickListe
         } else {
             util.setSnackbarMessage(getActivity(), Response.getMessage(), rlView, true);
 
+        }
+        }
+        catch (Exception e){
+            e.printStackTrace();
         }
     }
 

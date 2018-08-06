@@ -33,20 +33,20 @@ public class CardViewIntractorImpl implements ICardViewIntractor {
 
                 @Override
                 public void onFailure(RestError error, String msg) {
-                    if(error==null ||error.getError()==null){
-
-                        Gson gson=new Gson();
-                        CardAddResponse response= gson.fromJson(msg,CardAddResponse.class);
-                        listener.onSuccessAddCard(response);
-
-                    }
-                    else {
+                    if (error == null || error.getError() == null) {
+                        try {
+                            Gson gson = new Gson();
+                            CardAddResponse response = gson.fromJson(msg, CardAddResponse.class);
+                            listener.onSuccessAddCard(response);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    } else {
                         listener.onError(error.getError());
                     }
                 }
-            },token,userId,deleteCardRequest);
-        }
-        catch (Exception e){
+            }, token, userId, deleteCardRequest);
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
@@ -63,32 +63,29 @@ public class CardViewIntractorImpl implements ICardViewIntractor {
 
                 @Override
                 public void onFailure(RestError error, String msg) {
-                    if(error==null ||error.getError()==null){
+                    if (error == null || error.getError() == null) {
                         try {
-                            msg=msg.replace("[]","null");
-                            msg=msg.replace("{}","null");
+                            msg = msg.replace("[]", "null");
+                            msg = msg.replace("{}", "null");
                             Gson gson = new Gson();
                             CardAddResponse response = gson.fromJson(msg, CardAddResponse.class);
                             listener.onSuccessAddCard(response);
-                        }
-                        catch (Exception e){
+                        } catch (Exception e) {
                             try {
-                                JSONObject jsonObject=new JSONObject(msg);
-                               String m= jsonObject.getString("message");
+                                JSONObject jsonObject = new JSONObject(msg);
+                                String m = jsonObject.getString("message");
                                 listener.onError(m);
 
                             } catch (JSONException e1) {
                                 e1.printStackTrace();
                             }
                         }
-                    }
-                    else {
+                    } else {
                         listener.onError(error.getError());
                     }
                 }
-            },token,userId,addCardRequest);
-        }
-        catch (Exception e){
+            }, token, userId, addCardRequest);
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
@@ -105,20 +102,20 @@ public class CardViewIntractorImpl implements ICardViewIntractor {
 
                 @Override
                 public void onFailure(RestError error, String msg) {
-                    if(error==null ||error.getError()==null){
-
-                        Gson gson=new Gson();
-                        CardListResponse response= gson.fromJson(msg,CardListResponse.class);
-                        listener.onSuccessCardList(response);
-
-                    }
-                    else {
+                    if (error == null || error.getError() == null) {
+                        try {
+                            Gson gson = new Gson();
+                            CardListResponse response = gson.fromJson(msg, CardListResponse.class);
+                            listener.onSuccessCardList(response);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    } else {
                         listener.onError(error.getError());
                     }
                 }
-            },token,userId);
-        }
-        catch (Exception e){
+            }, token, userId);
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }

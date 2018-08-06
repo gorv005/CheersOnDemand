@@ -255,6 +255,7 @@ public class FragmentBecomePartner extends Fragment implements View.OnClickListe
     }
     @Override
     public void onAddStoreSuccess(UpdateStoreResponse Response) {
+        try {
         if(Response.getSuccess()){
             etStoreName.setText("");
             etAddLine1.setText("");
@@ -273,6 +274,10 @@ public class FragmentBecomePartner extends Fragment implements View.OnClickListe
             if(Response.getErrors()!=null && Response.getErrors().size()>0)
             util.setSnackbarMessage(getActivity(), Response.getErrors().get(0).getField(), rlView, true);
 
+        }
+        }
+        catch (Exception e){
+            e.printStackTrace();
         }
     }
 

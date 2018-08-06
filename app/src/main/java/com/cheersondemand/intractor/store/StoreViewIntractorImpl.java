@@ -29,26 +29,26 @@ public class StoreViewIntractorImpl implements IStoreViewIntractor {
 
                 @Override
                 public void onFailure(RestError error, String msg) {
-                    if(error==null ||error.getError()==null){
-
-                        Gson gson=new Gson();
-                        StoreListResponse response= gson.fromJson(msg,StoreListResponse.class);
-                        listener.onStoreListSuccess(response);
-
-                    }
-                    else {
+                    if (error == null || error.getError() == null) {
+                        try {
+                            Gson gson = new Gson();
+                            StoreListResponse response = gson.fromJson(msg, StoreListResponse.class);
+                            listener.onStoreListSuccess(response);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    } else {
                         listener.onError(error.getError());
                     }
                 }
-            },uuid);
-        }
-        catch (Exception e){
+            }, uuid);
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
     @Override
-    public void getStoreList(String token, String uuid,final OnLoginFinishedListener listener) {
+    public void getStoreList(String token, String uuid, final OnLoginFinishedListener listener) {
         try {
 
             WebServicesWrapper.getInstance().getStoreList(new ResponseResolver<StoreListResponse>() {
@@ -59,20 +59,20 @@ public class StoreViewIntractorImpl implements IStoreViewIntractor {
 
                 @Override
                 public void onFailure(RestError error, String msg) {
-                    if(error==null ||error.getError()==null){
-
-                        Gson gson=new Gson();
-                        StoreListResponse response= gson.fromJson(msg,StoreListResponse.class);
-                        listener.onStoreListSuccess(response);
-
-                    }
-                    else {
+                    if (error == null || error.getError() == null) {
+                        try {
+                            Gson gson = new Gson();
+                            StoreListResponse response = gson.fromJson(msg, StoreListResponse.class);
+                            listener.onStoreListSuccess(response);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    } else {
                         listener.onError(error.getError());
                     }
                 }
-            },token,uuid);
-        }
-        catch (Exception e){
+            }, token, uuid);
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
@@ -89,20 +89,20 @@ public class StoreViewIntractorImpl implements IStoreViewIntractor {
 
                 @Override
                 public void onFailure(RestError error, String msg) {
-                    if(error==null ||error.getError()==null){
-
-                        Gson gson=new Gson();
-                        UpdateStoreResponse response= gson.fromJson(msg,UpdateStoreResponse.class);
-                        listener.onUpdateStoreSuccess(response);
-
-                    }
-                    else {
+                    if (error == null || error.getError() == null) {
+                        try {
+                            Gson gson = new Gson();
+                            UpdateStoreResponse response = gson.fromJson(msg, UpdateStoreResponse.class);
+                            listener.onUpdateStoreSuccess(response);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    } else {
                         listener.onError(error.getError());
                     }
                 }
-            },updateStore,id);
-        }
-        catch (Exception e){
+            }, updateStore, id);
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
@@ -119,20 +119,20 @@ public class StoreViewIntractorImpl implements IStoreViewIntractor {
 
                 @Override
                 public void onFailure(RestError error, String msg) {
-                    if(error==null ||error.getError()==null){
-
-                        Gson gson=new Gson();
-                        UpdateStoreResponse response= gson.fromJson(msg,UpdateStoreResponse.class);
-                        listener.onUpdateStoreSuccess(response);
-
-                    }
-                    else {
+                    if (error == null || error.getError() == null) {
+                        try {
+                            Gson gson = new Gson();
+                            UpdateStoreResponse response = gson.fromJson(msg, UpdateStoreResponse.class);
+                            listener.onUpdateStoreSuccess(response);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    } else {
                         listener.onError(error.getError());
                     }
                 }
-            },token,updateStore,id);
-        }
-        catch (Exception e){
+            }, token, updateStore, id);
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }

@@ -33,6 +33,7 @@ import com.cheersondemand.model.order.updatecart.UpdateCartRequest;
 import com.cheersondemand.model.order.updatecart.UpdateCartResponse;
 import com.cheersondemand.model.productdescription.Offers;
 import com.cheersondemand.model.productdescription.SimilarProductsResponse;
+import com.cheersondemand.model.store.StoreList;
 import com.cheersondemand.model.wishlist.WishListDataResponse;
 import com.cheersondemand.model.wishlist.WishListRequest;
 import com.cheersondemand.model.wishlist.WishListResponse;
@@ -256,15 +257,22 @@ public class FragmentProductDescription extends Fragment implements View.OnClick
     }
 
     void createOrder() {
-        if (SharedPreference.getInstance(getActivity()).getBoolean(C.IS_LOGIN_GUEST)) {
-            String id = "" + SharedPreference.getInstance(getActivity()).geGuestUser(C.GUEST_USER).getId();
+        StoreList store = SharedPreference.getInstance(getActivity()).getStore(C.SELECTED_STORE);
+        if (store != null) {
+            GenRequest genRequest = new GenRequest();
+            genRequest.setUuid(Util.id(getActivity()));
+            genRequest.setWarehouseId("" + store.getId());
 
-            iOrderViewPresenterPresenter.createOrder(id, new GenRequest(Util.id(getActivity())));
-        } else {
-            String id = "" + SharedPreference.getInstance(getActivity()).getUser(C.AUTH_USER).getData().getUser().getId();
+            if (SharedPreference.getInstance(getActivity()).getBoolean(C.IS_LOGIN_GUEST)) {
+                String id = "" + SharedPreference.getInstance(getActivity()).geGuestUser(C.GUEST_USER).getId();
 
-            String token = C.bearer + SharedPreference.getInstance(getActivity()).getUser(C.AUTH_USER).getData().getToken().getAccessToken();
-            iOrderViewPresenterPresenter.createOrder(token, id, new GenRequest(Util.id(getActivity())));
+                iOrderViewPresenterPresenter.createOrder(id, genRequest);
+            } else {
+                String id = "" + SharedPreference.getInstance(getActivity()).getUser(C.AUTH_USER).getData().getUser().getId();
+
+                String token = C.bearer + SharedPreference.getInstance(getActivity()).getUser(C.AUTH_USER).getData().getToken().getAccessToken();
+                iOrderViewPresenterPresenter.createOrder(token, id, genRequest);
+            }
         }
     }
 
@@ -388,29 +396,36 @@ public class FragmentProductDescription extends Fragment implements View.OnClick
 
     @Override
     public void getResponseSuccess(SimilarProductsResponse response) {
-        if (response.getSuccess()) {
-            if (response.getData().getSimilarProducts().size() > 0) {
-                allProductList = response.getData().getSimilarProducts();
-                if (allProductList.size() > 0) {
-                    adapterSimilarProducts = new AdapterHomeCategories(false, allProductList, getActivity());
-                    rvSimilarDrinks.setAdapter(adapterSimilarProducts);
+        try {
+            if (response.getSuccess()) {
+                if (response.getData().getSimilarProducts().size() > 0) {
+                    allProductList = response.getData().getSimilarProducts();
+                    if (allProductList.size() > 0) {
+                        adapterSimilarProducts = new AdapterHomeCategories(false, allProductList, getActivity());
+                        rvSimilarDrinks.setAdapter(adapterSimilarProducts);
+                    }
+                } else {
+                    rlSimilar.setVisibility(View.GONE);
+                    rvSimilarDrinks.setVisibility(View.GONE);
                 }
-            } else {
-                rlSimilar.setVisibility(View.GONE);
-                rvSimilarDrinks.setVisibility(View.GONE);
             }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-
     }
 
     @Override
     public void getCreateOrderSuccess(CreateOrderResponse response) {
-        if (response.getSuccess()) {
-            SharedPreference.getInstance(getActivity()).setString(C.ORDER_ID, "" + response.getData().getOrder().getId());
-            addToCart();
-        } else {
-            util.setSnackbarMessage(getActivity(), response.getMessage(), rlView, true);
+        try {
+            if (response.getSuccess()) {
+                SharedPreference.getInstance(getActivity()).setString(C.ORDER_ID, "" + response.getData().getOrder().getId());
+                addToCart();
+            } else {
+                util.setSnackbarMessage(getActivity(), response.getMessage(), rlView, true);
 
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
@@ -430,44 +445,52 @@ public class FragmentProductDescription extends Fragment implements View.OnClick
 
     @Override
     public void getAddToCartSucess(AddToCartResponse response) {
-        if (response.getSuccess()) {
-            util.setSnackbarMessage(getActivity(), response.getMessage(), rlView, false);
+        try {
+            if (response.getSuccess()) {
+                util.setSnackbarMessage(getActivity(), response.getMessage(), rlView, false);
 
-            if (isProductDes) {
-                btnAddToCart.setText(getString(R.string.added_to_cart));
-                productDes.setIsInCart(true);
-                isProductDes = false;
-            } else if (isBuyNow) {
-                btnAddToCart.setText(getString(R.string.added_to_cart));
-                productDes.setIsInCart(true);
-                isProductDes = false;
-                isBuyNow = false;
-                Handler handler = new Handler();
-                handler.postDelayed(new Runnable() {
-                    public void run() {
-                        // Actions to do after 10 seconds
-                        gotoCart();
+                if (isProductDes) {
+                    btnAddToCart.setText(getString(R.string.added_to_cart));
+                    productDes.setIsInCart(true);
+                    isProductDes = false;
+                } else if (isBuyNow) {
+                    btnAddToCart.setText(getString(R.string.added_to_cart));
+                    productDes.setIsInCart(true);
+                    isProductDes = false;
+                    isBuyNow = false;
+                    Handler handler = new Handler();
+                    handler.postDelayed(new Runnable() {
+                        public void run() {
+                            // Actions to do after 10 seconds
+                            gotoCart();
 
-                    }
-                }, 2000);
+                        }
+                    }, 2000);
+                } else {
+                    updateCart();
+                }
             } else {
-                updateCart();
-            }
-        } else {
-            util.setSnackbarMessage(getActivity(), response.getMessage(), rlView, true);
-            isProductDes = false;
+                util.setSnackbarMessage(getActivity(), response.getMessage(), rlView, true);
+                isProductDes = false;
 
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
     @Override
     public void getUpdateCartSuccess(UpdateCartResponse response) {
-        if (response.getSuccess()) {
-            util.setSnackbarMessage(getActivity(), response.getMessage(), rlView, false);
-            updateCart();
-        } else {
-            util.setSnackbarMessage(getActivity(), response.getMessage(), rlView, true);
+        try {
+            if (response.getSuccess()) {
+                util.setSnackbarMessage(getActivity(), response.getMessage(), rlView, false);
+                updateCart();
+            } else {
+                util.setSnackbarMessage(getActivity(), response.getMessage(), rlView, true);
 
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
@@ -500,17 +523,21 @@ public class FragmentProductDescription extends Fragment implements View.OnClick
 
     @Override
     public void getRemoveItemFromCartSuccess(UpdateCartResponse response) {
-        if (response.getSuccess()) {
-            util.setSnackbarMessage(getActivity(), response.getMessage(), rlView, false);
+        try {
+            if (response.getSuccess()) {
+                util.setSnackbarMessage(getActivity(), response.getMessage(), rlView, false);
 
-            product.setCartQunatity(null);
-            product.setIsInCart(false);
-            allProductList.set(productPos, product);
-            adapterSimilarProducts.notifyDataSetChanged();
+                product.setCartQunatity(null);
+                product.setIsInCart(false);
+                allProductList.set(productPos, product);
+                adapterSimilarProducts.notifyDataSetChanged();
 
-        } else {
-            util.setSnackbarMessage(getActivity(), response.getMessage(), rlView, true);
+            } else {
+                util.setSnackbarMessage(getActivity(), response.getMessage(), rlView, true);
 
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
@@ -521,42 +548,50 @@ public class FragmentProductDescription extends Fragment implements View.OnClick
 
     @Override
     public void addTowishListSuccess(WishListResponse response) {
-        if (response.getSuccess()) {
-            util.setSnackbarMessage(getActivity(), response.getMessage(), rlView, false);
-            if (isProductDes) {
+        try {
+            if (response.getSuccess()) {
+                util.setSnackbarMessage(getActivity(), response.getMessage(), rlView, false);
+                if (isProductDes) {
+                    isProductDes = false;
+
+                    productDes.setIsWishlisted(true);
+                    imgLike.setImageResource(R.drawable.like);
+                } else {
+                    product.setIsWishlisted(true);
+                    adapterSimilarProducts.notifyDataSetChanged();
+                }
+            } else {
+                util.setSnackbarMessage(getActivity(), response.getMessage(), rlView, true);
                 isProductDes = false;
 
-                productDes.setIsWishlisted(true);
-                imgLike.setImageResource(R.drawable.like);
-            } else {
-                product.setIsWishlisted(true);
-                adapterSimilarProducts.notifyDataSetChanged();
             }
-        } else {
-            util.setSnackbarMessage(getActivity(), response.getMessage(), rlView, true);
-            isProductDes = false;
-
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
     @Override
     public void removeFromWishListSuccess(WishListResponse response) {
-        if (response.getSuccess()) {
-            util.setSnackbarMessage(getActivity(), response.getMessage(), rlView, false);
-            if (isProductDes) {
-                isProductDes = false;
-                productDes.setIsWishlisted(false);
-                imgLike.setImageResource(R.drawable.unlike);
+        try {
+            if (response.getSuccess()) {
+                util.setSnackbarMessage(getActivity(), response.getMessage(), rlView, false);
+                if (isProductDes) {
+                    isProductDes = false;
+                    productDes.setIsWishlisted(false);
+                    imgLike.setImageResource(R.drawable.unlike);
 
+                } else {
+                    product.setIsWishlisted(false);
+
+                    adapterSimilarProducts.notifyDataSetChanged();
+                }
             } else {
-                product.setIsWishlisted(false);
+                util.setSnackbarMessage(getActivity(), response.getMessage(), rlView, true);
+                isProductDes = false;
 
-                adapterSimilarProducts.notifyDataSetChanged();
             }
-        } else {
-            util.setSnackbarMessage(getActivity(), response.getMessage(), rlView, true);
-            isProductDes = false;
-
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
@@ -572,20 +607,24 @@ public class FragmentProductDescription extends Fragment implements View.OnClick
 
     @Override
     public void onSuccessCouponList(CouponListResponse response) {
-        if (response.getSuccess()) {
-            couponInfoList = response.getData();
+        try {
+            if (response.getSuccess()) {
+                couponInfoList = response.getData();
 
-            adapterOffers = new AdapterOffers(getActivity(), couponInfoList);
-            if (couponInfoList != null && couponInfoList.size() > 0) {
-                lvOffers.setAdapter(adapterOffers);
-                Util.setListViewHeightBasedOnChildren(lvOffers);
+                adapterOffers = new AdapterOffers(getActivity(), couponInfoList);
+                if (couponInfoList != null && couponInfoList.size() > 0) {
+                    lvOffers.setAdapter(adapterOffers);
+                    Util.setListViewHeightBasedOnChildren(lvOffers);
 
+                } else {
+                    lvOffers.setVisibility(View.GONE);
+
+                }
             } else {
                 lvOffers.setVisibility(View.GONE);
-
             }
-        } else {
-            lvOffers.setVisibility(View.GONE);
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
@@ -697,7 +736,7 @@ public class FragmentProductDescription extends Fragment implements View.OnClick
                     scrollRange = appBarLayout.getTotalScrollRange();
                 }
                 if (scrollRange + verticalOffset == 0) {
-                   // collapsing.setTitle("hfhfhfhhhh");
+                    // collapsing.setTitle("hfhfhfhhhh");
                     tvTitleText.setVisibility(View.VISIBLE);
 
                     tvTitleText.setText(product.getName());

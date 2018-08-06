@@ -17,7 +17,7 @@ public class NotificationViewIntractorImpl implements INotificationViewIntractor
 
 
     @Override
-    public void getNotificationList(String token, String userId, String page, String perPage,final OnFinishedListener listener) {
+    public void getNotificationList(String token, String userId, String page, String perPage, final OnFinishedListener listener) {
         try {
 
             WebServicesWrapper.getInstance().getNotificationList(new ResponseResolver<NotificationResponse>() {
@@ -28,20 +28,20 @@ public class NotificationViewIntractorImpl implements INotificationViewIntractor
 
                 @Override
                 public void onFailure(RestError error, String msg) {
-                    if(error==null ||error.getError()==null){
-
-                        Gson gson=new Gson();
-                        NotificationResponse response= gson.fromJson(msg,NotificationResponse.class);
-                        listener.onSuccessNotificationList(response);
-
-                    }
-                    else {
+                    if (error == null || error.getError() == null) {
+                        try {
+                            Gson gson = new Gson();
+                            NotificationResponse response = gson.fromJson(msg, NotificationResponse.class);
+                            listener.onSuccessNotificationList(response);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    } else {
                         listener.onError(error.getError());
                     }
                 }
-            },token,userId,page,perPage);
-        }
-        catch (Exception e){
+            }, token, userId, page, perPage);
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
@@ -58,20 +58,20 @@ public class NotificationViewIntractorImpl implements INotificationViewIntractor
 
                 @Override
                 public void onFailure(RestError error, String msg) {
-                    if(error==null ||error.getError()==null){
-
-                        Gson gson=new Gson();
-                        GuestUserCreateResponse response= gson.fromJson(msg,GuestUserCreateResponse.class);
-                        listener.onDeleteNotificationList(response);
-
-                    }
-                    else {
+                    if (error == null || error.getError() == null) {
+                        try {
+                            Gson gson = new Gson();
+                            GuestUserCreateResponse response = gson.fromJson(msg, GuestUserCreateResponse.class);
+                            listener.onDeleteNotificationList(response);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    } else {
                         listener.onError(error.getError());
                     }
                 }
-            },token,userId,notification_id);
-        }
-        catch (Exception e){
+            }, token, userId, notification_id);
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
@@ -88,20 +88,20 @@ public class NotificationViewIntractorImpl implements INotificationViewIntractor
 
                 @Override
                 public void onFailure(RestError error, String msg) {
-                    if(error==null ||error.getError()==null){
-
-                        Gson gson=new Gson();
-                        GuestUserCreateResponse response= gson.fromJson(msg,GuestUserCreateResponse.class);
-                        listener.onClearAllNotificationList(response);
-
-                    }
-                    else {
+                    if (error == null || error.getError() == null) {
+                        try {
+                            Gson gson = new Gson();
+                            GuestUserCreateResponse response = gson.fromJson(msg, GuestUserCreateResponse.class);
+                            listener.onClearAllNotificationList(response);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    } else {
                         listener.onError(error.getError());
                     }
                 }
-            },token,userId);
-        }
-        catch (Exception e){
+            }, token, userId);
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }

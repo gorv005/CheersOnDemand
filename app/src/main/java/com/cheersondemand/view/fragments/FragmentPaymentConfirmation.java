@@ -133,6 +133,7 @@ public class FragmentPaymentConfirmation extends Fragment implements ICardViewPr
 
     private int dotsCount;
     private ImageView[] dots;
+
     public FragmentPaymentConfirmation() {
         // Required empty public constructor
     }
@@ -169,12 +170,12 @@ public class FragmentPaymentConfirmation extends Fragment implements ICardViewPr
         LinearLayoutManager layout = new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false);
         rvCardList.setLayoutManager(layout);
         tvViewDetail.setOnClickListener(this);
-    //    customIndicator.setViewPager(rvCardList);
+        //    customIndicator.setViewPager(rvCardList);
         llAddNewAddress.setOnClickListener(this);
         llEdit.setOnClickListener(this);
         btnProceedToPay.setOnClickListener(this);
         tvAddCard.setOnClickListener(this);
-        SharedPreference.getInstance(getActivity()).setBoolean(C.IS_FROM_PAYMENT,true);
+        SharedPreference.getInstance(getActivity()).setBoolean(C.IS_FROM_PAYMENT, true);
         rvCardList.addOnPageChangedListener(new RecyclerViewPager.OnPageChangedListener() {
             @Override
             public void OnPageChanged(int i1, int position) {
@@ -216,6 +217,7 @@ public class FragmentPaymentConfirmation extends Fragment implements ICardViewPr
 
         dots[0].setImageDrawable(getResources().getDrawable(R.drawable.selecteditem_dot));
     }
+
     void getCartList() {
         String order_id = SharedPreference.getInstance(getActivity()).getString(C.ORDER_ID);
 
@@ -223,11 +225,11 @@ public class FragmentPaymentConfirmation extends Fragment implements ICardViewPr
             if (SharedPreference.getInstance(getActivity()).getBoolean(C.IS_LOGIN_GUEST)) {
                 String id = "" + SharedPreference.getInstance(getActivity()).geGuestUser(C.GUEST_USER).getId();
 
-                iOrderViewPresenterPresenter.getCartList(id, order_id, Util.id(getActivity()),false);
+                iOrderViewPresenterPresenter.getCartList(id, order_id, Util.id(getActivity()), false);
             } else {
                 String id = "" + SharedPreference.getInstance(getActivity()).getUser(C.AUTH_USER).getData().getUser().getId();
                 String token = C.bearer + SharedPreference.getInstance(getActivity()).getUser(C.AUTH_USER).getData().getToken().getAccessToken();
-                iOrderViewPresenterPresenter.getCartList(token, id, order_id, Util.id(getActivity()),false);
+                iOrderViewPresenterPresenter.getCartList(token, id, order_id, Util.id(getActivity()), false);
             }
         }
     }
@@ -249,7 +251,7 @@ public class FragmentPaymentConfirmation extends Fragment implements ICardViewPr
                 List<CardList> cardLists = SharedPreference.getInstance(getActivity()).getCard(C.CARD_DATA);
                 if (cardLists != null) {
                     for (int i = cardLists.size(); i >= 0; i--) {
-                        cardList.set(i, cardLists.get(i-1));
+                        cardList.set(i, cardLists.get(i - 1));
                     }
                 }
 
@@ -294,7 +296,7 @@ public class FragmentPaymentConfirmation extends Fragment implements ICardViewPr
     void fillDetails() {
         adapterProductAmount = new AdapterProductAmount(getActivity(), cartProduct.getOrder().getOrderItems());
         lvCharges.setAdapter(adapterProductAmount);
-        tvTaxes.setText(getString(R.string.doller) +  cartProduct.getOrder().getTax());
+        tvTaxes.setText(getString(R.string.doller) + cartProduct.getOrder().getTax());
         tvDelieveryCharges.setText(getString(R.string.doller) + "0.0");
         tvTotalOrder.setText(getString(R.string.doller) + "" + Util.get2Decimal(cartProduct.getOrder().getSubTotal()));
 
@@ -343,10 +345,14 @@ public class FragmentPaymentConfirmation extends Fragment implements ICardViewPr
 
     @Override
     public void getCartListSuccess(UpdateCartResponse response) {
-        if (response.getSuccess()) {
-            cartProduct = response.getData();
-            fillDetails();
+        try {
+            if (response.getSuccess()) {
+                cartProduct = response.getData();
+                fillDetails();
 
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
@@ -367,18 +373,26 @@ public class FragmentPaymentConfirmation extends Fragment implements ICardViewPr
 
     @Override
     public void onPaymentSuccess(PaymentResponse response) {
-        if (response.getSuccess()) {
-            Bundle bundle2 = new Bundle();
-            bundle2.putString(C.PAYMENT_RESULT, C.PAYMENT_SUCCESS);
-            ((ActivityContainer) getActivity()).fragmnetLoader(C.FRAGMENT_PAYMENT_RESULT, bundle2);
+        try {
+            if (response.getSuccess()) {
+                Bundle bundle2 = new Bundle();
+                bundle2.putString(C.PAYMENT_RESULT, C.PAYMENT_SUCCESS);
+                ((ActivityContainer) getActivity()).fragmnetLoader(C.FRAGMENT_PAYMENT_RESULT, bundle2);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
     @Override
     public void getPaymentError(String response) {
-        Bundle bundle2 = new Bundle();
-        bundle2.putString(C.PAYMENT_RESULT, C.PAYMENT_FAILED);
-        ((ActivityContainer) getActivity()).fragmnetLoader(C.FRAGMENT_PAYMENT_RESULT, bundle2);
+        try {
+            Bundle bundle2 = new Bundle();
+            bundle2.putString(C.PAYMENT_RESULT, C.PAYMENT_FAILED);
+            ((ActivityContainer) getActivity()).fragmnetLoader(C.FRAGMENT_PAYMENT_RESULT, bundle2);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @Override

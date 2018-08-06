@@ -29,6 +29,8 @@
     <string name="edit">Edit</string>
     <string name="wishList">Wishlist</string>
     <string name="my_orders">My Order</string>
+    <string name="my_orders_">My Orders</string>
+
     <string name="saved_add">Saved Addresses</string>
     <string name="payment_info">Payment Information</string>
     <string name="conn_acc">Connected Accounts</string>
@@ -271,6 +273,8 @@
     <string name="do_you_want_to_remove_coupon">Do you want to remove coupon from cart?</string>
     <string name="no_result_found">No Results Found !</string>
     <string name="try_modify_search">Try modifying your search to get relevant results.</string>
+    <string name="are_you_sure_delete_address">Are you sure you want to delete the address ?</string>
+    <string name="delete_address">Delete Address</string>
 
     <!--
         <string name="default_web_client_id">999387565226-hdnnhm6rhgik5ljvm06shotsi7j9883c.apps.googleusercontent.com</string>

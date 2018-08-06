@@ -36,22 +36,24 @@ public class OrderViewIntractorImpl implements IOrderViewIntractor {
                 @Override
                 public void onFailure(RestError error, String msg) {
 
-                        if(error==null ||error.getError()==null){
+                    if (error == null || error.getError() == null) {
+                        try {
 
-                            Gson gson=new Gson();
-                            CreateOrderResponse createOrderResponse= gson.fromJson(msg,CreateOrderResponse.class);
+
+                            Gson gson = new Gson();
+                            CreateOrderResponse createOrderResponse = gson.fromJson(msg, CreateOrderResponse.class);
 
                             listener.onSuccess(createOrderResponse);
-
+                        } catch (Exception e) {
+                            e.printStackTrace();
                         }
-                        else {
-                            listener.onError(error.getError());
-                        }
+                    } else {
+                        listener.onError(error.getError());
+                    }
                 }
 
-            },user_id,uuid);
-        }
-        catch (Exception e){
+            }, user_id, uuid);
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
@@ -68,22 +70,22 @@ public class OrderViewIntractorImpl implements IOrderViewIntractor {
 
                 @Override
                 public void onFailure(RestError error, String msg) {
-                        if(error==null ||error.getError()==null){
-
-                            Gson gson=new Gson();
-                            CreateOrderResponse createOrderResponse= gson.fromJson(msg,CreateOrderResponse.class);
+                    if (error == null || error.getError() == null) {
+                        try {
+                            Gson gson = new Gson();
+                            CreateOrderResponse createOrderResponse = gson.fromJson(msg, CreateOrderResponse.class);
 
                             listener.onSuccess(createOrderResponse);
-
+                        } catch (Exception e) {
+                            e.printStackTrace();
                         }
-                        else {
-                            listener.onError(error.getError());
-                        }
+                    } else {
+                        listener.onError(error.getError());
+                    }
 
                 }
-            },token,user_id,uuid);
-        }
-        catch (Exception e){
+            }, token, user_id, uuid);
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
@@ -100,21 +102,21 @@ public class OrderViewIntractorImpl implements IOrderViewIntractor {
 
                 @Override
                 public void onFailure(RestError error, String msg) {
-                    if(error==null ||error.getError()==null){
+                    if (error == null || error.getError() == null) {
+                        try {
+                            Gson gson = new Gson();
+                            AddToCartResponse addToCartResponse = gson.fromJson(msg, AddToCartResponse.class);
 
-                        Gson gson=new Gson();
-                        AddToCartResponse addToCartResponse= gson.fromJson(msg,AddToCartResponse.class);
-
-                        listener.onSuccessAddToCart(addToCartResponse);
-
-                    }
-                    else {
+                            listener.onSuccessAddToCart(addToCartResponse);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    } else {
                         listener.onError(error.getError());
                     }
                 }
-            },user_id,order_id,addToCartRequest);
-        }
-        catch (Exception e){
+            }, user_id, order_id, addToCartRequest);
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
@@ -131,21 +133,21 @@ public class OrderViewIntractorImpl implements IOrderViewIntractor {
 
                 @Override
                 public void onFailure(RestError error, String msg) {
-                    if(error==null ||error.getError()==null){
+                    if (error == null || error.getError() == null) {
+                        try {
+                            Gson gson = new Gson();
+                            AddToCartResponse addToCartResponse = gson.fromJson(msg, AddToCartResponse.class);
 
-                        Gson gson=new Gson();
-                        AddToCartResponse addToCartResponse= gson.fromJson(msg,AddToCartResponse.class);
-
-                        listener.onSuccessAddToCart(addToCartResponse);
-
-                    }
-                    else {
+                            listener.onSuccessAddToCart(addToCartResponse);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    } else {
                         listener.onError(error.getError());
                     }
                 }
-            },token,user_id,order_id,addToCartRequest);
-        }
-        catch (Exception e){
+            }, token, user_id, order_id, addToCartRequest);
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
@@ -162,21 +164,21 @@ public class OrderViewIntractorImpl implements IOrderViewIntractor {
 
                 @Override
                 public void onFailure(RestError error, String msg) {
-                    if(error==null ||error.getError()==null){
+                    if (error == null || error.getError() == null) {
+                        try {
+                            Gson gson = new Gson();
+                            UpdateCartResponse response = gson.fromJson(msg, UpdateCartResponse.class);
 
-                        Gson gson=new Gson();
-                        UpdateCartResponse response= gson.fromJson(msg,UpdateCartResponse.class);
-
-                        listener.onSuccessUpdateCart(response);
-
-                    }
-                    else {
+                            listener.onSuccessUpdateCart(response);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    } else {
                         listener.onError(error.getError());
                     }
                 }
-            },user_id,order_id,updateProductQuantityRequest);
-        }
-        catch (Exception e){
+            }, user_id, order_id, updateProductQuantityRequest);
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
@@ -193,21 +195,21 @@ public class OrderViewIntractorImpl implements IOrderViewIntractor {
 
                 @Override
                 public void onFailure(RestError error, String msg) {
-                    if(error==null ||error.getError()==null){
+                    if (error == null || error.getError() == null) {
+                        try {
+                            Gson gson = new Gson();
+                            UpdateCartResponse response = gson.fromJson(msg, UpdateCartResponse.class);
 
-                        Gson gson=new Gson();
-                        UpdateCartResponse response= gson.fromJson(msg,UpdateCartResponse.class);
-
-                        listener.onSuccessUpdateCart(response);
-
-                    }
-                    else {
+                            listener.onSuccessUpdateCart(response);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    } else {
                         listener.onError(error.getError());
                     }
                 }
-            },token,user_id,order_id,updateProductQuantityRequest);
-        }
-        catch (Exception e){
+            }, token, user_id, order_id, updateProductQuantityRequest);
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
@@ -224,21 +226,21 @@ public class OrderViewIntractorImpl implements IOrderViewIntractor {
 
                 @Override
                 public void onFailure(RestError error, String msg) {
-                    if(error==null ||error.getError()==null){
+                    if (error == null || error.getError() == null) {
+                        try {
+                            Gson gson = new Gson();
+                            UpdateCartResponse response = gson.fromJson(msg, UpdateCartResponse.class);
 
-                        Gson gson=new Gson();
-                        UpdateCartResponse response= gson.fromJson(msg,UpdateCartResponse.class);
-
-                        listener.onSuccessRemoveCart(response);
-
-                    }
-                    else {
+                            listener.onSuccessRemoveCart(response);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    } else {
                         listener.onError(error.getError());
                     }
                 }
-            },user_id,order_id,updateProductQuantityRequest);
-        }
-        catch (Exception e){
+            }, user_id, order_id, updateProductQuantityRequest);
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
@@ -255,27 +257,27 @@ public class OrderViewIntractorImpl implements IOrderViewIntractor {
 
                 @Override
                 public void onFailure(RestError error, String msg) {
-                    if(error==null ||error.getError()==null){
+                    if (error == null || error.getError() == null) {
+                        try {
+                            Gson gson = new Gson();
+                            UpdateCartResponse response = gson.fromJson(msg, UpdateCartResponse.class);
 
-                        Gson gson=new Gson();
-                        UpdateCartResponse response= gson.fromJson(msg,UpdateCartResponse.class);
-
-                        listener.onSuccessRemoveCart(response);
-
-                    }
-                    else {
+                            listener.onSuccessRemoveCart(response);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    } else {
                         listener.onError(error.getError());
                     }
                 }
-            },token,user_id,order_id,updateProductQuantityRequest);
-        }
-        catch (Exception e){
+            }, token, user_id, order_id, updateProductQuantityRequest);
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
     @Override
-    public void getCartList(String user_id, String order_id, String uuid,boolean isFromPayment, final OnLoginFinishedListener listener) {
+    public void getCartList(String user_id, String order_id, String uuid, boolean isFromPayment, final OnLoginFinishedListener listener) {
         try {
 
             WebServicesWrapper.getInstance().getCartList(new ResponseResolver<UpdateCartResponse>() {
@@ -286,27 +288,27 @@ public class OrderViewIntractorImpl implements IOrderViewIntractor {
 
                 @Override
                 public void onFailure(RestError error, String msg) {
-                    if(error==null ||error.getError()==null){
+                    if (error == null || error.getError() == null) {
+                        try {
+                            Gson gson = new Gson();
+                            UpdateCartResponse response = gson.fromJson(msg, UpdateCartResponse.class);
 
-                        Gson gson=new Gson();
-                        UpdateCartResponse response= gson.fromJson(msg,UpdateCartResponse.class);
-
-                        listener.onSuccessCartList(response);
-
-                    }
-                    else {
+                            listener.onSuccessCartList(response);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    } else {
                         listener.onError(error.getError());
                     }
                 }
-            },user_id,order_id,uuid,isFromPayment);
-        }
-        catch (Exception e){
+            }, user_id, order_id, uuid, isFromPayment);
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
     @Override
-    public void getCartList(String token, String user_id, String order_id, String uuid,boolean isFromPayment, final OnLoginFinishedListener listener) {
+    public void getCartList(String token, String user_id, String order_id, String uuid, boolean isFromPayment, final OnLoginFinishedListener listener) {
         try {
 
             WebServicesWrapper.getInstance().getCartList(new ResponseResolver<UpdateCartResponse>() {
@@ -317,21 +319,21 @@ public class OrderViewIntractorImpl implements IOrderViewIntractor {
 
                 @Override
                 public void onFailure(RestError error, String msg) {
-                    if(error==null ||error.getError()==null){
+                    if (error == null || error.getError() == null) {
+                        try {
+                            Gson gson = new Gson();
+                            UpdateCartResponse response = gson.fromJson(msg, UpdateCartResponse.class);
 
-                        Gson gson=new Gson();
-                        UpdateCartResponse response= gson.fromJson(msg,UpdateCartResponse.class);
-
-                        listener.onSuccessCartList(response);
-
-                    }
-                    else {
+                            listener.onSuccessCartList(response);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    } else {
                         listener.onError(error.getError());
                     }
                 }
-            },token,user_id,order_id,uuid,isFromPayment);
-        }
-        catch (Exception e){
+            }, token, user_id, order_id, uuid, isFromPayment);
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
@@ -348,21 +350,21 @@ public class OrderViewIntractorImpl implements IOrderViewIntractor {
 
                 @Override
                 public void onFailure(RestError error, String msg) {
-                    if(error==null ||error.getError()==null){
+                    if (error == null || error.getError() == null) {
+                        try {
+                            Gson gson = new Gson();
+                            WishListResponse response = gson.fromJson(msg, WishListResponse.class);
 
-                        Gson gson=new Gson();
-                        WishListResponse response= gson.fromJson(msg,WishListResponse.class);
-
-                        listener.onSuccessAddToWishList(response);
-
-                    }
-                    else {
+                            listener.onSuccessAddToWishList(response);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    } else {
                         listener.onError(error.getError());
                     }
                 }
-            },user_id,wishListRequest);
-        }
-        catch (Exception e){
+            }, user_id, wishListRequest);
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
@@ -379,27 +381,27 @@ public class OrderViewIntractorImpl implements IOrderViewIntractor {
 
                 @Override
                 public void onFailure(RestError error, String msg) {
-                    if(error==null ||error.getError()==null){
+                    if (error == null || error.getError() == null) {
+                        try {
+                            Gson gson = new Gson();
+                            WishListResponse response = gson.fromJson(msg, WishListResponse.class);
 
-                        Gson gson=new Gson();
-                        WishListResponse response= gson.fromJson(msg,WishListResponse.class);
-
-                        listener.onSuccessAddToWishList(response);
-
-                    }
-                    else {
+                            listener.onSuccessAddToWishList(response);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    } else {
                         listener.onError(error.getError());
                     }
                 }
-            },token,user_id,wishListRequest);
-        }
-        catch (Exception e){
+            }, token, user_id, wishListRequest);
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
     @Override
-    public void removeFromWishList(String user_id, WishListRequest wishListRequest,final OnLoginFinishedListener listener) {
+    public void removeFromWishList(String user_id, WishListRequest wishListRequest, final OnLoginFinishedListener listener) {
         try {
 
             WebServicesWrapper.getInstance().removeFromWishList(new ResponseResolver<WishListResponse>() {
@@ -410,21 +412,21 @@ public class OrderViewIntractorImpl implements IOrderViewIntractor {
 
                 @Override
                 public void onFailure(RestError error, String msg) {
-                    if(error==null ||error.getError()==null){
+                    if (error == null || error.getError() == null) {
+                        try {
+                            Gson gson = new Gson();
+                            WishListResponse response = gson.fromJson(msg, WishListResponse.class);
 
-                        Gson gson=new Gson();
-                        WishListResponse response= gson.fromJson(msg,WishListResponse.class);
-
-                        listener.onSuccessAddToWishList(response);
-
-                    }
-                    else {
+                            listener.onSuccessAddToWishList(response);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    } else {
                         listener.onError(error.getError());
                     }
                 }
-            },user_id,wishListRequest);
-        }
-        catch (Exception e){
+            }, user_id, wishListRequest);
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
@@ -441,21 +443,21 @@ public class OrderViewIntractorImpl implements IOrderViewIntractor {
 
                 @Override
                 public void onFailure(RestError error, String msg) {
-                    if(error==null ||error.getError()==null){
+                    if (error == null || error.getError() == null) {
+                        try {
+                            Gson gson = new Gson();
+                            WishListResponse response = gson.fromJson(msg, WishListResponse.class);
 
-                        Gson gson=new Gson();
-                        WishListResponse response= gson.fromJson(msg,WishListResponse.class);
-
-                        listener.onSuccessAddToWishList(response);
-
-                    }
-                    else {
+                            listener.onSuccessAddToWishList(response);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    } else {
                         listener.onError(error.getError());
                     }
                 }
-            },token,user_id,wishListRequest);
-        }
-        catch (Exception e){
+            }, token, user_id, wishListRequest);
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
@@ -472,20 +474,20 @@ public class OrderViewIntractorImpl implements IOrderViewIntractor {
 
                 @Override
                 public void onFailure(RestError error, String msg) {
-                    if(error==null ||error.getError()==null){
-
-                        Gson gson=new Gson();
-                        WishListDataResponse response= gson.fromJson(msg,WishListDataResponse.class);
-                        listener.onSuccessWishList(response);
-
-                    }
-                    else {
+                    if (error == null || error.getError() == null) {
+                        try {
+                            Gson gson = new Gson();
+                            WishListDataResponse response = gson.fromJson(msg, WishListDataResponse.class);
+                            listener.onSuccessWishList(response);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    } else {
                         listener.onError(error.getError());
                     }
                 }
-            },isAuthUser,token,UserId,uuid);
-        }
-        catch (Exception e){
+            }, isAuthUser, token, UserId, uuid);
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
@@ -502,21 +504,21 @@ public class OrderViewIntractorImpl implements IOrderViewIntractor {
 
                 @Override
                 public void onFailure(RestError error, String msg) {
-                    if(error==null ||error.getError()==null){
+                    if (error == null || error.getError() == null) {
+                        try {
+                            Gson gson = new Gson();
+                            CartHasItemResponse response = gson.fromJson(msg, CartHasItemResponse.class);
 
-                        Gson gson=new Gson();
-                        CartHasItemResponse response= gson.fromJson(msg,CartHasItemResponse.class);
-
-                        listener.onSuccess(response);
-
-                    }
-                    else {
+                            listener.onSuccess(response);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    } else {
                         listener.onError(error.getError());
                     }
                 }
-            },isAuthUser,token,UserId,genRequest);
-        }
-        catch (Exception e){
+            }, isAuthUser, token, UserId, genRequest);
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }

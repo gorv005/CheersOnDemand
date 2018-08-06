@@ -33,11 +33,14 @@ public class ProfileViewIntractorImpl implements IProfileViewIntractor {
                 @Override
                 public void onFailure(RestError error, String msg) {
                     if(error==null ||error.getError()==null){
-
+                        try {
                         Gson gson=new Gson();
                         LogoutResponse response= gson.fromJson(msg,LogoutResponse.class);
                         listener.onSuccess(response);
-
+                        }
+                        catch (Exception e){
+                            e.printStackTrace();
+                        }
                     }
                     else {
                         listener.onError(error.getError());
@@ -63,11 +66,14 @@ public class ProfileViewIntractorImpl implements IProfileViewIntractor {
                 @Override
                 public void onFailure(RestError error, String msg) {
                     if(error==null ||error.getError()==null){
-
+                        try {
                         Gson gson=new Gson();
                         GuestUserCreateResponse response= gson.fromJson(msg,GuestUserCreateResponse.class);
                         listener.onSuccessUpdateProfile(response);
-
+                        }
+                        catch (Exception e){
+                            e.printStackTrace();
+                        }
                     }
                     else {
                         listener.onError(error.getError());
@@ -93,11 +99,14 @@ public class ProfileViewIntractorImpl implements IProfileViewIntractor {
                 @Override
                 public void onFailure(RestError error, String msg) {
                     if(error==null ||error.getError()==null){
-
+                        try {
                         Gson gson=new Gson();
                         GuestUserCreateResponse response= gson.fromJson(msg,GuestUserCreateResponse.class);
                         listener.onSuccessUpdateProfile(response);
-
+                        }
+                        catch (Exception e){
+                            e.printStackTrace();
+                        }
                     }
                     else {
                         listener.onError(error.getError());

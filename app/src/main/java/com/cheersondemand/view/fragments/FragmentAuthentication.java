@@ -93,9 +93,13 @@ import static com.facebook.FacebookSdk.getApplicationContext;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class FragmentAuthentication extends Fragment implements IAutheniticationPresenter.IAuthenticationView,View.OnClickListener {
+public class FragmentAuthentication extends Fragment implements IAutheniticationPresenter.IAuthenticationView, View.OnClickListener {
 
 
+    public static final int GOOGLE_LOGIN_REQUEST_CODE = 1;
+    public static final int GOOGLE_LOGIN_RESPONSE_OK = 2;
+    public static final int GOOGLE_LOGIN_RESPONSE_FAIL = 3;
+    private static final int RC_SIGN_IN = 234;
     @BindView(R.id.btnLoginTab)
     Button btnLoginTab;
     @BindView(R.id.btnSignUpTab)
@@ -146,23 +150,19 @@ public class FragmentAuthentication extends Fragment implements IAuthenitication
     TextView skipAndContinue;
     @BindView(R.id.skip_and_continue_login)
     TextView skipAndContinueLogin;
-
-    private String mAccessToken;
     Util util;
-    private static final int RC_SIGN_IN = 234;
     GoogleSignInClient mGoogleSignInClient;
     GoogleApiClient mGoogleApiClient = null;
-    public static final int GOOGLE_LOGIN_REQUEST_CODE = 1;
-    public static final int GOOGLE_LOGIN_RESPONSE_OK = 2;
-    public static final int GOOGLE_LOGIN_RESPONSE_FAIL = 3;
     FirebaseAuth mAuth;
-     boolean isPasswordVisibleSignUP=false;
+    boolean isPasswordVisibleSignUP = false;
     String accessToken;
-    private Handler handler;
-    boolean isClicked=false;
-     boolean isPasswordVisibleLogin=false;
-     boolean isLoginScreen=false;
+    boolean isClicked = false;
+    boolean isPasswordVisibleLogin = false;
+    boolean isLoginScreen = false;
     IAutheniticationPresenter iAutheniticationPresenter;
+    private String mAccessToken;
+    private Handler handler;
+
     public FragmentAuthentication() {
         // Required empty public constructor
     }
@@ -183,12 +183,12 @@ public class FragmentAuthentication extends Fragment implements IAuthenitication
 
 
         mGoogleSignInClient = GoogleSignIn.getClient(getApplicationContext(), gso);
-     //   initializeGoogleLogin();
+        //   initializeGoogleLogin();
 
         util = new Util();
-        iAutheniticationPresenter=new AuthenicationPresenterImpl(this,getActivity());
+        iAutheniticationPresenter = new AuthenicationPresenterImpl(this, getActivity());
 
-            isLoginScreen=getArguments().getBoolean(C.IS_LOGIN_SCREEN);
+        isLoginScreen = getArguments().getBoolean(C.IS_LOGIN_SCREEN);
 
     }
 
@@ -224,8 +224,6 @@ public class FragmentAuthentication extends Fragment implements IAuthenitication
                 .build();
 
 
-
-
     }
 
 
@@ -237,16 +235,17 @@ public class FragmentAuthentication extends Fragment implements IAuthenitication
         unbinder = ButterKnife.bind(this, view);
         return view;
     }
+
     @Override
     public void onDestroy() {
         try {
             super.onDestroy();
             iAutheniticationPresenter.onDestroy();
-        }
-        catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
+
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         Typeface typeface = ResourcesCompat.getFont(getActivity(), R.font.sf_ui_display_regular);
@@ -254,13 +253,12 @@ public class FragmentAuthentication extends Fragment implements IAuthenitication
         etPassword.setTypeface(typeface);
         /*etEmailLogin.setText("gorv005@yopmail.com");
         etPasswordLogin.setText("Admin@123");*/
-        if(isLoginScreen){
+        if (isLoginScreen) {
             viewA.setVisibility(View.GONE);
             viewB.setVisibility(View.VISIBLE);
             viewSignUp.setVisibility(View.GONE);
             viewSignIn.setVisibility(View.VISIBLE);
-        }
-        else {
+        } else {
             viewA.setVisibility(View.VISIBLE);
             viewB.setVisibility(View.GONE);
             viewSignUp.setVisibility(View.VISIBLE);
@@ -290,9 +288,9 @@ public class FragmentAuthentication extends Fragment implements IAuthenitication
             public void onSuccess(LoginResult loginResult) {
                 Log.e("DEBUG", "UserID=" + loginResult.getAccessToken().getUserId() + "Token=" + loginResult.getAccessToken().getToken());
                 mAccessToken = loginResult.getAccessToken().getToken();
-               // util.setSnackbarMessage(getActivity(), "Login Sucess", LLView,false);
-               // getUserProfile(mAccessToken);
-                socailLogin(""+mAccessToken,"facebook");
+                // util.setSnackbarMessage(getActivity(), "Login Sucess", LLView,false);
+                // getUserProfile(mAccessToken);
+                socailLogin("" + mAccessToken, "facebook");
 
             }
 
@@ -355,10 +353,10 @@ public class FragmentAuthentication extends Fragment implements IAuthenitication
                     @Override
                     public void run() {
                         try {
-                            String scope = "oauth2:"+ Scopes.EMAIL+" "+ Scopes.PROFILE;
+                            String scope = "oauth2:" + Scopes.EMAIL + " " + Scopes.PROFILE;
                             accessToken = GoogleAuthUtil.getToken(getApplicationContext(), account.getAccount(), scope, new Bundle());
-                            Log.d("DEBUG", "accessToken:"+accessToken); //accessToken:ya29.Gl...
-                            socailLogin(accessToken,"google");
+                            Log.d("DEBUG", "accessToken:" + accessToken); //accessToken:ya29.Gl...
+                            socailLogin(accessToken, "google");
 
                         } catch (IOException e) {
                             e.printStackTrace();
@@ -369,14 +367,11 @@ public class FragmentAuthentication extends Fragment implements IAuthenitication
                 };
                 AsyncTask.execute(runnable);
                 //authenticating with firebase
-               // firebaseAuthWithGoogle(account,accessToken);
+                // firebaseAuthWithGoogle(account,accessToken);
             } catch (ApiException e) {
-              //  Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
+                //  Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
             }
-        }
-
-            else
-         {
+        } else {
             callbackManager.onActivityResult(requestCode, resultCode, data);
 
         }
@@ -401,6 +396,7 @@ public class FragmentAuthentication extends Fragment implements IAuthenitication
         }
         return null;
     }
+
     private void firebaseAuthWithGoogle(final GoogleSignInAccount acct, final String token) {
         // Log.d(TAG, "firebaseAuthWithGoogle:" + acct.getId());
 
@@ -418,8 +414,8 @@ public class FragmentAuthentication extends Fragment implements IAuthenitication
 
                             Log.e("DEBUG", user.getDisplayName());
                             Log.e("DEBUG", user.getEmail());
-                         //   util.setSnackbarMessage(getActivity(), "Login Sucess", LLView,false);
-                            socailLogin(token,"google");
+                            //   util.setSnackbarMessage(getActivity(), "Login Sucess", LLView,false);
+                            socailLogin(token, "google");
                         } else {
                             // If sign in fails, display a message to the user.
                             Toast.makeText(getApplicationContext(), "Authentication failed.",
@@ -432,26 +428,26 @@ public class FragmentAuthentication extends Fragment implements IAuthenitication
     }
 
 
-
-    void socailLogin(String token,String provider){
-        SocialLoginRequest socialLoginRequest=new SocialLoginRequest();
+    void socailLogin(String token, String provider) {
+        SocialLoginRequest socialLoginRequest = new SocialLoginRequest();
         socialLoginRequest.setAccessToken(token);
         socialLoginRequest.setLoginType(2);
         socialLoginRequest.setGrantType("password");
         socialLoginRequest.setProvider(provider);
         socialLoginRequest.setUuid(Util.id(getActivity()));
-        if(SharedPreference.getInstance(getActivity()).getString(C.DEVICE_TOKEN)!=null){
+        if (SharedPreference.getInstance(getActivity()).getString(C.DEVICE_TOKEN) != null) {
             socialLoginRequest.setDeviceToken(SharedPreference.getInstance(getActivity()).getString(C.DEVICE_TOKEN));
 
         }
 
         iAutheniticationPresenter.setSignUpSocail(socialLoginRequest);
     }
+
     //this method is called on click
     private void signIn() {
         //getting the google signin intent
 
-        mGoogleSignInClient. signOut();
+        mGoogleSignInClient.signOut();
         Intent signInIntent = mGoogleSignInClient.getSignInIntent();
 
         //starting the activity for result
@@ -518,9 +514,9 @@ public class FragmentAuthentication extends Fragment implements IAuthenitication
                 break;
             case R.id.skip_and_continue:
                 if (Util.isNetworkConnectivity(getActivity())) {
-                  //gotoHome();
-                    if(!isClicked) {
-                        isClicked=true;
+                    //gotoHome();
+                    if (!isClicked) {
+                        isClicked = true;
                         GenRequest categoryRequest = new GenRequest();
                         categoryRequest.setUuid(Util.id(getActivity()));
                         iAutheniticationPresenter.createGuestUser(categoryRequest);
@@ -529,8 +525,8 @@ public class FragmentAuthentication extends Fragment implements IAuthenitication
                 break;
             case R.id.skip_and_continue_login:
                 if (Util.isNetworkConnectivity(getActivity())) {
-                  //gotoHome();
-                    if(!isClicked) {
+                    //gotoHome();
+                    if (!isClicked) {
                         isClicked = true;
                         GenRequest categoryRequest = new GenRequest();
                         categoryRequest.setUuid(Util.id(getActivity()));
@@ -541,13 +537,13 @@ public class FragmentAuthentication extends Fragment implements IAuthenitication
             case R.id.btnSignUp:
                 Util.hideKeyboard(getActivity());
                 btnSignUp.startAnimation();
-              signUp();
+                signUp();
                 break;
             case R.id.btnLogin:
                 Util.hideKeyboard(getActivity());
 
                 btnLogin.startAnimation();
-               login();
+                login();
                 break;
             case R.id.tvForgotPassword:
                 Intent intent = new Intent(getActivity(), ActivityContainer.class);
@@ -558,43 +554,39 @@ public class FragmentAuthentication extends Fragment implements IAuthenitication
     }
 
 
-
-
-
-
-
-    void  login(){
-        LoginRequest loginRequest=new LoginRequest();
+    void login() {
+        LoginRequest loginRequest = new LoginRequest();
         loginRequest.setEmail(etEmailLogin.getText().toString());
         loginRequest.setGrantType("password");
         loginRequest.setLoginType(1);
         loginRequest.setUuid(Util.id(getActivity()));
         loginRequest.setPassword(etPasswordLogin.getText().toString());
-        if(SharedPreference.getInstance(getActivity()).getString(C.DEVICE_TOKEN)!=null){
+        if (SharedPreference.getInstance(getActivity()).getString(C.DEVICE_TOKEN) != null) {
             loginRequest.setDeviceToken(SharedPreference.getInstance(getActivity()).getString(C.DEVICE_TOKEN));
 
         }
         iAutheniticationPresenter.setLoginUsingEmail(loginRequest);
     }
-    void signUp(){
-        SignUpRequest signUpRequest=new SignUpRequest();
-        User user=new User();
+
+    void signUp() {
+        SignUpRequest signUpRequest = new SignUpRequest();
+        User user = new User();
         user.setName(etName.getText().toString());
 
         user.setUuid(Util.id(getActivity()));
         user.setEmail(etEmail.getText().toString());
         user.setPassword(etPassword.getText().toString());
-        if(SharedPreference.getInstance(getActivity()).getString(C.DEVICE_TOKEN)!=null){
+        if (SharedPreference.getInstance(getActivity()).getString(C.DEVICE_TOKEN) != null) {
             user.setDeviceToken(SharedPreference.getInstance(getActivity()).getString(C.DEVICE_TOKEN));
 
-        }
-        else {
+        } else {
             user.setDeviceToken("");
 
         }
         signUpRequest.setUser(user);
         iAutheniticationPresenter.setSignUp(signUpRequest);
     }
+
     private void initSignUp() {
         btnSignUp.setEnabled(false);
 
@@ -605,16 +597,15 @@ public class FragmentAuthentication extends Fragment implements IAuthenitication
                 switch (target) {
                     case RIGHT:
                         //Do something here
-                        if(!isPasswordVisibleSignUP) {
-                            isPasswordVisibleSignUP=true;
+                        if (!isPasswordVisibleSignUP) {
+                            isPasswordVisibleSignUP = true;
                             etPassword.setInputType(TYPE_CLASS_TEXT | TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
-                            etPassword.setCompoundDrawablesWithIntrinsicBounds( R.drawable.password_key, 0, R.drawable.ic_eye_visible, 0);
+                            etPassword.setCompoundDrawablesWithIntrinsicBounds(R.drawable.password_key, 0, R.drawable.ic_eye_visible, 0);
 
-                        }
-                        else {
-                            isPasswordVisibleSignUP=false;
+                        } else {
+                            isPasswordVisibleSignUP = false;
                             etPassword.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
-                            etPassword.setCompoundDrawablesWithIntrinsicBounds( R.drawable.password_key, 0, R.drawable.ic_eye, 0);
+                            etPassword.setCompoundDrawablesWithIntrinsicBounds(R.drawable.password_key, 0, R.drawable.ic_eye, 0);
 
                         }
                         break;
@@ -630,20 +621,19 @@ public class FragmentAuthentication extends Fragment implements IAuthenitication
         etName.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View view, boolean b) {
-             try {
-                 if (b) {
-                     etName.setBackgroundResource(R.drawable.edit_text_back_enable);
-                     etName.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_username_enable, 0, 0, 0);
+                try {
+                    if (b) {
+                        etName.setBackgroundResource(R.drawable.edit_text_back_enable);
+                        etName.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_username_enable, 0, 0, 0);
 
-                 } else {
-                     etName.setBackgroundResource(R.drawable.edit_text_back_disable);
-                     etName.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_username, 0, 0, 0);
+                    } else {
+                        etName.setBackgroundResource(R.drawable.edit_text_back_disable);
+                        etName.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_username, 0, 0, 0);
 
-                 }
-             }
-             catch (Exception e){
-                 e.printStackTrace();
-             }
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
         });
         etEmail.setOnFocusChangeListener(new View.OnFocusChangeListener() {
@@ -660,8 +650,7 @@ public class FragmentAuthentication extends Fragment implements IAuthenitication
                         etEmail.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_email, 0, 0, 0);
 
                     }
-                }
-                catch (Exception e){
+                } catch (Exception e) {
                     e.printStackTrace();
                 }
             }
@@ -677,8 +666,7 @@ public class FragmentAuthentication extends Fragment implements IAuthenitication
                         etPassword.setBackgroundResource(R.drawable.edit_text_back_disable);
 
                     }
-                }
-                catch (Exception e){
+                } catch (Exception e) {
                     e.printStackTrace();
                 }
             }
@@ -699,8 +687,7 @@ public class FragmentAuthentication extends Fragment implements IAuthenitication
                                       int count) {
 
 
-                       validation();
-
+                validation();
 
 
             }
@@ -723,7 +710,6 @@ public class FragmentAuthentication extends Fragment implements IAuthenitication
                 validation();
 
 
-
             }
         });
         etPassword.addTextChangedListener(new TextWatcher() {
@@ -740,17 +726,15 @@ public class FragmentAuthentication extends Fragment implements IAuthenitication
             public void onTextChanged(CharSequence s, int start, int before,
                                       int count) {
 
-                if(etPassword.getText().toString().length()>0){
-                    etPassword.setCompoundDrawablesWithIntrinsicBounds(  R.drawable.ic_password, 0, R.drawable.ic_eye, 0);
+                if (etPassword.getText().toString().length() > 0) {
+                    etPassword.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_password, 0, R.drawable.ic_eye, 0);
 
-                }
-                else {
-                        etPassword.setCompoundDrawablesWithIntrinsicBounds(  R.drawable.ic_password, 0, 0, 0);
+                } else {
+                    etPassword.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_password, 0, 0, 0);
 
 
                 }
                 validation();
-
 
 
             }
@@ -769,16 +753,15 @@ public class FragmentAuthentication extends Fragment implements IAuthenitication
                 switch (target) {
                     case RIGHT:
                         //Do something here
-                        if(!isPasswordVisibleLogin) {
-                            isPasswordVisibleLogin=true;
+                        if (!isPasswordVisibleLogin) {
+                            isPasswordVisibleLogin = true;
                             etPasswordLogin.setInputType(TYPE_CLASS_TEXT | TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
-                            etPasswordLogin.setCompoundDrawablesWithIntrinsicBounds( R.drawable.ic_password, 0, R.drawable.ic_eye_visible, 0);
+                            etPasswordLogin.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_password, 0, R.drawable.ic_eye_visible, 0);
 
-                        }
-                        else {
-                            isPasswordVisibleLogin=false;
+                        } else {
+                            isPasswordVisibleLogin = false;
                             etPasswordLogin.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
-                            etPasswordLogin.setCompoundDrawablesWithIntrinsicBounds(  R.drawable.ic_password, 0, R.drawable.ic_eye, 0);
+                            etPasswordLogin.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_password, 0, R.drawable.ic_eye, 0);
 
                         }
                         break;
@@ -793,39 +776,37 @@ public class FragmentAuthentication extends Fragment implements IAuthenitication
             @Override
             public void onFocusChange(View view, boolean b) {
 
-               try {
-                   if (b) {
-                       etEmailLogin.setBackgroundResource(R.drawable.edit_text_back_enable);
-                       etEmailLogin.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_email_enable, 0, 0, 0);
+                try {
+                    if (b) {
+                        etEmailLogin.setBackgroundResource(R.drawable.edit_text_back_enable);
+                        etEmailLogin.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_email_enable, 0, 0, 0);
 
-                   } else {
-                       etEmailLogin.setBackgroundResource(R.drawable.edit_text_back_disable);
-                       etEmailLogin.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_email, 0, 0, 0);
+                    } else {
+                        etEmailLogin.setBackgroundResource(R.drawable.edit_text_back_disable);
+                        etEmailLogin.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_email, 0, 0, 0);
 
-                   }
-               }
-               catch (Exception e){
-                   e.printStackTrace();
-               }
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
         });
         etPasswordLogin.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View view, boolean b) {
 
-               try {
-                   if (b) {
-                       etPasswordLogin.setBackgroundResource(R.drawable.edit_text_back_enable);
+                try {
+                    if (b) {
+                        etPasswordLogin.setBackgroundResource(R.drawable.edit_text_back_enable);
 
 
-                   } else {
-                       etPasswordLogin.setBackgroundResource(R.drawable.edit_text_back_disable);
+                    } else {
+                        etPasswordLogin.setBackgroundResource(R.drawable.edit_text_back_disable);
 
-                   }
-               }
-               catch (Exception e){
-                   e.printStackTrace();
-               }
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
         });
         etEmailLogin.addTextChangedListener(new TextWatcher() {
@@ -846,7 +827,6 @@ public class FragmentAuthentication extends Fragment implements IAuthenitication
                 validationLogin();
 
 
-
             }
         });
         etPasswordLogin.addTextChangedListener(new TextWatcher() {
@@ -863,17 +843,15 @@ public class FragmentAuthentication extends Fragment implements IAuthenitication
             public void onTextChanged(CharSequence s, int start, int before,
                                       int count) {
 
-                if(etPasswordLogin.getText().toString().length()>0){
-                    etPasswordLogin.setCompoundDrawablesWithIntrinsicBounds(  R.drawable.ic_password, 0, R.drawable.ic_eye, 0);
+                if (etPasswordLogin.getText().toString().length() > 0) {
+                    etPasswordLogin.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_password, 0, R.drawable.ic_eye, 0);
 
-                }
-                else {
-                    etPasswordLogin.setCompoundDrawablesWithIntrinsicBounds(  R.drawable.ic_password, 0, 0, 0);
+                } else {
+                    etPasswordLogin.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_password, 0, 0, 0);
 
 
                 }
                 validationLogin();
-
 
 
             }
@@ -882,53 +860,49 @@ public class FragmentAuthentication extends Fragment implements IAuthenitication
 
     }
 
-    void  validationLogin(){
+    void validationLogin() {
 
 
-            if(Util.isValidMail(etEmailLogin.getText().toString())){
+        if (Util.isValidMail(etEmailLogin.getText().toString())) {
 
-                if(etPasswordLogin.length()>4 && etPasswordLogin.length()<31){
-                    btnLogin.setBackground(ContextCompat.getDrawable(getActivity(), R.drawable.bg_button_enable));
-                    btnLogin.setEnabled(true);
+            if (etPasswordLogin.length() > 4 && etPasswordLogin.length() < 31) {
+                btnLogin.setBackground(ContextCompat.getDrawable(getActivity(), R.drawable.bg_button_enable));
+                btnLogin.setEnabled(true);
 
-                }
-                else {
-                    btnLogin.setBackground(ContextCompat.getDrawable(getActivity(), R.drawable.button_disable));
-                    btnLogin.setEnabled(false);
-
-                }
-            }
-            else {
+            } else {
                 btnLogin.setBackground(ContextCompat.getDrawable(getActivity(), R.drawable.button_disable));
                 btnLogin.setEnabled(false);
 
             }
+        } else {
+            btnLogin.setBackground(ContextCompat.getDrawable(getActivity(), R.drawable.button_disable));
+            btnLogin.setEnabled(false);
+
+        }
     }
-    void  validation(){
-        if(etName.getText().length()>2 && etName.length()<31){
 
-            if(Util.isValidMail(etEmail.getText().toString())){
+    void validation() {
+        if (etName.getText().length() > 2 && etName.length() < 31) {
 
-                if(etPassword.length()>4 && etPassword.length()<31){
+            if (Util.isValidMail(etEmail.getText().toString())) {
+
+                if (etPassword.length() > 4 && etPassword.length() < 31) {
                     btnSignUp.setBackground(ContextCompat.getDrawable(getActivity(), R.drawable.bg_button_enable));
                     btnSignUp.setEnabled(true);
 
-                }
-                else {
+                } else {
 
                     btnSignUp.setBackground(ContextCompat.getDrawable(getActivity(), R.drawable.button_disable));
                     btnSignUp.setEnabled(false);
 
                 }
-            }
-            else {
+            } else {
 
                 btnSignUp.setBackground(ContextCompat.getDrawable(getActivity(), R.drawable.button_disable));
                 btnSignUp.setEnabled(false);
 
             }
-        }
-        else {
+        } else {
 
             btnSignUp.setBackground(ContextCompat.getDrawable(getActivity(), R.drawable.button_disable));
             btnSignUp.setEnabled(false);
@@ -937,6 +911,7 @@ public class FragmentAuthentication extends Fragment implements IAuthenitication
 
 
     }
+
     private void initAnimation(View viewA, View viewB) {
         Animation animShow = AnimationUtils.loadAnimation(getActivity(), R.anim.view_show);
         viewB.startAnimation(animShow);
@@ -954,65 +929,69 @@ public class FragmentAuthentication extends Fragment implements IAuthenitication
 
     @Override
     public void getResponseSuccess(AuthenticationResponse response) {
-       // Log.e("DEBUG",""+response.toString());
-        isClicked=false;
-        btnLogin.revertAnimation();
-        btnSignUp.revertAnimation();
+        try {
+            // Log.e("DEBUG",""+response.toString());
+            isClicked = false;
+            btnLogin.revertAnimation();
+            btnSignUp.revertAnimation();
 
-        if(response.getError()!=null){
-            util.setSnackbarMessage(getActivity(), response.getError(), LLView, true);
+            if (response.getError() != null) {
+                util.setSnackbarMessage(getActivity(), response.getError(), LLView, true);
 
-        }
-        else if(!response.getSuccess()){
-            util.setSnackbarMessage(getActivity(), response.getErrors().get(0).getField(), LLView, true);
+            } else if (!response.getSuccess()) {
+                util.setSnackbarMessage(getActivity(), response.getErrors().get(0).getField(), LLView, true);
 
-        }
-        else if(response.getSuccess()){
-            if (Util.isNetworkConnectivity(getActivity())) {
-                SharedPreference.getInstance(getActivity()).setBoolean(C.IS_LOGIN,true);
-                SharedPreference.getInstance(getActivity()).setBoolean(C.IS_LOGIN_GUEST,false);
-                SharedPreference.getInstance(getActivity()).setBoolean(C.IS_NOTIFICATION,response.getData().getUser().getIsNotificationEnabled());
-                SharedPreference.getInstance(getActivity()).setUser(C.AUTH_USER,response);
-                SharedPreference.getInstance(getActivity()).setString(C.ORDER_ID,response.getData().getUser().getOrderId());
+            } else if (response.getSuccess()) {
+                if (Util.isNetworkConnectivity(getActivity())) {
+                    SharedPreference.getInstance(getActivity()).setBoolean(C.IS_LOGIN, true);
+                    SharedPreference.getInstance(getActivity()).setBoolean(C.IS_LOGIN_GUEST, false);
+                    SharedPreference.getInstance(getActivity()).setBoolean(C.IS_NOTIFICATION, response.getData().getUser().getIsNotificationEnabled());
+                    SharedPreference.getInstance(getActivity()).setUser(C.AUTH_USER, response);
+                    SharedPreference.getInstance(getActivity()).setString(C.ORDER_ID, response.getData().getUser().getOrderId());
 
-                gotoSearchLocationAuth();
+                    gotoSearchLocationAuth();
+                }
+            } else {
+
+                util.setSnackbarMessage(getActivity(), response.getMessage(), LLView, true);
+
             }
-        }
-        else {
-
-            util.setSnackbarMessage(getActivity(), response.getMessage(), LLView, true);
-
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
     @Override
     public void getResponseSuccessOfCreateGuestUser(GuestUserCreateResponse response) {
-        isClicked=false;
-        btnLogin.revertAnimation();
-        btnSignUp.revertAnimation();
-        if(response.getSuccess()){
-            if (Util.isNetworkConnectivity(getActivity())) {
-                SharedPreference.getInstance(getActivity()).setBoolean(C.IS_LOGIN_GUEST,true);
+        try {
+            isClicked = false;
+            btnLogin.revertAnimation();
+            btnSignUp.revertAnimation();
+            if (response.getSuccess()) {
+                if (Util.isNetworkConnectivity(getActivity())) {
+                    SharedPreference.getInstance(getActivity()).setBoolean(C.IS_LOGIN_GUEST, true);
 
-                SharedPreference.getInstance(getActivity()).seGuestUser(C.GUEST_USER,response.getData());
-                gotoSearchLocation();
-                //gotoHome();
+                    SharedPreference.getInstance(getActivity()).seGuestUser(C.GUEST_USER, response.getData());
+                    gotoSearchLocation();
+                    //gotoHome();
+                }
+            } else {
+                if (response.getMessage().trim().equalsIgnoreCase(C.GUEST_USER_ALLREADY_CREATED)) {
+                    SharedPreference.getInstance(getActivity()).setBoolean(C.IS_LOGIN_GUEST, true);
+                    SharedPreference.getInstance(getActivity()).seGuestUser(C.GUEST_USER, response.getData());
+                    gotoSearchLocation();
+                } else {
+                    util.setSnackbarMessage(getActivity(), response.getMessage(), LLView, true);
+                }
             }
-        }
-        else {
-            if(response.getMessage().trim().equalsIgnoreCase(C.GUEST_USER_ALLREADY_CREATED)){
-                SharedPreference.getInstance(getActivity()).setBoolean(C.IS_LOGIN_GUEST,true);
-                SharedPreference.getInstance(getActivity()).seGuestUser(C.GUEST_USER,response.getData());
-                gotoSearchLocation();
-            }
-            else {
-                util.setSnackbarMessage(getActivity(), response.getMessage(), LLView, true);
-            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
 
-    void gotoSearchLocationAuth(){
+    void gotoSearchLocationAuth() {
         Intent intent = new Intent(getActivity(), ActivitySearchLocation.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
 
@@ -1020,26 +999,30 @@ public class FragmentAuthentication extends Fragment implements IAuthenitication
         startActivityForResult(intent, C.REQUEST_ADDRESS);
     }
 
-    void gotoSearchLocation(){
+    void gotoSearchLocation() {
         Intent intent = new Intent(getActivity(), ActivitySearchLocation.class);
         intent.putExtra(C.FROM, C.SEARCH);
         startActivityForResult(intent, C.REQUEST_ADDRESS);
     }
+
     @Override
     public void getResponseError(String response) {
-        isClicked=false;
-        Log.e("DEBUG",""+response);
-        btnLogin.revertAnimation();
-        btnSignUp.revertAnimation();
-        if(response.trim().equalsIgnoreCase(C.GUEST_USER_ALLREADY_CREATED)){
-            SharedPreference.getInstance(getActivity()).setBoolean(C.IS_LOGIN_GUEST,true);
+        try {
+            isClicked = false;
+            Log.e("DEBUG", "" + response);
+            btnLogin.revertAnimation();
+            btnSignUp.revertAnimation();
+            if (response.trim().equalsIgnoreCase(C.GUEST_USER_ALLREADY_CREATED)) {
+                SharedPreference.getInstance(getActivity()).setBoolean(C.IS_LOGIN_GUEST, true);
 
-            Intent intent = new Intent(getActivity(), ActivitySearchLocation.class);
-            intent.putExtra(C.FROM, C.SEARCH);
-            startActivity(intent);
-        }
-        else {
-            util.setSnackbarMessage(getActivity(), response, LLView, true);
+                Intent intent = new Intent(getActivity(), ActivitySearchLocation.class);
+                intent.putExtra(C.FROM, C.SEARCH);
+                startActivity(intent);
+            } else {
+                util.setSnackbarMessage(getActivity(), response, LLView, true);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
@@ -1054,7 +1037,7 @@ public class FragmentAuthentication extends Fragment implements IAuthenitication
 
     }
 
-    public void gotoHome(){
+    public void gotoHome() {
         Intent intent = new Intent(getActivity(), ActivityHome.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         getActivity().startActivity(intent);

@@ -120,7 +120,12 @@ public class AdapterHomeBrands extends RecyclerView.Adapter<RecyclerView.ViewHol
 
     @Override
     public int getItemCount() {
-        return horizontalList.size() + 1;
+        if(horizontalList.size()>5) {
+            return horizontalList.size() + 1;
+        }
+        else {
+           return horizontalList.size();
+        }
     }
 
     public class ItemViewHolder extends RecyclerView.ViewHolder {

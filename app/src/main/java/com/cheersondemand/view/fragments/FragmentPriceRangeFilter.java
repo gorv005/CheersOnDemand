@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.cheersondemand.R;
+import com.cheersondemand.util.Util;
 import com.cheersondemand.util.seekbar.RangeSeekBar;
 import com.cheersondemand.view.ActivityFilters;
 import com.crystal.crystalrangeseekbar.interfaces.OnRangeSeekbarChangeListener;
@@ -68,13 +69,14 @@ public class FragmentPriceRangeFilter extends Fragment {
             }
         }, 1000);*/
         // Set the range
-        left.setText(getString(R.string.doller) + min);
-        right.setText(getString(R.string.doller) + max);
+
+        left.setText(getString(R.string.doller) + Util.getValueNumberFormat( min));
+        right.setText(getString(R.string.doller) + Util.getValueNumberFormat( max));
         rangeSeekbar.setOnRangeSeekbarChangeListener(new OnRangeSeekbarChangeListener() {
             @Override
             public void valueChanged(Number minValue, Number maxValue) {
-                left.setText(getString(R.string.doller) +String.valueOf(minValue));
-                right.setText(getString(R.string.doller) +String.valueOf(maxValue));
+                left.setText(getString(R.string.doller) +Util.getValueNumberFormat( String.valueOf(minValue)));
+                right.setText(getString(R.string.doller) +Util.getValueNumberFormat( String.valueOf(maxValue)));
             }
         });
 
@@ -83,11 +85,11 @@ public class FragmentPriceRangeFilter extends Fragment {
 
      public String getMinRange(){
 
-        return left.getText().toString().substring(1);
+        return Util.getNumberWithoutCommaFormat(left.getText().toString().substring(1));
      }
     public String getMaxRange(){
 
-        return right.getText().toString().substring(1);
+        return Util.getNumberWithoutCommaFormat(right.getText().toString().substring(1));
     }
     @Override
     public void onDestroyView() {

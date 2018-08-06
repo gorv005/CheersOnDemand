@@ -117,18 +117,23 @@ public class FragmentAddressList extends Fragment implements View.OnClickListene
 
     @Override
     public void onRemoveAddressSuccess(AddressAddResponse Response) {
-        if (Response.getSuccess()) {
-            util.setSnackbarMessage(getActivity(), Response.getMessage(), rlView, false);
+        try {
+            if (Response.getSuccess()) {
+                util.setSnackbarMessage(getActivity(), Response.getMessage(), rlView, false);
 
-            addresses.remove(position);
-            if(addresses.size()==0){
-                llNoProductInCount.setVisibility(View.VISIBLE);
-                rvAddressList.setVisibility(View.GONE);
+                addresses.remove(position);
+                if (addresses.size() == 0) {
+                    llNoProductInCount.setVisibility(View.VISIBLE);
+                    rvAddressList.setVisibility(View.GONE);
+                }
+                adapterAddress.notifyDataSetChanged();
+            } else {
+                util.setSnackbarMessage(getActivity(), Response.getMessage(), rlView, true);
+
             }
-            adapterAddress.notifyDataSetChanged();
-        } else {
-            util.setSnackbarMessage(getActivity(), Response.getMessage(), rlView, true);
-
+        }
+        catch (Exception e){
+            e.printStackTrace();
         }
     }
 
@@ -144,23 +149,27 @@ public class FragmentAddressList extends Fragment implements View.OnClickListene
 
     @Override
     public void onAddressListSuccess(AddressResponse Response) {
-        if (Response.getSuccess()) {
-            if (Response.getData() != null && Response.getData().size() > 0) {
-                llNoProductInCount.setVisibility(View.GONE);
-                rvAddressList.setVisibility(View.VISIBLE);
+        try {
+            if (Response.getSuccess()) {
+                if (Response.getData() != null && Response.getData().size() > 0) {
+                    llNoProductInCount.setVisibility(View.GONE);
+                    rvAddressList.setVisibility(View.VISIBLE);
 
-                addresses = Response.getData();
-                adapterAddress = new AdapterAddress(addresses, getActivity());
-                rvAddressList.setAdapter(adapterAddress);
+                    addresses = Response.getData();
+                    adapterAddress = new AdapterAddress(addresses, getActivity());
+                    rvAddressList.setAdapter(adapterAddress);
+                } else {
+                    llNoProductInCount.setVisibility(View.VISIBLE);
+                    rvAddressList.setVisibility(View.GONE);
+
+                }
             } else {
-                llNoProductInCount.setVisibility(View.VISIBLE);
-                rvAddressList.setVisibility(View.GONE);
+                util.setSnackbarMessage(getActivity(), Response.getMessage(), rlView, true);
 
             }
         }
-        else {
-            util.setSnackbarMessage(getActivity(), Response.getMessage(), rlView, true);
-
+        catch (Exception e){
+            e.printStackTrace();
         }
     }
 

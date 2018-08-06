@@ -22,7 +22,6 @@ import retrofit2.Response;
 public class HomeViewIntractorImpl implements IHomeViewIntractor {
 
 
-
     @Override
     public void getCategories(String uuid, final OnLoginFinishedListener listener) {
         try {
@@ -35,26 +34,26 @@ public class HomeViewIntractorImpl implements IHomeViewIntractor {
 
                 @Override
                 public void onFailure(RestError error, String msg) {
-                    if(error==null ||error.getError()==null){
-
-                        Gson gson=new Gson();
-                        BrandResponse response= gson.fromJson(msg,BrandResponse.class);
-                        listener.onSuccessBrand(response);
-
-                    }
-                    else {
+                    if (error == null || error.getError() == null) {
+                        try {
+                            Gson gson = new Gson();
+                            BrandResponse response = gson.fromJson(msg, BrandResponse.class);
+                            listener.onSuccessBrand(response);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    } else {
                         listener.onError(error.getError());
                     }
                 }
-            },uuid);
-        }
-        catch (Exception e){
+            }, uuid);
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
     @Override
-    public void getCategories(boolean isAuth,String token,String uuid, final OnLoginFinishedListener listener) {
+    public void getCategories(boolean isAuth, String token, String uuid, final OnLoginFinishedListener listener) {
         try {
 
             WebServicesWrapper.getInstance().getCategories(new ResponseResolver<CategoriesResponse>() {
@@ -65,26 +64,26 @@ public class HomeViewIntractorImpl implements IHomeViewIntractor {
 
                 @Override
                 public void onFailure(RestError error, String msg) {
-                    if(error==null ||error.getError()==null){
-
-                        Gson gson=new Gson();
-                        CategoriesResponse response= gson.fromJson(msg,CategoriesResponse.class);
-                        listener.onSuccess(response);
-
-                    }
-                    else {
+                    if (error == null || error.getError() == null) {
+                        try {
+                            Gson gson = new Gson();
+                            CategoriesResponse response = gson.fromJson(msg, CategoriesResponse.class);
+                            listener.onSuccess(response);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    } else {
                         listener.onError(error.getError());
                     }
                 }
-            },isAuth,token,uuid);
-        }
-        catch (Exception e){
+            }, isAuth, token, uuid);
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
     @Override
-    public void getSubCategories(boolean isAuth, String token, List<Integer> id, String uuid,final OnLoginFinishedListener listener) {
+    public void getSubCategories(boolean isAuth, String token, List<Integer> id, String uuid, final OnLoginFinishedListener listener) {
         try {
 
             WebServicesWrapper.getInstance().getSubCategories(new ResponseResolver<SubCategoryResponse>() {
@@ -95,26 +94,26 @@ public class HomeViewIntractorImpl implements IHomeViewIntractor {
 
                 @Override
                 public void onFailure(RestError error, String msg) {
-                    if(error==null ||error.getError()==null){
-
-                        Gson gson=new Gson();
-                        SubCategoryResponse response= gson.fromJson(msg,SubCategoryResponse.class);
-                        listener.onSuccessSubCat(response);
-
-                    }
-                    else {
+                    if (error == null || error.getError() == null) {
+                        try {
+                            Gson gson = new Gson();
+                            SubCategoryResponse response = gson.fromJson(msg, SubCategoryResponse.class);
+                            listener.onSuccessSubCat(response);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    } else {
                         listener.onError(error.getError());
                     }
                 }
-            },isAuth,token,id,uuid);
-        }
-        catch (Exception e){
+            }, isAuth, token, id, uuid);
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
     @Override
-    public void getBrands(boolean isAuth,String auth, String uuid, final OnLoginFinishedListener listener) {
+    public void getBrands(boolean isAuth, String auth, String uuid, final OnLoginFinishedListener listener) {
         try {
 
             WebServicesWrapper.getInstance().getBrands(new ResponseResolver<BrandResponse>() {
@@ -125,20 +124,20 @@ public class HomeViewIntractorImpl implements IHomeViewIntractor {
 
                 @Override
                 public void onFailure(RestError error, String msg) {
-                    if(error==null ||error.getError()==null){
-
-                        Gson gson=new Gson();
-                        BrandResponse response= gson.fromJson(msg,BrandResponse.class);
-                        listener.onSuccessBrand(response);
-
-                    }
-                    else {
+                    if (error == null || error.getError() == null) {
+                        try {
+                            Gson gson = new Gson();
+                            BrandResponse response = gson.fromJson(msg, BrandResponse.class);
+                            listener.onSuccessBrand(response);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    } else {
                         listener.onError(error.getError());
                     }
                 }
-            },isAuth,auth,uuid);
-        }
-        catch (Exception e){
+            }, isAuth, auth, uuid);
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
@@ -155,20 +154,20 @@ public class HomeViewIntractorImpl implements IHomeViewIntractor {
 
                 @Override
                 public void onFailure(RestError error, String msg) {
-                    if(error==null ||error.getError()==null){
-
-                        Gson gson=new Gson();
-                        ProductsWithCategoryResponse response= gson.fromJson(msg,ProductsWithCategoryResponse.class);
-                        listener.onProductWithCategorySuccess(response);
-
-                    }
-                    else {
+                    if (error == null || error.getError() == null) {
+                        try {
+                            Gson gson = new Gson();
+                            ProductsWithCategoryResponse response = gson.fromJson(msg, ProductsWithCategoryResponse.class);
+                            listener.onProductWithCategorySuccess(response);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    } else {
                         listener.onError(error.getError());
                     }
                 }
-            },uuid);
-        }
-        catch (Exception e){
+            }, uuid);
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
@@ -185,21 +184,21 @@ public class HomeViewIntractorImpl implements IHomeViewIntractor {
 
                 @Override
                 public void onFailure(RestError error, String msg) {
-                    Log.e("dd","hh");
-                    if(error==null ||error.getError()==null){
-
-                        Gson gson=new Gson();
-                        ProductsWithCategoryResponse response= gson.fromJson(msg,ProductsWithCategoryResponse.class);
-                        listener.onProductWithCategorySuccess(response);
-
-                    }
-                    else {
+                    Log.e("dd", "hh");
+                    if (error == null || error.getError() == null) {
+                        try {
+                            Gson gson = new Gson();
+                            ProductsWithCategoryResponse response = gson.fromJson(msg, ProductsWithCategoryResponse.class);
+                            listener.onProductWithCategorySuccess(response);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    } else {
                         listener.onError(error.getError());
                     }
                 }
-            },token,uuid);
-        }
-        catch (Exception e){
+            }, token, uuid);
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }

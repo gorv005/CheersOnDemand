@@ -15,7 +15,7 @@ import retrofit2.Response;
 
 public class PasswordViewIntractorImpl implements IPasswordViewIntractor {
     @Override
-    public void changePassword(String token,String userId, PasswordRequest passwordRequest, final OnLoginFinishedListener listener) {
+    public void changePassword(String token, String userId, PasswordRequest passwordRequest, final OnLoginFinishedListener listener) {
         try {
 
             WebServicesWrapper.getInstance().changePassword(new ResponseResolver<PasswordResponse>() {
@@ -26,20 +26,20 @@ public class PasswordViewIntractorImpl implements IPasswordViewIntractor {
 
                 @Override
                 public void onFailure(RestError error, String msg) {
-                    if(error==null ||error.getError()==null){
-
-                        Gson gson=new Gson();
-                        PasswordResponse response= gson.fromJson(msg,PasswordResponse.class);
-                        listener.onPasswordRequestSuccess(response);
-
-                    }
-                    else {
+                    if (error == null || error.getError() == null) {
+                        try {
+                            Gson gson = new Gson();
+                            PasswordResponse response = gson.fromJson(msg, PasswordResponse.class);
+                            listener.onPasswordRequestSuccess(response);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    } else {
                         listener.onError(error.getError());
                     }
                 }
-            },token,userId,passwordRequest);
-        }
-        catch (Exception e){
+            }, token, userId, passwordRequest);
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
@@ -56,20 +56,20 @@ public class PasswordViewIntractorImpl implements IPasswordViewIntractor {
 
                 @Override
                 public void onFailure(RestError error, String msg) {
-                    if(error==null ||error.getError()==null){
-
-                        Gson gson=new Gson();
-                        PasswordResponse response= gson.fromJson(msg,PasswordResponse.class);
-                        listener.onPasswordRequestSuccess(response);
-
-                    }
-                    else {
+                    if (error == null || error.getError() == null) {
+                        try {
+                            Gson gson = new Gson();
+                            PasswordResponse response = gson.fromJson(msg, PasswordResponse.class);
+                            listener.onPasswordRequestSuccess(response);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    } else {
                         listener.onError(error.getError());
                     }
                 }
-            },passwordRequest);
-        }
-        catch (Exception e){
+            }, passwordRequest);
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }

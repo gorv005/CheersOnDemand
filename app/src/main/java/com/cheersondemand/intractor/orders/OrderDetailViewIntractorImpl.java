@@ -31,11 +31,14 @@ public class OrderDetailViewIntractorImpl implements IOrderDetailViewIntractor {
                 @Override
                 public void onFailure(RestError error, String msg) {
                     if(error==null ||error.getError()==null){
-
+                        try {
                         Gson gson=new Gson();
                         OrderListResponse response= gson.fromJson(msg,OrderListResponse.class);
                         listener.onSuccessOrderList(response);
-
+                        }
+                        catch (Exception e){
+                            e.printStackTrace();
+                        }
                     }
                     else {
                         listener.onError(error.getError());
@@ -61,12 +64,15 @@ public class OrderDetailViewIntractorImpl implements IOrderDetailViewIntractor {
                 @Override
                 public void onFailure(RestError error, String msg) {
                     if(error==null ||error.getError()==null){
-
+                        try {
                         Gson gson=new Gson();
                         UpdateCartResponse response= gson.fromJson(msg,UpdateCartResponse.class);
 
                         listener.onSuccessCartList(response);
-
+                        }
+                        catch (Exception e){
+                            e.printStackTrace();
+                        }
                     }
                     else {
                         listener.onError(error.getError());
@@ -92,11 +98,14 @@ public class OrderDetailViewIntractorImpl implements IOrderDetailViewIntractor {
                 @Override
                 public void onFailure(RestError error, String msg) {
                     if (error == null || error.getError() == null) {
-
+                        try {
                         Gson gson = new Gson();
                         OrderListResponse response = gson.fromJson(msg, OrderListResponse.class);
                         listener.onSuccessReorderList(response);
-
+                        }
+                        catch (Exception e){
+                            e.printStackTrace();
+                        }
                     } else {
                         listener.onError(error.getError());
                     }
@@ -120,11 +129,14 @@ public class OrderDetailViewIntractorImpl implements IOrderDetailViewIntractor {
                 @Override
                 public void onFailure(RestError error, String msg) {
                     if (error == null || error.getError() == null) {
-
+                        try {
                         Gson gson = new Gson();
                         OrderListResponse response = gson.fromJson(msg, OrderListResponse.class);
                         listener.onSuccessCancelOrder(response);
-
+                        }
+                        catch (Exception e){
+                            e.printStackTrace();
+                        }
                     } else {
                         listener.onError(error.getError());
                     }

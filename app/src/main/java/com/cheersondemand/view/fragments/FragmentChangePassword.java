@@ -341,6 +341,7 @@ public class FragmentChangePassword extends Fragment implements View.OnClickList
     }
     @Override
     public void getPasswordSuccess(PasswordResponse response) {
+        try {
         if (response.getSuccess()) {
             llpasswordChangeSuccess.setVisibility(View.VISIBLE);
             llPasswordChangelayout.setVisibility(View.GONE);
@@ -350,6 +351,10 @@ public class FragmentChangePassword extends Fragment implements View.OnClickList
             tvPasswordError.setText(response.getMessage());
            // util.setSnackbarMessage(getActivity(), response.getMessage(), rlView, true);
 
+        }
+        }
+        catch (Exception e){
+            e.printStackTrace();
         }
     }
 

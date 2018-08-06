@@ -215,6 +215,7 @@ public class FragmentCoupons extends Fragment implements View.OnClickListener, I
 
     @Override
     public void onSuccessCouponList(CouponListResponse response) {
+        try {
         if (response.getSuccess()) {
             couponInfoList = response.getData();
             for (int i = 0; i < couponInfoList.size(); i++) {
@@ -235,11 +236,15 @@ public class FragmentCoupons extends Fragment implements View.OnClickListener, I
             //   util.setSnackbarMessage(getActivity(), response.getMessage(), LLView, true);
 
         }
+        }
+        catch (Exception e){
+            e.printStackTrace();
+        }
     }
 
     @Override
     public void onSuccessCartAfterCoupon(UpdateCartResponse response) {
-
+        try {
         if (response.getSuccess()) {
             util.setSnackbarMessage(getActivity(), response.getMessage(), LLView, false);
 
@@ -251,6 +256,10 @@ public class FragmentCoupons extends Fragment implements View.OnClickListener, I
         } else {
             util.setSnackbarMessage(getActivity(), response.getMessage(), LLView, true);
 
+        }
+        }
+        catch (Exception e){
+            e.printStackTrace();
         }
     }
 

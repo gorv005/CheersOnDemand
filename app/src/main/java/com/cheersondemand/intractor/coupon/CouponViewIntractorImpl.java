@@ -30,21 +30,20 @@ public class CouponViewIntractorImpl implements ICouponIntractor {
 
                 @Override
                 public void onFailure(RestError error, String msg) {
-                    if(error==null ||error.getError()==null){
-
-                        Gson gson=new Gson();
-                        UpdateCartResponse response= gson.fromJson(msg,UpdateCartResponse.class);
-                        listener.onSuccessCartAfterCoupon(response);
-
-                    }
-                    else {
+                    if (error == null || error.getError() == null) {
+                        try {
+                            Gson gson = new Gson();
+                            UpdateCartResponse response = gson.fromJson(msg, UpdateCartResponse.class);
+                            listener.onSuccessCartAfterCoupon(response);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    } else {
                         listener.onError(error.getError());
                     }
                 }
-            },isAuthUser,token,applyCouponRequest);
-        }
-
-        catch (Exception e){
+            }, isAuthUser, token, applyCouponRequest);
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
@@ -60,27 +59,26 @@ public class CouponViewIntractorImpl implements ICouponIntractor {
 
                 @Override
                 public void onFailure(RestError error, String msg) {
-                    if(error==null ||error.getError()==null){
-
-                        Gson gson=new Gson();
-                        CouponListResponse response= gson.fromJson(msg,CouponListResponse.class);
-                        listener.onSuccessCouponList(response);
-
-                    }
-                    else {
+                    if (error == null || error.getError() == null) {
+                        try {
+                            Gson gson = new Gson();
+                            CouponListResponse response = gson.fromJson(msg, CouponListResponse.class);
+                            listener.onSuccessCouponList(response);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    } else {
                         listener.onError(error.getError());
                     }
                 }
-            },isAuthUser,token,uuid,cart_id);
-        }
-
-        catch (Exception e){
+            }, isAuthUser, token, uuid, cart_id);
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
     @Override
-    public void getCouponDetails(boolean isAuthUser, String token, String coupon_id, String uuid,final OnLoginFinishedListener listener) {
+    public void getCouponDetails(boolean isAuthUser, String token, String coupon_id, String uuid, final OnLoginFinishedListener listener) {
         try {
             WebServicesWrapper.getInstance().getCouponDetail(new ResponseResolver<CouponInfoResponse>() {
                 @Override
@@ -90,28 +88,27 @@ public class CouponViewIntractorImpl implements ICouponIntractor {
 
                 @Override
                 public void onFailure(RestError error, String msg) {
-                    if(error==null ||error.getError()==null){
-
-                        Gson gson=new Gson();
-                        CouponInfoResponse response= gson.fromJson(msg,CouponInfoResponse.class);
-                        listener.onSuccessCouponInfo(response);
-
-                    }
-                    else {
+                    if (error == null || error.getError() == null) {
+                        try {
+                            Gson gson = new Gson();
+                            CouponInfoResponse response = gson.fromJson(msg, CouponInfoResponse.class);
+                            listener.onSuccessCouponInfo(response);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    } else {
                         listener.onError(error.getError());
                     }
                 }
-            },isAuthUser,token,coupon_id,uuid);
-        }
-
-        catch (Exception e){
+            }, isAuthUser, token, coupon_id, uuid);
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
     }
 
     @Override
-    public void removeCoupon(boolean isAuthUser, String token, CouponRequest couponRequest,final OnLoginFinishedListener listener) {
+    public void removeCoupon(boolean isAuthUser, String token, CouponRequest couponRequest, final OnLoginFinishedListener listener) {
         try {
             WebServicesWrapper.getInstance().removeCoupon(new ResponseResolver<UpdateCartResponse>() {
                 @Override
@@ -121,21 +118,20 @@ public class CouponViewIntractorImpl implements ICouponIntractor {
 
                 @Override
                 public void onFailure(RestError error, String msg) {
-                    if(error==null ||error.getError()==null){
-
-                        Gson gson=new Gson();
-                        UpdateCartResponse response= gson.fromJson(msg,UpdateCartResponse.class);
-                        listener.onSuccessCartAfterCoupon(response);
-
-                    }
-                    else {
+                    if (error == null || error.getError() == null) {
+                        try {
+                            Gson gson = new Gson();
+                            UpdateCartResponse response = gson.fromJson(msg, UpdateCartResponse.class);
+                            listener.onSuccessCartAfterCoupon(response);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    } else {
                         listener.onError(error.getError());
                     }
                 }
-            },isAuthUser,token,couponRequest);
-        }
-
-        catch (Exception e){
+            }, isAuthUser, token, couponRequest);
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }

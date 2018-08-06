@@ -93,8 +93,9 @@ public class FragmentCart extends Fragment implements View.OnClickListener, IOrd
     int source;
     @BindView(R.id.tvStoreClosed)
     TextView tvStoreClosed;
-    private LinearLayoutManager mLinearLayoutManager;
     boolean isFromCart;
+    private LinearLayoutManager mLinearLayoutManager;
+
     public FragmentCart() {
         // Required empty public constructor
     }
@@ -154,7 +155,7 @@ public class FragmentCart extends Fragment implements View.OnClickListener, IOrd
     }
 
     void getCartList() {
-        isFromCart= SharedPreference.getInstance(getActivity()).getBoolean(C.IS_FROM_PAYMENT);
+        isFromCart = SharedPreference.getInstance(getActivity()).getBoolean(C.IS_FROM_PAYMENT);
 
         String order_id = SharedPreference.getInstance(getActivity()).getString(C.ORDER_ID);
 
@@ -162,11 +163,11 @@ public class FragmentCart extends Fragment implements View.OnClickListener, IOrd
             if (SharedPreference.getInstance(getActivity()).getBoolean(C.IS_LOGIN_GUEST)) {
                 String id = "" + SharedPreference.getInstance(getActivity()).geGuestUser(C.GUEST_USER).getId();
 
-                iOrderViewPresenterPresenter.getCartList(id, order_id, Util.id(getActivity()),isFromCart);
+                iOrderViewPresenterPresenter.getCartList(id, order_id, Util.id(getActivity()), isFromCart);
             } else {
                 String id = "" + SharedPreference.getInstance(getActivity()).getUser(C.AUTH_USER).getData().getUser().getId();
                 String token = C.bearer + SharedPreference.getInstance(getActivity()).getUser(C.AUTH_USER).getData().getToken().getAccessToken();
-                iOrderViewPresenterPresenter.getCartList(token, id, order_id, Util.id(getActivity()),isFromCart);
+                iOrderViewPresenterPresenter.getCartList(token, id, order_id, Util.id(getActivity()), isFromCart);
             }
         } else {
             llNoProductInCount.setVisibility(View.VISIBLE);
@@ -181,11 +182,12 @@ public class FragmentCart extends Fragment implements View.OnClickListener, IOrd
     }
 
 
-   public void  disableProceedButton(){
+    public void disableProceedButton() {
         btnProceed.setEnabled(false);
         btnProceed.setBackground(ContextCompat.getDrawable(getActivity(), R.drawable.button_disable));
 
     }
+
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
@@ -380,119 +382,139 @@ public class FragmentCart extends Fragment implements View.OnClickListener, IOrd
 
     @Override
     public void getUpdateCartSuccess(UpdateCartResponse response) {
-        if (response.getSuccess()) {
-            util.setSnackbarMessage(getActivity(), response.getMessage(), LLView, false);
-            cartProduct = response.getData();
+        try {
+            if (response.getSuccess()) {
+                util.setSnackbarMessage(getActivity(), response.getMessage(), LLView, false);
+                cartProduct = response.getData();
 
-            orderItemsList.clear();
-            orderItemsList = response.getData().getOrder().getOrderItems();
-            adapterCartList.setData(cartProduct, orderItemsList);
+                orderItemsList.clear();
+                orderItemsList = response.getData().getOrder().getOrderItems();
+                adapterCartList.setData(cartProduct, orderItemsList);
 
             /*for(int i=0;i<response.getData().getOrder().getOrderItems().size();i++) {
                 orderItemsList.add(response.getData().getOrder().getOrderItems().get(i));
             }*/
-            adapterCartList.notifyDataSetChanged();
-        } else {
-            util.setSnackbarMessage(getActivity(), response.getMessage(), LLView, true);
+                adapterCartList.notifyDataSetChanged();
+            } else {
+                util.setSnackbarMessage(getActivity(), response.getMessage(), LLView, true);
 
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
     @Override
     public void getRemoveItemFromCartSuccess(UpdateCartResponse response) {
-        if (response.getSuccess()) {
-            util.setSnackbarMessage(getActivity(), response.getMessage(), LLView, true);
-            if (response.getData() != null && response.getData().getOrder().getOrderItems().size() > 0) {
-                cartProduct = response.getData();
-                orderItemsList.clear();
-                orderItemsList = response.getData().getOrder().getOrderItems();
-                adapterCartList.setData(cartProduct, orderItemsList);
-                llNoProductInCount.setVisibility(View.GONE);
-                rvCartList.setVisibility(View.VISIBLE);
+        try {
+            if (response.getSuccess()) {
+                util.setSnackbarMessage(getActivity(), response.getMessage(), LLView, true);
+                if (response.getData() != null && response.getData().getOrder().getOrderItems().size() > 0) {
+                    cartProduct = response.getData();
+                    orderItemsList.clear();
+                    orderItemsList = response.getData().getOrder().getOrderItems();
+                    adapterCartList.setData(cartProduct, orderItemsList);
+                    llNoProductInCount.setVisibility(View.GONE);
+                    rvCartList.setVisibility(View.VISIBLE);
           /*  for(int i=0;i<response.getData().getOrder().getOrderItems().size();i++) {
                 orderItemsList.add(response.getData().getOrder().getOrderItems().get(i));
             }*/
-                adapterCartList.notifyDataSetChanged();
+                    adapterCartList.notifyDataSetChanged();
+                } else {
+                    SharedPreference.getInstance(getActivity()).setString(C.ORDER_ID, null);
+                    llNoProductInCount.setVisibility(View.VISIBLE);
+                    rvCartList.setVisibility(View.GONE);
+                    btnProceed.setVisibility(View.GONE);
+                    tvStoreClosed.setVisibility(View.GONE);
+                    ((ActivityHome) getActivity()).setDot(false);
+
+                }
             } else {
-                SharedPreference.getInstance(getActivity()).setString(C.ORDER_ID, null);
-                llNoProductInCount.setVisibility(View.VISIBLE);
-                rvCartList.setVisibility(View.GONE);
-                btnProceed.setVisibility(View.GONE);
-                tvStoreClosed.setVisibility(View.GONE);
-                ((ActivityHome)getActivity()).setDot(false);
+                util.setSnackbarMessage(getActivity(), response.getMessage(), LLView, true);
 
             }
-        } else {
-            util.setSnackbarMessage(getActivity(), response.getMessage(), LLView, true);
-
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
     @Override
     public void getCartListSuccess(UpdateCartResponse response) {
-        if (response.getSuccess()) {
-            if (response.getData() != null && response.getData().getOrder().getOrderItems().size() > 0) {
-                btnProceed.setVisibility(View.VISIBLE);
-                cartProduct = response.getData();
+        try {
+            if (response.getSuccess()) {
+                if (response.getData() != null && response.getData().getOrder().getOrderItems().size() > 0) {
+                    btnProceed.setVisibility(View.VISIBLE);
+                    cartProduct = response.getData();
 //            adapterCartList.setData(cartProduct);
-                orderItemsList = response.getData().getOrder().getOrderItems();
+                    orderItemsList = response.getData().getOrder().getOrderItems();
 
-                adapterCartList = new AdapterCartList(source,cartProduct, orderItemsList, getActivity(), source);
-                rvCartList.setAdapter(adapterCartList);
-                llNoProductInCount.setVisibility(View.GONE);
-                rvCartList.setVisibility(View.VISIBLE);
-                if (cartProduct.getOrder() != null && cartProduct.getOrder().getStoreOpen()) {
-                    btnProceed.setEnabled(true);
-                } else {
-                    btnProceed.setEnabled(false);
-                    tvStoreClosed.setText(getString(R.string.store_closed));
+                    adapterCartList = new AdapterCartList(source, cartProduct, orderItemsList, getActivity(), source);
+                    rvCartList.setAdapter(adapterCartList);
+                    llNoProductInCount.setVisibility(View.GONE);
+                    rvCartList.setVisibility(View.VISIBLE);
+                    if (cartProduct.getOrder() != null && cartProduct.getOrder().getStoreOpen()) {
+                        btnProceed.setEnabled(true);
+                    } else {
+                        btnProceed.setEnabled(false);
+                        tvStoreClosed.setText(getString(R.string.store_closed));
 
-                    tvStoreClosed.setVisibility(View.VISIBLE);
-                }
-
-                for (int i = 0; i < cartProduct.getOrder().getOrderItems().size(); i++) {
-                    if (cartProduct.getOrder().getOrderItems().get(i).getOldUnitPrice() != null) {
                         tvStoreClosed.setVisibility(View.VISIBLE);
-                        tvStoreClosed.setText(getString(R.string.price_change));
-                        break;
                     }
+
+                    for (int i = 0; i < cartProduct.getOrder().getOrderItems().size(); i++) {
+                        if (cartProduct.getOrder().getOrderItems().get(i).getOldUnitPrice() != null) {
+                            tvStoreClosed.setVisibility(View.VISIBLE);
+                            tvStoreClosed.setText(getString(R.string.price_change));
+                            break;
+                        }
+                    }
+                } else {
+                    llNoProductInCount.setVisibility(View.VISIBLE);
+                    rvCartList.setVisibility(View.GONE);
                 }
             } else {
+                //  util.setSnackbarMessage(getActivity(), response.getMessage(), LLView, true);
                 llNoProductInCount.setVisibility(View.VISIBLE);
                 rvCartList.setVisibility(View.GONE);
-            }
-        } else {
-            //  util.setSnackbarMessage(getActivity(), response.getMessage(), LLView, true);
-            llNoProductInCount.setVisibility(View.VISIBLE);
-            rvCartList.setVisibility(View.GONE);
 
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
     @Override
     public void addTowishListSuccess(WishListResponse response) {
-        if (response.getSuccess()) {
-            util.setSnackbarMessage(getActivity(), response.getMessage(), LLView, false);
-            orderItemsList.get(productPos).getProduct().setIsWishlisted(true);
-            adapterCartList.notifyDataSetChanged();
+        try {
+            if (response.getSuccess()) {
+                util.setSnackbarMessage(getActivity(), response.getMessage(), LLView, false);
+                orderItemsList.get(productPos).getProduct().setIsWishlisted(true);
+                adapterCartList.notifyDataSetChanged();
 
-        } else {
-            util.setSnackbarMessage(getActivity(), response.getMessage(), LLView, true);
+            } else {
+                util.setSnackbarMessage(getActivity(), response.getMessage(), LLView, true);
 
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
     @Override
     public void removeFromWishListSuccess(WishListResponse response) {
-        if (response.getSuccess()) {
-            util.setSnackbarMessage(getActivity(), response.getMessage(), LLView, false);
-            orderItemsList.get(productPos).getProduct().setIsWishlisted(false);
+        try {
+            if (response.getSuccess()) {
+                util.setSnackbarMessage(getActivity(), response.getMessage(), LLView, false);
+                orderItemsList.get(productPos).getProduct().setIsWishlisted(false);
 
-            adapterCartList.notifyDataSetChanged();
+                adapterCartList.notifyDataSetChanged();
 
-        } else {
-            util.setSnackbarMessage(getActivity(), response.getMessage(), LLView, true);
+            } else {
+                util.setSnackbarMessage(getActivity(), response.getMessage(), LLView, true);
 
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
@@ -513,28 +535,32 @@ public class FragmentCart extends Fragment implements View.OnClickListener, IOrd
 
     @Override
     public void onSuccessCartAfterCoupon(UpdateCartResponse response) {
-        if (response.getSuccess()) {
+        try {
+            if (response.getSuccess()) {
 
-            cartProduct = response.getData();
-            //   cartProduct.getOrder().setOrderDate("");
-            orderItemsList.clear();
-            orderItemsList = response.getData().getOrder().getOrderItems();
+                cartProduct = response.getData();
+                //   cartProduct.getOrder().setOrderDate("");
+                orderItemsList.clear();
+                orderItemsList = response.getData().getOrder().getOrderItems();
 
            /* for (int i=0;i<response.getData().getOrder().getOrderItems().size();i++){
                 orderItemsList.add(response.getData().getOrder().getOrderItems().get(i));
                 orderItemsList.get(i).setChange("couponremove");
             }*/
-            adapterCartList = new AdapterCartList(source,cartProduct, response.getData().getOrder().getOrderItems(), getActivity(), source);
-            rvCartList.setAdapter(adapterCartList);
-            //      CartProduct s=cartProduct;
-            //   orderItemsList=response.getData().getOrder().getOrderItems();
+                adapterCartList = new AdapterCartList(source, cartProduct, response.getData().getOrder().getOrderItems(), getActivity(), source);
+                rvCartList.setAdapter(adapterCartList);
+                //      CartProduct s=cartProduct;
+                //   orderItemsList=response.getData().getOrder().getOrderItems();
 
-            //   adapterCartList.setData(cartProduct,orderItemsList);
-            adapterCartList.notifyDataSetChanged();
+                //   adapterCartList.setData(cartProduct,orderItemsList);
+                adapterCartList.notifyDataSetChanged();
 
-        } else {
-            util.setSnackbarMessage(getActivity(), response.getMessage(), LLView, true);
+            } else {
+                util.setSnackbarMessage(getActivity(), response.getMessage(), LLView, true);
 
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
@@ -555,30 +581,34 @@ public class FragmentCart extends Fragment implements View.OnClickListener, IOrd
 
     @Override
     public void onAddressListSuccess(AddressResponse Response) {
-        if (Response.getSuccess()) {
-            if (Response.getData() != null && Response.getData().size() > 0) {
-                Intent intent = new Intent(getActivity(), ActivityContainer.class);
-                intent.putExtra(C.FRAGMENT_ACTION, C.FRAGMENT_SELECT_ADDRESS);
-                Bundle bundle = new Bundle();
-                if (cartProduct.getOrder().getDeliveryAddress() != null) {
-                    bundle.putInt(C.ADDRESS_ID, cartProduct.getOrder().getDeliveryAddress().getId());
+        try {
+            if (Response.getSuccess()) {
+                if (Response.getData() != null && Response.getData().size() > 0) {
+                    Intent intent = new Intent(getActivity(), ActivityContainer.class);
+                    intent.putExtra(C.FRAGMENT_ACTION, C.FRAGMENT_SELECT_ADDRESS);
+                    Bundle bundle = new Bundle();
+                    if (cartProduct.getOrder().getDeliveryAddress() != null) {
+                        bundle.putInt(C.ADDRESS_ID, cartProduct.getOrder().getDeliveryAddress().getId());
+                    } else {
+                        bundle.putInt(C.ADDRESS_ID, 0);
+
+                    }
+                    bundle.putBoolean(C.IS_FROM_CHECKOUT, true);
+
+                    intent.putExtra(C.BUNDLE, bundle);
+                    getActivity().startActivity(intent);
                 } else {
-                    bundle.putInt(C.ADDRESS_ID, 0);
-
+                    Intent intent = new Intent(getActivity(), ActivityContainer.class);
+                    intent.putExtra(C.FRAGMENT_ACTION, C.FRAGMENT_ADD_ADDRESS);
+                    Bundle bundle = new Bundle();
+                    bundle.putBoolean(C.IS_EDIT, false);
+                    bundle.putBoolean(C.IS_FROM_CHECKOUT, true);
+                    intent.putExtra(C.BUNDLE, bundle);
+                    getActivity().startActivity(intent);
                 }
-                bundle.putBoolean(C.IS_FROM_CHECKOUT, true);
-
-                intent.putExtra(C.BUNDLE, bundle);
-                getActivity().startActivity(intent);
-            } else {
-                Intent intent = new Intent(getActivity(), ActivityContainer.class);
-                intent.putExtra(C.FRAGMENT_ACTION, C.FRAGMENT_ADD_ADDRESS);
-                Bundle bundle = new Bundle();
-                bundle.putBoolean(C.IS_EDIT, false);
-                bundle.putBoolean(C.IS_FROM_CHECKOUT, true);
-                intent.putExtra(C.BUNDLE, bundle);
-                getActivity().startActivity(intent);
             }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 

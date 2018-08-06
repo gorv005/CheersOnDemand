@@ -29,11 +29,14 @@ public class SearchViewIntractorImpl implements ISearchViewIntractor {
                 @Override
                 public void onFailure(RestError error, String msg) {
                     if(error==null ||error.getError()==null){
-
+                        try {
                         Gson gson=new Gson();
                         SearchResponse response= gson.fromJson(msg,SearchResponse.class);
                         listener.onRecentSearchSuccess(response);
-
+                        }
+                        catch (Exception e){
+                            e.printStackTrace();
+                        }
                     }
                     else {
                         listener.onError(error.getError());

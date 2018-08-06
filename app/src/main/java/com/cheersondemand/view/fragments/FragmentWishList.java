@@ -25,6 +25,7 @@ import com.cheersondemand.model.order.addtocart.AddToCartRequest;
 import com.cheersondemand.model.order.addtocart.AddToCartResponse;
 import com.cheersondemand.model.order.updatecart.UpdateCartRequest;
 import com.cheersondemand.model.order.updatecart.UpdateCartResponse;
+import com.cheersondemand.model.store.StoreList;
 import com.cheersondemand.model.wishlist.WishListDataResponse;
 import com.cheersondemand.model.wishlist.WishListRequest;
 import com.cheersondemand.model.wishlist.WishListResponse;
@@ -58,14 +59,13 @@ public class FragmentWishList extends Fragment implements IOrderViewPresenterPre
     WishListDataResponse productListResponse;
     @BindView(R.id.tvNoProduct)
     TextView tvNoProduct;
-    private GridLayoutManager lLayout;
     IOrderViewPresenterPresenter iOrderViewPresenterPresenter;
-
     Util util;
+    AllProduct product;
+    private GridLayoutManager lLayout;
     private int productPos;
     private int secPos;
     private boolean isAdd;
-    AllProduct product;
 
     public FragmentWishList() {
         // Required empty public constructor
@@ -151,17 +151,25 @@ public class FragmentWishList extends Fragment implements IOrderViewPresenterPre
     }
 
     void createOrder() {
-        if (SharedPreference.getInstance(getActivity()).getBoolean(C.IS_LOGIN_GUEST)) {
-            String id = "" + SharedPreference.getInstance(getActivity()).geGuestUser(C.GUEST_USER).getId();
+        StoreList store = SharedPreference.getInstance(getActivity()).getStore(C.SELECTED_STORE);
+        if (store != null) {
+            GenRequest genRequest = new GenRequest();
+            genRequest.setUuid(Util.id(getActivity()));
+            genRequest.setWarehouseId("" + store.getId());
 
-            iOrderViewPresenterPresenter.createOrder(id, new GenRequest(Util.id(getActivity())));
-        } else {
-            String id = "" + SharedPreference.getInstance(getActivity()).getUser(C.AUTH_USER).getData().getUser().getId();
+            if (SharedPreference.getInstance(getActivity()).getBoolean(C.IS_LOGIN_GUEST)) {
+                String id = "" + SharedPreference.getInstance(getActivity()).geGuestUser(C.GUEST_USER).getId();
 
-            String token = C.bearer + SharedPreference.getInstance(getActivity()).getUser(C.AUTH_USER).getData().getToken().getAccessToken();
-            iOrderViewPresenterPresenter.createOrder(token, id, new GenRequest(Util.id(getActivity())));
+                iOrderViewPresenterPresenter.createOrder(id, genRequest);
+            } else {
+                String id = "" + SharedPreference.getInstance(getActivity()).getUser(C.AUTH_USER).getData().getUser().getId();
+
+                String token = C.bearer + SharedPreference.getInstance(getActivity()).getUser(C.AUTH_USER).getData().getToken().getAccessToken();
+                iOrderViewPresenterPresenter.createOrder(token, id, genRequest);
+            }
         }
     }
+
 
     void addToCart() {
         AddToCartRequest addToCartRequest = new AddToCartRequest();
@@ -283,34 +291,46 @@ public class FragmentWishList extends Fragment implements IOrderViewPresenterPre
 
     @Override
     public void getCreateOrderSuccess(CreateOrderResponse response) {
-        if (response.getSuccess()) {
-            SharedPreference.getInstance(getActivity()).setString(C.ORDER_ID, "" + response.getData().getOrder().getId());
-            addToCart();
-        } else {
-            util.setSnackbarMessage(getActivity(), response.getMessage(), rlView, true);
+        try {
+            if (response.getSuccess()) {
+                SharedPreference.getInstance(getActivity()).setString(C.ORDER_ID, "" + response.getData().getOrder().getId());
+                addToCart();
+            } else {
+                util.setSnackbarMessage(getActivity(), response.getMessage(), rlView, true);
 
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
     @Override
     public void getAddToCartSucess(AddToCartResponse response) {
-        if (response.getSuccess()) {
-            util.setSnackbarMessage(getActivity(), response.getMessage(), rlView, false);
-            updateCart();
-        } else {
-            util.setSnackbarMessage(getActivity(), response.getMessage(), rlView, true);
+        try {
+            if (response.getSuccess()) {
+                util.setSnackbarMessage(getActivity(), response.getMessage(), rlView, false);
+                updateCart();
+            } else {
+                util.setSnackbarMessage(getActivity(), response.getMessage(), rlView, true);
 
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
     @Override
     public void getUpdateCartSuccess(UpdateCartResponse response) {
-        if (response.getSuccess()) {
-            util.setSnackbarMessage(getActivity(), response.getMessage(), rlView, false);
-            updateCart();
-        } else {
-            util.setSnackbarMessage(getActivity(), response.getMessage(), rlView, true);
+        try {
+            if (response.getSuccess()) {
+                util.setSnackbarMessage(getActivity(), response.getMessage(), rlView, false);
+                updateCart();
+            } else {
+                util.setSnackbarMessage(getActivity(), response.getMessage(), rlView, true);
 
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
@@ -343,17 +363,21 @@ public class FragmentWishList extends Fragment implements IOrderViewPresenterPre
 
     @Override
     public void getRemoveItemFromCartSuccess(UpdateCartResponse response) {
-        if (response.getSuccess()) {
-            util.setSnackbarMessage(getActivity(), response.getMessage(), rlView, false);
+        try {
+            if (response.getSuccess()) {
+                util.setSnackbarMessage(getActivity(), response.getMessage(), rlView, false);
 
-            product.setCartQunatity(null);
-            product.setIsInCart(false);
-            allProductList.set(productPos, product);
-            adapterProducts.notifyDataSetChanged();
+                product.setCartQunatity(null);
+                product.setIsInCart(false);
+                allProductList.set(productPos, product);
+                adapterProducts.notifyDataSetChanged();
 
-        } else {
-            util.setSnackbarMessage(getActivity(), response.getMessage(), rlView, true);
+            } else {
+                util.setSnackbarMessage(getActivity(), response.getMessage(), rlView, true);
 
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
@@ -364,52 +388,63 @@ public class FragmentWishList extends Fragment implements IOrderViewPresenterPre
 
     @Override
     public void addTowishListSuccess(WishListResponse response) {
-        if (response.getSuccess()) {
-            util.setSnackbarMessage(getActivity(), response.getMessage(), rlView, false);
-            product.setIsWishlisted(true);
-            adapterProducts.notifyDataSetChanged();
+        try {
+            if (response.getSuccess()) {
+                util.setSnackbarMessage(getActivity(), response.getMessage(), rlView, false);
+                product.setIsWishlisted(true);
+                adapterProducts.notifyDataSetChanged();
 
-        } else {
-            util.setSnackbarMessage(getActivity(), response.getMessage(), rlView, true);
+            } else {
+                util.setSnackbarMessage(getActivity(), response.getMessage(), rlView, true);
 
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
     @Override
     public void removeFromWishListSuccess(WishListResponse response) {
-        if (response.getSuccess()) {
-            util.setSnackbarMessage(getActivity(), response.getMessage(), rlView, false);
-            product.setIsWishlisted(false);
-            allProductList.remove(productPos);
-            if(allProductList.size()==0){
-                tvNoProduct.setVisibility(View.VISIBLE);
+        try {
+            if (response.getSuccess()) {
+                util.setSnackbarMessage(getActivity(), response.getMessage(), rlView, false);
+                product.setIsWishlisted(false);
+                allProductList.remove(productPos);
+                if (allProductList.size() == 0) {
+                    tvNoProduct.setVisibility(View.VISIBLE);
+                }
+                adapterProducts.notifyDataSetChanged();
+
+            } else {
+                util.setSnackbarMessage(getActivity(), response.getMessage(), rlView, true);
+
             }
-            adapterProducts.notifyDataSetChanged();
-
-        } else {
-            util.setSnackbarMessage(getActivity(), response.getMessage(), rlView, true);
-
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
 
     @Override
     public void getWishListSuccess(WishListDataResponse response) {
-        if (response.getSuccess()) {
-            if (response.getData() != null && response.getData().size() > 0) {
-                allProductList = response.getData();
-                adapterProducts = new AdapterProducts(allProductList, getActivity());
-                rvProductsList.setAdapter(adapterProducts);
+        try {
+            if (response.getSuccess()) {
+                if (response.getData() != null && response.getData().size() > 0) {
+                    allProductList = response.getData();
+                    adapterProducts = new AdapterProducts(allProductList, getActivity());
+                    rvProductsList.setAdapter(adapterProducts);
 
-            }
-            else {
+                } else {
+                    tvNoProduct.setVisibility(View.VISIBLE);
+
+                }
+            } else {
                 tvNoProduct.setVisibility(View.VISIBLE);
+                util.setSnackbarMessage(getActivity(), response.getMessage(), rlView, true);
 
             }
-        } else {
-            tvNoProduct.setVisibility(View.VISIBLE);
-            util.setSnackbarMessage(getActivity(), response.getMessage(), rlView, true);
-
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
@@ -421,7 +456,7 @@ public class FragmentWishList extends Fragment implements IOrderViewPresenterPre
 
     @Override
     public void showProgress() {
-        util.showDialog(C.MSG,getActivity());
+        util.showDialog(C.MSG, getActivity());
 
     }
 
@@ -431,6 +466,13 @@ public class FragmentWishList extends Fragment implements IOrderViewPresenterPre
 
     }
 
+    /**
+     * Converting dp to pixel
+     */
+    private int dpToPx(int dp) {
+        Resources r = getResources();
+        return Math.round(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, r.getDisplayMetrics()));
+    }
 
     public class GridSpacingItemDecoration extends RecyclerView.ItemDecoration {
 
@@ -465,14 +507,6 @@ public class FragmentWishList extends Fragment implements IOrderViewPresenterPre
                 }
             }
         }
-    }
-
-    /**
-     * Converting dp to pixel
-     */
-    private int dpToPx(int dp) {
-        Resources r = getResources();
-        return Math.round(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, r.getDisplayMetrics()));
     }
 
 }

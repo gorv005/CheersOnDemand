@@ -29,11 +29,14 @@ public class AddStoreViewIntractorImpl implements IStoreAddViewIntractor {
                 @Override
                 public void onFailure(RestError error, String msg) {
                     if(error==null ||error.getError()==null){
-
-                        Gson gson=new Gson();
-                        UpdateStoreResponse response= gson.fromJson(msg,UpdateStoreResponse.class);
-                        listener.onAddStoreSuccess(response);
-
+                        try {
+                            Gson gson = new Gson();
+                            UpdateStoreResponse response = gson.fromJson(msg, UpdateStoreResponse.class);
+                            listener.onAddStoreSuccess(response);
+                        }
+                        catch (Exception e){
+                            e.printStackTrace();
+                        }
                     }
                     else {
                         listener.onError(error.getError());

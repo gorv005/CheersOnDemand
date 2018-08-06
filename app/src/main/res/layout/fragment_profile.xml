@@ -188,7 +188,7 @@
                 android:layout_centerVertical="true"
                 android:layout_marginLeft="35dp"
                 android:fontFamily="@font/sf_ui_display_regular"
-                android:text="@string/my_orders"
+                android:text="@string/my_orders_"
                 android:textColor="@color/profile_item_text_color"
                 android:textSize="14.4sp" />
         </RelativeLayout>

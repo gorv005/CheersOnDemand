@@ -344,8 +344,13 @@ public class ActivitySearchLocation extends AppCompatActivity implements
                 getStoreList();
             }
         } else {
-            util.setSnackbarMessage(this, response.getMessage(), LLView, true);
+            if(response.getErrors()!=null){
+                util.setSnackbarMessage(this,response.getErrors().get(0).getField(), LLView, true);
 
+            }
+            else {
+                util.setSnackbarMessage(this, response.getMessage(), LLView, true);
+            }
         }
 
     }

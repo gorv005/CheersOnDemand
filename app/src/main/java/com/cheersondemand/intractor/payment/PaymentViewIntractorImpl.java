@@ -17,7 +17,7 @@ public class PaymentViewIntractorImpl implements IPaymentViewIntractor {
 
 
     @Override
-    public void paymentOrder(String token,PaymentRequest paymentRequest,final OnFinishedListener listener) {
+    public void paymentOrder(String token, PaymentRequest paymentRequest, final OnFinishedListener listener) {
         try {
 
             WebServicesWrapper.getInstance().paymentOrder(new ResponseResolver<PaymentResponse>() {
@@ -28,20 +28,20 @@ public class PaymentViewIntractorImpl implements IPaymentViewIntractor {
 
                 @Override
                 public void onFailure(RestError error, String msg) {
-                    if(error==null ||error.getError()==null){
-
-                        Gson gson=new Gson();
-                        PaymentResponse response= gson.fromJson(msg,PaymentResponse.class);
-                        listener.onPaymentSuccess(response);
-
-                    }
-                    else {
+                    if (error == null || error.getError() == null) {
+                        try {
+                            Gson gson = new Gson();
+                            PaymentResponse response = gson.fromJson(msg, PaymentResponse.class);
+                            listener.onPaymentSuccess(response);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    } else {
                         listener.onError(error.getError());
                     }
                 }
-            },token,paymentRequest);
-        }
-        catch (Exception e){
+            }, token, paymentRequest);
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }

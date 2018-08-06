@@ -146,6 +146,7 @@ public class FragmentOrderDetail extends Fragment implements View.OnClickListene
 
     @Override
     public void getCartListSuccess(UpdateCartResponse response) {
+        try {
         if (response.getSuccess()) {
             rlView.setVisibility(View.VISIBLE);
 
@@ -186,6 +187,10 @@ public class FragmentOrderDetail extends Fragment implements View.OnClickListene
         } else {
             util.setSnackbarMessage(getActivity(), response.getMessage(), rlView, true);
 
+        }
+        }
+        catch (Exception e){
+            e.printStackTrace();
         }
     }
 

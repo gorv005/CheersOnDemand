@@ -10,6 +10,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -39,7 +40,7 @@ public class FragmentCategoryList extends Fragment implements IHomeViewPresenter
     RecyclerView rvBrands;
     Unbinder unbinder;
     @BindView(R.id.rlView)
-    RelativeLayout rlView;
+    LinearLayout rlView;
     LinearLayoutManager layoutManager;
     AdapterCategories adapterCategories;
     Util util;
@@ -129,12 +130,17 @@ public class FragmentCategoryList extends Fragment implements IHomeViewPresenter
 
     @Override
     public void getResponseSuccess(CategoriesResponse response) {
+        try {
         if (response.getSuccess()) {
             adapterCategories = new AdapterCategories(response.getData(), getActivity());
             rvBrands.setAdapter(adapterCategories);
         } else {
             util.setSnackbarMessage(getActivity(), response.getMessage(), rlView, true);
 
+        }
+        }
+        catch (Exception e){
+            e.printStackTrace();
         }
     }
 

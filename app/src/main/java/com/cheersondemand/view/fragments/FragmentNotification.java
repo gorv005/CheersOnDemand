@@ -58,13 +58,12 @@ public class FragmentNotification extends Fragment implements View.OnClickListen
     boolean loading = true;
     @BindView(R.id.progressbar)
     ProgressBar progressbar;
-
+    long page = 1, perPage = 10;
+    int posItem;
     public FragmentNotification() {
         // Required empty public constructor
     }
 
-    long page = 1, perPage = 10;
-    int posItem;
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -94,25 +93,27 @@ public class FragmentNotification extends Fragment implements View.OnClickListen
         String id = "" + SharedPreference.getInstance(getActivity()).getUser(C.AUTH_USER).getData().getUser().getId();
 
         String token = C.bearer + SharedPreference.getInstance(getActivity()).getUser(C.AUTH_USER).getData().getToken().getAccessToken();
-        iNotificationViewPresenter.getNotificationList(token, id, page, ""+perPage);
+        iNotificationViewPresenter.getNotificationList(token, id, page, "" + perPage);
     }
 
-   public void deleteNotification(int pos){
-       posItem=pos;
+    public void deleteNotification(int pos) {
+        posItem = pos;
         String id = "" + SharedPreference.getInstance(getActivity()).getUser(C.AUTH_USER).getData().getUser().getId();
 
         String token = C.bearer + SharedPreference.getInstance(getActivity()).getUser(C.AUTH_USER).getData().getToken().getAccessToken();
 
-        iNotificationViewPresenter.deleteNotification(token,id,""+notifications.get(pos).getId());
+        iNotificationViewPresenter.deleteNotification(token, id, "" + notifications.get(pos).getId());
     }
-    public void clearAllNotification(){
+
+    public void clearAllNotification() {
 
         String id = "" + SharedPreference.getInstance(getActivity()).getUser(C.AUTH_USER).getData().getUser().getId();
 
         String token = C.bearer + SharedPreference.getInstance(getActivity()).getUser(C.AUTH_USER).getData().getToken().getAccessToken();
 
-        iNotificationViewPresenter.clearAllNotification(token,id);
+        iNotificationViewPresenter.clearAllNotification(token, id);
     }
+
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
@@ -131,7 +132,7 @@ public class FragmentNotification extends Fragment implements View.OnClickListen
                         if ((visibleItemCount + pastVisibleItems) >= totalItemCount) {
                             loading = false;
                             progressbar.setVisibility(View.VISIBLE);
-                            getNotificationList(""+page++);
+                            getNotificationList("" + page++);
                         }
                     }
                 }
@@ -162,67 +163,74 @@ public class FragmentNotification extends Fragment implements View.OnClickListen
 
     @Override
     public void onSuccessNotificationList(NotificationResponse Response) {
-
-        if (Response.getSuccess()) {
-            progressbar.setVisibility(View.GONE);
-            if (notifications != null && notifications.size() > 0 && page != 1) {
-                notifications.addAll(Response.getData());
-                adapterNotification.notifyDataSetChanged();
-            }
-           else{
-                if (Response.getData() != null && Response.getData().size() > 0) {
-                    llNoProductInCount.setVisibility(View.GONE);
-                    ActivityContainer.tvClearAll.setVisibility(View.VISIBLE);
-
-                    if (Response.getMeta() != null && Response.getMeta().getPagination() != null) {
-                        totalPages = Response.getMeta().getPagination().getTotalPages();
-                    }
-                    notifications=Response.getData();
-                    adapterNotification = new AdapterNotification(notifications, getActivity());
-                    rvNotifications.setAdapter(adapterNotification);
+        try {
+            if (Response.getSuccess()) {
+                progressbar.setVisibility(View.GONE);
+                if (notifications != null && notifications.size() > 0 && page != 1) {
+                    notifications.addAll(Response.getData());
+                    adapterNotification.notifyDataSetChanged();
                 } else {
-                    // util.setSnackbarMessage(getActivity(), Response.getMessage(), LLView, true);
-                    llNoProductInCount.setVisibility(View.VISIBLE);
+                    if (Response.getData() != null && Response.getData().size() > 0) {
+                        llNoProductInCount.setVisibility(View.GONE);
+                        ActivityContainer.tvClearAll.setVisibility(View.VISIBLE);
+
+                        if (Response.getMeta() != null && Response.getMeta().getPagination() != null) {
+                            totalPages = Response.getMeta().getPagination().getTotalPages();
+                        }
+                        notifications = Response.getData();
+                        adapterNotification = new AdapterNotification(notifications, getActivity());
+                        rvNotifications.setAdapter(adapterNotification);
+                    } else {
+                        // util.setSnackbarMessage(getActivity(), Response.getMessage(), LLView, true);
+                        llNoProductInCount.setVisibility(View.VISIBLE);
+                    }
                 }
+                loading = true;
+
+            } else {
+                util.setSnackbarMessage(getActivity(), Response.getMessage(), LLView, true);
+                llNoProductInCount.setVisibility(View.VISIBLE);
+
             }
-            loading = true;
-
-        }
-        else {
-            util.setSnackbarMessage(getActivity(), Response.getMessage(), LLView, true);
-            llNoProductInCount.setVisibility(View.VISIBLE);
-
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
     @Override
     public void onDeleteNotificationList(GuestUserCreateResponse Response) {
-        if (Response.getSuccess()) {
-            notifications.remove(posItem);
-            adapterNotification.notifyDataSetChanged();
-            util.setSnackbarMessage(getActivity(), Response.getMessage(), LLView, false);
-            if(notifications!=null && notifications.size()==0){
-                ActivityContainer.tvClearAll.setVisibility(View.GONE);
-            }
-        }
-        else {
-            util.setSnackbarMessage(getActivity(), Response.getMessage(), LLView, true);
+        try {
+            if (Response.getSuccess()) {
+                notifications.remove(posItem);
+                adapterNotification.notifyDataSetChanged();
+                util.setSnackbarMessage(getActivity(), Response.getMessage(), LLView, false);
+                if (notifications != null && notifications.size() == 0) {
+                    ActivityContainer.tvClearAll.setVisibility(View.GONE);
+                }
+            } else {
+                util.setSnackbarMessage(getActivity(), Response.getMessage(), LLView, true);
 
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
     @Override
     public void onClearAllNotificationList(GuestUserCreateResponse Response) {
-        if (Response.getSuccess()) {
-            util.setSnackbarMessage(getActivity(), Response.getMessage(), LLView, false);
-            notifications.clear();
-            adapterNotification.notifyDataSetChanged();
-            ActivityContainer.tvClearAll.setVisibility(View.GONE);
+        try {
+            if (Response.getSuccess()) {
+                util.setSnackbarMessage(getActivity(), Response.getMessage(), LLView, false);
+                notifications.clear();
+                adapterNotification.notifyDataSetChanged();
+                ActivityContainer.tvClearAll.setVisibility(View.GONE);
 
-        }
-        else {
-            util.setSnackbarMessage(getActivity(), Response.getMessage(), LLView, true);
+            } else {
+                util.setSnackbarMessage(getActivity(), Response.getMessage(), LLView, true);
 
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
@@ -234,7 +242,7 @@ public class FragmentNotification extends Fragment implements View.OnClickListen
 
     @Override
     public void showProgress() {
-        util.showDialog(C.MSG,getActivity());
+        util.showDialog(C.MSG, getActivity());
 
     }
 

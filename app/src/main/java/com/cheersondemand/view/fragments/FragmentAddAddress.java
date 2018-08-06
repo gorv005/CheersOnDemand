@@ -56,7 +56,7 @@ public class FragmentAddAddress extends Fragment implements View.OnClickListener
     @BindView(R.id.btnSaveAdd)
     Button btnSaveAdd;
     Unbinder unbinder;
-    boolean isEdit,isFromCheckOut;
+    boolean isEdit, isFromCheckOut;
     Address address1;
     IAddressViewPresenter iAddressViewPresenter;
     @BindView(R.id.rlView)
@@ -72,7 +72,7 @@ public class FragmentAddAddress extends Fragment implements View.OnClickListener
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         iAddressViewPresenter = new AddressViewPresenterImpl(this, getActivity());
-        util=new Util();
+        util = new Util();
         isEdit = getArguments().getBoolean(C.IS_EDIT);
         isFromCheckOut = getArguments().getBoolean(C.IS_FROM_CHECKOUT);
 
@@ -94,10 +94,9 @@ public class FragmentAddAddress extends Fragment implements View.OnClickListener
     @Override
     public void onResume() {
         super.onResume();
-        if(isEdit) {
+        if (isEdit) {
             ActivityContainer.tvTitle.setText(getString(R.string.edit_address));
-        }
-        else {
+        } else {
             ActivityContainer.tvTitle.setText(getString(R.string.add_address));
 
         }
@@ -316,12 +315,9 @@ public class FragmentAddAddress extends Fragment implements View.OnClickListener
             case R.id.btnSaveAdd:
                 if (isEdit) {
                     editAddress();
-                }
-
-               else if(isFromCheckOut){
+                } else if (isFromCheckOut) {
                     addDeliveryAddress();
-                }
-                else {
+                } else {
                     addAddress();
                 }
                 break;
@@ -364,6 +360,7 @@ public class FragmentAddAddress extends Fragment implements View.OnClickListener
         String token = C.bearer + SharedPreference.getInstance(getActivity()).getUser(C.AUTH_USER).getData().getToken().getAccessToken();
         iAddressViewPresenter.AddAddress(token, id, addressRequest);
     }
+
     public void addDeliveryAddress() {
         AddressRequest addressRequest = new AddressRequest();
         Address address = new Address();
@@ -378,67 +375,83 @@ public class FragmentAddAddress extends Fragment implements View.OnClickListener
         String order_id = "" + SharedPreference.getInstance(getActivity()).getString(C.ORDER_ID);
 
         String token = C.bearer + SharedPreference.getInstance(getActivity()).getUser(C.AUTH_USER).getData().getToken().getAccessToken();
-        iAddressViewPresenter.addDeliveryAddress(token, id, order_id,addressRequest);
+        iAddressViewPresenter.addDeliveryAddress(token, id, order_id, addressRequest);
     }
+
     @Override
     public void onRemoveAddressSuccess(AddressAddResponse response) {
-        if(response.getSuccess()){
-            util.setSnackbarMessage(getActivity(), response.getMessage(), rlView, false);
-        }
-        else {
-            util.setSnackbarMessage(getActivity(), response.getMessage(), rlView, true);
+        try {
+            if (response.getSuccess()) {
+                util.setSnackbarMessage(getActivity(), response.getMessage(), rlView, false);
+            } else {
+                util.setSnackbarMessage(getActivity(), response.getMessage(), rlView, true);
 
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
     @Override
     public void onAddAddressSuccess(AddressAddResponse response) {
-        if(response.getSuccess()){
-            util.setSnackbarMessage(getActivity(), response.getMessage(), rlView, false);
-            getActivity().finish();
+        try {
+            if (response.getSuccess()) {
+                util.setSnackbarMessage(getActivity(), response.getMessage(), rlView, false);
+                getActivity().finish();
 
-        }
-        else {
-            util.setSnackbarMessage(getActivity(), response.getMessage(), rlView, true);
+            } else {
+                util.setSnackbarMessage(getActivity(), response.getMessage(), rlView, true);
 
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
     @Override
     public void onEditAddressSuccess(AddressAddResponse response) {
-        if(response.getSuccess()){
-            util.setSnackbarMessage(getActivity(), response.getMessage(), rlView, false);
-            getActivity().finish();
-        }
-        else {
-            util.setSnackbarMessage(getActivity(), response.getMessage(), rlView, true);
+        try {
+            if (response.getSuccess()) {
+                util.setSnackbarMessage(getActivity(), response.getMessage(), rlView, false);
+                getActivity().finish();
+            } else {
+                util.setSnackbarMessage(getActivity(), response.getMessage(), rlView, true);
 
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
     @Override
     public void onAddressListSuccess(AddressResponse response) {
-        if(response.getSuccess()){
-            util.setSnackbarMessage(getActivity(), response.getMessage(), rlView, false);
-        }
-        else {
-            util.setSnackbarMessage(getActivity(), response.getMessage(), rlView, true);
+        try {
+            if (response.getSuccess()) {
+                util.setSnackbarMessage(getActivity(), response.getMessage(), rlView, false);
+            } else {
+                util.setSnackbarMessage(getActivity(), response.getMessage(), rlView, true);
 
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
     @Override
     public void onAddDeliveryAddressSuccess(AddressAddResponse Response) {
-        if(Response.getSuccess()){
-            if(Response.getSuccess()){
-                ((ActivityContainer)getActivity()).fragmnetLoader(C.FRAGMENT_PAYMENT_CONFIRMATION,null);
-            }
-            else {
+        try {
+            if (Response.getSuccess()) {
+                if (Response.getSuccess()) {
+                    ((ActivityContainer) getActivity()).fragmnetLoader(C.FRAGMENT_PAYMENT_CONFIRMATION, null);
+                } else {
+                    dialog(Response.getMessage());
+                }
+            } else {
                 dialog(Response.getMessage());
             }
-        }
-        else {
-            dialog(Response.getMessage());
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
@@ -450,7 +463,7 @@ public class FragmentAddAddress extends Fragment implements View.OnClickListener
 
     @Override
     public void showProgress() {
-        util.showDialog(C.MSG,getActivity());
+        util.showDialog(C.MSG, getActivity());
 
     }
 
@@ -459,6 +472,7 @@ public class FragmentAddAddress extends Fragment implements View.OnClickListener
         util.hideDialog();
 
     }
+
     void dialog(String msg) {
         final Dialog dialog = new Dialog(getActivity(), R.style.FullHeightDialog); //this is a reference to the style above
         dialog.setContentView(R.layout.dialog_ok); //I saved the xml file above as yesnomessage.xml

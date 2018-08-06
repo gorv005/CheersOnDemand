@@ -28,20 +28,20 @@ public class LocationViewIntractorImpl implements ILocationViewIntractor {
 
                 @Override
                 public void onFailure(RestError error, String msg) {
-                    if(error==null ||error.getError()==null){
-
-                        Gson gson=new Gson();
-                        SaveLocationResponse response= gson.fromJson(msg,SaveLocationResponse.class);
-                        listener.onLocationSavedSuccess(response);
-
-                    }
-                    else {
+                    if (error == null || error.getError() == null) {
+                        try {
+                            Gson gson = new Gson();
+                            SaveLocationResponse response = gson.fromJson(msg, SaveLocationResponse.class);
+                            listener.onLocationSavedSuccess(response);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    } else {
                         listener.onError(error.getError());
                     }
                 }
-            },saveLocation,id);
-        }
-        catch (Exception e){
+            }, saveLocation, id);
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
@@ -58,23 +58,23 @@ public class LocationViewIntractorImpl implements ILocationViewIntractor {
 
                 @Override
                 public void onFailure(RestError error, String msg) {
-                    if(error==null ||error.getError()==null){
+                    if (error == null || error.getError() == null) {
+                        try {
+                            msg = msg.replace("[]", "null");
+                            msg = msg.replace("{}", "null");
 
-                        msg=msg.replace("[]","null");
-                        msg=msg.replace("{}","null");
-
-                        Gson gson=new Gson();
-                        SaveLocationResponse response= gson.fromJson(msg,SaveLocationResponse.class);
-                        listener.onLocationSavedSuccess(response);
-
-                    }
-                    else {
+                            Gson gson = new Gson();
+                            SaveLocationResponse response = gson.fromJson(msg, SaveLocationResponse.class);
+                            listener.onLocationSavedSuccess(response);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    } else {
                         listener.onError(error.getError());
                     }
                 }
-            },token,saveLocation,id);
-        }
-        catch (Exception e){
+            }, token, saveLocation, id);
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
@@ -91,23 +91,23 @@ public class LocationViewIntractorImpl implements ILocationViewIntractor {
 
                 @Override
                 public void onFailure(RestError error, String msg) {
-                    if(error==null ||error.getError()==null){
+                    if (error == null || error.getError() == null) {
+                        try {
+                            msg = msg.replace("[]", "null");
+                            msg = msg.replace("{}", "null");
 
-                        msg=msg.replace("[]","null");
-                        msg=msg.replace("{}","null");
-
-                        Gson gson=new Gson();
-                        RecentLocationResponse response= gson.fromJson(msg,RecentLocationResponse.class);
-                        listener.onRecentLocationSuccess(response);
-
-                    }
-                    else {
+                            Gson gson = new Gson();
+                            RecentLocationResponse response = gson.fromJson(msg, RecentLocationResponse.class);
+                            listener.onRecentLocationSuccess(response);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    } else {
                         listener.onError(error.getError());
                     }
                 }
-            },isAuth,token,uuid,user_id);
-        }
-        catch (Exception e){
+            }, isAuth, token, uuid, user_id);
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }

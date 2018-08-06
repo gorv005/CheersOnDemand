@@ -31,21 +31,20 @@ public class AuthniticationIntractorImpl implements IAuthnicationIntractor {
 
                 @Override
                 public void onFailure(RestError error, String msg) {
-                    if(error==null ||error.getError()==null){
-
-                        Gson gson=new Gson();
-                        AuthenticationResponse response= gson.fromJson(msg,AuthenticationResponse.class);
-                        listener.onSuccess(response);
-
-                    }
-                    else {
+                    if (error == null || error.getError() == null) {
+                        try {
+                            Gson gson = new Gson();
+                            AuthenticationResponse response = gson.fromJson(msg, AuthenticationResponse.class);
+                            listener.onSuccess(response);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    } else {
                         listener.onError(error.getError());
                     }
                 }
-            },loginRequest);
-        }
-
-        catch (Exception e){
+            }, loginRequest);
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
@@ -62,19 +61,19 @@ public class AuthniticationIntractorImpl implements IAuthnicationIntractor {
                 @Override
                 public void onFailure(RestError error, String msg) {
                     if (error == null || error.getError() == null) {
-
-                        Gson gson = new Gson();
-                        AuthenticationResponse response = gson.fromJson(msg, AuthenticationResponse.class);
-                        listener.onSuccess(response);
-
+                        try {
+                            Gson gson = new Gson();
+                            AuthenticationResponse response = gson.fromJson(msg, AuthenticationResponse.class);
+                            listener.onSuccess(response);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
                     } else {
                         listener.onError(error.getError());
                     }
                 }
-            },signUpRequest);
-        }
-
-        catch (Exception e){
+            }, signUpRequest);
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
@@ -91,20 +90,20 @@ public class AuthniticationIntractorImpl implements IAuthnicationIntractor {
 
                 @Override
                 public void onFailure(RestError error, String msg) {
-                    if(error==null ||error.getError()==null){
-
-                        Gson gson=new Gson();
-                        AuthenticationResponse response= gson.fromJson(msg,AuthenticationResponse.class);
-                        listener.onSuccess(response);
-
-                    }
-                    else {
+                    if (error == null || error.getError() == null) {
+                        try {
+                            Gson gson = new Gson();
+                            AuthenticationResponse response = gson.fromJson(msg, AuthenticationResponse.class);
+                            listener.onSuccess(response);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    } else {
                         listener.onError(error.getError());
                     }
                 }
-            },signUpRequest);
-        }
-        catch (Exception e){
+            }, signUpRequest);
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
@@ -121,24 +120,25 @@ public class AuthniticationIntractorImpl implements IAuthnicationIntractor {
 
                 @Override
                 public void onFailure(RestError error, String msg) {
-                    if(error==null ||error.getError()==null){
+                    if (error == null || error.getError() == null) {
                         try {
-                            Gson gson = new Gson();
-                            GuestUserCreateResponse response = gson.fromJson(msg, GuestUserCreateResponse.class);
-                            listener.onSuccessCreateGuestuser(response);
-                        }
-                        catch (Exception e){
+                            try {
+                                Gson gson = new Gson();
+                                GuestUserCreateResponse response = gson.fromJson(msg, GuestUserCreateResponse.class);
+                                listener.onSuccessCreateGuestuser(response);
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+                        } catch (Exception e) {
                             e.printStackTrace();
                         }
-                    }
-                    else {
+                    } else {
                         listener.onError(error.getError());
                     }
 
                 }
-            },categoryRequest);
-        }
-        catch (Exception e){
+            }, categoryRequest);
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }

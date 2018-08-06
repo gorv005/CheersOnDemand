@@ -139,41 +139,52 @@ public class FragmentStoreSelection extends Fragment implements IStoreViewPresen
 
     @Override
     public void getStoreListSuccess(StoreListResponse response) {
-        if (response.getSuccess()) {
-            storeList = response.getData();
-            if (storeList != null && storeList.size() > 0) {
-                rlStoreView.setVisibility(View.VISIBLE);
-                ((ActivityContainer) getActivity()).hideToolBar();
-                StoreList storeList1 = SharedPreference.getInstance(getActivity()).getStore(C.SELECTED_STORE);
-                adapterStore = new AdapterStore(from,getActivity(), storeList, storeList1);
-                lvStoreList.setAdapter(adapterStore);
+        try {
+            if (response.getSuccess()) {
+                storeList = response.getData();
+                if (storeList != null && storeList.size() > 0) {
+                    rlStoreView.setVisibility(View.VISIBLE);
+                    ((ActivityContainer) getActivity()).hideToolBar();
+                    StoreList storeList1 = SharedPreference.getInstance(getActivity()).getStore(C.SELECTED_STORE);
+                    adapterStore = new AdapterStore(from, getActivity(), storeList, storeList1);
+                    lvStoreList.setAdapter(adapterStore);
+                } else {
+                    ((ActivityContainer) getActivity()).hideToolBar();
+                    ActivityContainer.tvTitle.setText(getString(R.string.coming_soon_));
+                    llNoStore.setVisibility(View.VISIBLE);
+                }
             } else {
-                ((ActivityContainer) getActivity()).hideToolBar();
-                ActivityContainer.tvTitle.setText(getString(R.string.coming_soon_));
+                // util.setSnackbarMessage(getActivity(), response.getMessage(), LLView, true);
                 llNoStore.setVisibility(View.VISIBLE);
+                ActivityContainer.tvTitle.setText(getString(R.string.coming_soon_));
+                ((ActivityContainer) getActivity()).hideToolBar();
+
+
             }
-        } else {
-            // util.setSnackbarMessage(getActivity(), response.getMessage(), LLView, true);
-            llNoStore.setVisibility(View.VISIBLE);
-            ActivityContainer.tvTitle.setText(getString(R.string.coming_soon_));
-            ((ActivityContainer) getActivity()).showToolBar();
-
-
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
     @Override
     public void updateStoreSuccess(UpdateStoreResponse response) {
-        if (response.getSuccess()) {
-            SharedPreference.getInstance(getActivity()).setStore(C.SELECTED_STORE, store);
-            if (from == C.SEARCH) {
-                gotoHome();
-            } else if (from == C.HOME) {
-                getActivity().finish();
-            }
-        } else {
-            util.setSnackbarMessage(getActivity(), response.getMessage(), LLView, true);
+        try {
+            if (response.getSuccess()) {
+                SharedPreference.getInstance(getActivity()).setStore(C.SELECTED_STORE, store);
+                if (from == C.SEARCH) {
+                    gotoHome();
+                } else if (from == C.HOME) {
+                    gotoHome();
+                }
+                else if (from == C.FRAGMENT_PRODUCT_LISTING) {
+                    getActivity().onBackPressed();
+                }
+            } else {
+                util.setSnackbarMessage(getActivity(), response.getMessage(), LLView, true);
 
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
@@ -197,7 +208,7 @@ public class FragmentStoreSelection extends Fragment implements IStoreViewPresen
 
     void updateStore() {
         store = adapterStore.getSelectedItem();
-        if (storeList != null) {
+        if (store != null && storeList != null) {
 
             UpdateStore updateStore = new UpdateStore();
             updateStore.setUuid(Util.id(getActivity()));
@@ -252,8 +263,7 @@ public class FragmentStoreSelection extends Fragment implements IStoreViewPresen
             Intent intent = new Intent(getActivity(), ActivityHome.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
             getActivity().startActivity(intent);
-        }
-        catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }

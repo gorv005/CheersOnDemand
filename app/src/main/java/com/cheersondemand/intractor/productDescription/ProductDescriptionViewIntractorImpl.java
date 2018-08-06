@@ -29,11 +29,14 @@ public class ProductDescriptionViewIntractorImpl implements IProductDescIntracto
                 @Override
                 public void onFailure(RestError error, String msg) {
                     if(error==null ||error.getError()==null){
-
+                        try {
                         Gson gson=new Gson();
                         SimilarProductsResponse response= gson.fromJson(msg,SimilarProductsResponse.class);
                         listener.onSuccess(response);
-
+                        }
+                        catch (Exception e){
+                            e.printStackTrace();
+                        }
                     }
                     else {
                         listener.onError(error.getError());
@@ -59,11 +62,14 @@ public class ProductDescriptionViewIntractorImpl implements IProductDescIntracto
                 @Override
                 public void onFailure(RestError error, String msg) {
                     if(error==null ||error.getError()==null){
-
+                        try {
                         Gson gson=new Gson();
                         SimilarProductsResponse response= gson.fromJson(msg,SimilarProductsResponse.class);
                         listener.onSuccess(response);
-
+                        }
+                        catch (Exception e){
+                            e.printStackTrace();
+                        }
                     }
                     else {
                         listener.onError(error.getError());

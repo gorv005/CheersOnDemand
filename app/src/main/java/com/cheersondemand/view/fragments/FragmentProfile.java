@@ -134,11 +134,14 @@ public class FragmentProfile extends Fragment implements View.OnClickListener, I
             viewConnectedAccount.setVisibility(View.GONE);
 
             if (authenticationResponse.getData().getUser().getProfilePicture() != null) {
-               imageLoader.DisplayImage(authenticationResponse.getData().getUser().getProfilePicture(), imgProfile);
-             //   Util.setImage(getActivity(),authenticationResponse.getData().getUser().getProfilePicture(),imgProfile);
+              // imageLoader.DisplayImage(authenticationResponse.getData().getUser().getProfilePicture(), imgProfile);
+                Util.setImage(getActivity(),authenticationResponse.getData().getUser().getProfilePicture(),imgProfile);
             }
             else {
-                imageLoader.DisplayImage("", imgProfile);
+                //imageLoader.DisplayImage("", imgProfile);
+
+          //      imgProfile.setImageResource(R.drawable.missing);
+                Util.setImage(getActivity(),authenticationResponse.getData().getUser().getProfilePicture(),imgProfile);
 
             }
 
@@ -151,6 +154,8 @@ public class FragmentProfile extends Fragment implements View.OnClickListener, I
             llChangePassword.setVisibility(View.GONE);
             viewChangePassword.setVisibility(View.GONE);
             llLogout.setVisibility(View.GONE);
+           // imageLoader.DisplayImage("", imgProfile);
+            imgProfile.setImageResource(R.drawable.default_placeholder);
         }
 
         getWishList();
@@ -339,10 +344,15 @@ public class FragmentProfile extends Fragment implements View.OnClickListener, I
 
     @Override
     public void getResponseSuccess(LogoutResponse response) {
+        try {
         if (response.getSuccess()) {
             SharedPreference.getInstance(getActivity()).setBoolean(C.IS_LOGIN, false);
             SharedPreference.getInstance(getActivity()).clearData();
             gotoLogin();
+        }
+        }
+        catch (Exception e){
+            e.printStackTrace();
         }
 
     }
@@ -370,6 +380,7 @@ public class FragmentProfile extends Fragment implements View.OnClickListener, I
 
     @Override
     public void onSuccessUpdateProfile(GuestUserCreateResponse Response) {
+        try {
         if (Response.getSuccess()) {
             SharedPreference.getInstance(getActivity()).setBoolean(C.IS_NOTIFICATION, isNotification);
             util.setSnackbarMessage(getActivity(), getString(R.string.profile_updated), rlView, false);
@@ -377,6 +388,10 @@ public class FragmentProfile extends Fragment implements View.OnClickListener, I
         } else {
             util.setSnackbarMessage(getActivity(), Response.getMessage(), rlView, true);
 
+        }
+        }
+        catch (Exception e){
+            e.printStackTrace();
         }
     }
 
@@ -418,14 +433,19 @@ public class FragmentProfile extends Fragment implements View.OnClickListener, I
 
     @Override
     public void getWishListSuccess(WishListDataResponse response) {
-        if (response.getSuccess()) {
-            productListResponse = response;
-            if (response.getData() != null && response.getData().size() > 0) {
-                tvNumberWishListItems.setVisibility(View.VISIBLE);
-                tvNumberWishListItems.setText("" + response.getData().size());
-            } else {
-                tvNumberWishListItems.setVisibility(View.GONE);
+        try {
+            if (response.getSuccess()) {
+                productListResponse = response;
+                if (response.getData() != null && response.getData().size() > 0) {
+                    tvNumberWishListItems.setVisibility(View.VISIBLE);
+                    tvNumberWishListItems.setText("" + response.getData().size());
+                } else {
+                    tvNumberWishListItems.setVisibility(View.GONE);
+                }
             }
+        }
+        catch (Exception e){
+            e.printStackTrace();
         }
     }
 

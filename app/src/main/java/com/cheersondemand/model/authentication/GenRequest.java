@@ -11,6 +11,9 @@ public class GenRequest {
     @SerializedName("uuid")
     @Expose
     private String uuid;
+    @SerializedName("warehouse_id")
+    @Expose
+    private String warehouseId;
     public GenRequest() {
     }
     public GenRequest(String uuid) {
@@ -23,5 +26,13 @@ public class GenRequest {
 
     public void setUuid(String uuid) {
         this.uuid = uuid;
+    }
+
+    public String getWarehouseId() {
+        return warehouseId;
+    }
+
+    public void setWarehouseId(String warehouseId) {
+        this.warehouseId = warehouseId;
     }
 }

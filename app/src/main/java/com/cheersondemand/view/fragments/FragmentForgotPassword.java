@@ -148,6 +148,7 @@ public class FragmentForgotPassword extends Fragment implements View.OnClickList
     }
     @Override
     public void getPasswordSuccess(PasswordResponse response) {
+        try {
         if (response.getSuccess()) {
                 tvSuccessMsg.setText(response.getMessage());
                 tvSuccessMsg.setTextColor(ContextCompat.getColor(getActivity(), R.color.green));
@@ -155,6 +156,10 @@ public class FragmentForgotPassword extends Fragment implements View.OnClickList
         else {
             util.setSnackbarMessage(getActivity(), response.getMessage(), LLView, true);
 
+        }
+        }
+        catch (Exception e){
+            e.printStackTrace();
         }
     }
 

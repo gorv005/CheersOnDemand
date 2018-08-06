@@ -30,20 +30,20 @@ public class AddressViewIntractorImpl implements IAddressViewIntractor {
 
                 @Override
                 public void onFailure(RestError error, String msg) {
-                    if(error==null ||error.getError()==null){
-
-                        Gson gson=new Gson();
-                        AddressAddResponse response= gson.fromJson(msg,AddressAddResponse.class);
-                        listener.onAddAddressSucess(response);
-
-                    }
-                    else {
+                    if (error == null || error.getError() == null) {
+                        try {
+                            Gson gson = new Gson();
+                            AddressAddResponse response = gson.fromJson(msg, AddressAddResponse.class);
+                            listener.onAddAddressSucess(response);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    } else {
                         listener.onError(error.getError());
                     }
                 }
-            },token,userId,addressRequest);
-        }
-        catch (Exception e){
+            }, token, userId, addressRequest);
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
@@ -60,20 +60,20 @@ public class AddressViewIntractorImpl implements IAddressViewIntractor {
 
                 @Override
                 public void onFailure(RestError error, String msg) {
-                    if(error==null ||error.getError()==null){
-
-                        Gson gson=new Gson();
-                        AddressAddResponse response= gson.fromJson(msg,AddressAddResponse.class);
-                        listener.onEditAddressSucess(response);
-
-                    }
-                    else {
+                    if (error == null || error.getError() == null) {
+                        try {
+                            Gson gson = new Gson();
+                            AddressAddResponse response = gson.fromJson(msg, AddressAddResponse.class);
+                            listener.onEditAddressSucess(response);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    } else {
                         listener.onError(error.getError());
                     }
                 }
-            },token,userId,id,addressRequest);
-        }
-        catch (Exception e){
+            }, token, userId, id, addressRequest);
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
@@ -90,26 +90,26 @@ public class AddressViewIntractorImpl implements IAddressViewIntractor {
 
                 @Override
                 public void onFailure(RestError error, String msg) {
-                    if(error==null ||error.getError()==null){
-
-                        Gson gson=new Gson();
-                        AddressResponse response= gson.fromJson(msg,AddressResponse.class);
-                        listener.onAddressListSucess(response);
-
-                    }
-                    else {
+                    if (error == null || error.getError() == null) {
+                        try {
+                            Gson gson = new Gson();
+                            AddressResponse response = gson.fromJson(msg, AddressResponse.class);
+                            listener.onAddressListSucess(response);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    } else {
                         listener.onError(error.getError());
                     }
                 }
-            },token,userId);
-        }
-        catch (Exception e){
+            }, token, userId);
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
     @Override
-    public void RemoveAddAddress(String token, String userId, String id,final OnFinishedListener listener) {
+    public void RemoveAddAddress(String token, String userId, String id, final OnFinishedListener listener) {
         try {
 
             WebServicesWrapper.getInstance().removeAddress(new ResponseResolver<AddressAddResponse>() {
@@ -120,20 +120,20 @@ public class AddressViewIntractorImpl implements IAddressViewIntractor {
 
                 @Override
                 public void onFailure(RestError error, String msg) {
-                    if(error==null ||error.getError()==null){
-
-                        Gson gson=new Gson();
-                        AddressAddResponse response= gson.fromJson(msg,AddressAddResponse.class);
-                        listener.onRemoveAddressSucess(response);
-
-                    }
-                    else {
+                    if (error == null || error.getError() == null) {
+                        try {
+                            Gson gson = new Gson();
+                            AddressAddResponse response = gson.fromJson(msg, AddressAddResponse.class);
+                            listener.onRemoveAddressSucess(response);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    } else {
                         listener.onError(error.getError());
                     }
                 }
-            },token,userId,id);
-        }
-        catch (Exception e){
+            }, token, userId, id);
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
@@ -150,26 +150,26 @@ public class AddressViewIntractorImpl implements IAddressViewIntractor {
 
                 @Override
                 public void onFailure(RestError error, String msg) {
-                    if(error==null ||error.getError()==null){
-
-                        Gson gson=new Gson();
-                        AddressAddResponse response= gson.fromJson(msg,AddressAddResponse.class);
-                        listener.onAddDeliveryAddressSuccess(response);
-
-                    }
-                    else {
+                    if (error == null || error.getError() == null) {
+                        try {
+                            Gson gson = new Gson();
+                            AddressAddResponse response = gson.fromJson(msg, AddressAddResponse.class);
+                            listener.onAddDeliveryAddressSuccess(response);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    } else {
                         listener.onError(error.getError());
                     }
                 }
-            },token,userId,cardId,addDeliveryAddressRequest);
-        }
-        catch (Exception e){
+            }, token, userId, cardId, addDeliveryAddressRequest);
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
     @Override
-    public void addDeliveryAddress(String token, String userId, String cardId, AddressRequest addressRequest,final OnFinishedListener listener) {
+    public void addDeliveryAddress(String token, String userId, String cardId, AddressRequest addressRequest, final OnFinishedListener listener) {
         try {
 
             WebServicesWrapper.getInstance().addDeliveryAddress(new ResponseResolver<AddressAddResponse>() {
@@ -180,20 +180,20 @@ public class AddressViewIntractorImpl implements IAddressViewIntractor {
 
                 @Override
                 public void onFailure(RestError error, String msg) {
-                    if(error==null ||error.getError()==null){
-
-                        Gson gson=new Gson();
-                        AddressAddResponse response= gson.fromJson(msg,AddressAddResponse.class);
-                        listener.onAddDeliveryAddressSuccess(response);
-
-                    }
-                    else {
+                    if (error == null || error.getError() == null) {
+                        try {
+                            Gson gson = new Gson();
+                            AddressAddResponse response = gson.fromJson(msg, AddressAddResponse.class);
+                            listener.onAddDeliveryAddressSuccess(response);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    } else {
                         listener.onError(error.getError());
                     }
                 }
-            },token,userId,cardId,addressRequest);
-        }
-        catch (Exception e){
+            }, token, userId, cardId, addressRequest);
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }

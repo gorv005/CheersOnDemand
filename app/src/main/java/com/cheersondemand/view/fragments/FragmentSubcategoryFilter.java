@@ -126,27 +126,33 @@ public class FragmentSubcategoryFilter extends Fragment implements IHomeViewPres
 
     @Override
     public void getResponseSuccessSubCat(SubCategoryResponse response) {
-            if(response.getSuccess()){
-                subCategoryList=response.getData();
+        try {
+
+            if (response.getSuccess()) {
+                subCategoryList = response.getData();
                 for (int i = 0; i < subCategoryList.size(); i++) {
                     subCategoryList.get(i).setPos(i);
                 }
-                if(subCategoryListFilter!=null) {
+                if (subCategoryListFilter != null) {
                     for (int i = 0; i < subCategoryList.size(); i++) {
-                        for(int j=0;j<subCategoryListFilter.size();j++){
-                            if(subCategoryList.get(i).getId()==subCategoryListFilter.get(i).getId() && subCategoryListFilter.get(i).isSelected()){
+                        for (int j = 0; j < subCategoryListFilter.size(); j++) {
+                            if (subCategoryList.get(i).getId().equals(subCategoryListFilter.get(i).getId()) && subCategoryListFilter.get(i).isSelected()) {
                                 subCategoryList.get(i).setSelected(true);
                                 break;
                             }
                         }
                     }
                 }
-                if(subCategoryList!=null && subCategoryList.size()>0){
-                    adapterSubCategory=new AdapterSubCategory(getActivity(),subCategoryList);
+                if (subCategoryList != null && subCategoryList.size() > 0) {
+                    adapterSubCategory = new AdapterSubCategory(getActivity(), subCategoryList);
                     lvSubCategories.setAdapter(adapterSubCategory);
 
                 }
             }
+        }
+        catch (Exception e){
+            e.printStackTrace();
+        }
     }
 
     @Override

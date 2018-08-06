@@ -92,11 +92,38 @@ public class FragmentAddCard extends Fragment implements ICardViewPresenter.ICar
     TextView name;
     @BindView(R.id.rlISDetailSave)
     RelativeLayout rlISDetailSave;
-    private boolean isDelete;
     ICardViewPresenter iCardViewPresenter;
     Util util;
-
     boolean isCheckout;
+    private boolean isDelete;
+    private InputFilter filter = new InputFilter() {
+
+        @Override
+        public CharSequence filter(CharSequence source, int start, int end, Spanned dest, int dstart, int dend) {
+
+            if ((etExpire.getText().toString() != null && etExpire.getText().toString().length() == 5)) {
+                return "";
+
+            } else if ((etExpire.getText().toString() != null && etExpire.getText().toString().length() == 1)) {
+                if ((etExpire.getText().toString() != null && !etExpire.getText().toString().equals("")) && (etExpire.getText().toString().startsWith("1"))) {
+                    if (source.toString().equals("0") || source.toString().equals("1") || source.toString().equals("2")) {
+                        return source.toString();
+                    } else {
+                        return "";
+                    }
+                }
+                return source.toString();
+
+            } else if ((etExpire.getText().toString() != null && !etExpire.getText().toString().equals("")) && (etExpire.getText().toString().startsWith("1") || etExpire.getText().toString().startsWith("0"))) {
+                return source.toString();
+
+            } else if (source != null && source.toString().startsWith("1") || source.toString().startsWith("0")) {
+                return source.toString();
+            }
+            return "";
+        }
+    };
+
     public FragmentAddCard() {
         // Required empty public constructor
     }
@@ -106,7 +133,7 @@ public class FragmentAddCard extends Fragment implements ICardViewPresenter.ICar
         super.onCreate(savedInstanceState);
         iCardViewPresenter = new CardViewPresenterImpl(this, getActivity());
         util = new Util();
-        isCheckout=getArguments().getBoolean(C.IS_FROM_CHECKOUT);
+        isCheckout = getArguments().getBoolean(C.IS_FROM_CHECKOUT);
     }
 
     @Override
@@ -128,10 +155,9 @@ public class FragmentAddCard extends Fragment implements ICardViewPresenter.ICar
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         btnSaveAdd.setOnClickListener(this);
-        if(isCheckout){
+        if (isCheckout) {
             rlISDetailSave.setVisibility(VISIBLE);
-        }
-        else {
+        } else {
             rlISDetailSave.setVisibility(GONE);
         }
         init();
@@ -142,7 +168,6 @@ public class FragmentAddCard extends Fragment implements ICardViewPresenter.ICar
         super.onDestroyView();
         unbinder.unbind();
     }
-
 
     void addCard(String stripe_token) {
         String id = "" + SharedPreference.getInstance(getActivity()).getUser(C.AUTH_USER).getData().getUser().getId();
@@ -196,14 +221,14 @@ public class FragmentAddCard extends Fragment implements ICardViewPresenter.ICar
                             etCardNumber.getText().toString().substring(8, 12) + "\t" + etCardNumber.getText().toString().substring(12)
                     );
                 }
-*/              if(etCardNumber.getText().toString().length()>4) {
+*/
+                if (etCardNumber.getText().toString().length() > 4) {
                     tvCardNumber.setText(Util.handleCardNumber(etCardNumber.getText().toString(), " "));
-                }
-                else {
+                } else {
                     tvCardNumber.setText(etCardNumber.getText().toString());
                 }
 
-              //  tvCardNumber.setText(etCardNumber.getText().toString());
+                //  tvCardNumber.setText(etCardNumber.getText().toString());
                 if (editable.toString().length() == 5) {
                     type = Util.getCardType(editable.toString());
 
@@ -328,40 +353,6 @@ public class FragmentAddCard extends Fragment implements ICardViewPresenter.ICar
 
     }
 
-    private InputFilter filter = new InputFilter() {
-
-        @Override
-        public CharSequence filter(CharSequence source, int start, int end, Spanned dest, int dstart, int dend) {
-
-            if ((etExpire.getText().toString() != null && etExpire.getText().toString().length() == 5)) {
-                return "";
-
-            }
-
-          else   if ((etExpire.getText().toString() != null && etExpire.getText().toString().length() == 1)) {
-            if ((etExpire.getText().toString() != null && !etExpire.getText().toString().equals("")) && (etExpire.getText().toString().startsWith("1"))) {
-                if(source.toString().equals("0")||source.toString().equals("1") || source.toString().equals("2")) {
-                    return source.toString();
-                }
-                else {
-                    return "";
-                }
-            }
-            return source.toString();
-
-            }
-           else if ((etExpire.getText().toString() != null && !etExpire.getText().toString().equals("")) && (etExpire.getText().toString().startsWith("1") || etExpire.getText().toString().startsWith("0"))) {
-                return source.toString();
-
-            } else if (source != null && source.toString().startsWith("1") || source.toString().startsWith("0")) {
-                return source.toString();
-            }
-            return "";
-        }
-    };
-
-
-
     private void flipCard() {
 
 
@@ -432,12 +423,11 @@ public class FragmentAddCard extends Fragment implements ICardViewPresenter.ICar
                 hideProgress();
                 // card.setStripeTokenId(token.getId());
                 Log.e("DEBUG", "Stripe token : " + token.getId());
-                if(isCheckout) {
+                if (isCheckout) {
                     if (checkboxISSave.isChecked()) {
                         addCard(token.getId());
-                    }
-                    else {
-                        CardList cardList=new CardList();
+                    } else {
+                        CardList cardList = new CardList();
                         cardList.setCardId(null);
                         cardList.setCardHolderName(etCardHolderName.getText().toString());
                         cardList.setExpMonth(Integer.parseInt(etExpire.getText().toString().split("/")[0]));
@@ -447,11 +437,10 @@ public class FragmentAddCard extends Fragment implements ICardViewPresenter.ICar
                         cardList.setStripeToken(token.getId());
                         cardList.setBrand(Util.getCardTypeUsingBrandName(type));
                         cardList.setIsDefaultSource(true);
-                        SharedPreference.getInstance(getActivity()).addCard(C.CARD_DATA,cardList);
+                        SharedPreference.getInstance(getActivity()).addCard(C.CARD_DATA, cardList);
                         getActivity().onBackPressed();
                     }
-                }
-                else {
+                } else {
                     addCard(token.getId());
 
                 }
@@ -466,21 +455,25 @@ public class FragmentAddCard extends Fragment implements ICardViewPresenter.ICar
 
     @Override
     public void onSuccessAddCard(CardAddResponse response) {
-        if (response.getSuccess()) {
-            util.setSnackbarMessage(getActivity(), response.getMessage(), llBack, false);
-            Handler handler = new Handler();
+        try {
+            if (response.getSuccess()) {
+                util.setSnackbarMessage(getActivity(), response.getMessage(), llBack, false);
+                Handler handler = new Handler();
 
-            handler.postDelayed(new Runnable() {
-                public void run() {
-                    // Actions to do after 10 seconds
-                    getActivity().onBackPressed();
-                }
-            }, 2000);
+                handler.postDelayed(new Runnable() {
+                    public void run() {
+                        // Actions to do after 10 seconds
+                        getActivity().onBackPressed();
+                    }
+                }, 2000);
 
 
-        } else {
-            util.setSnackbarMessage(getActivity(), response.getMessage(), llBack, true);
+            } else {
+                util.setSnackbarMessage(getActivity(), response.getMessage(), llBack, true);
 
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 

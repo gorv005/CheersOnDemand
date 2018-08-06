@@ -119,6 +119,7 @@ public class FragmentCardList extends Fragment implements ICardViewPresenter.ICa
 
     @Override
     public void onSuccessCardList(CardListResponse response) {
+        try {
         if (response.getSuccess()) {
             if (response.getData() != null && response.getData().size() > 0) {
                 tvNoCardAvailable.setVisibility(View.GONE);
@@ -134,10 +135,15 @@ public class FragmentCardList extends Fragment implements ICardViewPresenter.ICa
             util.setSnackbarMessage(getActivity(), response.getMessage(), LLView, true);
 
         }
+        }
+        catch (Exception e){
+            e.printStackTrace();
+        }
     }
 
     @Override
     public void onSuccessAddCard(CardAddResponse response) {
+        try {
         if (response.getSuccess()) {
             util.setSnackbarMessage(getActivity(), response.getMessage(), LLView, false);
 
@@ -147,6 +153,10 @@ public class FragmentCardList extends Fragment implements ICardViewPresenter.ICa
         } else {
             util.setSnackbarMessage(getActivity(), response.getMessage(), LLView, true);
 
+        }
+        }
+        catch (Exception e){
+            e.printStackTrace();
         }
     }
 

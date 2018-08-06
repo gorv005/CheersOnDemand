@@ -193,8 +193,8 @@ public class ItemViewHolder extends RecyclerView.ViewHolder {
         TextView title = (TextView) dialog.findViewById(R.id.tvmessagedialogtitle);
 
         TextView message = (TextView) dialog.findViewById(R.id.tvmessagedialogtext);
-        title.setText(context.getString(R.string.logout));
-        message.setText(context.getString(R.string.are_you_sure_logout));
+        title.setText(context.getString(R.string.delete_address));
+        message.setText(context.getString(R.string.are_you_sure_delete_address));
 
         Button yes = (Button) dialog.findViewById(R.id.bmessageDialogYes);
         yes.setText(context.getString(R.string.yes_delete));

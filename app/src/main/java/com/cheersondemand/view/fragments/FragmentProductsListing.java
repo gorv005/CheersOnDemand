@@ -117,23 +117,17 @@ public class FragmentProductsListing extends Fragment implements View.OnClickLis
     TextView tvStoreName;
     @BindView(R.id.llStoreSelect)
     LinearLayout llStoreSelect;
-    private GridLayoutManager lLayout;
     String catId, subCatId;
     String from = "0", to = "5000";
     String from_ = "0", to_ = "5000";
-
     String orderBy = "desc";
     String orderField = "created_at";
     int source;
-    private int productPos;
-    private int secPos;
-    private boolean isAdd, isFilter = false, isSort = false;
     AllProduct product;
     List<Categories> categoriesList;
     List<Brand> brandList;
     List<SubCategory> subCatList;
     StoreList store;
-
     int totalPages;
     int pastVisibleItems, visibleItemCount, totalItemCount;
     boolean loading = true;
@@ -141,6 +135,10 @@ public class FragmentProductsListing extends Fragment implements View.OnClickLis
     List<Integer> catIdList;
     List<Integer> brandId;
     List<Integer> sub_cat_id;
+    private GridLayoutManager lLayout;
+    private int productPos;
+    private int secPos;
+    private boolean isAdd, isFilter = false, isSort = false;
 
     public FragmentProductsListing() {
         // Required empty public constructor
@@ -220,7 +218,7 @@ public class FragmentProductsListing extends Fragment implements View.OnClickLis
         getCategories();
     }
 
-    void  setStoreName(){
+    void setStoreName() {
         store = SharedPreference.getInstance(getActivity()).getStore(C.SELECTED_STORE);
         if (store != null) {
             tvStoreName.setText(store.getName());
@@ -286,7 +284,7 @@ public class FragmentProductsListing extends Fragment implements View.OnClickLis
     public void onResume() {
         super.onResume();
         setStoreName();
-        page=1;
+        page = 1;
         getProducts(page);
         ActivityContainer.tvTitle.setText(R.string.product_listing);
     }
@@ -421,17 +419,25 @@ public class FragmentProductsListing extends Fragment implements View.OnClickLis
     }
 
     void createOrder() {
-        if (SharedPreference.getInstance(getActivity()).getBoolean(C.IS_LOGIN_GUEST)) {
-            String id = "" + SharedPreference.getInstance(getActivity()).geGuestUser(C.GUEST_USER).getId();
+        StoreList store = SharedPreference.getInstance(getActivity()).getStore(C.SELECTED_STORE);
+        if (store != null) {
+            GenRequest genRequest = new GenRequest();
+            genRequest.setUuid(Util.id(getActivity()));
+            genRequest.setWarehouseId("" + store.getId());
 
-            iOrderViewPresenterPresenter.createOrder(id, new GenRequest(Util.id(getActivity())));
-        } else {
-            String id = "" + SharedPreference.getInstance(getActivity()).getUser(C.AUTH_USER).getData().getUser().getId();
+            if (SharedPreference.getInstance(getActivity()).getBoolean(C.IS_LOGIN_GUEST)) {
+                String id = "" + SharedPreference.getInstance(getActivity()).geGuestUser(C.GUEST_USER).getId();
 
-            String token = C.bearer + SharedPreference.getInstance(getActivity()).getUser(C.AUTH_USER).getData().getToken().getAccessToken();
-            iOrderViewPresenterPresenter.createOrder(token, id, new GenRequest(Util.id(getActivity())));
+                iOrderViewPresenterPresenter.createOrder(id, genRequest);
+            } else {
+                String id = "" + SharedPreference.getInstance(getActivity()).getUser(C.AUTH_USER).getData().getUser().getId();
+
+                String token = C.bearer + SharedPreference.getInstance(getActivity()).getUser(C.AUTH_USER).getData().getToken().getAccessToken();
+                iOrderViewPresenterPresenter.createOrder(token, id, genRequest);
+            }
         }
     }
+
 
     void addToCart() {
         AddToCartRequest addToCartRequest = new AddToCartRequest();
@@ -554,34 +560,46 @@ public class FragmentProductsListing extends Fragment implements View.OnClickLis
 
     @Override
     public void getCreateOrderSuccess(CreateOrderResponse response) {
-        if (response.getSuccess()) {
-            SharedPreference.getInstance(getActivity()).setString(C.ORDER_ID, "" + response.getData().getOrder().getId());
-            addToCart();
-        } else {
-            util.setSnackbarMessage(getActivity(), response.getMessage(), rlView, true);
+        try {
+            if (response.getSuccess()) {
+                SharedPreference.getInstance(getActivity()).setString(C.ORDER_ID, "" + response.getData().getOrder().getId());
+                addToCart();
+            } else {
+                util.setSnackbarMessage(getActivity(), response.getMessage(), rlView, true);
 
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
     @Override
     public void getAddToCartSucess(AddToCartResponse response) {
-        if (response.getSuccess()) {
-            util.setSnackbarMessage(getActivity(), response.getMessage(), rlView, false);
-            updateCart();
-        } else {
-            util.setSnackbarMessage(getActivity(), response.getMessage(), rlView, true);
+        try {
+            if (response.getSuccess()) {
+                util.setSnackbarMessage(getActivity(), response.getMessage(), rlView, false);
+                updateCart();
+            } else {
+                util.setSnackbarMessage(getActivity(), response.getMessage(), rlView, true);
 
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
     @Override
     public void getUpdateCartSuccess(UpdateCartResponse response) {
-        if (response.getSuccess()) {
-            util.setSnackbarMessage(getActivity(), response.getMessage(), rlView, false);
-            updateCart();
-        } else {
-            util.setSnackbarMessage(getActivity(), response.getMessage(), rlView, true);
+        try {
+            if (response.getSuccess()) {
+                util.setSnackbarMessage(getActivity(), response.getMessage(), rlView, false);
+                updateCart();
+            } else {
+                util.setSnackbarMessage(getActivity(), response.getMessage(), rlView, true);
 
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
@@ -614,17 +632,21 @@ public class FragmentProductsListing extends Fragment implements View.OnClickLis
 
     @Override
     public void getRemoveItemFromCartSuccess(UpdateCartResponse response) {
-        if (response.getSuccess()) {
-            util.setSnackbarMessage(getActivity(), response.getMessage(), rlView, false);
+        try {
+            if (response.getSuccess()) {
+                util.setSnackbarMessage(getActivity(), response.getMessage(), rlView, false);
 
-            product.setCartQunatity(null);
-            product.setIsInCart(false);
-            allProductList.set(productPos, product);
-            adapterProducts.notifyDataSetChanged();
+                product.setCartQunatity(null);
+                product.setIsInCart(false);
+                allProductList.set(productPos, product);
+                adapterProducts.notifyDataSetChanged();
 
-        } else {
-            util.setSnackbarMessage(getActivity(), response.getMessage(), rlView, true);
+            } else {
+                util.setSnackbarMessage(getActivity(), response.getMessage(), rlView, true);
 
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
@@ -635,27 +657,35 @@ public class FragmentProductsListing extends Fragment implements View.OnClickLis
 
     @Override
     public void addTowishListSuccess(WishListResponse response) {
-        if (response.getSuccess()) {
-            util.setSnackbarMessage(getActivity(), response.getMessage(), rlView, false);
-            product.setIsWishlisted(true);
-            adapterProducts.notifyDataSetChanged();
+        try {
+            if (response.getSuccess()) {
+                util.setSnackbarMessage(getActivity(), response.getMessage(), rlView, false);
+                product.setIsWishlisted(true);
+                adapterProducts.notifyDataSetChanged();
 
-        } else {
-            util.setSnackbarMessage(getActivity(), response.getMessage(), rlView, true);
+            } else {
+                util.setSnackbarMessage(getActivity(), response.getMessage(), rlView, true);
 
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
     @Override
     public void removeFromWishListSuccess(WishListResponse response) {
-        if (response.getSuccess()) {
-            util.setSnackbarMessage(getActivity(), response.getMessage(), rlView, false);
-            product.setIsWishlisted(false);
-            adapterProducts.notifyDataSetChanged();
+        try {
+            if (response.getSuccess()) {
+                util.setSnackbarMessage(getActivity(), response.getMessage(), rlView, false);
+                product.setIsWishlisted(false);
+                adapterProducts.notifyDataSetChanged();
 
-        } else {
-            util.setSnackbarMessage(getActivity(), response.getMessage(), rlView, true);
+            } else {
+                util.setSnackbarMessage(getActivity(), response.getMessage(), rlView, true);
 
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
@@ -683,36 +713,44 @@ public class FragmentProductsListing extends Fragment implements View.OnClickLis
 
     @Override
     public void getResponseSuccess(CategoriesResponse response) {
-        if (response.getSuccess()) {
-            categoriesList = response.getData();
+        try {
+            if (response.getSuccess()) {
+                categoriesList = response.getData();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
     @Override
     public void getResponseSuccess(SimilarProductsResponse response) {
-        if (response.getSuccess()) {
-            progressbar.setVisibility(View.GONE);
-            if (allProductList != null && allProductList.size() > 0) {
-                allProductList.addAll(response.getData().getSimilarProducts());
-                adapterProducts.notifyDataSetChanged();
-            } else {
-                if (response.getData() != null && response.getData().getSimilarProducts() != null && response.getData().getSimilarProducts().size() > 0) {
-                    llNoProductInCount.setVisibility(View.GONE);
-
-                    if (response.getMeta() != null && response.getMeta().getPagination() != null) {
-                        totalPages = response.getMeta().getPagination().getTotalPages();
-                    }
-                    allProductList = response.getData().getSimilarProducts();
-                    adapterProducts = new AdapterProducts(allProductList, getActivity());
-                    rvProductsList.setAdapter(adapterProducts);
+        try {
+            if (response.getSuccess()) {
+                progressbar.setVisibility(View.GONE);
+                if (allProductList != null && allProductList.size() > 0) {
+                    allProductList.addAll(response.getData().getSimilarProducts());
+                    adapterProducts.notifyDataSetChanged();
                 } else {
-                    llNoProductInCount.setVisibility(View.VISIBLE);
-                }
-            }
-            loading = true;
-        } else {
-            util.setSnackbarMessage(getActivity(), response.getMessage(), rlView, true);
+                    if (response.getData() != null && response.getData().getSimilarProducts() != null && response.getData().getSimilarProducts().size() > 0) {
+                        llNoProductInCount.setVisibility(View.GONE);
 
+                        if (response.getMeta() != null && response.getMeta().getPagination() != null) {
+                            totalPages = response.getMeta().getPagination().getTotalPages();
+                        }
+                        allProductList = response.getData().getSimilarProducts();
+                        adapterProducts = new AdapterProducts(allProductList, getActivity());
+                        rvProductsList.setAdapter(adapterProducts);
+                    } else {
+                        llNoProductInCount.setVisibility(View.VISIBLE);
+                    }
+                }
+                loading = true;
+            } else {
+                util.setSnackbarMessage(getActivity(), response.getMessage(), rlView, true);
+
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
@@ -760,7 +798,7 @@ public class FragmentProductsListing extends Fragment implements View.OnClickLis
         Intent intent = new Intent(getActivity(), ActivityContainer.class);
         Bundle bundle = new Bundle();
         intent.putExtra(C.FRAGMENT_ACTION, C.FRAGMENT_STORE_LIST);
-        bundle.putInt(C.FROM, C.HOME);
+        bundle.putInt(C.FROM, C.FRAGMENT_PRODUCT_LISTING);
 
         intent.putExtra(C.BUNDLE, bundle);
         startActivity(intent);
@@ -828,6 +866,64 @@ public class FragmentProductsListing extends Fragment implements View.OnClickLis
         startActivityForResult(intent, REQUEST_CODE);
     }
 
+    /**
+     * Converting dp to pixel
+     */
+    private int dpToPx(int dp) {
+        Resources r = getResources();
+        return Math.round(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, r.getDisplayMetrics()));
+    }
+
+    public void getSortDialog() {
+
+        View view = getLayoutInflater().inflate(R.layout.dialog_sort, null);
+
+        ListView sortList = (ListView) view.findViewById(R.id.lvSortItems);
+        ImageView btnDone = (ImageView) view.findViewById(R.id.ivCross);
+
+        final Dialog mBottomSheetDialog = new Dialog(getActivity(),
+                R.style.MaterialDialogSheet);
+        mBottomSheetDialog.setContentView(view);
+        mBottomSheetDialog.setCancelable(true);
+        mBottomSheetDialog.getWindow().setLayout(LinearLayout.LayoutParams.MATCH_PARENT,
+                LinearLayout.LayoutParams.WRAP_CONTENT);
+        mBottomSheetDialog.getWindow().setGravity(Gravity.BOTTOM);
+        final AdapterSortList adapterSortList = new AdapterSortList(getActivity(), Util.getSortList(), sortPos);
+        mBottomSheetDialog.show();
+
+        sortList.setAdapter(adapterSortList);
+        sortList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                adapterSortList.setTick(position + 1);
+                sortPos = position + 1;
+                mBottomSheetDialog.dismiss();
+                if (position == 0) {
+                    orderBy = "asc";
+                    orderField = "price";
+                } else if (position == 1) {
+                    orderBy = "desc";
+                    orderField = "price";
+                } else if (position == 2) {
+                    orderBy = "desc";
+                    orderField = "created_at";
+                } else if (position == 3) {
+                    orderBy = "desc";
+                    orderField = "sold";
+                }
+                isSort = true;
+                getProducts(1);
+            }
+        });
+        btnDone.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mBottomSheetDialog.dismiss();
+            }
+        });
+
+    }
+
     public class GridSpacingItemDecoration extends RecyclerView.ItemDecoration {
 
         private int spanCount;
@@ -861,66 +957,5 @@ public class FragmentProductsListing extends Fragment implements View.OnClickLis
                 }
             }
         }
-    }
-
-    /**
-     * Converting dp to pixel
-     */
-    private int dpToPx(int dp) {
-        Resources r = getResources();
-        return Math.round(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, r.getDisplayMetrics()));
-    }
-
-
-    public void getSortDialog() {
-
-        View view = getLayoutInflater().inflate(R.layout.dialog_sort, null);
-
-        ListView sortList = (ListView) view.findViewById(R.id.lvSortItems);
-        ImageView btnDone = (ImageView) view.findViewById(R.id.ivCross);
-
-        final Dialog mBottomSheetDialog = new Dialog(getActivity(),
-                R.style.MaterialDialogSheet);
-        mBottomSheetDialog.setContentView(view);
-        mBottomSheetDialog.setCancelable(true);
-        mBottomSheetDialog.getWindow().setLayout(LinearLayout.LayoutParams.MATCH_PARENT,
-                LinearLayout.LayoutParams.WRAP_CONTENT);
-        mBottomSheetDialog.getWindow().setGravity(Gravity.BOTTOM);
-        final AdapterSortList adapterSortList = new AdapterSortList(getActivity(), Util.getSortList(), sortPos);
-        mBottomSheetDialog.show();
-
-        sortList.setAdapter(adapterSortList);
-        sortList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                adapterSortList.setTick(position + 1);
-                sortPos = position + 1;
-                mBottomSheetDialog.dismiss();
-                if (position == 0) {
-                    orderBy = "asc";
-                    orderField = "price";
-                } else if (position == 1) {
-                    orderBy = "desc";
-                    orderField = "price";
-                }
-                else if (position == 2) {
-                    orderBy = "desc";
-                    orderField = "created_at";
-                }
-                else if (position == 3) {
-                    orderBy = "desc";
-                    orderField = "sold";
-                }
-                isSort = true;
-                getProducts(1);
-            }
-        });
-        btnDone.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mBottomSheetDialog.dismiss();
-            }
-        });
-
     }
 }

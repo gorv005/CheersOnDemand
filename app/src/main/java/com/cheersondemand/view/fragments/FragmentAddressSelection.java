@@ -138,6 +138,7 @@ public class FragmentAddressSelection extends Fragment implements View.OnClickLi
 
     @Override
     public void onRemoveAddressSuccess(AddressAddResponse Response) {
+        try {
         if (Response.getSuccess()) {
             util.setSnackbarMessage(getActivity(), Response.getMessage(), rlView, false);
 
@@ -151,6 +152,10 @@ public class FragmentAddressSelection extends Fragment implements View.OnClickLi
         } else {
             util.setSnackbarMessage(getActivity(), Response.getMessage(), rlView, true);
 
+        }
+        }
+        catch (Exception e){
+            e.printStackTrace();
         }
     }
 
@@ -166,6 +171,7 @@ public class FragmentAddressSelection extends Fragment implements View.OnClickLi
 
     @Override
     public void onAddressListSuccess(AddressResponse Response) {
+        try {
         if (Response.getSuccess()) {
             if (Response.getData() != null && Response.getData().size() > 0) {
                 llNoProductInCount.setVisibility(View.GONE);
@@ -184,15 +190,24 @@ public class FragmentAddressSelection extends Fragment implements View.OnClickLi
             util.setSnackbarMessage(getActivity(), Response.getMessage(), rlView, true);
 
         }
+        }
+        catch (Exception e){
+            e.printStackTrace();
+        }
     }
 
     @Override
     public void onAddDeliveryAddressSuccess(AddressAddResponse Response) {
+        try {
         if(Response.getSuccess()){
             ((ActivityContainer)getActivity()).fragmnetLoader(C.FRAGMENT_PAYMENT_CONFIRMATION,null);
         }
         else {
             dialog(Response.getMessage());
+        }
+        }
+        catch (Exception e){
+            e.printStackTrace();
         }
     }
 

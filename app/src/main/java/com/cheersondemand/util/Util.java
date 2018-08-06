@@ -156,7 +156,7 @@ public class Util {
         Glide.with(context)
                 .load(url)
                 .placeholder(R.drawable.missing)
-   // .error(R.drawable.missing)
+    .error(R.drawable.missing)
                 .into(imageView);
     }
 
@@ -301,6 +301,24 @@ public class Util {
         }
 
 
+    }
+
+    public  static String getValueNumberFormat(String s){
+      if(s!=null){
+          if(s.length()==4){
+          s=   s.substring(0, 1) + "," + s.substring(1, s.length());
+          }
+      }
+      return s;
+    }
+
+    public  static String getNumberWithoutCommaFormat(String s){
+        if(s!=null){
+            if(s.length()==5){
+                s=  s.replaceAll(",","");
+            }
+        }
+        return s;
     }
     public static String handleCardNumber(String inputCardNumber, String seperator) {
         String unformattedText = inputCardNumber.replace(seperator, "");
