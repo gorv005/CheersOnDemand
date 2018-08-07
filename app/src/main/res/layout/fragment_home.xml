@@ -178,9 +178,19 @@
         android:text="@string/sorry_no_product"
         android:textColor="@color/profile_text_color"
         android:textSize="16sp" />
+    <ScrollView
+        android:layout_below="@id/rl"
+        android:scrollbars="none"
+        android:layout_width="match_parent"
+        android:fillViewport="true"
+        android:layout_height="wrap_content">
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
     <com.facebook.shimmer.ShimmerFrameLayout
         android:id="@+id/shimmerBrands"
-        android:layout_below="@id/rl"
         android:visibility="gone"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -230,5 +240,6 @@
                 android:layout_centerHorizontal="true" />
         </RelativeLayout>
     </com.facebook.shimmer.ShimmerFrameLayout>
-
+        </LinearLayout>
+    </ScrollView>
 </RelativeLayout>

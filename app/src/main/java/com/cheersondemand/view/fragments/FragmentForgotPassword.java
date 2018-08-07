@@ -140,6 +140,7 @@ public class FragmentForgotPassword extends Fragment implements View.OnClickList
 
 
     void forgotPassword(){
+        Util.hideKeyboard(getActivity());
         PasswordRequest passwordRequest=new PasswordRequest();
         Password password=new Password();
         password.setEmail(etEmail.getText().toString());

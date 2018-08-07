@@ -223,11 +223,14 @@ public class FragmentHome extends Fragment implements IStoreViewPresenter.IStore
         horizontalLayout = new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false);
         rvBrands.setLayoutManager(horizontalLayout);
 
+        rvBrands.setNestedScrollingEnabled(false);
 
         horizontalLayout1 = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
 
         rvProducts.setLayoutManager(horizontalLayout1);
         rvProducts.setHasFixedSize(true);
+        rvProducts.setNestedScrollingEnabled(false);
+
         setStoreLocation();
 
   /*      adapterHomeBrands = new AdapterHomeBrands(setHomeBrands(), getActivity());
@@ -318,7 +321,14 @@ public class FragmentHome extends Fragment implements IStoreViewPresenter.IStore
 
                     SharedPreference.getInstance(getActivity()).setBoolean(C.CART_HAS_ITEM, response.getData().getHasCartProduct());
                     SharedPreference.getInstance(getActivity()).setString(C.ORDER_ID, response.getData().getUser().getOrderId());
+                     if(response.getData().getHasCartProduct()) {
+                         ((ActivityHome) getActivity()).setDot(true);
 
+                     }
+                     else {
+                         ((ActivityHome) getActivity()).setDot(false);
+
+                     }
                 } else {
                     tvNoStoreAvailable.setVisibility(View.VISIBLE);
                     tvNoStoreAvailable.setText(getString(R.string.no_product_found_));
@@ -484,6 +494,12 @@ public class FragmentHome extends Fragment implements IStoreViewPresenter.IStore
                 product.setIsInCart(false);
                 homeCategoriesSectionList.get(secPos).getAllProducts().set(productPos, product);
                 adapterHomeCategoriesSections.notified();
+
+                if(response.getData()==null){
+                    SharedPreference.getInstance(getActivity()).setBoolean(C.CART_HAS_ITEM, false);
+                    SharedPreference.getInstance(getActivity()).setString(C.ORDER_ID, null);
+                    ((ActivityHome)getActivity()).setDot(false);
+                }
         /*    v1.animate().rotationX(90).setDuration(400).setListener(new AnimatorListenerAdapter() {
                 @Override
                 public void onAnimationEnd(Animator animation) {

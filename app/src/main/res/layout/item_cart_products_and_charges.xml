@@ -183,7 +183,7 @@
                 android:textStyle="bold"
 
                 android:layout_alignParentEnd="true"
-                android:fontFamily="@font/sf_ui_display_regular"
+                android:fontFamily="@font/sf_ui_display_bold"
                 android:textColor="@color/view_all_color"
                 android:text="@string/amount"
                 />

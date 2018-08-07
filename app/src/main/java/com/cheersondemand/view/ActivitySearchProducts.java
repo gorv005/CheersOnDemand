@@ -281,12 +281,17 @@ public class ActivitySearchProducts extends Activity implements View.OnClickList
                     lvSearchResult.setAdapter(adapterProductSearcheResults);
                 }
             } else {
-                searchProducts.clear();
+                if(searchProducts!=null && searchProducts.size()>0) {
+                    searchProducts.clear();
+                }
                 llSearchResult.setVisibility(View.GONE);
 
             }
         } else {
-            searchProducts.clear();
+            if(searchProducts!=null && searchProducts.size()>0) {
+                searchProducts.clear();
+
+            }
             llSearchResult.setVisibility(View.GONE);
 
         }

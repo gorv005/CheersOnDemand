@@ -199,6 +199,7 @@ public class FragmentCoupons extends Fragment implements View.OnClickListener, I
         switch (v.getId()) {
             case R.id.btnApply:
                 if (etCouponName.getText().length() >= 1) {
+                    Util.hideKeyboard(getActivity());
                     applyCoupon(etCouponName.getText().toString());
                 }
                 break;

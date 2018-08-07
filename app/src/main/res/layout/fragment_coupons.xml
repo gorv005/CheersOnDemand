@@ -11,7 +11,7 @@
         android:layout_width="match_parent"
         android:layout_height="60dp">
     <RelativeLayout
-        android:layout_marginTop="30dp"
+        android:layout_marginTop="25dp"
 
         android:id="@+id/imgBack"
         android:gravity="center|center_vertical"
@@ -25,7 +25,7 @@
             android:layout_height="wrap_content" />
     </RelativeLayout>
     <TextView
-        android:layout_marginTop="15dp"
+        android:layout_marginTop="10dp"
         android:layout_width="wrap_content"
         android:background="@color/white"
         android:layout_height="wrap_content"

@@ -371,7 +371,10 @@ public class FragmentWishList extends Fragment implements IOrderViewPresenterPre
                 product.setIsInCart(false);
                 allProductList.set(productPos, product);
                 adapterProducts.notifyDataSetChanged();
-
+                if(response.getData()==null){
+                    SharedPreference.getInstance(getActivity()).setBoolean(C.CART_HAS_ITEM, false);
+                    SharedPreference.getInstance(getActivity()).setString(C.ORDER_ID, null);
+                }
             } else {
                 util.setSnackbarMessage(getActivity(), response.getMessage(), rlView, true);
 

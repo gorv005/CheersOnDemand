@@ -1,7 +1,6 @@
 package com.cheersondemand.view.adapter.coupon;
 
 import android.app.Activity;
-import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,6 +11,7 @@ import com.cheersondemand.R;
 import com.cheersondemand.model.coupon.CouponInfo;
 import com.cheersondemand.util.C;
 import com.cheersondemand.util.ImageLoader.ImageLoader;
+import com.cheersondemand.util.Util;
 import com.cheersondemand.view.ActivityContainer;
 import com.cheersondemand.view.ActivityHome;
 
@@ -25,7 +25,7 @@ public class AdapterCouponList extends RecyclerView.Adapter<RecyclerView.ViewHol
     private static final int TYPE_FOOTER = 1;
     private static final int TYPE_ITEM = 0;
 private List<CouponInfo> horizontalList;
-    Context context;
+    Activity context;
     ImageLoader imageLoader;
     String couponName="";
     int source;
@@ -116,6 +116,8 @@ private List<CouponInfo> horizontalList;
             itemViewHolder.tvApply.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    Util.hideKeyboard(context);
+
                     if(source== C.FRAGMENT_PRODUCT_DESC) {
                         ((ActivityContainer) context).applyCoupon(horizontalList.get(position).getCode());
                     }

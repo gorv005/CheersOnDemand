@@ -319,6 +319,7 @@ public class FragmentChangePassword extends Fragment implements View.OnClickList
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.btnChangePassword:
+
                 changePassword();
                 break;
             case R.id.btnGotoProfile:
@@ -329,6 +330,7 @@ public class FragmentChangePassword extends Fragment implements View.OnClickList
 
 
     void  changePassword(){
+        Util.hideKeyboard(getActivity());
         PasswordRequest passwordRequest=new PasswordRequest();
         Password password=new Password();
         password.setCurrentPassword(etCurrentPassword.getText().toString());
