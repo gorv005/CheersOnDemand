@@ -98,7 +98,7 @@
     <string name="shared_image">shared_image</string>
     <string name="buy_now">Buy Now</string>
     <string name="qty">Qty.</string>
-    <string name="this_product_no_longer_available">This product is no longer available.</string>
+    <string name="this_product_no_longer_available">This product is not available in the selected store.</string>
     <string name="added_to_wishList">Added to wishlist</string>
     <string name="your_cart">Your Cart</string>
     <string name="amount">Amount</string>
@@ -275,6 +275,9 @@
     <string name="try_modify_search">Try modifying your search to get relevant results.</string>
     <string name="are_you_sure_delete_address">Are you sure you want to delete the address ?</string>
     <string name="delete_address">Delete Address</string>
+    <string name="read_more">Read More</string>
+    <string name="read_less">Read Less</string>
+    <string name="sorry_quantity_updated">Sorry, quantity of some products from your cart are updated because only few products available in store</string>
 
     <!--
         <string name="default_web_client_id">999387565226-hdnnhm6rhgik5ljvm06shotsi7j9883c.apps.googleusercontent.com</string>

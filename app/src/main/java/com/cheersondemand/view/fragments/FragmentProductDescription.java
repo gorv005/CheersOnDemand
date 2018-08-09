@@ -11,9 +11,15 @@ import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.text.Layout;
+import android.text.SpannableStringBuilder;
+import android.text.Spanned;
+import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -44,6 +50,7 @@ import com.cheersondemand.presenter.home.order.OrderViewPresenterImpl;
 import com.cheersondemand.presenter.productDescription.IProductDescViewPresenter;
 import com.cheersondemand.presenter.productDescription.ProductDescViewPresenterImpl;
 import com.cheersondemand.util.C;
+import com.cheersondemand.util.CustomSpannable;
 import com.cheersondemand.util.ImageLoader.ImageLoader;
 import com.cheersondemand.util.NonScrollListView;
 import com.cheersondemand.util.SharedPreference;
@@ -132,11 +139,13 @@ public class FragmentProductDescription extends Fragment implements View.OnClick
     AppBarLayout appbar;
     @BindView(R.id.tvTitleText)
     TextView tvTitleText;
+    @BindView(R.id.tvReadMore)
+    TextView tvReadMore;
     private int productPos;
     private int secPos;
     private boolean isAdd;
     private boolean isProductDes = false, isBuyNow = false;
-
+    boolean isReadMore=false;
     public FragmentProductDescription() {
         // Required empty public constructor
     }
@@ -176,6 +185,7 @@ public class FragmentProductDescription extends Fragment implements View.OnClick
         ivCheckout.setOnClickListener(this);
         ivCart.setOnClickListener(this);
         imgBack.setOnClickListener(this);
+        tvReadMore.setOnClickListener(this);
         setDetail();
         initCollapsingToolbar();
     }
@@ -201,6 +211,8 @@ public class FragmentProductDescription extends Fragment implements View.OnClick
     }
 
     void setDetail() {
+        tvDesc.setText(product.getDescription());
+
         //  imageLoader.DisplayImage(product.getImage(), imgProduct);
         Util.setImage(getActivity(), product.getImage(), imgProduct);
         if (product.getIsWishlisted()) {
@@ -221,10 +233,100 @@ public class FragmentProductDescription extends Fragment implements View.OnClick
         tvalcohalVol.setText("-");
         tvRegion.setText(product.getRegion());
         tvQuantity.setText("0.0");
-        tvDesc.setText(product.getDescription());
+
+        makeTextViewResizable(tvDesc, 3, "See More", true);
+
+    }
+    public  void makeTextViewResizable(final TextView tv, final int maxLine, final String expandText, final boolean viewMore) {
+
+        if (tv.getTag() == null) {
+            tv.setTag(tv.getText());
+        }
+        ViewTreeObserver vto = tv.getViewTreeObserver();
+        vto.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+
+            @SuppressWarnings("deprecation")
+            @Override
+            public void onGlobalLayout() {
+                Layout l = tvDesc.getLayout();
+                if (l != null) {
+                    int lines = l.getLineCount();
+                    if (lines > 0) {
+                        if (l.getEllipsisCount(lines - 1) > 0) {
+                            Log.d("", "Text is ellipsized");
+                            tvReadMore.setVisibility(View.VISIBLE);
+                        } else {
+                            if(!isReadMore) {
+                                tvReadMore.setVisibility(View.GONE);
+                            }
+
+                        }
+                    }
+                }
+            /*    ViewTreeObserver obs = tv.getViewTreeObserver();
+                obs.removeGlobalOnLayoutListener(this);
+                if (maxLine == 0) {
+                    int lineEndIndex = tv.getLayout().getLineEnd(0);
+                    String text = tv.getText().subSequence(0, lineEndIndex - expandText.length() + 1) + " " + expandText;
+                    tv.setText(text);
+                    tv.setMovementMethod(LinkMovementMethod.getInstance());
+                    tv.setText(
+                            addClickablePartTextViewResizable(Html.fromHtml(tv.getText().toString()), tv, maxLine, expandText,
+                                    viewMore), TextView.BufferType.SPANNABLE);
+                } else if (maxLine > 0 && tv.getLineCount() > maxLine) {
+                   *//* int lineEndIndex = tv.getLayout().getLineEnd(maxLine - 1);
+                    String text = tv.getText().subSequence(0, lineEndIndex - expandText.length() + 1) + " " + expandText;
+                    tv.setText(text);
+                    tv.setMovementMethod(LinkMovementMethod.getInstance());
+                    tv.setText(
+                            addClickablePartTextViewResizable(Html.fromHtml(tv.getText().toString()), tv, maxLine, expandText,
+                                    viewMore), TextView.BufferType.SPANNABLE);*//*
+                    tvReadMore.setVisibility(View.VISIBLE);
+                } else {
+                   *//* int lineEndIndex = tv.getLayout().getLineEnd(tv.getLayout().getLineCount() - 1);
+                    String text = tv.getText().subSequence(0, lineEndIndex) + " " + expandText;
+                    tv.setText(text);
+                    tv.setMovementMethod(LinkMovementMethod.getInstance());
+                    tv.setText(
+                            addClickablePartTextViewResizable(Html.fromHtml(tv.getText().toString()), tv, lineEndIndex, expandText,
+                                    viewMore), TextView.BufferType.SPANNABLE);*//*
+                    tvReadMore.setVisibility(View.GONE);
+
+                }*/
+            }
+        });
 
     }
 
+    private static SpannableStringBuilder addClickablePartTextViewResizable(final Spanned strSpanned, final TextView tv,
+                                                                            final int maxLine, final String spanableText, final boolean viewMore) {
+        String str = strSpanned.toString();
+        SpannableStringBuilder ssb = new SpannableStringBuilder(strSpanned);
+
+        if (str.contains(spanableText)) {
+
+
+            ssb.setSpan(new CustomSpannable(false){
+                @Override
+                public void onClick(View widget) {
+                    if (viewMore) {
+                        tv.setLayoutParams(tv.getLayoutParams());
+                        tv.setText(tv.getTag().toString(), TextView.BufferType.SPANNABLE);
+                        tv.invalidate();
+                    //    makeTextViewResizable(tv, -1, "See Less", false);
+                    } else {
+                        tv.setLayoutParams(tv.getLayoutParams());
+                        tv.setText(tv.getTag().toString(), TextView.BufferType.SPANNABLE);
+                        tv.invalidate();
+                      //  makeTextViewResizable(tv, 3, ".. See More", true);
+                    }
+                }
+            }, str.indexOf(spanableText), str.indexOf(spanableText) + spanableText.length(), 0);
+
+        }
+        return ssb;
+
+    }
     List<Offers> offersList() {
         List<Offers> offersList = new ArrayList<>();
         offersList.add(new Offers(1, "Flat 60", "Flat 60 off on your purchase"));
@@ -531,7 +633,7 @@ public class FragmentProductDescription extends Fragment implements View.OnClick
                 product.setIsInCart(false);
                 allProductList.set(productPos, product);
                 adapterSimilarProducts.notifyDataSetChanged();
-                if(response.getData()==null){
+                if (response.getData() == null) {
                     SharedPreference.getInstance(getActivity()).setBoolean(C.CART_HAS_ITEM, false);
                     SharedPreference.getInstance(getActivity()).setString(C.ORDER_ID, null);
                 }
@@ -720,6 +822,22 @@ public class FragmentProductDescription extends Fragment implements View.OnClick
                 break;
             case R.id.ivCheckout:
                 // getActivity().onBackPressed();
+                break;
+            case R.id.tvReadMore:
+                if(!isReadMore) {
+                    tvDesc.setMaxLines(Integer.MAX_VALUE);
+                    tvDesc.setEllipsize(null);
+                    isReadMore=true;
+                    tvReadMore.setText(getString(R.string.read_less));
+                    tvReadMore.setVisibility(View.VISIBLE);
+                }
+                else {
+                    tvDesc.setMaxLines(3);
+                    tvDesc.setEllipsize(TextUtils.TruncateAt.END);
+                    isReadMore=false;
+                    tvReadMore.setText(getString(R.string.read_more));
+                    tvReadMore.setVisibility(View.VISIBLE);
+                }
                 break;
         }
     }
