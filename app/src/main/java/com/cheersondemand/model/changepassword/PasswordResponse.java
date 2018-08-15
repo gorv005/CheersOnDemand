@@ -1,5 +1,6 @@
 package com.cheersondemand.model.changepassword;
 
+import com.cheersondemand.model.Errors;
 import com.cheersondemand.model.UserResponse;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
@@ -26,7 +27,7 @@ public class PasswordResponse {
     private List<Object> meta = null;
     @SerializedName("errors")
     @Expose
-    private List<Object> errors = null;
+    private List<Errors> errors = null;
 
     public Boolean getSuccess() {
         return success;
@@ -60,11 +61,11 @@ public class PasswordResponse {
         this.meta = meta;
     }
 
-    public List<Object> getErrors() {
+    public List<Errors> getErrors() {
         return errors;
     }
 
-    public void setErrors(List<Object> errors) {
+    public void setErrors(List<Errors> errors) {
         this.errors = errors;
     }
 }

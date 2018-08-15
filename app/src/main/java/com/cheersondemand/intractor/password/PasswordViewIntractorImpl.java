@@ -5,6 +5,7 @@ import com.cheersondemand.frameworks.retrofit.RestError;
 import com.cheersondemand.frameworks.retrofit.WebServicesWrapper;
 import com.cheersondemand.model.changepassword.PasswordRequest;
 import com.cheersondemand.model.changepassword.PasswordResponse;
+import com.cheersondemand.model.changepassword.ResetPasswordRequest;
 import com.google.gson.Gson;
 
 import retrofit2.Response;
@@ -49,6 +50,36 @@ public class PasswordViewIntractorImpl implements IPasswordViewIntractor {
         try {
 
             WebServicesWrapper.getInstance().forgotPassword(new ResponseResolver<PasswordResponse>() {
+                @Override
+                public void onSuccess(PasswordResponse r, Response response) {
+                    listener.onPasswordRequestSuccess(r);
+                }
+
+                @Override
+                public void onFailure(RestError error, String msg) {
+                    if (error == null || error.getError() == null) {
+                        try {
+                            Gson gson = new Gson();
+                            PasswordResponse response = gson.fromJson(msg, PasswordResponse.class);
+                            listener.onPasswordRequestSuccess(response);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    } else {
+                        listener.onError(error.getError());
+                    }
+                }
+            }, passwordRequest);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void resetPassword(ResetPasswordRequest passwordRequest,final OnLoginFinishedListener listener) {
+        try {
+
+            WebServicesWrapper.getInstance().resetPassword(new ResponseResolver<PasswordResponse>() {
                 @Override
                 public void onSuccess(PasswordResponse r, Response response) {
                     listener.onPasswordRequestSuccess(r);

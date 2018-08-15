@@ -23,8 +23,8 @@ android {
         applicationId "com.cheersondemand"
         minSdkVersion 21
         targetSdkVersion 27
-        versionCode 5
-        versionName "1.4"
+        versionCode 6
+        versionName "1.5"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         multiDexEnabled true
         vectorDrawables.useSupportLibrary = true
@@ -81,7 +81,8 @@ dependencies {
         transitive = true;
     }
     compile 'com.github.lsjwzh.RecyclerViewPager:lib:v1.1.2'
-
+    implementation 'com.airbnb:deeplinkdispatch:3.1.1'
+    annotationProcessor 'com.airbnb:deeplinkdispatch-processor:3.1.1'
 }
 //apply plugin: 'com.google.gms.google-services'
 

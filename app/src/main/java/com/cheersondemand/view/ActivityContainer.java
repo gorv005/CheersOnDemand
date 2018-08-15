@@ -41,6 +41,7 @@ import com.cheersondemand.view.fragments.FragmentPaymentResult;
 import com.cheersondemand.view.fragments.FragmentProductDescription;
 import com.cheersondemand.view.fragments.FragmentProductsListing;
 import com.cheersondemand.view.fragments.FragmentProfile;
+import com.cheersondemand.view.fragments.FragmentResetPassword;
 import com.cheersondemand.view.fragments.FragmentSearchProductResults;
 import com.cheersondemand.view.fragments.FragmentStoreSelection;
 import com.cheersondemand.view.fragments.FragmentUpdateProfile;
@@ -121,6 +122,12 @@ public class ActivityContainer extends AppCompatActivity {
             case C.FRAGMENT_FORGOT_PASSWORD:
                 getSupportActionBar().hide();
                 fragment = new FragmentForgotPassword();
+                fragmentTransaction.replace(R.id.container, fragment);
+                //fragmentTransaction.addToBackStack(C.TAG_FRAGMENT_PRODUCTS_HOME);
+                break;
+            case C.FRAGMENT_RESET_PASSWORD:
+                getSupportActionBar().hide();
+                fragment = new FragmentResetPassword();
                 fragmentTransaction.replace(R.id.container, fragment);
                 //fragmentTransaction.addToBackStack(C.TAG_FRAGMENT_PRODUCTS_HOME);
                 break;
@@ -406,6 +413,16 @@ public class ActivityContainer extends AppCompatActivity {
                    super.onBackPressed();
                }
             }
+            else if (fragment != null && fragment instanceof FragmentResetPassword) {
+               Intent intent = new Intent(this, MainActivity.class);
+               intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+               Bundle bundle = new Bundle();
+               intent.putExtra(C.FRAGMENT_ACTION, C.FRAGMENT_AUTHNITICATION);
+               bundle.putBoolean(C.IS_LOGIN_SCREEN, true);
+
+               intent.putExtra(C.BUNDLE, bundle);
+               startActivity(intent);
+           }
             else {
                super.onBackPressed();
 

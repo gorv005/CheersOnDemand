@@ -5,7 +5,6 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
-
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="com.google.android.providers.gsf.permission.READ_GSERVICES" />
@@ -26,6 +25,13 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+            <intent-filter android:autoVerify="true">
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="cod" />
+            </intent-filter>
         </activity>
 
         <meta-data
@@ -36,8 +42,7 @@
             android:value="AIzaSyCr_DiSsxjrwqA8dakEki3ZZ5KcJQQdd5E" />
         <meta-data
             android:name="io.fabric.ApiKey"
-            android:value="a50d1d403052d83ecf4b50b3a1262518579eb8a8"
-            />
+            android:value="a50d1d403052d83ecf4b50b3a1262518579eb8a8" />
         <!--
             <meta-data
             android:name="com.google.android.gms.version"
@@ -63,14 +68,14 @@
             android:name=".view.ActivityHome"
             android:screenOrientation="portrait" />
         <activity
-            android:theme="@style/ActivityTheme"
             android:name=".view.ActivityContainer"
-            android:windowSoftInputMode="adjustPan"
-            android:screenOrientation="portrait" />
-        <activity
+            android:screenOrientation="portrait"
             android:theme="@style/ActivityTheme"
+            android:windowSoftInputMode="adjustPan" />
+        <activity
             android:name=".view.ActivitySearchLocation"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            android:theme="@style/ActivityTheme" />
 
         <service android:name=".firebase.FirebaseMessagingServices">
             <intent-filter>
@@ -85,11 +90,13 @@
 
         <activity
             android:name=".view.ActivityFilters"
-            android:screenOrientation="portrait"></activity>
-        <activity             android:theme="@style/ActivityTheme"
+            android:screenOrientation="portrait" />
+        <activity
             android:name=".view.ActivitySearchProducts"
-            android:windowSoftInputMode="adjustResize"
-            android:screenOrientation="portrait"></activity>
+            android:screenOrientation="portrait"
+            android:theme="@style/ActivityTheme"
+            android:windowSoftInputMode="adjustResize" />
+
         <provider
             android:name="android.support.v4.content.FileProvider"
             android:authorities="com.cheersondemand"
@@ -97,8 +104,10 @@
             android:grantUriPermissions="true">
             <meta-data
                 android:name="android.support.FILE_PROVIDER_PATHS"
-                android:resource="@xml/provider_paths"/>
+                android:resource="@xml/provider_paths" />
         </provider>
+
+        <activity android:name=".DeepLinkActivity"></activity>
     </application>
 
 </manifest>

@@ -349,8 +349,15 @@ public class FragmentChangePassword extends Fragment implements View.OnClickList
             llPasswordChangelayout.setVisibility(View.GONE);
         }
         else {
-            tvPasswordError.setVisibility(View.VISIBLE);
-            tvPasswordError.setText(response.getMessage());
+
+            if(response.getErrors()!=null && response.getErrors().size()>=0){
+                tvPasswordError.setVisibility(View.VISIBLE);
+                tvPasswordError.setText(response.getErrors().get(0).getField());
+            }
+            else {
+                tvPasswordError.setVisibility(View.VISIBLE);
+                tvPasswordError.setText(response.getMessage());            }
+
            // util.setSnackbarMessage(getActivity(), response.getMessage(), rlView, true);
 
         }

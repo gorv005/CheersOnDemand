@@ -6,6 +6,7 @@ import com.cheersondemand.intractor.password.IPasswordViewIntractor;
 import com.cheersondemand.intractor.password.PasswordViewIntractorImpl;
 import com.cheersondemand.model.changepassword.PasswordRequest;
 import com.cheersondemand.model.changepassword.PasswordResponse;
+import com.cheersondemand.model.changepassword.ResetPasswordRequest;
 
 
 public class PasswordViewPresenterImpl implements IPasswordViewPresenter, IPasswordViewIntractor.OnLoginFinishedListener {
@@ -58,6 +59,15 @@ public class PasswordViewPresenterImpl implements IPasswordViewPresenter, IPassw
             mView.showProgress();
 
             iPasswordViewIntractor.forgotPassword(passwordRequest, this);
+        }
+    }
+
+    @Override
+    public void resetPassword(ResetPasswordRequest passwordRequest) {
+        if (mView != null) {
+            mView.showProgress();
+
+            iPasswordViewIntractor.resetPassword(passwordRequest, this);
         }
     }
 

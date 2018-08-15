@@ -127,4 +127,6 @@ public interface C {
     String IS_FROM_PAYMENT ="isFromPayment" ;
     int FRAGMENT_SEARCH_PRODUCT_RESULTS =32 ;
     String TAG_FRAGMENT_COUPONS = "TAG_FRAGMENT_COUPONS";
+    int FRAGMENT_RESET_PASSWORD =33 ;
+    String TOKEN = "token";
 }
