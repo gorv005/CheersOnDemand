@@ -79,7 +79,7 @@ public class LocationHelper implements PermissionUtils.PermissionResultCallback,
         permissionUtils.check_permission(permissions,"Need GPS permission for getting your location",1);
     }
 
-    private boolean isPermissionGranted() {
+    public boolean isPermissionGranted() {
         return isPermissionGranted;
     }
 

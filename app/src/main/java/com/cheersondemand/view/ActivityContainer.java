@@ -1,7 +1,6 @@
 package com.cheersondemand.view;
 
 import android.annotation.SuppressLint;
-import android.app.ActivityManager;
 import android.content.Intent;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
@@ -401,7 +400,7 @@ public class ActivityContainer extends AppCompatActivity {
 
             Fragment fragment = getVisibleFragment();
            if (fragment != null && fragment instanceof FragmentOrderList) {
-               ActivityManager mngr = (ActivityManager) getSystemService( ACTIVITY_SERVICE );
+              /* ActivityManager mngr = (ActivityManager) getSystemService( ACTIVITY_SERVICE );
 
                List<ActivityManager.RunningTaskInfo> taskList = mngr.getRunningTasks(10);
 
@@ -411,8 +410,10 @@ public class ActivityContainer extends AppCompatActivity {
                }
                else {
                    super.onBackPressed();
-               }
-            }
+               }*/
+               gotoHome();
+
+           }
             else if (fragment != null && fragment instanceof FragmentResetPassword) {
                Intent intent = new Intent(this, MainActivity.class);
                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);

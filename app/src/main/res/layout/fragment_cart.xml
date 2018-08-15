@@ -34,23 +34,35 @@
     android:background="@color/hint_color"
     android:layout_width="match_parent"
     android:layout_height="1dp"/>
-    <TextView
-        android:layout_width="match_parent"
+    <RelativeLayout
+        android:id="@+id/rlStoreAlert"
         android:background="@color/orange"
+        android:layout_width="match_parent"
+        android:minHeight="40dp"
+        android:padding="10dp"
+        android:visibility="gone"
+        android:layout_height="wrap_content">
+        <ImageView
+            android:id="@+id/ivAlert"
+            android:layout_centerVertical="true"
+            android:src="@drawable/error_icon"
+            android:layout_width="30dp"
+            android:layout_height="30dp" />
+    <TextView
+        android:layout_marginLeft="10dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
         android:layout_gravity="left"
-        android:minHeight="40dp"
-
-        android:visibility="gone"
+        android:layout_toRightOf="@id/ivAlert"
 
         android:id="@+id/tvStoreClosed"
         android:fontFamily="@font/sf_ui_display_regular"
         android:gravity="center|center_vertical"
         android:textColor="@color/white"
-        android:padding="10dp"
         android:textSize="14sp"
         android:text="@string/price_change" />
+    </RelativeLayout>
     <LinearLayout
         android:visibility="gone"
 

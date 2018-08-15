@@ -37,7 +37,7 @@ public class    MainActivity extends AppCompatActivity {
         try {
             Intent intent = getIntent();
             Uri data = intent.getData();
-            Log.e("DEBUG","DATA="+data.toString());
+         //   Log.e("DEBUG","DATA="+data.toString());
             if(data!=null && data.toString()!=null){
                 String d=data.toString().substring(data.toString().lastIndexOf('/') + 1);
                 Intent i = new Intent(this, ActivityContainer.class);

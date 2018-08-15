@@ -18,6 +18,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -94,6 +95,10 @@ public class FragmentCart extends Fragment implements View.OnClickListener, IOrd
     @BindView(R.id.tvStoreClosed)
     TextView tvStoreClosed;
     boolean isFromCart;
+    @BindView(R.id.ivAlert)
+    ImageView ivAlert;
+    @BindView(R.id.rlStoreAlert)
+    RelativeLayout rlStoreAlert;
     private LinearLayoutManager mLinearLayoutManager;
 
     public FragmentCart() {
@@ -425,7 +430,7 @@ public class FragmentCart extends Fragment implements View.OnClickListener, IOrd
                     llNoProductInCount.setVisibility(View.VISIBLE);
                     rvCartList.setVisibility(View.GONE);
                     btnProceed.setVisibility(View.GONE);
-                    tvStoreClosed.setVisibility(View.GONE);
+                    rlStoreAlert.setVisibility(View.GONE);
                     ((ActivityHome) getActivity()).setDot(false);
 
                 }
@@ -458,12 +463,12 @@ public class FragmentCart extends Fragment implements View.OnClickListener, IOrd
                         btnProceed.setEnabled(false);
                         tvStoreClosed.setText(getString(R.string.store_closed));
 
-                        tvStoreClosed.setVisibility(View.VISIBLE);
+                        rlStoreAlert.setVisibility(View.VISIBLE);
                     }
 
                     for (int i = 0; i < cartProduct.getOrder().getOrderItems().size(); i++) {
                         if (cartProduct.getOrder().getOrderItems().get(i).getOldUnitPrice() != null) {
-                            tvStoreClosed.setVisibility(View.VISIBLE);
+                            rlStoreAlert.setVisibility(View.VISIBLE);
                             tvStoreClosed.setText(getString(R.string.price_change));
                             break;
                         }

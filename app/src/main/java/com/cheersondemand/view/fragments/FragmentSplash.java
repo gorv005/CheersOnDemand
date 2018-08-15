@@ -247,9 +247,18 @@ public class FragmentSplash extends Fragment {
         int SecondPermissionResult = ContextCompat.checkSelfPermission(getActivity(), ACCESS_FINE_LOCATION);
         int ThirdPermissionResult  = ContextCompat.checkSelfPermission(getActivity(), ACCESS_COARSE_LOCATION);
 
-        return FirstPermissionResult == PackageManager.PERMISSION_GRANTED &&
+       /* return FirstPermissionResult == PackageManager.PERMISSION_GRANTED &&
                 SecondPermissionResult == PackageManager.PERMISSION_GRANTED &&
-                ThirdPermissionResult == PackageManager.PERMISSION_GRANTED;
+                ThirdPermissionResult == PackageManager.PERMISSION_GRANTED;*/
+        if(FirstPermissionResult == PackageManager.PERMISSION_GRANTED && SecondPermissionResult == PackageManager.PERMISSION_GRANTED
+                && ThirdPermissionResult == PackageManager.PERMISSION_GRANTED  ){
+            return true;
+        }
+        else if(FirstPermissionResult == PackageManager.PERMISSION_GRANTED && SecondPermissionResult == PackageManager.PERMISSION_DENIED
+              && ThirdPermissionResult == PackageManager.PERMISSION_DENIED  ){
+            return true;
+        }
+        return false;
     }
 
     @Override

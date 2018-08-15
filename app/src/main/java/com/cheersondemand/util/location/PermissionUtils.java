@@ -3,13 +3,13 @@ package com.cheersondemand.util.location;
 import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -61,6 +61,8 @@ public class PermissionUtils {
      * @param dialog_content
      * @param request_code
      */
+
+
 
     public void check_permission(ArrayList<String> permissions, String dialog_content, int request_code)
     {
@@ -155,7 +157,27 @@ public class PermissionUtils {
                             {
                                 Log.i("Go to settings","and enable permissions");
                                 permissionResultCallback.NeverAskAgain(req_code);
-                                Toast.makeText(current_activity, "Go to settings and enable permissions", Toast.LENGTH_LONG).show();
+                            //    Toast.makeText(current_activity, "Go to settings and enable permissions", Toast.LENGTH_LONG).show();
+                                showMessageOKCancel("GPS permission allows us to access location data. Please allow in app settings for additional functionality.",
+                                        new DialogInterface.OnClickListener() {
+                                            @Override
+                                            public void onClick(DialogInterface dialog, int which) {
+
+                                                switch (which) {
+                                                    case DialogInterface.BUTTON_POSITIVE:
+                                                        context.startActivity(new Intent(android.provider.Settings.ACTION_SETTINGS));
+                                                        break;
+                                                    case DialogInterface.BUTTON_NEGATIVE:
+                                                        dialog.dismiss();
+
+                                                        break;
+                                                }
+
+
+                                            }
+                                        });
+
+
                                 return;
                             }
                         }

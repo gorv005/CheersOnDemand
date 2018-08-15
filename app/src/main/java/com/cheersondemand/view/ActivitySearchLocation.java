@@ -306,7 +306,7 @@ public class ActivitySearchLocation extends AppCompatActivity implements
                                            @NonNull int[] grantResults) {
         // redirects to utils
         locationHelper.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        location();
+        //location();
     }
 
     void location() {
@@ -323,9 +323,9 @@ public class ActivitySearchLocation extends AppCompatActivity implements
             selectedLocation.setLongitude("" + mLastLocation.getLongitude());
             saveLocation(selectedLocation);
         } else {
-
-            util.setSnackbarMessage(this, "Couldn't get the location. Make sure location is enabled on the device", LLView, true);
-
+            if(locationHelper.isPermissionGranted()) {
+                util.setSnackbarMessage(this, "Couldn't get the location. Make sure location is enabled on the device", LLView, true);
+            }
         }
     }
 

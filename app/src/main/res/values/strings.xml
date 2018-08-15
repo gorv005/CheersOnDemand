@@ -261,7 +261,7 @@
     <string name="please_select_price_range">Select a price range</string>
     <string name="discount_item">Discounted Items</string>
     <string name="you_need_to_sign_in">You need to Sign in first in order to use this functionality.</string>
-    <string name="store_closed">Currently store is not open at top of cart screen</string>
+    <string name="store_closed">Sorry store is not available at this location.\nPlease use some other location.</string>
     <string name="price_change">Some of the items in your cart are either not available at this new store or the prices may have changed. Please review below.</string>
     <string name="sorry_delivery_not_available">Sorry delivery to this location is not available. Please use some other location.</string>
     <string name="shopping_from">Shopping from</string>
