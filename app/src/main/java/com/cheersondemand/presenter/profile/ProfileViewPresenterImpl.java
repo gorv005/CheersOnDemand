@@ -62,6 +62,7 @@ public class ProfileViewPresenterImpl implements IProfileViewPresenter, IProfile
     @Override
     public void logout(LogoutRequest logoutRequest) {
         if (mView != null) {
+            mView.showProgress();
 
             iProfileViewIntractor.logout(logoutRequest, this);
         }

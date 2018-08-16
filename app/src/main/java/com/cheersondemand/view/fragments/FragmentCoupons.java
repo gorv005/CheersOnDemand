@@ -271,11 +271,14 @@ public class FragmentCoupons extends Fragment implements View.OnClickListener, I
 
     @Override
     public void showProgress() {
+            util.showDialog(C.MSG, getActivity());
 
     }
 
     @Override
     public void hideProgress() {
+
+            util.hideDialog();
 
     }
 

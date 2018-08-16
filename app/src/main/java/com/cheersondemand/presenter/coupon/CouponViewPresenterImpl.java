@@ -27,7 +27,7 @@ public class CouponViewPresenterImpl implements ICouponViewPresenter, ICouponInt
     @Override
     public void onSuccessCartAfterCoupon(UpdateCartResponse response) {
         if (mView != null) {
-            //mView.hideProgress();
+            mView.hideProgress();
             mView.onSuccessCartAfterCoupon(response);
         }
     }
@@ -35,7 +35,7 @@ public class CouponViewPresenterImpl implements ICouponViewPresenter, ICouponInt
     @Override
     public void onSuccessCouponList(CouponListResponse response) {
         if (mView != null) {
-            //mView.hideProgress();
+            mView.hideProgress();
             mView.onSuccessCouponList(response);
         }
     }
@@ -43,7 +43,7 @@ public class CouponViewPresenterImpl implements ICouponViewPresenter, ICouponInt
     @Override
     public void onSuccessCouponInfo(CouponInfoResponse response) {
         if (mView != null) {
-            //mView.hideProgress();
+            mView.hideProgress();
             mView.onSuccessCouponInfo(response);
         }
     }
@@ -51,7 +51,7 @@ public class CouponViewPresenterImpl implements ICouponViewPresenter, ICouponInt
     @Override
     public void onError(String response) {
         if (mView != null) {
-            //mView.hideProgress();
+            mView.hideProgress();
             mView.getResponseError(response);
         }
     }
@@ -64,6 +64,7 @@ public class CouponViewPresenterImpl implements ICouponViewPresenter, ICouponInt
     @Override
     public void applyCoupon(boolean isAuthUser, String token, ApplyCouponRequest applyCouponRequest) {
         if (mView != null) {
+            mView.showProgress();
 
             iCouponIntractor.applyCoupon(isAuthUser,token,applyCouponRequest, this);
         }
@@ -72,6 +73,7 @@ public class CouponViewPresenterImpl implements ICouponViewPresenter, ICouponInt
     @Override
     public void getListOfCoupons(boolean isAuthUser, String token, String uuid, String cart_id) {
         if (mView != null) {
+            mView.showProgress();
 
             iCouponIntractor.getListOfCoupons(isAuthUser,token,uuid,cart_id, this);
         }
@@ -80,6 +82,7 @@ public class CouponViewPresenterImpl implements ICouponViewPresenter, ICouponInt
     @Override
     public void getCouponDetails(boolean isAuthUser, String token, String coupon_id, String uuid) {
         if (mView != null) {
+            mView.showProgress();
 
             iCouponIntractor.getCouponDetails(isAuthUser,token,coupon_id,uuid, this);
         }
@@ -88,6 +91,7 @@ public class CouponViewPresenterImpl implements ICouponViewPresenter, ICouponInt
     @Override
     public void removeCoupon(boolean isAuthUser, String token, CouponRequest couponRequest) {
         if (mView != null) {
+            mView.showProgress();
 
             iCouponIntractor.removeCoupon(isAuthUser,token,couponRequest, this);
         }

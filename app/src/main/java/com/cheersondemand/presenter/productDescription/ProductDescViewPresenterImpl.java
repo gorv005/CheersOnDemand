@@ -24,7 +24,7 @@ public class ProductDescViewPresenterImpl implements IProductDescViewPresenter, 
     @Override
     public void onSuccess(SimilarProductsResponse Response) {
         if (mView != null) {
-            //mView.hideProgress();
+            mView.hideProgress();
             mView.getResponseSuccess(Response);
         }
     }
@@ -32,7 +32,7 @@ public class ProductDescViewPresenterImpl implements IProductDescViewPresenter, 
     @Override
     public void onError(String response) {
         if (mView != null) {
-            //mView.hideProgress();
+            mView.hideProgress();
             mView.getResponseError(response);
         }
     }
@@ -46,6 +46,7 @@ public class ProductDescViewPresenterImpl implements IProductDescViewPresenter, 
     @Override
     public void getSimilarProducts(String productsId, String uuid, String page, String per_page) {
         if (mView != null) {
+            mView.showProgress();
 
             iProductDescIntractor.getSimilarProducts(productsId,uuid,page,per_page, this);
         }
@@ -54,6 +55,7 @@ public class ProductDescViewPresenterImpl implements IProductDescViewPresenter, 
     @Override
     public void getSimilarProducts(String token, String productsId, String uuid, String page, String per_page) {
         if (mView != null) {
+            mView.showProgress();
 
             iProductDescIntractor.getSimilarProducts(token,productsId,uuid,page,per_page, this);
         }

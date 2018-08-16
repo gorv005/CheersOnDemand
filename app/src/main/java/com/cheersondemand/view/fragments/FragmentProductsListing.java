@@ -138,7 +138,7 @@ public class FragmentProductsListing extends Fragment implements View.OnClickLis
     private GridLayoutManager lLayout;
     private int productPos;
     private int secPos;
-    private boolean isAdd, isFilter = false, isSort = false;
+    private boolean isAdd, isFilter = false, isSort = false,isloadMore=false;
 
     public FragmentProductsListing() {
         // Required empty public constructor
@@ -208,6 +208,7 @@ public class FragmentProductsListing extends Fragment implements View.OnClickLis
                             loading = false;
                             progressbar.setVisibility(View.VISIBLE);
                             page++;
+                            isloadMore=true;
                             getProducts(page);
                         }
                     }
@@ -374,29 +375,37 @@ public class FragmentProductsListing extends Fragment implements View.OnClickLis
 
     @Override
     public void getProductListSuccess(ProductListResponse response) {
-        if (response.getSuccess()) {
-            progressbar.setVisibility(View.GONE);
-            if (allProductList != null && allProductList.size() > 0 && page != 1) {
-                allProductList.addAll(response.getData());
-                adapterProducts.notifyDataSetChanged();
-            } else {
-                if (response.getData() != null && response.getData().size() > 0) {
-                    llNoProductInCount.setVisibility(View.GONE);
+        try {
+            isloadMore=false;
 
-                    if (response.getMeta() != null && response.getMeta().getPagination() != null) {
-                        totalPages = response.getMeta().getPagination().getTotalPages();
-                    }
-                    allProductList = response.getData();
-                    adapterProducts = new AdapterProducts(allProductList, getActivity());
-                    rvProductsList.setAdapter(adapterProducts);
+            if (response.getSuccess()) {
+                progressbar.setVisibility(View.GONE);
+                if (allProductList != null && allProductList.size() > 0 && page != 1) {
+
+                    allProductList.addAll(response.getData());
+                    adapterProducts.notifyDataSetChanged();
                 } else {
-                    llNoProductInCount.setVisibility(View.VISIBLE);
-                }
-            }
-            loading = true;
-        } else {
-            util.setSnackbarMessage(getActivity(), response.getMessage(), rlView, true);
+                    if (response.getData() != null && response.getData().size() > 0) {
+                        llNoProductInCount.setVisibility(View.GONE);
 
+                        if (response.getMeta() != null && response.getMeta().getPagination() != null) {
+                            totalPages = response.getMeta().getPagination().getTotalPages();
+                        }
+                        allProductList = response.getData();
+                        adapterProducts = new AdapterProducts(allProductList, getActivity());
+                        rvProductsList.setAdapter(adapterProducts);
+                    } else {
+                        llNoProductInCount.setVisibility(View.VISIBLE);
+                    }
+                }
+                loading = true;
+            } else {
+                util.setSnackbarMessage(getActivity(), response.getMessage(), rlView, true);
+
+            }
+        }
+        catch (Exception e){
+            e.printStackTrace();
         }
     }
 
@@ -729,6 +738,8 @@ public class FragmentProductsListing extends Fragment implements View.OnClickLis
     @Override
     public void getResponseSuccess(SimilarProductsResponse response) {
         try {
+            isloadMore=false;
+
             if (response.getSuccess()) {
                 progressbar.setVisibility(View.GONE);
                 if (allProductList != null && allProductList.size() > 0) {
@@ -737,7 +748,6 @@ public class FragmentProductsListing extends Fragment implements View.OnClickLis
                 } else {
                     if (response.getData() != null && response.getData().getSimilarProducts() != null && response.getData().getSimilarProducts().size() > 0) {
                         llNoProductInCount.setVisibility(View.GONE);
-
                         if (response.getMeta() != null && response.getMeta().getPagination() != null) {
                             totalPages = response.getMeta().getPagination().getTotalPages();
                         }
@@ -766,11 +776,16 @@ public class FragmentProductsListing extends Fragment implements View.OnClickLis
 
     @Override
     public void showProgress() {
-
+        if(!isloadMore) {
+            util.showDialog(C.MSG, getActivity());
+        }
     }
 
     @Override
     public void hideProgress() {
+        if(!isloadMore) {
+            util.hideDialog();
+        }
 
     }
 

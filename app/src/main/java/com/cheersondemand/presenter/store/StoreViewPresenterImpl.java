@@ -75,7 +75,7 @@ public class StoreViewPresenterImpl implements IStoreViewPresenter, IStoreViewIn
     @Override
     public void updateStore(String id, UpdateStore updateStore) {
         if (mView != null) {
-
+            mView.showProgress();
             iStoreViewIntractor.updateStore(id,updateStore, this);
         }
     }
@@ -83,7 +83,7 @@ public class StoreViewPresenterImpl implements IStoreViewPresenter, IStoreViewIn
     @Override
     public void updateStore(String token, String id, UpdateStore updateStore) {
         if (mView != null) {
-
+            mView.showProgress();
             iStoreViewIntractor.updateStore(token,id,updateStore, this);
         }
     }

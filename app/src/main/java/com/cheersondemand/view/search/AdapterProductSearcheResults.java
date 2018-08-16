@@ -1,7 +1,6 @@
 package com.cheersondemand.view.search;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
@@ -15,6 +14,7 @@ import com.cheersondemand.R;
 import com.cheersondemand.model.search.Product;
 import com.cheersondemand.util.C;
 import com.cheersondemand.util.ImageLoader.ImageLoader;
+import com.cheersondemand.util.Util;
 import com.cheersondemand.view.ActivityContainer;
 import com.cheersondemand.view.ActivitySearchProducts;
 
@@ -28,7 +28,7 @@ public class AdapterProductSearcheResults extends RecyclerView.Adapter<RecyclerV
     private static final int TYPE_FOOTER = 1;
     private static final int TYPE_ITEM = 0;
 private List<Product> horizontalList;
-    Context context;
+    Activity context;
     ImageLoader imageLoader;
 public class ItemViewHolder extends RecyclerView.ViewHolder {
     public TextView tvMainAdress;
@@ -76,6 +76,7 @@ public class ItemViewHolder extends RecyclerView.ViewHolder {
             itemViewHolder.rlRecentSearch.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    Util.hideKeyboard(context);
                     if(horizontalList.get(position).getClassName().equals("Category")) {
                         Intent intent = new Intent(context, ActivityContainer.class);
                         Bundle bundle = new Bundle();

@@ -253,14 +253,20 @@ public class ActivityFilters extends AppCompatActivity implements View.OnClickLi
 
                 intent = new Intent();
                 bundle = new Bundle();
-                for (int i = 0; i < brandList.size(); i++) {
-                    brandList.get(i).setSelected(false);
+                if(brandList!=null) {
+                    for (int i = 0; i < brandList.size(); i++) {
+                        brandList.get(i).setSelected(false);
+                    }
                 }
-                for (int i = 0; i < categoriesList.size(); i++) {
-                    categoriesList.get(i).setSelected(false);
+                if(categoriesList!=null) {
+                    for (int i = 0; i < categoriesList.size(); i++) {
+                        categoriesList.get(i).setSelected(false);
+                    }
                 }
-                for (int i = 0; i < subCategoriesList.size(); i++) {
-                    subCategoriesList.get(i).setSelected(false);
+                if(subCategoriesList!=null) {
+                    for (int i = 0; i < subCategoriesList.size(); i++) {
+                        subCategoriesList.get(i).setSelected(false);
+                    }
                 }
                 minRange="0";
                 maxRange="5000";

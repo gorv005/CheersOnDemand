@@ -132,7 +132,8 @@ public class FragmentCardList extends Fragment implements ICardViewPresenter.ICa
                 tvNoCardAvailable.setVisibility(View.VISIBLE);
             }
         } else {
-            util.setSnackbarMessage(getActivity(), response.getMessage(), LLView, true);
+          //  util.setSnackbarMessage(getActivity(), response.getMessage(), LLView, true);
+            tvNoCardAvailable.setVisibility(View.VISIBLE);
 
         }
         }

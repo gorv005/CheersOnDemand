@@ -95,7 +95,7 @@ public class OrderViewPresenterImpl implements IOrderViewPresenterPresenter, IOr
     @Override
     public void onSuccess(CartHasItemResponse response) {
         if (hasItemView != null) {
-           // hasItemView.hideProgress();
+            hasItemView.hideProgress();
             hasItemView.getCartHasItemSuccess(response);
         }
     }
@@ -126,6 +126,7 @@ public class OrderViewPresenterImpl implements IOrderViewPresenterPresenter, IOr
     @Override
     public void createOrder(String user_id, GenRequest uuid) {
         if (mView != null) {
+            mView.showProgress();
 
             iOrderViewIntractor.createOrder(user_id,uuid, this);
         }
@@ -134,6 +135,7 @@ public class OrderViewPresenterImpl implements IOrderViewPresenterPresenter, IOr
     @Override
     public void createOrder(String token, String user_id, GenRequest uuid) {
         if (mView != null) {
+            mView.showProgress();
 
             iOrderViewIntractor.createOrder(token,user_id,uuid, this);
         }
@@ -142,6 +144,7 @@ public class OrderViewPresenterImpl implements IOrderViewPresenterPresenter, IOr
     @Override
     public void addToCart(String user_id, String order_id, AddToCartRequest addToCartRequest) {
         if (mView != null) {
+            mView.showProgress();
 
             iOrderViewIntractor.addToCart(user_id,order_id,addToCartRequest, this);
         }
@@ -150,6 +153,7 @@ public class OrderViewPresenterImpl implements IOrderViewPresenterPresenter, IOr
     @Override
     public void addToCart(String token, String user_id, String order_id, AddToCartRequest addToCartRequest) {
         if (mView != null) {
+            mView.showProgress();
 
             iOrderViewIntractor.addToCart(token,user_id,order_id,addToCartRequest, this);
         }
@@ -158,6 +162,7 @@ public class OrderViewPresenterImpl implements IOrderViewPresenterPresenter, IOr
     @Override
     public void updateCart(String user_id, String order_id, UpdateCartRequest updateProductQuantityRequest) {
         if (mView != null) {
+            mView.showProgress();
 
             iOrderViewIntractor.updateCart(user_id,order_id,updateProductQuantityRequest, this);
         }
@@ -166,6 +171,7 @@ public class OrderViewPresenterImpl implements IOrderViewPresenterPresenter, IOr
     @Override
     public void updateCart(String token, String user_id, String order_id, UpdateCartRequest updateProductQuantityRequest) {
         if (mView != null) {
+            mView.showProgress();
 
             iOrderViewIntractor.updateCart(token,user_id,order_id,updateProductQuantityRequest, this);
         }
@@ -174,6 +180,7 @@ public class OrderViewPresenterImpl implements IOrderViewPresenterPresenter, IOr
     @Override
     public void removeItemFromCart(String user_id, String order_id, UpdateCartRequest updateProductQuantityRequest) {
         if (mView != null) {
+            mView.showProgress();
 
             iOrderViewIntractor.removeItemFromCart(user_id,order_id,updateProductQuantityRequest, this);
         }
@@ -182,6 +189,7 @@ public class OrderViewPresenterImpl implements IOrderViewPresenterPresenter, IOr
     @Override
     public void removeItemFromCart(String token, String user_id, String order_id, UpdateCartRequest updateProductQuantityRequest) {
         if (mView != null) {
+            mView.showProgress();
 
             iOrderViewIntractor.removeItemFromCart(token,user_id,order_id,updateProductQuantityRequest, this);
         }
@@ -206,6 +214,7 @@ public class OrderViewPresenterImpl implements IOrderViewPresenterPresenter, IOr
     @Override
     public void addToWishList(String user_id, WishListRequest wishListRequest) {
         if (mView != null) {
+            mView.showProgress();
 
             iOrderViewIntractor.addToWishList(user_id,wishListRequest, this);
         }
@@ -214,6 +223,7 @@ public class OrderViewPresenterImpl implements IOrderViewPresenterPresenter, IOr
     @Override
     public void addToWishList(String token, String user_id, WishListRequest wishListRequest) {
         if (mView != null) {
+            mView.showProgress();
 
             iOrderViewIntractor.addToWishList(token,user_id,wishListRequest, this);
         }
@@ -222,6 +232,7 @@ public class OrderViewPresenterImpl implements IOrderViewPresenterPresenter, IOr
     @Override
     public void removeFromWishList(String user_id, WishListRequest wishListRequest) {
         if (mView != null) {
+            mView.showProgress();
 
             iOrderViewIntractor.removeFromWishList(user_id,wishListRequest, this);
         }
@@ -230,6 +241,7 @@ public class OrderViewPresenterImpl implements IOrderViewPresenterPresenter, IOr
     @Override
     public void removeFromWishList(String token, String user_id, WishListRequest wishListRequest) {
         if (mView != null) {
+            mView.showProgress();
 
             iOrderViewIntractor.removeFromWishList(token,user_id,wishListRequest, this);
         }
@@ -238,6 +250,7 @@ public class OrderViewPresenterImpl implements IOrderViewPresenterPresenter, IOr
     @Override
     public void getCartHasItem(boolean isAuth, String token, String user_id, GenRequest genRequest) {
         if (hasItemView != null) {
+            mView.showProgress();
 
             iOrderViewIntractor.getCartHasItem(isAuth,token,user_id,genRequest, this);
         }

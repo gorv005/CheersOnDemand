@@ -35,6 +35,9 @@ public class AllProduct implements Serializable {
     @SerializedName("manufacture_date")
     @Expose
     private String manufactureDate;
+    @SerializedName("quantity")
+    @Expose
+    private String quantity;
     @SerializedName("is_wishlisted")
     @Expose
     private Boolean isWishlisted;
@@ -202,5 +205,13 @@ public class AllProduct implements Serializable {
 
     public void setInCart(Boolean inCart) {
         isInCart = inCart;
+    }
+
+    public String getQuantity() {
+        return quantity;
+    }
+
+    public void setQuantity(String quantity) {
+        this.quantity = quantity;
     }
 }

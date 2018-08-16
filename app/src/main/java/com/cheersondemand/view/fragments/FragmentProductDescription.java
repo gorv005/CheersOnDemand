@@ -230,9 +230,20 @@ public class FragmentProductDescription extends Fragment implements View.OnClick
         tvProductName.setText(product.getName());
         tvProductPrice.setText("$" + product.getPrice());
         tvType.setText(product.getSubCategory().getName());
-        tvalcohalVol.setText("-");
+        if(product.getAbv()==null) {
+            tvalcohalVol.setText("-");
+        }
+        else {
+            tvalcohalVol.setText(product.getAbv());
+        }
         tvRegion.setText(product.getRegion());
-        tvQuantity.setText("0.0");
+        if(product.getQuantity()==null) {
+            tvQuantity.setText("");
+        }
+        else {
+            tvQuantity.setText(product.getQuantity());
+
+        }
 
         makeTextViewResizable(tvDesc, 3, "See More", true);
 
@@ -248,21 +259,24 @@ public class FragmentProductDescription extends Fragment implements View.OnClick
             @SuppressWarnings("deprecation")
             @Override
             public void onGlobalLayout() {
-                Layout l = tvDesc.getLayout();
-                if (l != null) {
-                    int lines = l.getLineCount();
-                    if (lines > 0) {
-                        if (l.getEllipsisCount(lines - 1) > 0) {
-                            Log.d("", "Text is ellipsized");
-                            tvReadMore.setVisibility(View.VISIBLE);
-                        } else {
-                            if(!isReadMore) {
-                                tvReadMore.setVisibility(View.GONE);
-                            }
+                try {
+                    if (tvDesc != null) {
+                        Layout l = tvDesc.getLayout();
+                        if (l != null) {
+                            int lines = l.getLineCount();
+                            if (lines > 0) {
+                                if (l.getEllipsisCount(lines - 1) > 0) {
+                                    Log.d("", "Text is ellipsized");
+                                    tvReadMore.setVisibility(View.VISIBLE);
+                                } else {
+                                    if (!isReadMore) {
+                                        tvReadMore.setVisibility(View.GONE);
+                                    }
 
+                                }
+                            }
                         }
                     }
-                }
             /*    ViewTreeObserver obs = tv.getViewTreeObserver();
                 obs.removeGlobalOnLayoutListener(this);
                 if (maxLine == 0) {
@@ -293,6 +307,10 @@ public class FragmentProductDescription extends Fragment implements View.OnClick
                     tvReadMore.setVisibility(View.GONE);
 
                 }*/
+                }
+                catch (Exception e){
+                    e.printStackTrace();
+                }
             }
         });
 

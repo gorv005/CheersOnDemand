@@ -60,6 +60,7 @@ public class FragmentNotification extends Fragment implements View.OnClickListen
     ProgressBar progressbar;
     long page = 1, perPage = 10;
     int posItem;
+    boolean isLoadMore=false;
     public FragmentNotification() {
         // Required empty public constructor
     }
@@ -132,6 +133,7 @@ public class FragmentNotification extends Fragment implements View.OnClickListen
                         if ((visibleItemCount + pastVisibleItems) >= totalItemCount) {
                             loading = false;
                             progressbar.setVisibility(View.VISIBLE);
+                            isLoadMore=true;
                             getNotificationList("" + page++);
                         }
                     }
@@ -164,6 +166,7 @@ public class FragmentNotification extends Fragment implements View.OnClickListen
     @Override
     public void onSuccessNotificationList(NotificationResponse Response) {
         try {
+            isLoadMore=false;
             if (Response.getSuccess()) {
                 progressbar.setVisibility(View.GONE);
                 if (notifications != null && notifications.size() > 0 && page != 1) {
@@ -242,13 +245,15 @@ public class FragmentNotification extends Fragment implements View.OnClickListen
 
     @Override
     public void showProgress() {
-        util.showDialog(C.MSG, getActivity());
-
+        if(!isLoadMore) {
+            util.showDialog(C.MSG, getActivity());
+        }
     }
 
     @Override
     public void hideProgress() {
-        util.hideDialog();
-
+        if(!isLoadMore) {
+            util.hideDialog();
+        }
     }
 }

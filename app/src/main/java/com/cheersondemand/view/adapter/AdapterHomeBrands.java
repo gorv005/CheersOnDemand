@@ -1,7 +1,6 @@
 package com.cheersondemand.view.adapter;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
@@ -14,6 +13,7 @@ import com.cheersondemand.R;
 import com.cheersondemand.model.Categories;
 import com.cheersondemand.util.C;
 import com.cheersondemand.util.ImageLoader.ImageLoader;
+import com.cheersondemand.util.Util;
 import com.cheersondemand.view.ActivityContainer;
 import com.cheersondemand.view.ActivityHome;
 import com.mikhaellopez.circularimageview.CircularImageView;
@@ -27,7 +27,7 @@ import java.util.List;
 public class AdapterHomeBrands extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private static final int TYPE_FOOTER = 1;
     private static final int TYPE_ITEM = 0;
-    Context context;
+    Activity context;
     ImageLoader imageLoader;
     private List<Categories> horizontalList;
 
@@ -69,6 +69,8 @@ public class AdapterHomeBrands extends RecyclerView.Adapter<RecyclerView.ViewHol
             itemViewHolder.tvBrandName.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    Util.hideKeyboard(context);
+
                     Intent intent = new Intent(context, ActivityContainer.class);
                     Bundle bundle = new Bundle();
                     bundle.putString(C.CAT_ID, "" + horizontalList.get(position).getId());
@@ -83,6 +85,8 @@ public class AdapterHomeBrands extends RecyclerView.Adapter<RecyclerView.ViewHol
             itemViewHolder.ivProductImage.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    Util.hideKeyboard(context);
+
                     Intent intent = new Intent(context, ActivityContainer.class);
                     Bundle bundle = new Bundle();
                     bundle.putString(C.CAT_ID, "" + horizontalList.get(position).getId());
@@ -99,6 +103,8 @@ public class AdapterHomeBrands extends RecyclerView.Adapter<RecyclerView.ViewHol
             footerViewHolder.ivMore.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    Util.hideKeyboard(context);
+
                     /*Intent intent = new Intent(context, ActivityContainer.class);
                     intent.putExtra(C.FRAGMENT_ACTION, C.FRAGMENT_CATEGORIES);
                     context.startActivity(intent);*/

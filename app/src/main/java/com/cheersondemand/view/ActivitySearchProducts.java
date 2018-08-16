@@ -257,11 +257,11 @@ public class ActivitySearchProducts extends Activity implements View.OnClickList
         if (SharedPreference.getInstance(this).getBoolean(C.IS_LOGIN_GUEST)) {
             String id = "" + SharedPreference.getInstance(this).geGuestUser(C.GUEST_USER).getId();
 
-            iSearchViewPresenter.getFetchRecordOfSearch(false, "", Util.id(this), query, class_name, class_id, "");
+            iSearchViewPresenter.getFetchRecordOfSearch(false, "", Util.id(this), query, class_name, class_id, "5");
         } else {
             String id = "" + SharedPreference.getInstance(this).getUser(C.AUTH_USER).getData().getUser().getId();
             String token = C.bearer + SharedPreference.getInstance(this).getUser(C.AUTH_USER).getData().getToken().getAccessToken();
-            iSearchViewPresenter.getFetchRecordOfSearch(true, token, Util.id(this), query, class_name, class_id, "");
+            iSearchViewPresenter.getFetchRecordOfSearch(true, token, Util.id(this), query, class_name, class_id, "5");
 
         }
     }

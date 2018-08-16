@@ -28,7 +28,7 @@ public class ProductViewPresenterImpl implements IProductViewPresenter, IProduct
     @Override
     public void onProductListSuccess(ProductListResponse Response) {
         if (mView != null) {
-            //mView.hideProgress();
+            mView.hideProgress();
             mView.getProductListSuccess(Response);
         }
     }
@@ -36,7 +36,7 @@ public class ProductViewPresenterImpl implements IProductViewPresenter, IProduct
     @Override
     public void onError(String response) {
         if (mView != null) {
-            //mView.hideProgress();
+            mView.hideProgress();
             mView.getResponseError(response);
         }
     }
@@ -50,6 +50,7 @@ public class ProductViewPresenterImpl implements IProductViewPresenter, IProduct
     @Override
     public void getProductList(boolean isAuthUser, String token, String uuid, String page, String per_page) {
         if (mView != null) {
+            mView.showProgress();
 
             iProductsViewIntractor.getProductList(isAuthUser,token,uuid,page,per_page, this);
         }
@@ -58,6 +59,7 @@ public class ProductViewPresenterImpl implements IProductViewPresenter, IProduct
     @Override
     public void getProductList(boolean isAuthUser, String token, String uuid, String page, String per_page, String cat_id, String from, String to, String orderBy, String orderField) {
         if (mView != null) {
+            mView.showProgress();
 
             iProductsViewIntractor.getProductList(isAuthUser,token,uuid,page,per_page, cat_id,from,to,orderBy,orderField,this);
         }
@@ -66,6 +68,7 @@ public class ProductViewPresenterImpl implements IProductViewPresenter, IProduct
     @Override
     public void getAllProducts(boolean isAuthUser, String token, String uuid, String page, String per_page, String from, String to, String orderBy, String orderField) {
         if (mView != null) {
+            mView.showProgress();
 
             iProductsViewIntractor.getAllProducts(isAuthUser,token,uuid,page,per_page,from,to,orderBy,orderField,this);
         }
@@ -74,6 +77,7 @@ public class ProductViewPresenterImpl implements IProductViewPresenter, IProduct
     @Override
     public void getAllSimilarProducts(boolean isAuthUser, String token, String uuid, String page, String per_page, String from, String to, String orderBy, String orderField, String id) {
         if (mView != null) {
+            mView.showProgress();
 
             iProductsViewIntractor.getAllSimilarProducts(isAuthUser,token,uuid,page,per_page,from,to,orderBy,orderField,id,this);
         }
@@ -82,6 +86,7 @@ public class ProductViewPresenterImpl implements IProductViewPresenter, IProduct
     @Override
     public void getAllProductsFilter(boolean isAuthUser, String token, List<Integer> category_id, String uuid, String page, String per_page, String from, String to, String orderBy, String orderField) {
         if (mView != null) {
+            mView.showProgress();
 
             iProductsViewIntractor.getAllProductsFilter(isAuthUser,token,category_id,uuid,page,per_page,from,to,orderBy,orderField,this);
         }
@@ -90,6 +95,7 @@ public class ProductViewPresenterImpl implements IProductViewPresenter, IProduct
     @Override
     public void getAllProductsFilter(boolean isAuthUser, String token, List<Integer> category_id, List<Integer> brand_id, List<Integer> sub_cat_id,String uuid, String page, String per_page, String from, String to, String orderBy, String orderField) {
         if (mView != null) {
+            mView.showProgress();
 
             iProductsViewIntractor.getAllProductsFilter(isAuthUser,token,category_id,brand_id,sub_cat_id,uuid,page,per_page,from,to,orderBy,orderField,this);
         }

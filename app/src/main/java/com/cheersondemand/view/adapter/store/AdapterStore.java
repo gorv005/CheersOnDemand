@@ -38,7 +38,7 @@ List<StoreList> filterList;
         mInflater = LayoutInflater.from(activity);
         this.filterList=sideMenuItems;
         this.selectedStore=store;
-        if(source== C.HOME) {
+        if(source== C.HOME ||source== C.FRAGMENT_PRODUCT_LISTING ) {
             if (store != null) {
                 lastCheckedPosition = store.getId();
             }
