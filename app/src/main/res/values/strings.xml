@@ -261,7 +261,9 @@
     <string name="please_select_price_range">Select a price range</string>
     <string name="discount_item">Discounted Items</string>
     <string name="you_need_to_sign_in">You need to Sign in first in order to use this functionality.</string>
-    <string name="store_closed">Sorry store is not available at this location.\nPlease use some other location.</string>
+    <string name="store_closed">Sorry store is not available at this location. It will open soon. \nPlease use some other location.</string>
+    <string name="store_closed_and_prices_changed">Sorry store is not available at this location. It will open soon. \nSome of the items in your cart are either not available at this new store or the prices may have changed. Please review below.</string>
+
     <string name="price_change">Some of the items in your cart are either not available at this new store or the prices may have changed. Please review below.</string>
     <string name="sorry_delivery_not_available">Sorry delivery to this location is not available. Please use some other location.</string>
     <string name="shopping_from">Shopping from</string>
@@ -278,6 +280,8 @@
     <string name="read_more">Read More</string>
     <string name="read_less">Read Less</string>
     <string name="sorry_quantity_updated">Sorry, quantity of some products from your cart are updated because only few products available in store</string>
+    <string name="total_order_amount">Total Order Amount</string>
+    <string name="coupon_applied">Coupon Applied</string>
 
     <!--
         <string name="default_web_client_id">999387565226-hdnnhm6rhgik5ljvm06shotsi7j9883c.apps.googleusercontent.com</string>

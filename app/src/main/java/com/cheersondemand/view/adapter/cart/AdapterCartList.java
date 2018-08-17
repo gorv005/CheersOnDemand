@@ -159,6 +159,14 @@ private List<OrderItem> horizontalList;
                 isProceed=false;
                 itemViewHolder.rlCard.setBackgroundResource(R.drawable.card_border);
                 itemViewHolder.llProductNotAvailable.setVisibility(View.VISIBLE);
+                if(source==C.FRAGMENT_PRODUCTS_HOME) {
+
+                    ((ActivityHome) context).showMessage();
+                }
+                else {
+                    ((ActivityContainer) context).showMessage();
+
+                }
             }
             else if(orderItem.getRemainingStockMessage()!=null && !orderItem.getRemainingStockMessage().equals("")&& orderItem.getRemainingStockMessage().length()> 1){
                 isProceed=false;
@@ -176,9 +184,12 @@ private List<OrderItem> horizontalList;
             }
             else if(orderItem.getOldUnitPrice()!=null  && !orderItem.getOldUnitPrice().equals(orderItem.getUnitPrice())){
                 isProceed=true;
-                   itemViewHolder.llPrice.setVisibility(View.VISIBLE);
-                   itemViewHolder.tvPriceChange.setText("The price is change from "+orderItem.getOldUnitPrice()+ " to "+ orderItem.getUnitPrice());
+                   /*itemViewHolder.llPrice.setVisibility(View.VISIBLE);
+                itemViewHolder.rlCard.setBackgroundResource(R.drawable.card_border);*/
 
+                itemViewHolder.rlCard.setBackgroundResource(R.drawable.card_border_yellow);
+                itemViewHolder.llProductWarning.setVisibility(View.VISIBLE);
+                itemViewHolder.tvWarningMsg.setText("The product price changed from "+orderItem.getOldUnitPrice()+ " to "+ orderItem.getUnitPrice()+".");
             }
             else {
 

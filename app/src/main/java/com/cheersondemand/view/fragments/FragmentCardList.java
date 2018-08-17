@@ -149,6 +149,9 @@ public class FragmentCardList extends Fragment implements ICardViewPresenter.ICa
             util.setSnackbarMessage(getActivity(), response.getMessage(), LLView, false);
 
             cardList.remove(posItem);
+            if(cardList.size()==0){
+                tvNoCardAvailable.setVisibility(View.VISIBLE);
+            }
             adapterCard.notifyDataSetChanged();
 
         } else {

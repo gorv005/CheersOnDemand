@@ -429,6 +429,7 @@ public class FragmentAuthentication extends Fragment implements IAuthenitication
 
 
     void socailLogin(String token, String provider) {
+        SharedPreference.getInstance(getActivity()).setBoolean(C.IS_SOCAIL,true);
         SocialLoginRequest socialLoginRequest = new SocialLoginRequest();
         socialLoginRequest.setAccessToken(token);
         socialLoginRequest.setLoginType(2);
@@ -555,6 +556,7 @@ public class FragmentAuthentication extends Fragment implements IAuthenitication
 
 
     void login() {
+        SharedPreference.getInstance(getActivity()).setBoolean(C.IS_SOCAIL,false);
         LoginRequest loginRequest = new LoginRequest();
         loginRequest.setEmail(etEmailLogin.getText().toString());
         loginRequest.setGrantType("password");
@@ -569,6 +571,8 @@ public class FragmentAuthentication extends Fragment implements IAuthenitication
     }
 
     void signUp() {
+        SharedPreference.getInstance(getActivity()).setBoolean(C.IS_SOCAIL,false);
+
         SignUpRequest signUpRequest = new SignUpRequest();
         User user = new User();
         user.setName(etName.getText().toString());

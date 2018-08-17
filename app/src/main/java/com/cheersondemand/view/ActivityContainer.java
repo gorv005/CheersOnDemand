@@ -276,6 +276,12 @@ public class ActivityContainer extends AppCompatActivity {
             ((FragmentCart) fragment).disableProceedButton();
         }
     }
+    public void showMessage(){
+        Fragment fragment = getVisibleFragment();
+        if (fragment != null && fragment instanceof FragmentCart) {
+            ((FragmentCart) fragment).showMessage();
+        }
+    }
     public void removeCoupon() {
         Fragment fragment = getVisibleFragment();
         if (fragment != null && fragment instanceof FragmentCart) {
@@ -296,9 +302,18 @@ public class ActivityContainer extends AppCompatActivity {
         if (fragment != null && fragment instanceof FragmentAddressList) {
             ((FragmentAddressList) fragment).removeAddress(address, pos);
         }
+       else if (fragment != null && fragment instanceof FragmentAddressSelection) {
+            ((FragmentAddressSelection) fragment).removeAddress(address, pos);
+        }
 
     }
+    public void changeAddress(Address address) {
+        Fragment fragment = getVisibleFragment();
+        if (fragment != null && fragment instanceof FragmentAddressSelection) {
+            ((FragmentAddressSelection) fragment).changeAddress(address);
+        }
 
+    }
     public void reorder(Order order) {
         Fragment fragment = getVisibleFragment();
         if (fragment != null && fragment instanceof FragmentOrderList) {

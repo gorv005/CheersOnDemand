@@ -250,7 +250,16 @@ public class FragmentAddAddress extends Fragment implements View.OnClickListener
             public void onTextChanged(CharSequence s, int start, int before,
                                       int count) {
 
+               /* if (etPhoneNo.getText().toString().length() ==3) {
+                    etPhoneNo.setText(Util.handlePhoneNumber(etPhoneNo.getText().toString(), "-"));
+                    etPhoneNo.setSelection(etPhoneNo.getText().toString().length());
 
+                }
+                else if (etPhoneNo.getText().toString().length() ==7) {
+                    etPhoneNo.setText(Util.handlePhoneNumber(etPhoneNo.getText().toString(), "-"));
+                    etPhoneNo.setSelection(etPhoneNo.getText().toString().length());
+
+                }*/
                 validationFields();
 
 
@@ -268,7 +277,7 @@ public class FragmentAddAddress extends Fragment implements View.OnClickListener
 
                         if (etPincode.getText().length() > 0) {
 
-                            if (etPhoneNo.getText().length() > 0 && etPhoneNo.length() == 10) {
+                            if (etPhoneNo.getText().length() > 0 && etPhoneNo.length() == 12) {
 
 
                                 btnSaveAdd.setBackground(ContextCompat.getDrawable(getActivity(), R.drawable.bg_button_enable));

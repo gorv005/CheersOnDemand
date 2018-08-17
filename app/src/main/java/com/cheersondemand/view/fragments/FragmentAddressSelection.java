@@ -24,8 +24,12 @@ import com.cheersondemand.model.address.AddDeliveryAddressRequest;
 import com.cheersondemand.model.address.Address;
 import com.cheersondemand.model.address.AddressAddResponse;
 import com.cheersondemand.model.address.AddressResponse;
+import com.cheersondemand.model.card.CardAddResponse;
+import com.cheersondemand.model.card.CardListResponse;
 import com.cheersondemand.presenter.address.AddressViewPresenterImpl;
 import com.cheersondemand.presenter.address.IAddressViewPresenter;
+import com.cheersondemand.presenter.card.CardViewPresenterImpl;
+import com.cheersondemand.presenter.card.ICardViewPresenter;
 import com.cheersondemand.util.C;
 import com.cheersondemand.util.SharedPreference;
 import com.cheersondemand.util.Util;
@@ -41,7 +45,7 @@ import butterknife.Unbinder;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class FragmentAddressSelection extends Fragment implements View.OnClickListener, IAddressViewPresenter.IAddressView {
+public class FragmentAddressSelection extends Fragment implements View.OnClickListener, IAddressViewPresenter.IAddressView , ICardViewPresenter.ICardView {
 
     int position;
 
@@ -53,6 +57,7 @@ public class FragmentAddressSelection extends Fragment implements View.OnClickLi
     RelativeLayout rlView;
     Unbinder unbinder;
     IAddressViewPresenter iAddressViewPresenter;
+    ICardViewPresenter iCardViewPresenter;
     List<Address> addresses;
     Util util;
     AdapterAddressSelection adapterAddress;
@@ -75,6 +80,8 @@ public class FragmentAddressSelection extends Fragment implements View.OnClickLi
         super.onCreate(savedInstanceState);
         util = new Util();
         iAddressViewPresenter = new AddressViewPresenterImpl(this, getActivity());
+        iCardViewPresenter = new CardViewPresenterImpl(this, getActivity());
+
         if(getArguments()!=null) {
             Address_id = getArguments().getInt(C.ADDRESS_ID);
         }
@@ -122,7 +129,9 @@ public class FragmentAddressSelection extends Fragment implements View.OnClickLi
         String token = C.bearer + SharedPreference.getInstance(getActivity()).getUser(C.AUTH_USER).getData().getToken().getAccessToken();
         iAddressViewPresenter.RemoveAddAddress(token, id, "" + address.getId());
     }
-
+    public void changeAddress(Address address) {
+       Address_id=address.getId();
+    }
     void getAddressList() {
         String id = "" + SharedPreference.getInstance(getActivity()).getUser(C.AUTH_USER).getData().getUser().getId();
 
@@ -147,6 +156,11 @@ public class FragmentAddressSelection extends Fragment implements View.OnClickLi
                 llNoProductInCount.setVisibility(View.VISIBLE);
                 rvAddressList.setVisibility(View.GONE);
                 llButton.setVisibility(View.GONE);
+            }
+            else {
+                Address_id=addresses.get(0).getId();
+
+                adapterAddress.setPostion(addresses.get(0).getId());
             }
             adapterAddress.notifyDataSetChanged();
         } else {
@@ -200,7 +214,8 @@ public class FragmentAddressSelection extends Fragment implements View.OnClickLi
     public void onAddDeliveryAddressSuccess(AddressAddResponse Response) {
         try {
         if(Response.getSuccess()){
-            ((ActivityContainer)getActivity()).fragmnetLoader(C.FRAGMENT_PAYMENT_CONFIRMATION,null);
+           // ((ActivityContainer)getActivity()).fragmnetLoader(C.FRAGMENT_PAYMENT_CONFIRMATION,null);
+            getCardList();
         }
         else {
             dialog(Response.getMessage());
@@ -209,6 +224,44 @@ public class FragmentAddressSelection extends Fragment implements View.OnClickLi
         catch (Exception e){
             e.printStackTrace();
         }
+    }
+    void getCardList() {
+        String id = "" + SharedPreference.getInstance(getActivity()).getUser(C.AUTH_USER).getData().getUser().getId();
+
+        String token = C.bearer + SharedPreference.getInstance(getActivity()).getUser(C.AUTH_USER).getData().getToken().getAccessToken();
+        iCardViewPresenter.getCardList(token, id);
+    }
+    @Override
+    public void onSuccessCardList(CardListResponse response) {
+        if (response.getSuccess()) {
+            if (response.getData() != null && response.getData().size() > 0) {
+                 ((ActivityContainer)getActivity()).fragmnetLoader(C.FRAGMENT_PAYMENT_CONFIRMATION,null);
+
+
+            } else {
+                // tvNoCardAvailable.setVisibility(View.VISIBLE);
+             gotoCard();
+
+            }
+        }
+        else {
+            // tvNoCardAvailable.setVisibility(View.VISIBLE);
+
+            gotoCard();
+
+        }
+    }
+
+
+    void gotoCard(){
+        Bundle bundle3 = new Bundle();
+
+        bundle3.putBoolean(C.IS_FROM_CHECKOUT, true);
+        ((ActivityContainer) getActivity()).fragmnetLoader(C.FRAGMENT_ADD_CARD, bundle3);
+    }
+    @Override
+    public void onSuccessAddCard(CardAddResponse response) {
+
     }
 
     @Override

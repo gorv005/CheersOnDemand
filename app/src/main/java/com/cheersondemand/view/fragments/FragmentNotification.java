@@ -1,6 +1,9 @@
 package com.cheersondemand.view.fragments;
 
 
+import android.app.Dialog;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -14,6 +17,7 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import com.cheersondemand.R;
 import com.cheersondemand.model.GuestUserCreateResponse;
@@ -108,12 +112,10 @@ public class FragmentNotification extends Fragment implements View.OnClickListen
 
     public void clearAllNotification() {
 
-        String id = "" + SharedPreference.getInstance(getActivity()).getUser(C.AUTH_USER).getData().getUser().getId();
-
-        String token = C.bearer + SharedPreference.getInstance(getActivity()).getUser(C.AUTH_USER).getData().getToken().getAccessToken();
-
-        iNotificationViewPresenter.clearAllNotification(token, id);
+       dialog();
     }
+
+
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
@@ -256,4 +258,46 @@ public class FragmentNotification extends Fragment implements View.OnClickListen
             util.hideDialog();
         }
     }
+
+    void dialog() {
+        final Dialog dialog = new Dialog(getActivity(), R.style.FullHeightDialog); //this is a reference to the style above
+        dialog.setContentView(R.layout.dialog); //I saved the xml file above as yesnomessage.xml
+        dialog.setCancelable(true);
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+
+//to set the message
+        TextView title = (TextView) dialog.findViewById(R.id.tvmessagedialogtitle);
+
+        TextView message = (TextView) dialog.findViewById(R.id.tvmessagedialogtext);
+        title.setText(getString(R.string.delete_address));
+        message.setText(getString(R.string.are_you_sure_delete_address));
+//add some action to the buttons
+        Button yes = (Button) dialog.findViewById(R.id.bmessageDialogYes);
+        yes.setText(getString(R.string.yes_delete));
+        yes.setOnClickListener(new View.OnClickListener() {
+
+            public void onClick(View v) {
+                dialog.dismiss();
+                String id = "" + SharedPreference.getInstance(getActivity()).getUser(C.AUTH_USER).getData().getUser().getId();
+
+                String token = C.bearer + SharedPreference.getInstance(getActivity()).getUser(C.AUTH_USER).getData().getToken().getAccessToken();
+
+                iNotificationViewPresenter.clearAllNotification(token, id);
+
+            }
+        });
+
+        Button no = (Button) dialog.findViewById(R.id.bmessageDialogNo);
+        no.setText(getString(R.string.cancel));
+        no.setOnClickListener(new View.OnClickListener() {
+
+            public void onClick(View v) {
+                // TODO Auto-generated method stub
+                dialog.dismiss();
+            }
+        });
+
+        dialog.show();
+    }
+
 }

@@ -91,7 +91,6 @@ public class ActivityHome extends AppCompatActivity implements View.OnClickListe
         rlProfile.setOnClickListener(this);
         rlHome.setOnClickListener(this);
         iOrderViewPresenterPresenter = new OrderViewPresenterImpl(this, this);
-        currentPage = getString(R.string.home);
     }
 
     public void fragmnetLoader(int fragmentType, Bundle bundle) {
@@ -100,16 +99,21 @@ public class ActivityHome extends AppCompatActivity implements View.OnClickListe
 
         switch (fragmentType) {
             case C.FRAGMENT_PRODUCTS_HOME:
+                currentPage = getString(R.string.home);
                 fragment = new FragmentHome();
                 fragmentTransaction.replace(R.id.container, fragment);
                 //fragmentTransaction.addToBackStack(C.TAG_FRAGMENT_PRODUCTS_HOME);
                 break;
             case C.FRAGMENT_PROFILE_HOME:
+                currentPage = getString(R.string.profile);
+
                 fragment = new FragmentProfile();
                 fragmentTransaction.replace(R.id.container, fragment);
                 //fragmentTransaction.addToBackStack(C.TAG_FRAGMENT_PRODUCTS_HOME);
                 break;
             case C.FRAGMENT_CART:
+                currentPage = getString(R.string.my_cart);
+
                 fragment = new FragmentCart();
                 fragmentTransaction.replace(R.id.container, fragment);
                 //fragmentTransaction.addToBackStack(C.TAG_FRAGMENT_PRODUCTS_HOME);
@@ -368,6 +372,12 @@ public class ActivityHome extends AppCompatActivity implements View.OnClickListe
                 ((FragmentCart) fragment).disableProceedButton();
             }
         }
+    public void showMessage(){
+        Fragment fragment = getVisibleFragment();
+        if (fragment != null && fragment instanceof FragmentCart) {
+            ((FragmentCart) fragment).showMessage();
+        }
+    }
     public  void setDot(boolean isCartHasProduct){
         if(isCartHasProduct) {
             ivDot.setVisibility(View.VISIBLE);

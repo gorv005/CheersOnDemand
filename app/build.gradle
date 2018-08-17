@@ -23,7 +23,7 @@ android {
         applicationId "com.cheersondemand"
         minSdkVersion 21
         targetSdkVersion 27
-        versionCode 7
+        versionCode 8
         versionName "1.6"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         multiDexEnabled true

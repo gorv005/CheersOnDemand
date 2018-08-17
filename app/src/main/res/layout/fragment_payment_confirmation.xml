@@ -162,11 +162,85 @@
                     android:layout_alignParentStart="true"
                     android:fontFamily="@font/sf_ui_display_regular"
                     android:textColor="@color/item_color"
-                    android:text="@string/total_order"
+                    android:text="@string/total_order_amount"
                     />
 
                 <TextView
                     android:id="@+id/tvTotalOrder"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="14sp"
+                    android:textStyle="bold"
+
+                    android:layout_alignParentEnd="true"
+                    android:fontFamily="@font/sf_ui_display_regular"
+                    android:textColor="@color/item_color"
+                    android:text=""
+                    />
+
+
+            </RelativeLayout>
+            <RelativeLayout
+                android:id="@+id/rlCoupenApplied"
+                android:paddingLeft="15dp"
+                android:paddingRight="15dp"
+                android:background="@color/white"
+                android:layout_marginTop="10dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                >
+
+
+                <TextView
+
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="14sp"
+                    android:layout_alignParentStart="true"
+                    android:fontFamily="@font/sf_ui_display_regular"
+                    android:textColor="@color/item_color"
+                    android:text="@string/coupon_applied"
+                    />
+
+                <TextView
+                    android:id="@+id/tvCouponAmount"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="14sp"
+                    android:textStyle="bold"
+
+                    android:layout_alignParentEnd="true"
+                    android:fontFamily="@font/sf_ui_display_regular"
+                    android:textColor="@color/item_color"
+                    android:text=""
+                    />
+
+
+            </RelativeLayout>
+            <RelativeLayout
+                android:id="@+id/rlTotalAmount"
+                android:paddingLeft="15dp"
+                android:paddingRight="15dp"
+                android:background="@color/white"
+                android:layout_marginTop="10dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                >
+
+
+                <TextView
+
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="14sp"
+                    android:layout_alignParentStart="true"
+                    android:fontFamily="@font/sf_ui_display_regular"
+                    android:textColor="@color/item_color"
+                    android:text="@string/total_amount"
+                    />
+
+                <TextView
+                    android:id="@+id/tvTotalAmount"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textSize="14sp"
@@ -211,7 +285,7 @@
 
                     android:layout_alignParentEnd="true"
                     android:fontFamily="@font/sf_ui_display_regular"
-                    android:textColor="@color/item_color"
+                    android:textColor="@color/profile_text_color"
                     android:text=""
                     />
 
@@ -220,6 +294,7 @@
             <RelativeLayout
                 android:paddingLeft="15dp"
                 android:paddingRight="15dp"
+                android:visibility="gone"
                 android:background="@color/white"
                 android:layout_marginTop="10dp"
                 android:layout_width="match_parent"
@@ -253,43 +328,6 @@
 
 
             </RelativeLayout>
-            <RelativeLayout
-                android:id="@+id/rlCoupenApplied"
-                android:paddingLeft="15dp"
-                android:paddingRight="15dp"
-                android:background="@color/white"
-                android:layout_marginTop="10dp"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                >
-
-
-                <TextView
-
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textSize="14sp"
-                    android:layout_alignParentStart="true"
-                    android:fontFamily="@font/sf_ui_display_regular"
-                    android:textColor="@color/item_color"
-                    android:text="@string/coupen_applied"
-                    />
-
-                <TextView
-                    android:id="@+id/tvCouponAmount"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textSize="14sp"
-                    android:textStyle="bold"
-
-                    android:layout_alignParentEnd="true"
-                    android:fontFamily="@font/sf_ui_display_regular"
-                    android:textColor="@color/item_color"
-                    android:text=""
-                    />
-
-
-            </RelativeLayout>
             <View
                 android:layout_marginLeft="15dp"
                 android:layout_marginRight="15dp"
@@ -302,6 +340,7 @@
                 android:id="@+id/rlApplyCoupon"
                 android:paddingLeft="15dp"
                 android:paddingRight="15dp"
+                android:paddingBottom="15dp"
                 android:visibility="visible"
                 android:background="@color/white"
                 android:layout_width="match_parent"
@@ -475,7 +514,17 @@
                         android:textSize="16sp"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content" />
+                    <TextView
 
+                        android:id="@+id/tvPhone"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignEnd="@+id/btnProceedToPay"
+                        android:layout_marginLeft="5dp"
+                        android:fontFamily="@font/sf_ui_display_regular"
+                        android:text="thhhhh"
+                        android:textColor="@color/profile_text_color"
+                        android:textSize="16sp" />
                 </LinearLayout>
             </RelativeLayout>
             <View
@@ -571,19 +620,7 @@
             android:textColor="@color/white"
             android:textSize="13.4sp" />
 
-        <TextView
 
-            android:id="@+id/tvPhone"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignEnd="@+id/btnProceedToPay"
-            android:layout_alignParentBottom="true"
-            android:layout_marginBottom="82dp"
-            android:layout_marginEnd="121dp"
-            android:fontFamily="@font/sf_ui_display_regular"
-            android:text=""
-            android:textColor="@color/profile_text_color"
-            android:textSize="16sp" />
 
     </RelativeLayout>
 

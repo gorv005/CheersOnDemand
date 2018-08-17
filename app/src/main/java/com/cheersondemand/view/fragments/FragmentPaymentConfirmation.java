@@ -130,6 +130,10 @@ public class FragmentPaymentConfirmation extends Fragment implements ICardViewPr
 
     @BindView(R.id.llIndicatore)
     LinearLayout llIndicatore;
+    @BindView(R.id.tvTotalAmount)
+    TextView tvTotalAmount;
+    @BindView(R.id.rlTotalAmount)
+    RelativeLayout rlTotalAmount;
 
     private int dotsCount;
     private ImageView[] dots;
@@ -268,9 +272,12 @@ public class FragmentPaymentConfirmation extends Fragment implements ICardViewPr
                 getCartList();
             } else {
                 // tvNoCardAvailable.setVisibility(View.VISIBLE);
+                getCartList();
+
             }
         } else {
             // util.setSnackbarMessage(getActivity(), response.getMessage(), LLView, true);
+            getCartList();
 
         }
     }
@@ -299,10 +306,12 @@ public class FragmentPaymentConfirmation extends Fragment implements ICardViewPr
         tvTaxes.setText(getString(R.string.doller) + cartProduct.getOrder().getTax());
         tvDelieveryCharges.setText(getString(R.string.doller) + "0.0");
         tvTotalOrder.setText(getString(R.string.doller) + "" + Util.get2Decimal(cartProduct.getOrder().getSubTotal()));
-
+        tvTotalAmount.setText(getString(R.string.doller) + Util.get2Decimal(cartProduct.getOrder().getSubTotal()));
         tvSubTotal.setText(getString(R.string.doller) + Util.get2Decimal(cartProduct.getOrder().getTotal()));
         if (cartProduct.getOrder().getCoupon() != null && cartProduct.getOrder().getAppliedDiscount() > 0) {
             tvCouponAmount.setText("-" + getString(R.string.doller) + cartProduct.getOrder().getAppliedDiscount());
+            rlCoupenApplied.setVisibility(View.VISIBLE);
+
         } else {
             rlCoupenApplied.setVisibility(View.GONE);
         }
@@ -375,6 +384,8 @@ public class FragmentPaymentConfirmation extends Fragment implements ICardViewPr
     public void onPaymentSuccess(PaymentResponse response) {
         try {
             if (response.getSuccess()) {
+                SharedPreference.getInstance(getActivity()).setString(C.ORDER_ID, null);
+
                 Bundle bundle2 = new Bundle();
                 bundle2.putString(C.PAYMENT_RESULT, C.PAYMENT_SUCCESS);
                 ((ActivityContainer) getActivity()).fragmnetLoader(C.FRAGMENT_PAYMENT_RESULT, bundle2);

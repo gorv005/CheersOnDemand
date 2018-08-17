@@ -100,7 +100,7 @@ public class FragmentCart extends Fragment implements View.OnClickListener, IOrd
     @BindView(R.id.rlStoreAlert)
     RelativeLayout rlStoreAlert;
     private LinearLayoutManager mLinearLayoutManager;
-
+    boolean isBtnEnable=true;
     public FragmentCart() {
         // Required empty public constructor
     }
@@ -188,11 +188,24 @@ public class FragmentCart extends Fragment implements View.OnClickListener, IOrd
 
 
     public void disableProceedButton() {
+        isBtnEnable=false;
+
         btnProceed.setEnabled(false);
         btnProceed.setBackground(ContextCompat.getDrawable(getActivity(), R.drawable.button_disable));
 
     }
+    public void enableProceedButton() {
+        isBtnEnable=true;
+        btnProceed.setEnabled(true);
+        btnProceed.setBackground(ContextCompat.getDrawable(getActivity(), R.drawable.button_select));
 
+    }
+
+    public void showMessage(){
+        tvStoreClosed.setText(getString(R.string.price_change));
+
+        rlStoreAlert.setVisibility(View.VISIBLE);
+    }
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
@@ -458,9 +471,9 @@ public class FragmentCart extends Fragment implements View.OnClickListener, IOrd
                     llNoProductInCount.setVisibility(View.GONE);
                     rvCartList.setVisibility(View.VISIBLE);
                     if (cartProduct.getOrder() != null && cartProduct.getOrder().getStoreOpen()) {
-                        btnProceed.setEnabled(true);
+                        enableProceedButton();
                     } else {
-                        btnProceed.setEnabled(false);
+                        disableProceedButton();
                         tvStoreClosed.setText(getString(R.string.store_closed));
 
                         rlStoreAlert.setVisibility(View.VISIBLE);
@@ -469,7 +482,12 @@ public class FragmentCart extends Fragment implements View.OnClickListener, IOrd
                     for (int i = 0; i < cartProduct.getOrder().getOrderItems().size(); i++) {
                         if (cartProduct.getOrder().getOrderItems().get(i).getOldUnitPrice() != null) {
                             rlStoreAlert.setVisibility(View.VISIBLE);
-                            tvStoreClosed.setText(getString(R.string.price_change));
+                            if(isBtnEnable){
+                                tvStoreClosed.setText(getString(R.string.price_change));
+                            }
+                            else {
+                                tvStoreClosed.setText(getString(R.string.store_closed_and_prices_changed));
+                            }
                             break;
                         }
                     }

@@ -106,6 +106,7 @@ public interface C {
     public static final String CARD_NUMBER_FORMAT = "XXXX XXXX XXXX XXXX";
     public static final String CARD_NUMBER_FORMAT_AMEX = "XXXX XXXXXX XXXXX";
     public static final char CHAR_X = 'X';
+    public static final String PHONE_NUMBER_FORMAT = "XXX-XXX-XXXX";
 
     int FRAGMENT_PAYMENT_CONFIRMATION = 30;
     String TAG_FRAGMENT_SELECT_ADDRESS = "TAG_FRAGMENT_SELECT_ADDRESS";
@@ -129,4 +130,5 @@ public interface C {
     String TAG_FRAGMENT_COUPONS = "TAG_FRAGMENT_COUPONS";
     int FRAGMENT_RESET_PASSWORD =33 ;
     String TOKEN = "token";
+    String IS_SOCAIL ="is_socail" ;
 }

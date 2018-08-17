@@ -44,6 +44,8 @@ public class Util {
     public static final int MASTERCARD = 2;
     public static final int DISCOVER = 3;
     public static final int AMEX = 4;
+    public static final int PHONE =5;
+
     public static boolean isNetworkConnectivity(Activity activity) {
         ConnectivityManager cm = (ConnectivityManager) activity
                 .getSystemService(Context.CONNECTIVITY_SERVICE);
@@ -334,4 +336,18 @@ public class Util {
 
         return sbFormattedNumber.toString();
     }
+    public static String handlePhoneNumber(String inputCardNumber, String seperator) {
+        String unformattedText = inputCardNumber.replace(seperator, "");
+        String format = C.PHONE_NUMBER_FORMAT;
+        StringBuilder sbFormattedNumber = new StringBuilder();
+        for(int iIdx = 0, jIdx = 0; (iIdx < format.length()) && (unformattedText.length() > jIdx); iIdx++) {
+            if(format.charAt(iIdx) == C.CHAR_X)
+                sbFormattedNumber.append(unformattedText.charAt(jIdx++));
+            else
+                sbFormattedNumber.append(format.charAt(iIdx));
+        }
+
+        return sbFormattedNumber.toString();
+    }
+
 }

@@ -463,7 +463,12 @@ public class FragmentAddCard extends Fragment implements ICardViewPresenter.ICar
                 handler.postDelayed(new Runnable() {
                     public void run() {
                         // Actions to do after 10 seconds
-                        getActivity().onBackPressed();
+                        if(isCheckout){
+                            ((ActivityContainer)getActivity()).fragmnetLoader(C.FRAGMENT_PAYMENT_CONFIRMATION,null);
+                        }
+                        else {
+                            getActivity().onBackPressed();
+                        }
                     }
                 }, 2000);
 

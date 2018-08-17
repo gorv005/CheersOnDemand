@@ -128,8 +128,14 @@ public class FragmentProfile extends Fragment implements View.OnClickListener, I
             authenticationResponse = SharedPreference.getInstance(getActivity()).getUser(C.AUTH_USER);
             tvEmail.setText(authenticationResponse.getData().getUser().getEmail());
             tvName.setText(authenticationResponse.getData().getUser().getName());
-            llChangePassword.setVisibility(View.VISIBLE);
-            viewChangePassword.setVisibility(View.VISIBLE);
+            if(SharedPreference.getInstance(getActivity()).getBoolean(C.IS_SOCAIL)) {
+                llChangePassword.setVisibility(View.GONE);
+                viewChangePassword.setVisibility(View.GONE);
+            }
+            else {
+                llChangePassword.setVisibility(View.VISIBLE);
+                viewChangePassword.setVisibility(View.VISIBLE);
+            }
             llConnectedAcc.setVisibility(View.GONE);
             viewConnectedAccount.setVisibility(View.GONE);
 

@@ -63,7 +63,6 @@ public class ItemViewHolder extends RecyclerView.ViewHolder {
     }
     public AdapterAddressSelection(List<Address> horizontalList, Activity context,int address) {
         this.horizontalList = horizontalList;
-
         this.context=context;
         imageLoader=new ImageLoader(context);
         if(address!=0){
@@ -74,6 +73,10 @@ public class ItemViewHolder extends RecyclerView.ViewHolder {
                 lastCheckedPosition = horizontalList.get(0).getId();
             }
         }
+    }
+    public void setPostion(int id) {
+        lastCheckedPosition=id;
+
     }
     public Address getSelectedAddress() {
         if(pos!=-1) {
@@ -104,6 +107,7 @@ public class ItemViewHolder extends RecyclerView.ViewHolder {
     public void onBindViewHolder(final RecyclerView.ViewHolder  holder, final int position) {
         if (holder instanceof ItemViewHolder) {
             final ItemViewHolder itemViewHolder = (ItemViewHolder) holder;
+
             if (horizontalList.get(position).getId() == lastCheckedPosition){
                 pos=position;
                 itemViewHolder.radioButton.setChecked(true);
@@ -113,6 +117,7 @@ public class ItemViewHolder extends RecyclerView.ViewHolder {
                 itemViewHolder.llModify.setVisibility(View.GONE);
 
             }
+
             itemViewHolder.tvName.setText(horizontalList.get(position).getName());
             itemViewHolder.tvSubAddress.setText(horizontalList.get(position).getFlatNo()+" "+horizontalList.get(position).getAddressFirst()
             +" "+horizontalList.get(position).getAddressSecond()+ " "+horizontalList.get(position).getZipCode());
@@ -141,14 +146,18 @@ public class ItemViewHolder extends RecyclerView.ViewHolder {
             itemViewHolder.radioButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    ((ActivityContainer)context).changeAddress(horizontalList.get(position));
+
                     lastCheckedPosition = horizontalList.get(position).getId();
                     pos=position;
                     notifyDataSetChanged();
+
                 }
             });
             itemViewHolder.llAddressItem.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    ((ActivityContainer)context).changeAddress(horizontalList.get(position));
                     lastCheckedPosition = horizontalList.get(position).getId();
                     pos=position;
                     notifyDataSetChanged();
