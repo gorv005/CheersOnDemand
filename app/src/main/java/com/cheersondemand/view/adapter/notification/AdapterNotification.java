@@ -48,7 +48,7 @@ public class AdapterNotification extends RecyclerView.Adapter<AdapterNotificatio
 
         View itemView = LayoutInflater.from(parent.getContext()).inflate(layoutId, parent, false);
         final ViewHolder viewHolder = new ViewHolder(itemView);
-
+        viewHolder.swipeLayout.animateReset();
         /*View.OnClickListener onClick = new View.OnClickListener() {
             @Override
             public void onClick(View v) {

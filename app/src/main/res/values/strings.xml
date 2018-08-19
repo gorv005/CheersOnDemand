@@ -276,6 +276,8 @@
     <string name="no_result_found">No Results Found !</string>
     <string name="try_modify_search">Try modifying your search to get relevant results.</string>
     <string name="are_you_sure_delete_address">Are you sure you want to delete the address ?</string>
+    <string name="are_you_sure_delete_notification">Are you sure you want to delete all notifications ?</string>
+
     <string name="delete_address">Delete Address</string>
     <string name="read_more">Read More</string>
     <string name="read_less">Read Less</string>

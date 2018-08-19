@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.view.ContextThemeWrapper;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -73,7 +74,7 @@ import butterknife.Unbinder;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class FragmentHome extends Fragment implements IStoreViewPresenter.IStoreView, IHomeViewPresenterPresenter.IHomeView, IOrderViewPresenterPresenter.IOrderView, View.OnClickListener {
+public class FragmentHome extends Fragment implements SwipeRefreshLayout.OnRefreshListener, IStoreViewPresenter.IStoreView, IHomeViewPresenterPresenter.IHomeView, IOrderViewPresenterPresenter.IOrderView, View.OnClickListener {
 
     View v1, v2;
     @BindView(R.id.rvBrands)
@@ -125,6 +126,8 @@ public class FragmentHome extends Fragment implements IStoreViewPresenter.IStore
     RelativeLayout rlBrands;
     @BindView(R.id.rlProducts)
     RelativeLayout rlProducts;
+    @BindView(R.id.swipe_refresh_layout)
+    SwipeRefreshLayout swipeRefreshLayout;
 
     private int productPos;
     private int secPos;
@@ -168,6 +171,12 @@ public class FragmentHome extends Fragment implements IStoreViewPresenter.IStore
         //  iHomeViewPresenterPresenter.getBrands(SharedPreference.getInstance(getActivity()).getUser(C.AUTH_USER).getData().getToken().getAccessToken(),categoryRequest);
         shimmerBrands.startShimmerAnimation();
         //  ((ActivityHome)getActivity()).getCartHasItem();
+       getProductsAndCategories();
+    }
+
+
+
+    void getProductsAndCategories(){
         if (SharedPreference.getInstance(getActivity()).getBoolean(C.IS_LOGIN_GUEST)) {
             iHomeViewPresenterPresenter.getProductWithCategories(Util.id(getActivity()));
         } else {
@@ -175,7 +184,6 @@ public class FragmentHome extends Fragment implements IStoreViewPresenter.IStore
             iHomeViewPresenterPresenter.getProductWithCategories(token, Util.id(getActivity()));
         }
     }
-
     void setStoreLocation() {
         store = SharedPreference.getInstance(getActivity()).getStore(C.SELECTED_STORE);
         if (store != null) {
@@ -234,7 +242,7 @@ public class FragmentHome extends Fragment implements IStoreViewPresenter.IStore
         rvProducts.setLayoutManager(horizontalLayout1);
         rvProducts.setHasFixedSize(true);
         rvProducts.setNestedScrollingEnabled(false);
-
+        swipeRefreshLayout.setOnRefreshListener(this);
         setStoreLocation();
 
   /*      adapterHomeBrands = new AdapterHomeBrands(setHomeBrands(), getActivity());
@@ -288,6 +296,10 @@ public class FragmentHome extends Fragment implements IStoreViewPresenter.IStore
     @Override
     public void getProductWithCategoriesSuccess(ProductsWithCategoryResponse response) {
         try {
+            if(swipeRefreshLayout!=null && swipeRefreshLayout.isRefreshing()){
+                swipeRefreshLayout.setRefreshing(false);
+
+            }
             if (response.getSuccess()) {
 
                 shimmerBrands.setVisibility(View.VISIBLE);
@@ -325,14 +337,13 @@ public class FragmentHome extends Fragment implements IStoreViewPresenter.IStore
 
                     SharedPreference.getInstance(getActivity()).setBoolean(C.CART_HAS_ITEM, response.getData().getHasCartProduct());
                     SharedPreference.getInstance(getActivity()).setString(C.ORDER_ID, response.getData().getUser().getOrderId());
-                     if(response.getData().getHasCartProduct()) {
-                         ((ActivityHome) getActivity()).setDot(true);
+                    if (response.getData().getHasCartProduct()) {
+                        ((ActivityHome) getActivity()).setDot(true);
 
-                     }
-                     else {
-                         ((ActivityHome) getActivity()).setDot(false);
+                    } else {
+                        ((ActivityHome) getActivity()).setDot(false);
 
-                     }
+                    }
                 } else {
                     tvNoStoreAvailable.setVisibility(View.VISIBLE);
                     tvNoStoreAvailable.setText(getString(R.string.no_product_found_));
@@ -346,7 +357,7 @@ public class FragmentHome extends Fragment implements IStoreViewPresenter.IStore
                 //   util.setSnackbarMessage(getActivity(), response.getMessage(), rlHomeView, true);
 
             }
-             updateStore();
+            updateStore();
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -499,10 +510,10 @@ public class FragmentHome extends Fragment implements IStoreViewPresenter.IStore
                 homeCategoriesSectionList.get(secPos).getAllProducts().set(productPos, product);
                 adapterHomeCategoriesSections.notified();
 
-                if(response.getData()==null){
+                if (response.getData() == null) {
                     SharedPreference.getInstance(getActivity()).setBoolean(C.CART_HAS_ITEM, false);
                     SharedPreference.getInstance(getActivity()).setString(C.ORDER_ID, null);
-                    ((ActivityHome)getActivity()).setDot(false);
+                    ((ActivityHome) getActivity()).setDot(false);
                 }
         /*    v1.animate().rotationX(90).setDuration(400).setListener(new AnimatorListenerAdapter() {
                 @Override
@@ -585,15 +596,19 @@ public class FragmentHome extends Fragment implements IStoreViewPresenter.IStore
 
     @Override
     public void updateStoreSuccess(UpdateStoreResponse response) {
-            if(response.getSuccess()){
-                if(response.getData()!=null && response.getData().getIsQuantityUpdated()){
-                    dialog();
-                }
+        if (response.getSuccess()) {
+            if (response.getData() != null && response.getData().getIsQuantityUpdated()) {
+                dialog();
             }
+        }
     }
 
     @Override
     public void getResponseError(String response) {
+        if(swipeRefreshLayout!=null && swipeRefreshLayout.isRefreshing()){
+            swipeRefreshLayout.setRefreshing(false);
+
+        }
         util.setSnackbarMessage(getActivity(), response, rlHomeView, true);
     }
 
@@ -898,4 +913,8 @@ public class FragmentHome extends Fragment implements IStoreViewPresenter.IStore
         dialog.show();
     }
 
+    @Override
+    public void onRefresh() {
+        getProductsAndCategories();
+    }
 }

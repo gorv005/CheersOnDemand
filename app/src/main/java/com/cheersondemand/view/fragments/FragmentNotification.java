@@ -269,11 +269,11 @@ public class FragmentNotification extends Fragment implements View.OnClickListen
         TextView title = (TextView) dialog.findViewById(R.id.tvmessagedialogtitle);
 
         TextView message = (TextView) dialog.findViewById(R.id.tvmessagedialogtext);
-        title.setText(getString(R.string.delete_address));
-        message.setText(getString(R.string.are_you_sure_delete_address));
+        title.setText(getString(R.string.app_name));
+        message.setText(getString(R.string.are_you_sure_delete_notification));
 //add some action to the buttons
         Button yes = (Button) dialog.findViewById(R.id.bmessageDialogYes);
-        yes.setText(getString(R.string.yes_delete));
+        yes.setText(getString(R.string.yes));
         yes.setOnClickListener(new View.OnClickListener() {
 
             public void onClick(View v) {
@@ -288,7 +288,7 @@ public class FragmentNotification extends Fragment implements View.OnClickListen
         });
 
         Button no = (Button) dialog.findViewById(R.id.bmessageDialogNo);
-        no.setText(getString(R.string.cancel));
+        no.setText(getString(R.string.No));
         no.setOnClickListener(new View.OnClickListener() {
 
             public void onClick(View v) {
