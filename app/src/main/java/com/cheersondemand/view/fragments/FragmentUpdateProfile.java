@@ -13,6 +13,7 @@ import android.media.ExifInterface;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.Handler;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
@@ -135,12 +136,12 @@ public class FragmentUpdateProfile extends Fragment implements View.OnClickListe
         etEmail.clearFocus();
         etPhoneNo.clearFocus();
         if (authenticationResponse.getData().getUser().getProfilePicture() != null) {
-         //   imageLoader.DisplayImage(authenticationResponse.getData().getUser().getProfilePicture(), imgProfile);
-            Util.setImage(getActivity(),authenticationResponse.getData().getUser().getProfilePicture(),imgProfile);
+            imageLoader.DisplayImage(authenticationResponse.getData().getUser().getProfilePicture(), imgProfile);
+          //  Util.setImage(getActivity(),authenticationResponse.getData().getUser().getProfilePicture(),imgProfile);
             ivCamera.setVisibility(View.GONE);
 
         } else {
-            Util.setImage(getActivity(),"",imgProfile);
+          //  Util.setImage(getActivity(),"",imgProfile);
           //  imageLoader.DisplayImage("", imgProfile);
             ivCamera.setVisibility(View.VISIBLE);
             //imgProfile.setImageResource(R.drawable.missing);
@@ -267,10 +268,14 @@ public class FragmentUpdateProfile extends Fragment implements View.OnClickListe
             iProfileViewPresenter.updateProfile(token, id, body, name, phone);
         }
       else  if(fileUri ==null && isRemoved){
+            File file = new File(Environment.getExternalStorageDirectory()+"");
+
             RequestBody name = RequestBody.create(MediaType.parse("text/plain"), etName.getText().toString());
             RequestBody phone = RequestBody.create(MediaType.parse("text/plain"), etPhoneNo.getText().toString());
-            MultipartBody.Part body = MultipartBody.Part.createFormData("profile_picture", "image.jpg", null);
-            iProfileViewPresenter.updateProfile(token, id, body, name, phone);
+            RequestBody requestFile = RequestBody.create(MediaType.parse("image/*"), file);
+
+           MultipartBody.Part body = MultipartBody.Part.createFormData("profile_picture", "image.jpg", requestFile);
+            iProfileViewPresenter.updateProfile(token, id, null, name, phone);
         }
         else {
             iProfileViewPresenter.updateProfile(token, id, profileUpdateRequest);
@@ -361,7 +366,7 @@ public class FragmentUpdateProfile extends Fragment implements View.OnClickListe
                                 break;
                             case 2:
                                 isRemoved=true;
-                                imgProfile.setImageResource(R.drawable.edit_profile_back_default);
+                                imgProfile.setImageResource(R.drawable.missing);
                                 ivCamera.setVisibility(View.VISIBLE);
                                 break;
                         }

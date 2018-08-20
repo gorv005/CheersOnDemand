@@ -34,6 +34,8 @@ public class FirebaseMessagingServices extends FirebaseMessagingService {
     @Override
     public void onMessageReceived(RemoteMessage remoteMessage) {
         // Create and show notification
+        Log.e(" remoessage.getData()=",""+remoteMessage.getData());
+
         Log.e("remoteMessage=",""+remoteMessage);
         sendNotification(remoteMessage.getNotification().getBody());
     }

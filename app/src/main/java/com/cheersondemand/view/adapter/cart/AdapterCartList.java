@@ -295,10 +295,14 @@ private List<OrderItem> horizontalList;
                 footerViewHolder.rlApplyCoupon.setVisibility(View.GONE);
                 footerViewHolder.rlAfterApplyCoupon.setVisibility(View.VISIBLE);
 
-                footerViewHolder.tvCouponAmount.setText("-"+context.getString(R.string.doller)+cartProduct.getOrder().getAppliedDiscount());
+                footerViewHolder.tvCouponAmount.setText("-"+context.getString(R.string.doller)+Util.get2Decimal(cartProduct.getOrder().getAppliedDiscount()));
 
                 footerViewHolder.tvCouponName.setText(""+cartProduct.getOrder().getCoupon().getCode());
 
+            }
+            else {
+                footerViewHolder.rlApplyCoupon.setVisibility(View.VISIBLE);
+                footerViewHolder.rlAfterApplyCoupon.setVisibility(View.GONE);
             }
 
             footerViewHolder.ivDelete.setOnClickListener(new View.OnClickListener() {

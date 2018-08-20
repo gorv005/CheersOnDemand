@@ -176,7 +176,9 @@ public class FragmentOrderList extends Fragment implements IOrderDetailViewPrese
             util.setSnackbarMessage(getActivity(), response.getMessage(), LLView, false);
             //  SharedPreference.getInstance(getActivity()).setBoolean(C.IS_REORDER,true);
             Handler handler = new Handler();
-
+            if(response.getData()!=null && response.getData().getOrderId()!=null){
+                SharedPreference.getInstance(getActivity()).setString(C.ORDER_ID,response.getData().getOrderId());
+            }
             handler.postDelayed(new Runnable() {
                 public void run() {
                     // Actions to do after 10 seconds

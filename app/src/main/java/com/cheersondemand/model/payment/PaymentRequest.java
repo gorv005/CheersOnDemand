@@ -20,7 +20,9 @@ public class PaymentRequest {
     @SerializedName("card_id")
     @Expose
     private String cardId;
-
+    @SerializedName("schedule_time")
+    @Expose
+    private String scheduleTime;
     public String getStripeToken() {
         return stripeToken;
     }
@@ -53,4 +55,11 @@ public class PaymentRequest {
         this.cardId = cardId;
     }
 
+    public String getScheduleTime() {
+        return scheduleTime;
+    }
+
+    public void setScheduleTime(String scheduleTime) {
+        this.scheduleTime = scheduleTime;
+    }
 }

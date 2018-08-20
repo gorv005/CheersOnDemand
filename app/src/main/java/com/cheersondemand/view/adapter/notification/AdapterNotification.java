@@ -48,7 +48,6 @@ public class AdapterNotification extends RecyclerView.Adapter<AdapterNotificatio
 
         View itemView = LayoutInflater.from(parent.getContext()).inflate(layoutId, parent, false);
         final ViewHolder viewHolder = new ViewHolder(itemView);
-        viewHolder.swipeLayout.animateReset();
         /*View.OnClickListener onClick = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -93,7 +92,7 @@ public class AdapterNotification extends RecyclerView.Adapter<AdapterNotificatio
     }
 
     @Override
-    public void onBindViewHolder(ViewHolder holder, final int position) {
+    public void onBindViewHolder(final ViewHolder holder, final int position) {
         holder.tvNotificationStatus.setText(horizontalList.get(position).getTitle());
         holder.tvNotificationDesc.setText(horizontalList.get(position).getMessage());
         holder.tvDays.setText(horizontalList.get(position).getCreatedAt());
@@ -101,6 +100,8 @@ public class AdapterNotification extends RecyclerView.Adapter<AdapterNotificatio
             @Override
             public void onClick(View v) {
                 ((ActivityContainer)context).deleteNotification(position);
+                holder.swipeLayout.animateReset();
+
             }
         });
       //  holder.swipeLayout.setOffset(itemsOffset[position]);

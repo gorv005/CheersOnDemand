@@ -402,6 +402,9 @@ public class FragmentCart extends Fragment implements View.OnClickListener, IOrd
     public void getUpdateCartSuccess(UpdateCartResponse response) {
         try {
             if (response.getSuccess()) {
+                if(response.getData()!=null && response.getData().getCouponMessage()!=null && !response.getData().getCouponMessage().equals("")){
+                    dialog(response.getData().getCouponMessage());
+                }
                 util.setSnackbarMessage(getActivity(), response.getMessage(), LLView, false);
                 cartProduct = response.getData();
 
@@ -460,6 +463,7 @@ public class FragmentCart extends Fragment implements View.OnClickListener, IOrd
     public void getCartListSuccess(UpdateCartResponse response) {
         try {
             if (response.getSuccess()) {
+
                 if (response.getData() != null && response.getData().getOrder().getOrderItems().size() > 0) {
                     btnProceed.setVisibility(View.VISIBLE);
                     cartProduct = response.getData();
@@ -504,6 +508,32 @@ public class FragmentCart extends Fragment implements View.OnClickListener, IOrd
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+    void dialog(String msg) {
+        final Dialog dialog = new Dialog(getActivity(), R.style.FullHeightDialog); //this is a reference to the style above
+        dialog.setContentView(R.layout.dialog_ok ); //I saved the xml file above as yesnomessage.xml
+        dialog.setCancelable(true);
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+
+//to set the message
+        TextView title = (TextView) dialog.findViewById(R.id.tvmessagedialogtitle);
+
+        TextView message = (TextView) dialog.findViewById(R.id.tvmessagedialogtext);
+        title.setText(getString(R.string.app_name));
+        message.setText(msg);
+//add some action to the buttons
+        Button yes = (Button) dialog.findViewById(R.id.bmessageDialogOK);
+        yes.setText(getString(R.string.ok));
+        yes.setOnClickListener(new View.OnClickListener() {
+
+            public void onClick(View v) {
+                dialog.dismiss();
+
+
+            }
+        });
+
+        dialog.show();
     }
 
     @Override

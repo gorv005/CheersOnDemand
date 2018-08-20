@@ -111,15 +111,25 @@ public class ItemViewHolder extends RecyclerView.ViewHolder {
             }
             else  if(horizontalList.get(position).getStatus().equals(C.confirmed)) {
                 itemViewHolder.tvDays.setText(context.getString(R.string.confirmed));
-                itemViewHolder.btnCancel.setVisibility(View.GONE);
+                itemViewHolder.btnCancel.setVisibility(View.VISIBLE);
                 itemViewHolder.ivDot.setImageResource(R.drawable.ic_black_dot);
 
-                itemViewHolder.btnReorder.setVisibility(View.VISIBLE);
+                itemViewHolder.btnReorder.setVisibility(View.GONE);
                 itemViewHolder.btnViewStatus.setVisibility(View.GONE);
+            }
+            else  if(horizontalList.get(position).getStatus().equals(C.in_transmit)) {
+                itemViewHolder.tvDays.setText(context.getString(R.string.in_transmit));
+                itemViewHolder.btnCancel.setVisibility(View.GONE);
+                itemViewHolder.ivDot.setImageResource(R.drawable.ic_yellow_dot);
+
+                itemViewHolder.btnReorder.setVisibility(View.GONE);
+                itemViewHolder.btnViewStatus.setVisibility(View.VISIBLE);
             }
             else {
                 itemViewHolder.btnCancel.setVisibility(View.GONE);
-
+                itemViewHolder.ivDot.setVisibility(View.GONE);
+                itemViewHolder.tvDays.setText("");
+                itemViewHolder.tvDays.setVisibility(View.GONE);
                 itemViewHolder.btnReorder.setVisibility(View.GONE);
                 itemViewHolder.btnViewStatus.setVisibility(View.GONE);
             }
@@ -159,7 +169,14 @@ public class ItemViewHolder extends RecyclerView.ViewHolder {
                     ((ActivityContainer)context).fragmnetLoader(C.FRAGMENT_ORDER_DETAIL,bundle);
                 }
             });
-
+            itemViewHolder.btnViewStatus.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Bundle bundle=new Bundle();
+                    bundle.putSerializable(C.ORDER,horizontalList.get(position));
+                    ((ActivityContainer)context).fragmnetLoader(C.FRAGMENT_ORDER_DETAIL,bundle);
+                }
+            });
             itemViewHolder.btnReorder.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {

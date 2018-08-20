@@ -614,14 +614,15 @@ public class FragmentHome extends Fragment implements SwipeRefreshLayout.OnRefre
 
     @Override
     public void showProgress() {
+        util.showDialog(C.MSG, getActivity());
 
     }
 
     @Override
     public void hideProgress() {
+        util.hideDialog();
 
     }
-
     @Override
     public void onClick(View v) {
         switch (v.getId()) {

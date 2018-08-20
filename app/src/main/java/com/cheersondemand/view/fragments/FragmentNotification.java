@@ -211,6 +211,8 @@ public class FragmentNotification extends Fragment implements View.OnClickListen
                 util.setSnackbarMessage(getActivity(), Response.getMessage(), LLView, false);
                 if (notifications != null && notifications.size() == 0) {
                     ActivityContainer.tvClearAll.setVisibility(View.GONE);
+                    llNoProductInCount.setVisibility(View.VISIBLE);
+
                 }
             } else {
                 util.setSnackbarMessage(getActivity(), Response.getMessage(), LLView, true);
@@ -229,6 +231,8 @@ public class FragmentNotification extends Fragment implements View.OnClickListen
                 notifications.clear();
                 adapterNotification.notifyDataSetChanged();
                 ActivityContainer.tvClearAll.setVisibility(View.GONE);
+                llNoProductInCount.setVisibility(View.VISIBLE);
+
 
             } else {
                 util.setSnackbarMessage(getActivity(), Response.getMessage(), LLView, true);

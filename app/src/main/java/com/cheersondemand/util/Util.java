@@ -24,6 +24,8 @@ import com.cheersondemand.model.productList.Sort;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
@@ -213,6 +215,29 @@ public class Util {
             return false;
 
         }
+    }
+
+    public  static Date getCurrentDate(){
+        Calendar calendar = Calendar.getInstance();
+        calendar.add(Calendar.HOUR, 1);
+        calendar.add(Calendar.MINUTE, 30);
+
+       return calendar.getTime();
+
+    }
+    public  static Date getDefaultDate(){
+        Calendar calendar = Calendar.getInstance();
+        calendar.add(Calendar.HOUR, 1);
+        calendar.add(Calendar.MINUTE, 31);
+
+        return calendar.getTime();
+
+    }
+    public static Date get1monthLaterDate(){
+        Calendar calendar = Calendar.getInstance();
+        calendar.add(Calendar.MONTH, 1);
+       return calendar.getTime();
+
     }
     public static void hideKeyboard(Activity activity) {
         InputMethodManager imm = (InputMethodManager) activity.getSystemService(Activity.INPUT_METHOD_SERVICE);

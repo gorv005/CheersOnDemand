@@ -196,17 +196,17 @@ android:layout_centerVertical="true"
                             android:text="@string/viewStatus"
                             android:textAllCaps="true"
                             android:textColor="@color/white"
-                            android:textSize="12sp" />
+                            android:textSize="10sp" />
 
                         <TextView
 
                             android:id="@+id/tvMoreProducts"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_alignParentRight="true"
-                            android:layout_centerVertical="true"
+                            android:layout_alignBaseline="@+id/btnCancel"
+                            android:layout_alignBottom="@+id/btnCancel"
+                            android:layout_alignParentEnd="true"
                             android:layout_gravity="center_vertical"
-                            android:layout_marginLeft="5dp"
                             android:ellipsize="end"
                             android:fontFamily="@font/sf_ui_display_regular"
                             android:gravity="center_vertical"

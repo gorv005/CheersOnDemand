@@ -433,7 +433,6 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:background="@color/white"
-            android:layout_marginBottom="15dp"
             android:id="@+id/llAddressItem"
             android:layout_height="wrap_content">
 
@@ -522,7 +521,7 @@
                         android:layout_alignEnd="@+id/btnProceedToPay"
                         android:layout_marginLeft="5dp"
                         android:fontFamily="@font/sf_ui_display_regular"
-                        android:text="thhhhh"
+                        android:text=""
                         android:textColor="@color/profile_text_color"
                         android:textSize="16sp" />
                 </LinearLayout>
@@ -538,7 +537,6 @@
                 android:layout_below="@id/v"
                 android:weightSum="10"
                 android:id="@+id/llModify"
-                android:layout_marginBottom="80dp"
                 android:layout_width="match_parent"
                 android:layout_height="50dp">
 
@@ -596,10 +594,64 @@
             </LinearLayout>
 
         </RelativeLayout>
+        <LinearLayout
+            android:paddingBottom="100dp"
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:paddingLeft="15dp"
+            android:layout_gravity="left"
+            android:ellipsize="end"
+            android:background="@color/profile_back"
+            android:fontFamily="@font/sf_ui_display_regular"
+            android:gravity="center_vertical"
+            android:text="@string/scheduleTime"
+            android:textColor="@color/item_color"
+            android:textSize="14sp" />
+        <LinearLayout
+            android:background="@color/white"
+            android:id="@+id/rlSchedileTime"
+            android:paddingTop="10dp"
+            android:orientation="vertical"
+            android:paddingLeft="15dp"
+            android:paddingRight="15dp"
+
+            android:layout_width="match_parent"
+            android:layout_height="60dp">
+
+            <TextView
+                android:id="@+id/tvScheduleTime"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
+                android:fontFamily="@font/sf_ui_display_regular"
+                android:maxLines="1"
+                android:hint="@string/scheduleTime"
+                android:singleLine="true"
+                android:textColor="@color/editext_text_color"
+                android:textColorHint="@color/editext_hint_color"
+                android:textCursorDrawable="@drawable/edit_text_cursor_color"
+                android:textSize="16sp" />
+
+            <View
+                android:layout_marginTop="10dp"
+                android:background="@color/edit_text_border"
+                android:layout_width="match_parent"
+                android:layout_height="2dp"/>
+
+        </LinearLayout>
+        </LinearLayout>
+
     </LinearLayout>
 </ScrollView>
     <RelativeLayout
         android:id="@+id/llButton"
+        android:visibility="visible"
         android:layout_alignParentBottom="true"
         android:background="@color/white"
         android:layout_width="match_parent"

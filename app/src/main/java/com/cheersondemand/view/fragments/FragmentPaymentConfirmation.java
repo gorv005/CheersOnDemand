@@ -6,6 +6,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -42,9 +43,14 @@ import com.cheersondemand.util.Util;
 import com.cheersondemand.view.ActivityContainer;
 import com.cheersondemand.view.adapter.card.AdapterCardPayment;
 import com.cheersondemand.view.adapter.cart.AdapterProductAmount;
+import com.kunzisoft.switchdatetime.SwitchDateTimeDialogFragment;
 import com.lsjwzh.widget.recyclerviewpager.RecyclerViewPager;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
+import java.util.TimeZone;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -134,10 +140,17 @@ public class FragmentPaymentConfirmation extends Fragment implements ICardViewPr
     TextView tvTotalAmount;
     @BindView(R.id.rlTotalAmount)
     RelativeLayout rlTotalAmount;
+    @BindView(R.id.tvScheduleTime)
+    TextView tvScheduleTime;
+    @BindView(R.id.rlSchedileTime)
+    LinearLayout rlSchedileTime;
+    private SwitchDateTimeDialogFragment dateTimeFragment;
+    private static final String TAG_DATETIME_FRAGMENT = "TAG_DATETIME_FRAGMENT";
 
     private int dotsCount;
     private ImageView[] dots;
-
+    Date mCurrentDate;
+    boolean isScheduleTimeselected=false;
     public FragmentPaymentConfirmation() {
         // Required empty public constructor
     }
@@ -178,6 +191,7 @@ public class FragmentPaymentConfirmation extends Fragment implements ICardViewPr
         llAddNewAddress.setOnClickListener(this);
         llEdit.setOnClickListener(this);
         btnProceedToPay.setOnClickListener(this);
+        rlSchedileTime.setOnClickListener(this);
         tvAddCard.setOnClickListener(this);
         SharedPreference.getInstance(getActivity()).setBoolean(C.IS_FROM_PAYMENT, true);
         rvCardList.addOnPageChangedListener(new RecyclerViewPager.OnPageChangedListener() {
@@ -191,6 +205,7 @@ public class FragmentPaymentConfirmation extends Fragment implements ICardViewPr
 
             }
         });
+        initDateTimePicker();
     }
 
     @Override
@@ -200,6 +215,60 @@ public class FragmentPaymentConfirmation extends Fragment implements ICardViewPr
         ActivityContainer.tvTitle.setText(getString(R.string.payment));
     }
 
+
+    void initDateTimePicker(){
+        mCurrentDate=Util.getDefaultDate();
+        // Construct SwitchDateTimePicker
+        dateTimeFragment = (SwitchDateTimeDialogFragment)getActivity().getSupportFragmentManager().findFragmentByTag(TAG_DATETIME_FRAGMENT);
+        if(dateTimeFragment == null) {
+            dateTimeFragment = SwitchDateTimeDialogFragment.newInstance(
+                    getString(R.string.scheduleTime),
+                    getString(android.R.string.ok),
+                    getString(android.R.string.cancel)
+                  //  getString(R.string.clean) // Optional
+            );
+        }
+
+        // Optionally define a timezone
+        dateTimeFragment.setTimeZone(TimeZone.getDefault());
+
+        // Init format
+        final SimpleDateFormat myDateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm", java.util.Locale.getDefault());
+        // Assign unmodifiable values
+        dateTimeFragment.set24HoursMode(false);
+        dateTimeFragment.setHighlightAMPMSelection(true);
+        dateTimeFragment.setMinimumDateTime(Util.getCurrentDate());
+        dateTimeFragment.setMaximumDateTime(Util.get1monthLaterDate());
+
+        // Define new day and month format
+        try {
+            dateTimeFragment.setSimpleDateMonthAndDayFormat(new SimpleDateFormat("MMMM dd", Locale.getDefault()));
+        } catch (SwitchDateTimeDialogFragment.SimpleDateMonthAndDayFormatException e) {
+            Log.e("DEBUG", e.getMessage());
+        }
+
+        // Set listener for date
+        // Or use dateTimeFragment.setOnButtonClickListener(new SwitchDateTimeDialogFragment.OnButtonClickListener() {
+        dateTimeFragment.setOnButtonClickListener(new SwitchDateTimeDialogFragment.OnButtonWithNeutralClickListener() {
+            @Override
+            public void onPositiveButtonClick(Date date) {
+                mCurrentDate=date;
+                tvScheduleTime.setText(myDateFormat.format(date));
+                isScheduleTimeselected=true;
+            }
+
+            @Override
+            public void onNegativeButtonClick(Date date) {
+                // Do nothing
+            }
+
+            @Override
+            public void onNeutralButtonClick(Date date) {
+                // Optional if neutral button does'nt exists
+               // tvScheduleTime.setText("");
+            }
+        });
+    }
     private void setUiPageViewController() {
 
         dotsCount = adapterCardPayment.getItemCount();
@@ -289,6 +358,9 @@ public class FragmentPaymentConfirmation extends Fragment implements ICardViewPr
         PaymentRequest paymentRequest = new PaymentRequest();
         paymentRequest.setCartId(order_id);
         paymentRequest.setIsGift(checkbox.isChecked());
+        if(isScheduleTimeselected){
+            paymentRequest.setScheduleTime(tvScheduleTime.getText().toString());
+        }
         if (cardList.get(rvCardList.getCurrentPosition()).getCardId() != null) {
             paymentRequest.setCardId(cardList.get(rvCardList.getCurrentPosition()).getCardId());
         } else {
@@ -303,16 +375,20 @@ public class FragmentPaymentConfirmation extends Fragment implements ICardViewPr
     void fillDetails() {
         adapterProductAmount = new AdapterProductAmount(getActivity(), cartProduct.getOrder().getOrderItems());
         lvCharges.setAdapter(adapterProductAmount);
+        tvNoOfItems.setText(cartProduct.getOrder().getOrderItems().size()+" Items");
         tvTaxes.setText(getString(R.string.doller) + cartProduct.getOrder().getTax());
         tvDelieveryCharges.setText(getString(R.string.doller) + "0.0");
         tvTotalOrder.setText(getString(R.string.doller) + "" + Util.get2Decimal(cartProduct.getOrder().getSubTotal()));
-        tvTotalAmount.setText(getString(R.string.doller) + Util.get2Decimal(cartProduct.getOrder().getSubTotal()));
         tvSubTotal.setText(getString(R.string.doller) + Util.get2Decimal(cartProduct.getOrder().getTotal()));
         if (cartProduct.getOrder().getCoupon() != null && cartProduct.getOrder().getAppliedDiscount() > 0) {
             tvCouponAmount.setText("-" + getString(R.string.doller) + cartProduct.getOrder().getAppliedDiscount());
             rlCoupenApplied.setVisibility(View.VISIBLE);
+            double am=cartProduct.getOrder().getSubTotal()-cartProduct.getOrder().getAppliedDiscount();
+            tvTotalAmount.setText(getString(R.string.doller) + Util.get2Decimal(am));
+            rlTotalAmount.setVisibility(View.VISIBLE);
 
         } else {
+            rlTotalAmount.setVisibility(View.GONE);
             rlCoupenApplied.setVisibility(View.GONE);
         }
         isDetailShown = false;
@@ -455,6 +531,11 @@ public class FragmentPaymentConfirmation extends Fragment implements ICardViewPr
                 break;
             case R.id.btnProceedToPay:
                 doPayment();
+                break;
+            case R.id.rlSchedileTime:
+                dateTimeFragment.startAtCalendarView();
+                dateTimeFragment.setDefaultDateTime(mCurrentDate);
+                dateTimeFragment.show(getActivity().getSupportFragmentManager(), TAG_DATETIME_FRAGMENT);
                 break;
         }
     }

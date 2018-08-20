@@ -131,4 +131,5 @@ public interface C {
     int FRAGMENT_RESET_PASSWORD =33 ;
     String TOKEN = "token";
     String IS_SOCAIL ="is_socail" ;
+    String in_transmit="in_transit";
 }

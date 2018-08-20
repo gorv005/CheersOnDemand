@@ -558,7 +558,7 @@ public class FragmentAuthentication extends Fragment implements IAuthenitication
     void login() {
         SharedPreference.getInstance(getActivity()).setBoolean(C.IS_SOCAIL,false);
         LoginRequest loginRequest = new LoginRequest();
-        loginRequest.setEmail(etEmailLogin.getText().toString());
+        loginRequest.setEmail(etEmailLogin.getText().toString().toLowerCase());
         loginRequest.setGrantType("password");
         loginRequest.setLoginType(1);
         loginRequest.setUuid(Util.id(getActivity()));
@@ -578,7 +578,7 @@ public class FragmentAuthentication extends Fragment implements IAuthenitication
         user.setName(etName.getText().toString());
 
         user.setUuid(Util.id(getActivity()));
-        user.setEmail(etEmail.getText().toString());
+        user.setEmail(etEmail.getText().toString().toLowerCase());
         user.setPassword(etPassword.getText().toString());
         if (SharedPreference.getInstance(getActivity()).getString(C.DEVICE_TOKEN) != null) {
             user.setDeviceToken(SharedPreference.getInstance(getActivity()).getString(C.DEVICE_TOKEN));

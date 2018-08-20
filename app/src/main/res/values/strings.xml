@@ -284,6 +284,8 @@
     <string name="sorry_quantity_updated">Sorry, quantity of some products from your cart are updated because only few products available in store</string>
     <string name="total_order_amount">Total Order Amount</string>
     <string name="coupon_applied">Coupon Applied</string>
+    <string name="scheduleTime">Schedule Time</string>
+    <string name="in_transmit">In Transit</string>
 
     <!--
         <string name="default_web_client_id">999387565226-hdnnhm6rhgik5ljvm06shotsi7j9883c.apps.googleusercontent.com</string>
