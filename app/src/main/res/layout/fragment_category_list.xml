@@ -7,48 +7,53 @@
     android:id="@+id/rlView"
     tools:context="com.cheersondemand.view.fragments.FragmentCategoryList">
 
+
+
     <RelativeLayout
         android:id="@+id/rlBar"
         android:layout_width="match_parent"
         android:layout_height="60dp">
-        <RelativeLayout
-            android:layout_marginTop="25dp"
 
+        <RelativeLayout
             android:id="@+id/imgBack"
-            android:gravity="center|center_vertical"
-            android:layout_marginLeft="15dp"
+
             android:layout_width="25dp"
-            android:layout_height="25dp">
+            android:layout_height="25dp"
+            android:layout_marginLeft="15dp"
+            android:layout_marginTop="25dp"
+            android:gravity="center|center_vertical">
+
             <ImageView
-                android:layout_centerInParent="true"
                 android:layout_width="wrap_content"
-                android:src="@drawable/left_arrow_1"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:src="@drawable/left_arrow_1" />
         </RelativeLayout>
+
         <TextView
-            android:layout_marginTop="10dp"
+            android:id="@+id/tvExplore"
             android:layout_width="wrap_content"
-            android:background="@color/white"
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
             android:layout_gravity="center"
-            android:paddingTop="15dp"
-            android:textStyle="bold"
-            android:id="@+id/tvExplore"
-
+            android:layout_marginTop="10dp"
+            android:background="@color/white"
             android:fontFamily="@font/sf_ui_display_regular"
             android:gravity="center|center_vertical"
+
+            android:paddingTop="15dp"
+            android:text="@string/Explore"
             android:textColor="@color/profile_text_color"
             android:textSize="16.3sp"
-            android:text="@string/Explore" />
+            android:textStyle="bold" />
 
     </RelativeLayout>
     <View
+        android:layout_below="@id/rlBar"
         android:id="@+id/viewLine"
         android:background="@color/hint_color"
         android:layout_width="match_parent"
         android:layout_height="1dp"/>
-
     <RelativeLayout
         android:background="@color/brands_back_color"
         android:layout_width="match_parent"

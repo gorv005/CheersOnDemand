@@ -260,7 +260,9 @@ public class Util {
 
         Bitmap newBitmap = Bitmap.createScaledBitmap(realImage, width,
                 height, filter);
-        //  Bitmap newBitmap=   Bitmap.createScaledBitmap(realImage,(int)(realImage.getWidth()*0.9), (int)(realImage.getHeight()*0.9), true);
+/*
+          Bitmap newBitmap=   Bitmap.createScaledBitmap(realImage,(int)(realImage.getWidth()*0.1), (int)(realImage.getHeight()*0.1), true);
+*/
         return newBitmap;
     }
 

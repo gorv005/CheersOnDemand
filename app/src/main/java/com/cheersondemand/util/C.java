@@ -132,4 +132,9 @@ public interface C {
     String TOKEN = "token";
     String IS_SOCAIL ="is_socail" ;
     String in_transmit="in_transit";
+    String refunded="refunded";
+    String payment_failed="payment_failed";
+    String IS_RETRY_PAYEMNT = "is_retry_payement";
+    String TAG_FRAGMENT_PAYMENT_CONFIRMATION = "TAG_FRAGMENT_PAYMENT_CONFIRMATION";
+    int FRAGMENT_ADD_ADDRESS_1 =34 ;
 }

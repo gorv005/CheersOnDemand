@@ -42,6 +42,12 @@ public class Order implements Serializable{
     @SerializedName("is_gift")
     @Expose
     private Boolean isGift;
+    @SerializedName("schedule_time")
+    @Expose
+    private String scheduleTime;
+    @SerializedName("tracking_url")
+    @Expose
+    private String trackingUrl;
     @SerializedName("is_coupon_valid")
     @Expose
     private Boolean isCouponValid;
@@ -236,6 +242,22 @@ public class Order implements Serializable{
 
     public void setOrderHistory(List<OrderHistory> orderHistory) {
         this.orderHistory = orderHistory;
+    }
+
+    public String getScheduleTime() {
+        return scheduleTime;
+    }
+
+    public void setScheduleTime(String scheduleTime) {
+        this.scheduleTime = scheduleTime;
+    }
+
+    public String getTrackingUrl() {
+        return trackingUrl;
+    }
+
+    public void setTrackingUrl(String trackingUrl) {
+        this.trackingUrl = trackingUrl;
     }
 
     public String getTax() {

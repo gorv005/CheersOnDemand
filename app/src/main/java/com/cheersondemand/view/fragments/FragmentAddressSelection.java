@@ -103,6 +103,7 @@ public class FragmentAddressSelection extends Fragment implements View.OnClickLi
         rvAddressList.setLayoutManager(layoutManager);
         rvAddressList.setHasFixedSize(true);
         btnConfirmAdd.setOnClickListener(this);
+        btnAddAnAddress.setOnClickListener(this);
     }
 
     @Override
@@ -235,7 +236,9 @@ public class FragmentAddressSelection extends Fragment implements View.OnClickLi
     public void onSuccessCardList(CardListResponse response) {
         if (response.getSuccess()) {
             if (response.getData() != null && response.getData().size() > 0) {
-                 ((ActivityContainer)getActivity()).fragmnetLoader(C.FRAGMENT_PAYMENT_CONFIRMATION,null);
+                Bundle bundle=new Bundle();
+                bundle.putBoolean(C.IS_RETRY_PAYEMNT,false);
+                 ((ActivityContainer)getActivity()).fragmnetLoader(C.FRAGMENT_PAYMENT_CONFIRMATION,bundle);
 
 
             } else {
@@ -257,6 +260,8 @@ public class FragmentAddressSelection extends Fragment implements View.OnClickLi
         Bundle bundle3 = new Bundle();
 
         bundle3.putBoolean(C.IS_FROM_CHECKOUT, true);
+        bundle3.putBoolean(C.IS_RETRY_PAYEMNT, false);
+
         ((ActivityContainer) getActivity()).fragmnetLoader(C.FRAGMENT_ADD_CARD, bundle3);
     }
     @Override
@@ -290,6 +295,8 @@ public class FragmentAddressSelection extends Fragment implements View.OnClickLi
                 Bundle bundle = new Bundle();
                 bundle.putBoolean(C.IS_EDIT, false);
                 bundle.putBoolean(C.IS_FROM_CHECKOUT, true);
+                bundle.putBoolean(C.IS_RETRY_PAYEMNT, false);
+
                 intent.putExtra(C.BUNDLE, bundle);
                 intent.putExtra(C.FRAGMENT_ACTION, C.FRAGMENT_ADD_ADDRESS);
                 startActivity(intent);

@@ -38,7 +38,7 @@ private List<Order> horizontalList;
 public class ItemViewHolder extends RecyclerView.ViewHolder {
     public TextView tvOrderNo,tvProductName,tvQuantity,tvDays,tvMoreProducts;
     public ImageView ivProductImage,ivDot;
-    Button btnReorder,btnCancel,btnViewStatus;
+    Button btnReorder,btnCancel,btnViewStatus,btnRetryPayment;
     RelativeLayout rlProduct;
     public ItemViewHolder(View view) {
         super(view);
@@ -53,6 +53,7 @@ public class ItemViewHolder extends RecyclerView.ViewHolder {
         btnReorder = (Button) view.findViewById(R.id.btnReorder);
         btnCancel = (Button) view.findViewById(R.id.btnCancel);
         btnViewStatus = (Button) view.findViewById(R.id.btnViewStatus);
+        btnRetryPayment = (Button) view.findViewById(R.id.btnRetryPayment);
 
         rlProduct = (RelativeLayout) view.findViewById(R.id.rlProduct);
     }
@@ -93,6 +94,8 @@ public class ItemViewHolder extends RecyclerView.ViewHolder {
                 itemViewHolder.btnCancel.setVisibility(View.VISIBLE);
                 itemViewHolder.btnReorder.setVisibility(View.GONE);
                 itemViewHolder.btnViewStatus.setVisibility(View.GONE);
+                itemViewHolder.btnRetryPayment.setVisibility(View.GONE);
+
             }
             else  if(horizontalList.get(position).getStatus().equals(C.cancelled)) {
                 itemViewHolder.tvDays.setText(horizontalList.get(position).getStatus());
@@ -100,6 +103,8 @@ public class ItemViewHolder extends RecyclerView.ViewHolder {
                 itemViewHolder.ivDot.setImageResource(R.drawable.ic_red_dot);
                 itemViewHolder.btnReorder.setVisibility(View.GONE);
                 itemViewHolder.btnViewStatus.setVisibility(View.GONE);
+                itemViewHolder.btnRetryPayment.setVisibility(View.GONE);
+
             }
             else  if(horizontalList.get(position).getStatus().equals(C.delivered)) {
                 itemViewHolder.tvDays.setText(context.getString(R.string.delivered_on)+" "+horizontalList.get(position).getDeliveredOn());
@@ -108,6 +113,8 @@ public class ItemViewHolder extends RecyclerView.ViewHolder {
 
                 itemViewHolder.btnReorder.setVisibility(View.VISIBLE);
                 itemViewHolder.btnViewStatus.setVisibility(View.GONE);
+                itemViewHolder.btnRetryPayment.setVisibility(View.GONE);
+
             }
             else  if(horizontalList.get(position).getStatus().equals(C.confirmed)) {
                 itemViewHolder.tvDays.setText(context.getString(R.string.confirmed));
@@ -116,6 +123,18 @@ public class ItemViewHolder extends RecyclerView.ViewHolder {
 
                 itemViewHolder.btnReorder.setVisibility(View.GONE);
                 itemViewHolder.btnViewStatus.setVisibility(View.GONE);
+                itemViewHolder.btnRetryPayment.setVisibility(View.GONE);
+
+            }
+            else  if(horizontalList.get(position).getStatus().equals(C.refunded)) {
+                itemViewHolder.tvDays.setText(context.getString(R.string.refunded));
+                itemViewHolder.btnCancel.setVisibility(View.GONE);
+                itemViewHolder.ivDot.setImageResource(R.drawable.ic_red_dot);
+
+                itemViewHolder.btnReorder.setVisibility(View.GONE);
+                itemViewHolder.btnViewStatus.setVisibility(View.GONE);
+                itemViewHolder.btnRetryPayment.setVisibility(View.GONE);
+
             }
             else  if(horizontalList.get(position).getStatus().equals(C.in_transmit)) {
                 itemViewHolder.tvDays.setText(context.getString(R.string.in_transmit));
@@ -124,6 +143,18 @@ public class ItemViewHolder extends RecyclerView.ViewHolder {
 
                 itemViewHolder.btnReorder.setVisibility(View.GONE);
                 itemViewHolder.btnViewStatus.setVisibility(View.VISIBLE);
+                itemViewHolder.btnRetryPayment.setVisibility(View.GONE);
+
+            }
+            else  if(horizontalList.get(position).getStatus().equals(C.payment_failed)) {
+                itemViewHolder.tvDays.setText(context.getString(R.string.payment_failed));
+                itemViewHolder.btnCancel.setVisibility(View.GONE);
+                itemViewHolder.ivDot.setImageResource(R.drawable.ic_black_dot);
+
+                itemViewHolder.btnReorder.setVisibility(View.GONE);
+                itemViewHolder.btnViewStatus.setVisibility(View.GONE);
+                itemViewHolder.btnRetryPayment.setVisibility(View.VISIBLE);
+
             }
             else {
                 itemViewHolder.btnCancel.setVisibility(View.GONE);
@@ -132,6 +163,8 @@ public class ItemViewHolder extends RecyclerView.ViewHolder {
                 itemViewHolder.tvDays.setVisibility(View.GONE);
                 itemViewHolder.btnReorder.setVisibility(View.GONE);
                 itemViewHolder.btnViewStatus.setVisibility(View.GONE);
+                itemViewHolder.btnRetryPayment.setVisibility(View.GONE);
+
             }
             itemViewHolder.tvOrderNo.setText(horizontalList.get(position).getOrderNumber());
             if(horizontalList.get(position).getOrderItems()!=null && horizontalList.get(position).getOrderItems().size()>0) {
@@ -187,6 +220,15 @@ public class ItemViewHolder extends RecyclerView.ViewHolder {
                 @Override
                 public void onClick(View v) {
                     ((ActivityContainer)context).cancelOrder(horizontalList.get(position));
+                }
+            });
+            itemViewHolder.btnRetryPayment.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Bundle bundle=new Bundle();
+                    bundle.putSerializable(C.ORDER,horizontalList.get(position));
+                    bundle.putBoolean(C.IS_RETRY_PAYEMNT,true);
+                    ((ActivityContainer)context).fragmnetLoader(C.FRAGMENT_PAYMENT_CONFIRMATION,bundle);
                 }
             });
           /*  itemViewHolder.tvBrandName.setText(horizontalList.get(position));

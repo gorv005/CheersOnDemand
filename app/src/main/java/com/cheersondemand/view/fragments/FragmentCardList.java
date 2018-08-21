@@ -188,6 +188,8 @@ public class FragmentCardList extends Fragment implements ICardViewPresenter.ICa
             case R.id.btnAddNewCard:
                 Bundle bundle3=new Bundle();
                 bundle3.putBoolean(C.IS_FROM_CHECKOUT,false);
+                bundle3.putBoolean(C.IS_RETRY_PAYEMNT, false);
+
                 ((ActivityContainer) getActivity()).fragmnetLoader(C.FRAGMENT_ADD_CARD, bundle3);
                 break;
         }

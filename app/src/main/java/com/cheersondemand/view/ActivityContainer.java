@@ -176,6 +176,13 @@ public class ActivityContainer extends AppCompatActivity {
                     fragmentTransaction.addToBackStack(C.TAG_FRAGMENT_ADD_ADDRESS);
                 }*/
                 break;
+            case C.FRAGMENT_ADD_ADDRESS_1:
+                fragment = new FragmentAddAddress();
+                fragmentTransaction.replace(R.id.container, fragment);
+                if (bundle!=null && bundle.getBoolean(C.IS_FROM_CHECKOUT)) {
+                    fragmentTransaction.addToBackStack(C.TAG_FRAGMENT_ADD_ADDRESS);
+                }
+                break;
             case C.FRAGMENT_SELECT_ADDRESS:
                 fragment = new FragmentAddressSelection();
                 fragmentTransaction.replace(R.id.container, fragment);
@@ -216,7 +223,9 @@ public class ActivityContainer extends AppCompatActivity {
             case C.FRAGMENT_PAYMENT_CONFIRMATION:
                 fragment = new FragmentPaymentConfirmation();
                 fragmentTransaction.replace(R.id.container, fragment);
-                // fragmentTransaction.addToBackStack(C.TAG_FRAGMENT_FRAGMENT_ADD_CARD);
+                if (bundle!=null && bundle.getBoolean(C.IS_RETRY_PAYEMNT)) {
+                    fragmentTransaction.addToBackStack(C.TAG_FRAGMENT_PAYMENT_CONFIRMATION);
+                }
                 break;
             case C.FRAGMENT_ORDER_DETAIL:
                 fragment = new FragmentOrderDetail();
@@ -232,7 +241,7 @@ public class ActivityContainer extends AppCompatActivity {
                 getSupportActionBar().hide();
                 fragment = new FragmentProductsListing();
                 fragmentTransaction.replace(R.id.container, fragment);
-                if (bundle.getInt(C.SOURCE) != C.FRAGMENT_PRODUCTS_HOME && bundle.getInt(C.SOURCE) != C.FRAGMENT_CATEGORIES_HOME) {
+                if (bundle.getInt(C.SOURCE) != C.FRAGMENT_PRODUCTS_HOME && bundle.getInt(C.SOURCE) != C.FRAGMENT_CATEGORIES_HOME && bundle.getInt(C.SOURCE) != C.FRAGMENT_CATEGORIES ) {
                     fragmentTransaction.addToBackStack(C.TAG_FRAGMENT_PRODUCT_LISTING);
                 }
                 break;
@@ -439,6 +448,7 @@ public class ActivityContainer extends AppCompatActivity {
                intent.putExtra(C.BUNDLE, bundle);
                startActivity(intent);
            }
+
             else {
                super.onBackPressed();
 
@@ -454,6 +464,14 @@ public class ActivityContainer extends AppCompatActivity {
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         Bundle bundle=new Bundle();
         bundle.putInt(C.FRAGMENT_ACTION,C.FRAGMENT_PROFILE_HOME);
+        intent.putExtra(C.BUNDLE,bundle);
+        startActivity(intent);
+    }
+    public void gotoCart(){
+        Intent intent = new Intent(this, ActivityHome.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        Bundle bundle=new Bundle();
+        bundle.putInt(C.FRAGMENT_ACTION,C.FRAGMENT_CART);
         intent.putExtra(C.BUNDLE,bundle);
         startActivity(intent);
     }

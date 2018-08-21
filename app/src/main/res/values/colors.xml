@@ -53,5 +53,6 @@
     <color name="orange">#FF7F50</color>
     <color name="warning">#FFCF47</color>
     <color name="clock_back">#E0E0E0</color>
+    <color name="demo_dark_transparent">#24000000</color>
 
 </resources>

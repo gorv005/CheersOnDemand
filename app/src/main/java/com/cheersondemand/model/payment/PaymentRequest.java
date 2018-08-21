@@ -17,6 +17,9 @@ public class PaymentRequest {
     @SerializedName("is_gift")
     @Expose
     private Boolean isGift;
+    @SerializedName("source")
+    @Expose
+    private String source;
     @SerializedName("card_id")
     @Expose
     private String cardId;
@@ -61,5 +64,13 @@ public class PaymentRequest {
 
     public void setScheduleTime(String scheduleTime) {
         this.scheduleTime = scheduleTime;
+    }
+
+    public String getSource() {
+        return source;
+    }
+
+    public void setSource(String source) {
+        this.source = source;
     }
 }

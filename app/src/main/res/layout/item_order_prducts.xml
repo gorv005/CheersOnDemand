@@ -164,25 +164,41 @@ android:layout_centerVertical="true"
                             android:layout_width="110dp"
                             android:padding="3dp"
                             android:layout_height="30dp"                            android:layout_gravity="center_horizontal"
-                            android:background="@drawable/add_to_cart_button"
+                            android:background="@drawable/black_back"
                             android:fontFamily="@font/sf_ui_display_regular"
                             android:text="@string/re_order"
                             android:textAllCaps="true"
+                            android:visibility="gone"
                             android:textColor="@color/white"
                             android:textSize="10sp" />
 
                         <Button
 
                             android:id="@+id/btnCancel"
-                            android:layout_width="110dp"
+                            android:layout_width="wrap_content"
                             android:padding="3dp"
+                            android:visibility="gone"
                             android:layout_height="30dp"
-                            android:background="@drawable/bg_button_enable"
+                            android:background="@drawable/red_back"
                             android:fontFamily="@font/sf_ui_display_regular"
                             android:text="@string/cancel"
                             android:textAllCaps="true"
                             android:textColor="@color/white"
-                            android:textSize="12sp" />
+                            android:textSize="10sp" />
+                        <Button
+
+                            android:id="@+id/btnRetryPayment"
+                            android:layout_width="wrap_content"
+                            android:padding="3dp"
+                            android:visibility="gone"
+                            android:layout_height="30dp"
+
+                            android:background="@drawable/red_back"
+                            android:fontFamily="@font/sf_ui_display_regular"
+                            android:text="@string/retry_payment"
+                            android:textAllCaps="true"
+                            android:textColor="@color/white"
+                            android:textSize="10sp" />
 
                         <Button
 
@@ -190,8 +206,8 @@ android:layout_centerVertical="true"
                             android:layout_width="110dp"
                             android:padding="3dp"
                             android:layout_height="30dp"                            android:layout_gravity="center_horizontal"
-                            android:visibility="gone"
-                            android:background="@drawable/bg_button_yellow"
+                            android:visibility="visible"
+                            android:background="@drawable/yellow_back"
                             android:fontFamily="@font/sf_ui_display_regular"
                             android:text="@string/viewStatus"
                             android:textAllCaps="true"

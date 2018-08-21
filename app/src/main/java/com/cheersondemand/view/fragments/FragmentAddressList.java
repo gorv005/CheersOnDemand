@@ -204,6 +204,7 @@ public class FragmentAddressList extends Fragment implements View.OnClickListene
                 Bundle bundle=new Bundle();
                 bundle.putBoolean(C.IS_EDIT,false);
                 bundle.putBoolean(C.IS_FROM_CHECKOUT, false);
+                bundle.putBoolean(C.IS_RETRY_PAYEMNT, false);
 
                 intent.putExtra(C.BUNDLE,bundle);
                 intent.putExtra(C.FRAGMENT_ACTION,C.FRAGMENT_ADD_ADDRESS);

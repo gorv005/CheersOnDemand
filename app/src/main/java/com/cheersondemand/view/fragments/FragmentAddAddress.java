@@ -24,8 +24,12 @@ import com.cheersondemand.model.address.Address;
 import com.cheersondemand.model.address.AddressAddResponse;
 import com.cheersondemand.model.address.AddressRequest;
 import com.cheersondemand.model.address.AddressResponse;
+import com.cheersondemand.model.card.CardAddResponse;
+import com.cheersondemand.model.card.CardListResponse;
 import com.cheersondemand.presenter.address.AddressViewPresenterImpl;
 import com.cheersondemand.presenter.address.IAddressViewPresenter;
+import com.cheersondemand.presenter.card.CardViewPresenterImpl;
+import com.cheersondemand.presenter.card.ICardViewPresenter;
 import com.cheersondemand.util.C;
 import com.cheersondemand.util.SharedPreference;
 import com.cheersondemand.util.Util;
@@ -38,7 +42,7 @@ import butterknife.Unbinder;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class FragmentAddAddress extends Fragment implements View.OnClickListener, IAddressViewPresenter.IAddressView {
+public class FragmentAddAddress extends Fragment implements View.OnClickListener, IAddressViewPresenter.IAddressView , ICardViewPresenter.ICardView{
 
 
     @BindView(R.id.etName)
@@ -56,12 +60,13 @@ public class FragmentAddAddress extends Fragment implements View.OnClickListener
     @BindView(R.id.btnSaveAdd)
     Button btnSaveAdd;
     Unbinder unbinder;
-    boolean isEdit, isFromCheckOut;
+    boolean isEdit, isFromCheckOut,isRetryPayment=false;
     Address address1;
     IAddressViewPresenter iAddressViewPresenter;
     @BindView(R.id.rlView)
     RelativeLayout rlView;
     Util util;
+    ICardViewPresenter iCardViewPresenter;
 
     public FragmentAddAddress() {
         // Required empty public constructor
@@ -72,8 +77,12 @@ public class FragmentAddAddress extends Fragment implements View.OnClickListener
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         iAddressViewPresenter = new AddressViewPresenterImpl(this, getActivity());
+        iCardViewPresenter = new CardViewPresenterImpl(this, getActivity());
+
         util = new Util();
         isEdit = getArguments().getBoolean(C.IS_EDIT);
+        isRetryPayment = getArguments().getBoolean(C.IS_RETRY_PAYEMNT);
+
         isFromCheckOut = getArguments().getBoolean(C.IS_FROM_CHECKOUT);
 
         if (isEdit) {
@@ -392,7 +401,12 @@ public class FragmentAddAddress extends Fragment implements View.OnClickListener
         String token = C.bearer + SharedPreference.getInstance(getActivity()).getUser(C.AUTH_USER).getData().getToken().getAccessToken();
         iAddressViewPresenter.addDeliveryAddress(token, id, order_id, addressRequest);
     }
+    void getCardList() {
+        String id = "" + SharedPreference.getInstance(getActivity()).getUser(C.AUTH_USER).getData().getUser().getId();
 
+        String token = C.bearer + SharedPreference.getInstance(getActivity()).getUser(C.AUTH_USER).getData().getToken().getAccessToken();
+        iCardViewPresenter.getCardList(token, id);
+    }
     @Override
     public void onRemoveAddressSuccess(AddressAddResponse response) {
         try {
@@ -456,20 +470,58 @@ public class FragmentAddAddress extends Fragment implements View.OnClickListener
     @Override
     public void onAddDeliveryAddressSuccess(AddressAddResponse Response) {
         try {
-            if (Response.getSuccess()) {
+
                 if (Response.getSuccess()) {
-                    ((ActivityContainer) getActivity()).fragmnetLoader(C.FRAGMENT_PAYMENT_CONFIRMATION, null);
+                  //  ((ActivityContainer) getActivity()).fragmnetLoader(C.FRAGMENT_PAYMENT_CONFIRMATION, null);
+                    getCardList();
                 } else {
                     dialog(Response.getMessage());
                 }
-            } else {
-                dialog(Response.getMessage());
-            }
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
+    @Override
+    public void onSuccessCardList(CardListResponse response) {
+        if (response.getSuccess()) {
+            if (response.getData() != null && response.getData().size() > 0) {
+                if(isRetryPayment){
+                 getActivity().onBackPressed();
+                }
+                else {
+                    Bundle bundle=new Bundle();
+                    bundle.putBoolean(C.IS_RETRY_PAYEMNT,false);
+
+                    ((ActivityContainer) getActivity()).fragmnetLoader(C.FRAGMENT_PAYMENT_CONFIRMATION, bundle);
+
+                }
+            } else {
+                // tvNoCardAvailable.setVisibility(View.VISIBLE);
+                gotoCard();
+
+            }
+        }
+        else {
+            // tvNoCardAvailable.setVisibility(View.VISIBLE);
+
+            gotoCard();
+
+        }
+    }
+
+    @Override
+    public void onSuccessAddCard(CardAddResponse response) {
+
+    }
+    void gotoCard(){
+        Bundle bundle3 = new Bundle();
+
+        bundle3.putBoolean(C.IS_FROM_CHECKOUT, true);
+        bundle3.putBoolean(C.IS_RETRY_PAYEMNT, false);
+
+        ((ActivityContainer) getActivity()).fragmnetLoader(C.FRAGMENT_ADD_CARD, bundle3);
+    }
     @Override
     public void getResponseError(String response) {
         util.setSnackbarMessage(getActivity(), response, rlView, true);

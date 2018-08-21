@@ -219,6 +219,10 @@
                 </RelativeLayout>
             </RelativeLayout>
         </RelativeLayout>
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:orientation="horizontal"
+            android:layout_height="wrap_content">
         <TextView
             android:layout_marginRight="15dp"
             android:layout_marginLeft="15dp"
@@ -233,7 +237,34 @@
             android:text="@string/order_status"
             android:textColor="@color/spec_desc"
             android:textSize="14sp" />
+            <LinearLayout
+                android:id="@+id/llTrackOrder"
+                android:layout_marginRight="15dp"
+                android:layout_marginLeft="15dp"
+                android:orientation="vertical"
+                android:layout_marginTop="10dp"
+                android:layout_centerVertical="true"
+                android:layout_alignParentRight="true"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+        <TextView
 
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="left"
+            android:ellipsize="end"
+            android:fontFamily="@font/sf_ui_display_regular"
+            android:gravity="left"
+            android:maxLines="1"
+            android:text="@string/track_order"
+            android:textColor="@color/profile_text_color"
+            android:textSize="14sp" />
+                <View
+                    android:background="@color/profile_text_color"
+                    android:layout_width="70dp"
+                    android:layout_height="2dp"/>
+            </LinearLayout>
+        </RelativeLayout>
         <android.support.v7.widget.RecyclerView
             android:id="@+id/rvOrderStatus"
             android:layout_marginTop="10dp"

@@ -10,6 +10,7 @@ import com.cheersondemand.model.payment.PaymentResponse;
 public interface IPaymentViewPresenter {
 
     public void orderPayment(String token, PaymentRequest paymentRequest);
+    public void retryPayment(String token,String userId,String OrderId,PaymentRequest  paymentRequest);
 
 
     void onDestroy();

@@ -24,6 +24,8 @@ import android.support.v4.content.ContextCompat;
 import android.support.v4.content.FileProvider;
 import android.support.v7.app.AlertDialog;
 import android.text.Editable;
+import android.text.InputFilter;
+import android.text.Spanned;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -161,8 +163,21 @@ public class FragmentUpdateProfile extends Fragment implements View.OnClickListe
         unbinder.unbind();
     }
 
+    private InputFilter filter = new InputFilter() {
+
+        @Override
+        public CharSequence filter(CharSequence source, int start, int end, Spanned dest, int dstart, int dend) {
+
+           /* if (source.toString().equals("-")){
+                return "";
+            }*/
+            return source.toString();
+        }
+    };
 
     void initFields() {
+     //   etPhoneNo.setFilters(new InputFilter[]{filter});
+
         btnSaveProfile.setEnabled(false);
         etName.addTextChangedListener(new TextWatcher() {
 
@@ -214,7 +229,7 @@ public class FragmentUpdateProfile extends Fragment implements View.OnClickListe
     void validationFields() {
         if (etName.getText().length() > 2 && etName.length() < 31) {
 
-            if (Util.isValidPhone(etPhoneNo.getText().toString())) {
+            if (etPhoneNo.getText().length() > 0 && etPhoneNo.length() == 12) {
 
 
                 btnSaveProfile.setBackground(ContextCompat.getDrawable(getActivity(), R.drawable.bg_button_enable));
@@ -606,6 +621,7 @@ public class FragmentUpdateProfile extends Fragment implements View.OnClickListe
 
         @Override
         public void onTextChanged(CharSequence s, int start, int before, int count) {
+
             for (int i = 0; i < mArray_pos.length; i++) {
                 if(((mBeforeTextChanged.length() - mAppentText.length() * i) == (mArray_pos[i] - 1) &&
                         (s.length() - mAppentText.length() * i) == mArray_pos[i])){

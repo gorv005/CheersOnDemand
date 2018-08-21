@@ -2,8 +2,10 @@ package com.cheersondemand.view.fragments;
 
 
 import android.app.Dialog;
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -85,8 +87,11 @@ public class FragmentOrderDetail extends Fragment implements View.OnClickListene
     RelativeLayout rlView;
     @BindView(R.id.rvOrderStatus)
     RecyclerView rvOrderStatus;
+    @BindView(R.id.llTrackOrder)
+    LinearLayout llTrackOrder;
     private LinearLayoutManager mLinearLayoutManager;
     AdapterOrderStatus adapterOrderStatus;
+
     public FragmentOrderDetail() {
         // Required empty public constructor
     }
@@ -119,17 +124,19 @@ public class FragmentOrderDetail extends Fragment implements View.OnClickListene
         super.onViewCreated(view, savedInstanceState);
         rlView.setVisibility(View.GONE);
         tvMoreProducts.setOnClickListener(this);
+        llTrackOrder.setOnClickListener(this);
         mLinearLayoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
         rvOrderStatus.setLayoutManager(mLinearLayoutManager);
         rvOrderStatus.setHasFixedSize(true);
         rvOrderStatus.setNestedScrollingEnabled(false);
+
         getCartList();
     }
 
     void getCartList() {
         String id = "" + SharedPreference.getInstance(getActivity()).getUser(C.AUTH_USER).getData().getUser().getId();
         String token = C.bearer + SharedPreference.getInstance(getActivity()).getUser(C.AUTH_USER).getData().getToken().getAccessToken();
-        iOrderDetailViewPresenter.getCartList(token, id, "" + order.getId(), Util.id(getActivity()),false);
+        iOrderDetailViewPresenter.getCartList(token, id, "" + order.getId(), Util.id(getActivity()), false);
 
     }
 
@@ -147,49 +154,63 @@ public class FragmentOrderDetail extends Fragment implements View.OnClickListene
     @Override
     public void getCartListSuccess(UpdateCartResponse response) {
         try {
-        if (response.getSuccess()) {
-            rlView.setVisibility(View.VISIBLE);
+            if (response.getSuccess()) {
 
-            order = response.getData().getOrder();
-            tvOrderNo.setText(order.getOrderNumber());
-            tvOrderDate.setText(order.getOrderDate());
-            if (order.getOrderItems() != null && order.getOrderItems().size() > 1) {
-                tvMoreProducts.setText("+" + (order.getOrderItems().size() - 1) + " " + getString(R.string.more_products));
-            } else {
-                tvMoreProducts.setText("");
-            }
-            if (order.getOrderItems() != null && order.getOrderItems().size() > 0) {
-                tvProductName.setText(order.getOrderItems().get(0).getProductName());
-                tvQuantity.setText(getString(R.string.quantity) + ": " + order.getOrderItems().get(0).getQuantity());
-                tvPrice.setText("" + getString(R.string.doller) + order.getOrderItems().get(0).getTotalPrice());
-                Util.setImage(getActivity(), order.getOrderItems().get(0).getProduct().getImage(), ivProductImage);
+                if(response.getData()!=null && response.getData().getOrder()!=null && response.getData().getOrder().getTrackingUrl()!=null){
+                    if(response.getData().getOrder().getStatus().equals(C.confirmed)||response.getData().getOrder().getStatus().equals(C.in_transmit)
+                    ||response.getData().getOrder().getStatus().equals(C.refunded))
+                    {
+                        llTrackOrder.setVisibility(View.VISIBLE);
+                    }
+                    else {
+                        llTrackOrder.setVisibility(View.GONE);
+                    }
 
-            } else {
-                tvQuantity.setText("");
-                tvPrice.setText("");
-                tvName.setText("");
-
-            }
-            if (order.getDeliveryAddress() != null) {
-                tvName.setText(order.getDeliveryAddress().getName());
-                tvSubAddress1.setText(order.getDeliveryAddress().getFlatNo() + " " + order.getDeliveryAddress().getAddressFirst());
-                tvSubAddress2.setText(order.getDeliveryAddress().getAddressSecond() + " " + order.getDeliveryAddress().getZipCode());
-                tvPhone.setText(" " + order.getDeliveryAddress().getPhoneNumber());
-            }
-            List<OrderHistory> historyList=new ArrayList<>();
-            for(int i=0;i<order.getOrderHistory().size();i++){
-                if(order.getOrderHistory().get(i).getOrderDate()!=null){
-                    historyList.add(order.getOrderHistory().get(i));
                 }
-            }
-            adapterOrderStatus=new AdapterOrderStatus(historyList,getActivity());
-            rvOrderStatus.setAdapter(adapterOrderStatus);
-        } else {
-            util.setSnackbarMessage(getActivity(), response.getMessage(), rlView, true);
+                else {
+                    llTrackOrder.setVisibility(View.GONE);
+                }
+                rlView.setVisibility(View.VISIBLE);
 
-        }
-        }
-        catch (Exception e){
+                order = response.getData().getOrder();
+                tvOrderNo.setText(order.getOrderNumber());
+                tvOrderDate.setText(order.getOrderDate());
+                if (order.getOrderItems() != null && order.getOrderItems().size() > 1) {
+                    tvMoreProducts.setText("+" + (order.getOrderItems().size() - 1) + " " + getString(R.string.more_products));
+                } else {
+                    tvMoreProducts.setText("");
+                }
+                if (order.getOrderItems() != null && order.getOrderItems().size() > 0) {
+                    tvProductName.setText(order.getOrderItems().get(0).getProductName());
+                    tvQuantity.setText(getString(R.string.quantity) + ": " + order.getOrderItems().get(0).getQuantity());
+                    tvPrice.setText("" + getString(R.string.doller) + order.getOrderItems().get(0).getTotalPrice());
+                    Util.setImage(getActivity(), order.getOrderItems().get(0).getProduct().getImage(), ivProductImage);
+
+                } else {
+                    tvQuantity.setText("");
+                    tvPrice.setText("");
+                    tvName.setText("");
+
+                }
+                if (order.getDeliveryAddress() != null) {
+                    tvName.setText(order.getDeliveryAddress().getName());
+                    tvSubAddress1.setText(order.getDeliveryAddress().getFlatNo() + " " + order.getDeliveryAddress().getAddressFirst());
+                    tvSubAddress2.setText(order.getDeliveryAddress().getAddressSecond() + " " + order.getDeliveryAddress().getZipCode());
+                    tvPhone.setText(" " + order.getDeliveryAddress().getPhoneNumber());
+                }
+                List<OrderHistory> historyList = new ArrayList<>();
+                for (int i = 0; i < order.getOrderHistory().size(); i++) {
+                    if (order.getOrderHistory().get(i).getOrderDate() != null) {
+                        historyList.add(order.getOrderHistory().get(i));
+                    }
+                }
+                adapterOrderStatus = new AdapterOrderStatus(historyList, getActivity());
+                rvOrderStatus.setAdapter(adapterOrderStatus);
+            } else {
+                util.setSnackbarMessage(getActivity(), response.getMessage(), rlView, true);
+
+            }
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
@@ -267,6 +288,17 @@ public class FragmentOrderDetail extends Fragment implements View.OnClickListene
             case R.id.tvMoreProducts:
                 dialog(order.getOrderItems());
                 break;
+            case R.id.llTrackOrder:
+                if(order!=null && order.getTrackingUrl()!=null) {
+                    trackOrder(order.getTrackingUrl());
+                }
+                break;
         }
+    }
+
+    void trackOrder(String url){
+        Intent i = new Intent(Intent.ACTION_VIEW);
+        i.setData(Uri.parse(url));
+        startActivity(i);
     }
 }

@@ -68,7 +68,7 @@ public class AdapterCard extends RecyclerView.Adapter<AdapterCard.ViewHolder > {
     }
 
     @Override
-    public void onBindViewHolder(ViewHolder holder, final int position) {
+    public void onBindViewHolder(final ViewHolder holder, final int position) {
         holder.tv_member_name.setText(horizontalList.get(position).getCardHolderName());
         holder.tv_validity.setText(horizontalList.get(position).getExpMonth()+"/"+horizontalList.get(position).getExpYear());
         holder.tv_card_number.setText( context.getString(R.string.card_number_sample)+" "+horizontalList.get(position).getLast4());
@@ -78,6 +78,8 @@ public class AdapterCard extends RecyclerView.Adapter<AdapterCard.ViewHolder > {
             @Override
             public void onClick(View v) {
                 ((ActivityContainer)context).deleteCard(position);
+                holder.swipeLayout.animateReset();
+
             }
         });
     }

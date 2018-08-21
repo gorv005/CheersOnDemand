@@ -147,6 +147,7 @@ public class FragmentProductDescription extends Fragment implements View.OnClick
     private boolean isProductDes = false, isBuyNow = false;
     boolean isReadMore=false;
     boolean isProgressShow=false;
+    boolean isClicked=false;
     public FragmentProductDescription() {
         // Required empty public constructor
     }
@@ -194,6 +195,7 @@ public class FragmentProductDescription extends Fragment implements View.OnClick
     @Override
     public void onResume() {
         super.onResume();
+        isClicked=false;
         getSimilarProducts();
         getCouponList();
         ((ActivityContainer) getActivity()).hideToolBar();
@@ -570,6 +572,7 @@ public class FragmentProductDescription extends Fragment implements View.OnClick
     @Override
     public void getAddToCartSucess(AddToCartResponse response) {
         try {
+            isClicked=false;
             if (response.getSuccess()) {
                 util.setSnackbarMessage(getActivity(), response.getMessage(), rlView, false);
 
@@ -763,6 +766,7 @@ public class FragmentProductDescription extends Fragment implements View.OnClick
     @Override
     public void getResponseError(String response) {
         isProductDes = false;
+        isClicked=false;
         util.setSnackbarMessage(getActivity(), response, rlView, true);
 
     }
@@ -807,37 +811,40 @@ public class FragmentProductDescription extends Fragment implements View.OnClick
                 break;
 
             case R.id.btnAddToCart:
+                if(!isClicked) {
+                    isClicked = true;
+                    if (!productDes.getIsInCart()) {
+                        isProductDes = true;
+                        product = productDes;
 
-                if (!productDes.getIsInCart()) {
-                    isProductDes = true;
-                    product = productDes;
-
-                    if (SharedPreference.getInstance(getActivity()).getString(C.ORDER_ID) == null) {
-                        createOrder();
+                        if (SharedPreference.getInstance(getActivity()).getString(C.ORDER_ID) == null) {
+                            createOrder();
+                        } else {
+                            addToCart();
+                        }
                     } else {
-                        addToCart();
-                    }
-                } else {
-                    util.setSnackbarMessage(getActivity(), getString(R.string.product_already_in_cart), rlView, true);
+                        util.setSnackbarMessage(getActivity(), getString(R.string.product_already_in_cart), rlView, true);
 
+                    }
                 }
                 break;
             case R.id.btnBuyNow:
+                if(!isClicked) {
+                    isClicked=true;
+                    if (!productDes.getIsInCart()) {
+                        isBuyNow = true;
+                        product = productDes;
 
-                if (!productDes.getIsInCart()) {
-                    isBuyNow = true;
-                    product = productDes;
-
-                    if (SharedPreference.getInstance(getActivity()).getString(C.ORDER_ID) == null) {
-                        createOrder();
+                        if (SharedPreference.getInstance(getActivity()).getString(C.ORDER_ID) == null) {
+                            createOrder();
+                        } else {
+                            addToCart();
+                        }
                     } else {
-                        addToCart();
+                        gotoCart();
+
                     }
-                } else {
-                    gotoCart();
-
                 }
-
                 break;
             case R.id.imgBack:
                 getActivity().onBackPressed();

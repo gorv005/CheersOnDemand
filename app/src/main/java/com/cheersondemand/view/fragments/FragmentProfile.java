@@ -140,8 +140,8 @@ public class FragmentProfile extends Fragment implements View.OnClickListener, I
             viewConnectedAccount.setVisibility(View.GONE);
 
             if (authenticationResponse.getData().getUser().getProfilePicture() != null) {
-              // imageLoader.DisplayImage(authenticationResponse.getData().getUser().getProfilePicture(), imgProfile);
-                Util.setImage(getActivity(),authenticationResponse.getData().getUser().getProfilePicture(),imgProfile);
+               imageLoader.DisplayImage(authenticationResponse.getData().getUser().getProfilePicture(), imgProfile);
+               // Util.setImage(getActivity(),authenticationResponse.getData().getUser().getProfilePicture(),imgProfile);
             }
             else {
                 //imageLoader.DisplayImage("", imgProfile);

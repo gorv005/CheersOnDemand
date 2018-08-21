@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:background="@color/brands_back_color"
+    android:layout_height="wrap_content">
+
+
+    <RelativeLayout
+        android:paddingTop="20dp"
+        android:paddingLeft="20dp"
+        android:paddingRight="20dp"
+        android:paddingBottom="30dp"
+        android:layout_centerInParent="true"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+        <RelativeLayout
+            android:id="@+id/ivProductImageRl"
+
+            android:background="@drawable/product_circular_border"
+            android:layout_width="60dp"
+            android:layout_height="60dp">
+            <com.cheersondemand.util.CircleImageView
+                xmlns:app="http://schemas.android.com/apk/res-auto"
+                android:id="@+id/ivProductImage"
+                android:layout_centerHorizontal="true"
+                android:layout_alignParentBottom="true"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                app:civ_border_width="0dp"
+                android:src="@color/demo_dark_transparent"
+               />
+
+        </RelativeLayout>
+
+        <View
+            android:id="@+id/tvBrandName"
+            android:text="beers"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="10dp"
+            android:layout_below="@id/ivProductImageRl"
+            android:textSize="14sp"
+            android:background="@color/demo_dark_transparent"
+            android:textStyle="bold"
+            android:fontFamily="@font/sf_ui_display_regular"
+            android:textColor="@color/brand_text_color"
+            android:maxLines="1"
+            android:layout_width="100dp"
+            android:layout_height="10dp" />
+    </RelativeLayout>
+</RelativeLayout>

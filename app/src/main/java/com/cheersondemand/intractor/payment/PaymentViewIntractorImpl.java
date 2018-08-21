@@ -45,4 +45,34 @@ public class PaymentViewIntractorImpl implements IPaymentViewIntractor {
             e.printStackTrace();
         }
     }
+
+    @Override
+    public void retryPayment(String token, String userId,String OrderId,PaymentRequest paymentRequest, final OnFinishedListener listener) {
+        try {
+
+            WebServicesWrapper.getInstance().retryPayment(new ResponseResolver<PaymentResponse>() {
+                @Override
+                public void onSuccess(PaymentResponse r, Response response) {
+                    listener.onPaymentSuccess(r);
+                }
+
+                @Override
+                public void onFailure(RestError error, String msg) {
+                    if (error == null || error.getError() == null) {
+                        try {
+                            Gson gson = new Gson();
+                            PaymentResponse response = gson.fromJson(msg, PaymentResponse.class);
+                            listener.onPaymentSuccess(response);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    } else {
+                        listener.onError(error.getError());
+                    }
+                }
+            }, token,userId,OrderId, paymentRequest);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 }

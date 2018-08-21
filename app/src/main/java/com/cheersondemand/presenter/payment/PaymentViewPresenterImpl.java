@@ -53,6 +53,14 @@ public class PaymentViewPresenterImpl implements IPaymentViewPresenter, IPayment
     }
 
     @Override
+    public void retryPayment(String token, String userId, String OrderId, PaymentRequest paymentRequest) {
+        if (mView != null) {
+            mView.showProgress();
+            iPaymentViewIntractor.retryPayment(token,userId,OrderId,paymentRequest, this);
+        }
+    }
+
+    @Override
     public void onDestroy() {
         try {
             mView = null;

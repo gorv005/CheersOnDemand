@@ -91,7 +91,7 @@ public class HomeViewPresenterImpl implements IHomeViewPresenterPresenter, IHome
     @Override
     public void getSubCategories(boolean isAuth, String token, List<Integer> id, String uuid) {
         if (mView != null) {
-
+            mView.showProgress();
             iHomeViewIntractor.getSubCategories(isAuth,token,id,uuid, this);
         }
     }

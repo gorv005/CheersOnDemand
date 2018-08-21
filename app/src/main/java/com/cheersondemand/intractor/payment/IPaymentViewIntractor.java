@@ -17,5 +17,6 @@ public interface IPaymentViewIntractor {
     }
     public void paymentOrder(String token,PaymentRequest  paymentRequest, OnFinishedListener listener);
 
+    public void retryPayment(String token,String userId,String OrderId,PaymentRequest  paymentRequest, OnFinishedListener listener);
 
 }

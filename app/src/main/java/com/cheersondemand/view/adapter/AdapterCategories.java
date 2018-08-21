@@ -2,6 +2,7 @@ package com.cheersondemand.view.adapter;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -79,13 +80,23 @@ public class ItemViewHolder extends RecyclerView.ViewHolder {
                 @Override
                 public void onClick(View v) {
                    // Toast.makeText(context, "click", Toast.LENGTH_SHORT).show();
-                    Bundle bundle=new Bundle();
+                   /* Bundle bundle=new Bundle();
                     bundle.putString(C.CAT_ID,""+horizontalList.get(position).getId());
                     bundle.putString(C.SUB_CAT_ID,"");
 
                     bundle.putInt(C.SOURCE,C.FRAGMENT_CATEGORIES);
 
-                    ((ActivityContainer)context).fragmnetLoader(C.FRAGMENT_PRODUCT_LISTING,bundle);
+                    ((ActivityContainer)context).fragmnetLoader(C.FRAGMENT_PRODUCT_LISTING,bundle);*/
+
+                    Intent intent = new Intent(context, ActivityContainer.class);
+                    Bundle bundle = new Bundle();
+                    bundle.putString(C.CAT_ID, "" + horizontalList.get(position).getId());
+                    bundle.putString(C.SUB_CAT_ID, "");
+
+                    bundle.putInt(C.SOURCE, C.FRAGMENT_CATEGORIES);
+                    intent.putExtra(C.FRAGMENT_ACTION, C.FRAGMENT_PRODUCT_LISTING);
+                    intent.putExtra(C.BUNDLE, bundle);
+                    context.startActivity(intent);
                 }
             });
         }

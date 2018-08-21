@@ -94,7 +94,7 @@ public class FragmentAddCard extends Fragment implements ICardViewPresenter.ICar
     RelativeLayout rlISDetailSave;
     ICardViewPresenter iCardViewPresenter;
     Util util;
-    boolean isCheckout;
+    boolean isCheckout,isRetryPayment=false;
     private boolean isDelete;
     private InputFilter filter = new InputFilter() {
 
@@ -134,6 +134,13 @@ public class FragmentAddCard extends Fragment implements ICardViewPresenter.ICar
         iCardViewPresenter = new CardViewPresenterImpl(this, getActivity());
         util = new Util();
         isCheckout = getArguments().getBoolean(C.IS_FROM_CHECKOUT);
+        try {
+            isRetryPayment = getArguments().getBoolean(C.IS_RETRY_PAYEMNT);
+        }
+        catch (Exception e){
+            e.printStackTrace();
+        }
+
     }
 
     @Override
@@ -438,7 +445,8 @@ public class FragmentAddCard extends Fragment implements ICardViewPresenter.ICar
                         cardList.setBrand(Util.getCardTypeUsingBrandName(type));
                         cardList.setIsDefaultSource(true);
                         SharedPreference.getInstance(getActivity()).addCard(C.CARD_DATA, cardList);
-                        getActivity().onBackPressed();
+                        gotoPaymentScreen();
+
                     }
                 } else {
                     addCard(token.getId());
@@ -463,12 +471,7 @@ public class FragmentAddCard extends Fragment implements ICardViewPresenter.ICar
                 handler.postDelayed(new Runnable() {
                     public void run() {
                         // Actions to do after 10 seconds
-                        if(isCheckout){
-                            ((ActivityContainer)getActivity()).fragmnetLoader(C.FRAGMENT_PAYMENT_CONFIRMATION,null);
-                        }
-                        else {
-                            getActivity().onBackPressed();
-                        }
+                        gotoPaymentScreen();
                     }
                 }, 2000);
 
@@ -482,6 +485,16 @@ public class FragmentAddCard extends Fragment implements ICardViewPresenter.ICar
         }
     }
 
+    void gotoPaymentScreen(){
+        if(isCheckout){
+            Bundle bundle=new Bundle();
+            bundle.putBoolean(C.IS_RETRY_PAYEMNT,isRetryPayment);
+            ((ActivityContainer)getActivity()).fragmnetLoader(C.FRAGMENT_PAYMENT_CONFIRMATION,bundle);
+        }
+        else {
+            getActivity().onBackPressed();
+        }
+    }
     @Override
     public void getResponseError(String response) {
         util.setSnackbarMessage(getActivity(), response, llBack, true);

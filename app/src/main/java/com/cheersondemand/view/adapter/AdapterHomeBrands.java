@@ -108,7 +108,9 @@ public class AdapterHomeBrands extends RecyclerView.Adapter<RecyclerView.ViewHol
                     /*Intent intent = new Intent(context, ActivityContainer.class);
                     intent.putExtra(C.FRAGMENT_ACTION, C.FRAGMENT_CATEGORIES);
                     context.startActivity(intent);*/
-                    ((ActivityHome)context).fragmnetLoader(C.FRAGMENT_CATEGORIES,null);
+                    Bundle bundle = new Bundle();
+                    bundle.putInt(C.SOURCE, C.FRAGMENT_PRODUCTS_HOME);
+                    ((ActivityHome)context).fragmnetLoader(C.FRAGMENT_CATEGORIES,bundle);
                     //   Toast.makeText(context, "More", Toast.LENGTH_SHORT).show();
 
                 }

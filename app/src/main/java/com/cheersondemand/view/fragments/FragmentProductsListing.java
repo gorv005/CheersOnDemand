@@ -121,7 +121,7 @@ public class FragmentProductsListing extends Fragment implements View.OnClickLis
     String from = "0", to = "5000";
     String from_ = "0", to_ = "5000";
     String orderBy = "desc";
-    String orderField = "created_at";
+    String orderField = "sold";
     int source;
     AllProduct product;
     List<Categories> categoriesList;
@@ -813,10 +813,18 @@ public class FragmentProductsListing extends Fragment implements View.OnClickLis
                 gotoStoreList();
                 break;
             case R.id.btnBrowseProduct:
-                getActivity().finish();
-                Intent intent = new Intent(getActivity(), ActivityContainer.class);
-                intent.putExtra(C.FRAGMENT_ACTION, C.FRAGMENT_CATEGORIES);
-                startActivity(intent);
+                if(source==C.FRAGMENT_CATEGORIES){
+                    getActivity().onBackPressed();
+                }
+                else {
+                    getActivity().finish();
+                    Intent intent = new Intent(getActivity(), ActivityContainer.class);
+                    Bundle bundle = new Bundle();
+                    bundle.putInt(C.SOURCE, C.FRAGMENT_PRODUCT_LISTING);
+                    intent.putExtra(C.BUNDLE, bundle);
+                    intent.putExtra(C.FRAGMENT_ACTION, C.FRAGMENT_CATEGORIES);
+                    startActivity(intent);
+                }
                 break;
         }
     }

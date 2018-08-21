@@ -59,9 +59,11 @@ public class FragmentSubcategoryFilter extends Fragment implements IHomeViewPres
     List<SubCategory> subCategoryListFilter;
 
     AdapterSubCategory adapterSubCategory;
+    Util util;
     public FragmentSubcategoryFilter() {
         // Required empty public constructor
     }
+
 
 
     @Override
@@ -77,6 +79,7 @@ public class FragmentSubcategoryFilter extends Fragment implements IHomeViewPres
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         catIdList=new ArrayList<>();
+        util=new Util();
         iHomeViewPresenterPresenter=new HomeViewPresenterImpl(this,getActivity());
     }
 
@@ -176,10 +179,16 @@ public class FragmentSubcategoryFilter extends Fragment implements IHomeViewPres
     @Override
     public void showProgress() {
 
+            util.showDialog(C.MSG, getActivity());
+
+
     }
 
     @Override
     public void hideProgress() {
+
+            util.hideDialog();
+
 
     }
 }

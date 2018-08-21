@@ -24,6 +24,7 @@ import com.cheersondemand.presenter.home.IHomeViewPresenterPresenter;
 import com.cheersondemand.util.C;
 import com.cheersondemand.util.SharedPreference;
 import com.cheersondemand.util.Util;
+import com.cheersondemand.view.ActivityContainer;
 import com.cheersondemand.view.adapter.AdapterCategories;
 
 import butterknife.BindView;
@@ -53,7 +54,7 @@ public class FragmentCategoryList extends Fragment implements IHomeViewPresenter
     RelativeLayout rlBar;
     @BindView(R.id.viewLine)
     View viewLine;
-
+    int source;
     public FragmentCategoryList() {
         // Required empty public constructor
     }
@@ -63,6 +64,9 @@ public class FragmentCategoryList extends Fragment implements IHomeViewPresenter
         super.onResume();
         /*((ActivityContainer)getActivity()).showToolBar();
         ActivityContainer.tvTitle.setText(R.string.Explore);*/
+        if(source!=C.FRAGMENT_PRODUCTS_HOME) {
+            ((ActivityContainer) getActivity()).hideToolBar();
+        }
     }
 
     @Override
@@ -70,6 +74,7 @@ public class FragmentCategoryList extends Fragment implements IHomeViewPresenter
         super.onCreate(savedInstanceState);
         util = new Util();
         iHomeViewPresenterPresenter = new HomeViewPresenterImpl(this, getActivity());
+        source = getArguments().getInt(C.SOURCE);
     }
 
     @Override

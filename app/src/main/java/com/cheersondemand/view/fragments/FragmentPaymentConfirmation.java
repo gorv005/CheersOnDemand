@@ -47,6 +47,7 @@ import com.kunzisoft.switchdatetime.SwitchDateTimeDialogFragment;
 import com.lsjwzh.widget.recyclerviewpager.RecyclerViewPager;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -151,6 +152,8 @@ public class FragmentPaymentConfirmation extends Fragment implements ICardViewPr
     private ImageView[] dots;
     Date mCurrentDate;
     boolean isScheduleTimeselected=false;
+    Order order;
+    boolean isRetryPayment=false;
     public FragmentPaymentConfirmation() {
         // Required empty public constructor
     }
@@ -162,8 +165,10 @@ public class FragmentPaymentConfirmation extends Fragment implements ICardViewPr
         iOrderViewPresenterPresenter = new OrderViewPresenterImpl(this, getActivity());
         iPaymentViewPresenter = new PaymentViewPresenterImpl(this, getActivity());
         util = new Util();
-        //  cartProduct = (CartProduct) getActivity().getIntent().getExtras().getSerializable(C.CART_DATA);
-
+        isRetryPayment= getArguments().getBoolean(C.IS_RETRY_PAYEMNT);
+        if(isRetryPayment) {
+            order = (Order) getArguments().getSerializable(C.ORDER);
+        }
     }
 
     @Override
@@ -292,8 +297,13 @@ public class FragmentPaymentConfirmation extends Fragment implements ICardViewPr
     }
 
     void getCartList() {
-        String order_id = SharedPreference.getInstance(getActivity()).getString(C.ORDER_ID);
-
+        String order_id=null;
+        if(isRetryPayment){
+            order_id=""+order.getId();
+        }
+        else {
+            order_id = SharedPreference.getInstance(getActivity()).getString(C.ORDER_ID);
+        }
         if (order_id != null && !order_id.equals("0")) {
             if (SharedPreference.getInstance(getActivity()).getBoolean(C.IS_LOGIN_GUEST)) {
                 String id = "" + SharedPreference.getInstance(getActivity()).geGuestUser(C.GUEST_USER).getId();
@@ -316,41 +326,75 @@ public class FragmentPaymentConfirmation extends Fragment implements ICardViewPr
 
     @Override
     public void onSuccessCardList(CardListResponse response) {
-        if (response.getSuccess()) {
-            if (response.getData() != null && response.getData().size() > 0) {
+        try {
+            if (response.getSuccess()) {
 
-                cardList = response.getData();
-
-                List<CardList> cardLists = SharedPreference.getInstance(getActivity()).getCard(C.CARD_DATA);
-                if (cardLists != null) {
-                    for (int i = cardLists.size(); i >= 0; i--) {
-                        cardList.set(i, cardLists.get(i - 1));
+                cardList=new ArrayList<>();
+                    List<CardList> cardLists = SharedPreference.getInstance(getActivity()).getCard(C.CARD_DATA);
+                    if (cardLists != null && cardLists.size()>0) {
+                        for (int i = cardLists.size(); i > 0; i--) {
+                            cardList.add(i-1, cardLists.get(i - 1));
+                        }
                     }
+                if(response.getData()!=null && response.getData().size()>0) {
+                        for(int i=0;i<response.getData().size();i++) {
+                            cardList.add(response.getData().get(i));
+                        }
+                }
+                else {
+                        if(isRetryPayment){
+                            gotoCard();
+                        }
                 }
 
-                adapterCardPayment = new AdapterCardPayment(cardList, getActivity());
-                rvCardList.setAdapter(adapterCardPayment);
-                for (int j = 0; j < cardList.size(); j++) {
-                    if (cardList.get(j).getIsDefaultSource()) {
-                        rvCardList.scrollToPosition(j);
-                        break;
+                    adapterCardPayment = new AdapterCardPayment(cardList, getActivity());
+                    rvCardList.setAdapter(adapterCardPayment);
+                    for (int j = 0; j < cardList.size(); j++) {
+                        if (cardList.get(j).getIsDefaultSource()) {
+                            rvCardList.scrollToPosition(j);
+                            break;
 
+                        }
                     }
-                }
-                setUiPageViewController();
-                getCartList();
+                    setUiPageViewController();
+                    getCartList();
+
             } else {
-                // tvNoCardAvailable.setVisibility(View.VISIBLE);
+                // util.setSnackbarMessage(getActivity(), response.getMessage(), LLView, true);
                 getCartList();
 
             }
-        } else {
-            // util.setSnackbarMessage(getActivity(), response.getMessage(), LLView, true);
-            getCartList();
-
+        }
+        catch (Exception e){
+            e.printStackTrace();
         }
     }
+    void gotoCard(){
+        Bundle bundle3 = new Bundle();
 
+        bundle3.putBoolean(C.IS_FROM_CHECKOUT, true);
+        bundle3.putBoolean(C.IS_RETRY_PAYEMNT, true);
+        ((ActivityContainer) getActivity()).fragmnetLoader(C.FRAGMENT_ADD_CARD, bundle3);
+    }
+    void retryPayment() {
+        if(cardList!=null && cardList.size()>0) {
+            String order_id = "" + order.getId();
+            PaymentRequest paymentRequest = new PaymentRequest();
+            paymentRequest.setIsGift(checkbox.isChecked());
+            if (isScheduleTimeselected) {
+                paymentRequest.setScheduleTime(tvScheduleTime.getText().toString());
+            }
+            if (cardList.get(rvCardList.getCurrentPosition()).getCardId() != null) {
+                paymentRequest.setSource(cardList.get(rvCardList.getCurrentPosition()).getCardId());
+            } else {
+                paymentRequest.setSource(cardList.get(rvCardList.getCurrentPosition()).getStripeToken());
+            }
+            String id = "" + SharedPreference.getInstance(getActivity()).getUser(C.AUTH_USER).getData().getUser().getId();
+
+            String token = C.bearer + SharedPreference.getInstance(getActivity()).getUser(C.AUTH_USER).getData().getToken().getAccessToken();
+            iPaymentViewPresenter.retryPayment(token, id, order_id, paymentRequest);
+        }
+    }
 
     void doPayment() {
         String order_id = SharedPreference.getInstance(getActivity()).getString(C.ORDER_ID);
@@ -516,21 +560,33 @@ public class FragmentPaymentConfirmation extends Fragment implements ICardViewPr
 
                 bundle1.putBoolean(C.IS_EDIT, false);
                 bundle1.putBoolean(C.IS_FROM_CHECKOUT, true);
-                ((ActivityContainer) getActivity()).fragmnetLoader(C.FRAGMENT_ADD_ADDRESS, bundle1);
+                bundle1.putBoolean(C.IS_RETRY_PAYEMNT, isRetryPayment);
+                ((ActivityContainer) getActivity()).fragmnetLoader(C.FRAGMENT_ADD_ADDRESS_1, bundle1);
                 break;
             case R.id.llEdit:
-                Bundle bundle2 = new Bundle();
-                bundle2.putInt(C.ADDRESS_ID, cartProduct.getOrder().getDeliveryAddress().getId());
-                ((ActivityContainer) getActivity()).fragmnetLoader(C.FRAGMENT_SELECT_ADDRESS, bundle2);
+                if(isRetryPayment) {
+                   getActivity().onBackPressed();
+                }
+                else {
+                    Bundle bundle2 = new Bundle();
+                    bundle2.putInt(C.ADDRESS_ID, cartProduct.getOrder().getDeliveryAddress().getId());
+                    ((ActivityContainer) getActivity()).fragmnetLoader(C.FRAGMENT_SELECT_ADDRESS, bundle2);
+                }
                 break;
             case R.id.tvAddCard:
                 Bundle bundle3 = new Bundle();
 
                 bundle3.putBoolean(C.IS_FROM_CHECKOUT, true);
+                bundle3.putBoolean(C.IS_RETRY_PAYEMNT, isRetryPayment);
                 ((ActivityContainer) getActivity()).fragmnetLoader(C.FRAGMENT_ADD_CARD, bundle3);
                 break;
             case R.id.btnProceedToPay:
-                doPayment();
+                if(isRetryPayment){
+                    retryPayment();
+                }
+                else {
+                    doPayment();
+                }
                 break;
             case R.id.rlSchedileTime:
                 dateTimeFragment.startAtCalendarView();

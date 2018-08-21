@@ -83,6 +83,8 @@ dependencies {
     compile 'com.github.lsjwzh.RecyclerViewPager:lib:v1.1.2'
     implementation 'com.airbnb:deeplinkdispatch:3.1.1'
     annotationProcessor 'com.airbnb:deeplinkdispatch-processor:3.1.1'
+    implementation 'com.github.sharish:ShimmerRecyclerView:v1.3'
+
 }
 //apply plugin: 'com.google.gms.google-services'
 

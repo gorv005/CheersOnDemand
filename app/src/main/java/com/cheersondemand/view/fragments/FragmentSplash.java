@@ -242,21 +242,24 @@ public class FragmentSplash extends Fragment {
     }
 
     public boolean CheckingPermissionIsEnabledOrNot() {
-
-        int FirstPermissionResult = ContextCompat.checkSelfPermission(getActivity(), WRITE_EXTERNAL_STORAGE);
-        int SecondPermissionResult = ContextCompat.checkSelfPermission(getActivity(), ACCESS_FINE_LOCATION);
-        int ThirdPermissionResult  = ContextCompat.checkSelfPermission(getActivity(), ACCESS_COARSE_LOCATION);
+        try {
+            int FirstPermissionResult = ContextCompat.checkSelfPermission(getActivity(), WRITE_EXTERNAL_STORAGE);
+            int SecondPermissionResult = ContextCompat.checkSelfPermission(getActivity(), ACCESS_FINE_LOCATION);
+            int ThirdPermissionResult = ContextCompat.checkSelfPermission(getActivity(), ACCESS_COARSE_LOCATION);
 
        /* return FirstPermissionResult == PackageManager.PERMISSION_GRANTED &&
                 SecondPermissionResult == PackageManager.PERMISSION_GRANTED &&
                 ThirdPermissionResult == PackageManager.PERMISSION_GRANTED;*/
-        if(FirstPermissionResult == PackageManager.PERMISSION_GRANTED && SecondPermissionResult == PackageManager.PERMISSION_GRANTED
-                && ThirdPermissionResult == PackageManager.PERMISSION_GRANTED  ){
-            return true;
+            if (FirstPermissionResult == PackageManager.PERMISSION_GRANTED && SecondPermissionResult == PackageManager.PERMISSION_GRANTED
+                    && ThirdPermissionResult == PackageManager.PERMISSION_GRANTED) {
+                return true;
+            } else if (FirstPermissionResult == PackageManager.PERMISSION_GRANTED && SecondPermissionResult == PackageManager.PERMISSION_DENIED
+                    && ThirdPermissionResult == PackageManager.PERMISSION_DENIED) {
+                return true;
+            }
         }
-        else if(FirstPermissionResult == PackageManager.PERMISSION_GRANTED && SecondPermissionResult == PackageManager.PERMISSION_DENIED
-              && ThirdPermissionResult == PackageManager.PERMISSION_DENIED  ){
-            return true;
+        catch (Exception e){
+            e.printStackTrace();
         }
         return false;
     }

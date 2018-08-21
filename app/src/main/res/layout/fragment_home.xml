@@ -194,21 +194,15 @@
             android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
-    <com.facebook.shimmer.ShimmerFrameLayout
-        android:id="@+id/shimmerBrands"
-        android:visibility="gone"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:orientation="vertical"
-        shimmer:duration="800">
+
     <RelativeLayout
         android:id="@+id/rlBrands"
         android:background="@color/brands_back_color"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <android.support.v7.widget.RecyclerView
+        <com.cooltechworks.views.shimmer.ShimmerRecyclerView
+            xmlns:app="http://schemas.android.com/apk/res-auto"
             android:id="@+id/rvBrands"
 
             android:scrollbars="none"
@@ -216,35 +210,35 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
+            app:shimmer_demo_child_count="5"
+            app:shimmer_demo_layout="@layout/layout_shimmer_brands"
+            app:shimmer_demo_layout_manager_type="linear_horizontal"
+            app:shimmer_demo_angle="20"
              />
     </RelativeLayout>
-    </com.facebook.shimmer.ShimmerFrameLayout>
 
-    <com.facebook.shimmer.ShimmerFrameLayout
-        android:id="@+id/shimmerProducts"
-        android:layout_below="@id/shimmerBrands"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:orientation="vertical"
-        android:visibility="gone"
-        shimmer:duration="800">
+
         <RelativeLayout
             android:id="@+id/rlProducts"
             android:background="@color/white"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-            <android.support.v7.widget.RecyclerView
+            <com.cooltechworks.views.shimmer.ShimmerRecyclerView
+                xmlns:app="http://schemas.android.com/apk/res-auto"
+
                 android:id="@+id/rvProducts"
                 android:scrollbars="none"
                 android:background="@color/white"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
-                android:layout_centerHorizontal="true" />
+                android:layout_centerHorizontal="true"
+                app:shimmer_demo_child_count="5"
+                app:shimmer_demo_layout="@layout/layout_shimmer_products"
+                app:shimmer_demo_layout_manager_type="linear_horizontal"
+                app:shimmer_demo_angle="20"/>
         </RelativeLayout>
-    </com.facebook.shimmer.ShimmerFrameLayout>
         </LinearLayout>
     </ScrollView>
 </android.support.v4.widget.SwipeRefreshLayout>

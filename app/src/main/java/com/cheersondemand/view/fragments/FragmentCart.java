@@ -661,6 +661,8 @@ public class FragmentCart extends Fragment implements View.OnClickListener, IOrd
                     intent.putExtra(C.FRAGMENT_ACTION, C.FRAGMENT_ADD_ADDRESS);
                     Bundle bundle = new Bundle();
                     bundle.putBoolean(C.IS_EDIT, false);
+                    bundle.putBoolean(C.IS_RETRY_PAYEMNT, false);
+
                     bundle.putBoolean(C.IS_FROM_CHECKOUT, true);
                     intent.putExtra(C.BUNDLE, bundle);
                     getActivity().startActivity(intent);
