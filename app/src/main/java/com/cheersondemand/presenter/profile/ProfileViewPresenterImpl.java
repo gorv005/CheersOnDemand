@@ -70,10 +70,10 @@ public class ProfileViewPresenterImpl implements IProfileViewPresenter, IProfile
     }
 
     @Override
-    public void updateProfile(String token, String UserId, MultipartBody.Part part, RequestBody name, RequestBody phone) {
+    public void updateProfile(String token, String UserId, MultipartBody.Part part, RequestBody name, RequestBody phone,RequestBody isDeleted) {
         if (mView != null) {
             mView.showProgress();
-            iProfileViewIntractor.updateProfile(token,UserId,part,name,phone, this);
+            iProfileViewIntractor.updateProfile(token,UserId,part,name,phone,isDeleted ,this);
         }
     }
 

@@ -184,6 +184,10 @@ public class FragmentUpdateProfile extends Fragment implements View.OnClickListe
 
             }
         });
+        etPhoneNo.addTextChangedListener(new AutoAddTextWatcher(etPhoneNo,
+                "-",
+                3,6));
+/*
         etPhoneNo.addTextChangedListener(new TextWatcher() {
 
             public void afterTextChanged(Editable s) {
@@ -204,6 +208,7 @@ public class FragmentUpdateProfile extends Fragment implements View.OnClickListe
 
             }
         });
+*/
     }
 
     void validationFields() {
@@ -256,6 +261,7 @@ public class FragmentUpdateProfile extends Fragment implements View.OnClickListe
         if (fileUri != null) {
             File file = new File(getRealPathFromURI(fileUri));
            // File file = new File(fileUri.getPath());
+            RequestBody isDeleted = RequestBody.create(MediaType.parse("text/plain"), ""+0);
 
             RequestBody name = RequestBody.create(MediaType.parse("text/plain"), etName.getText().toString());
             RequestBody phone = RequestBody.create(MediaType.parse("text/plain"), etPhoneNo.getText().toString());
@@ -265,17 +271,17 @@ public class FragmentUpdateProfile extends Fragment implements View.OnClickListe
             MultipartBody.Part body = MultipartBody.Part.createFormData("profile_picture", "image.jpg", requestFile);
 
 
-            iProfileViewPresenter.updateProfile(token, id, body, name, phone);
+            iProfileViewPresenter.updateProfile(token, id, body, name, phone,isDeleted);
         }
       else  if(fileUri ==null && isRemoved){
             File file = new File(Environment.getExternalStorageDirectory()+"");
-
+            RequestBody isDeleted = RequestBody.create(MediaType.parse("text/plain"), ""+1);
             RequestBody name = RequestBody.create(MediaType.parse("text/plain"), etName.getText().toString());
             RequestBody phone = RequestBody.create(MediaType.parse("text/plain"), etPhoneNo.getText().toString());
-            RequestBody requestFile = RequestBody.create(MediaType.parse("image/*"), file);
+         //   RequestBody requestFile = RequestBody.create(MediaType.parse("image/*"), file);
 
-           MultipartBody.Part body = MultipartBody.Part.createFormData("profile_picture", "image.jpg", requestFile);
-            iProfileViewPresenter.updateProfile(token, id, null, name, phone);
+          // MultipartBody.Part body = MultipartBody.Part.createFormData("profile_picture", "image.jpg", requestFile);
+            iProfileViewPresenter.updateProfile(token, id, null, name, phone,isDeleted);
         }
         else {
             iProfileViewPresenter.updateProfile(token, id, profileUpdateRequest);
@@ -572,4 +578,84 @@ public class FragmentUpdateProfile extends Fragment implements View.OnClickListe
         util.hideDialog();
 
     }
+    public class AutoAddTextWatcher implements TextWatcher {
+        private CharSequence mBeforeTextChanged;
+        private TextWatcher mTextWatcher;
+        private int[] mArray_pos;
+        private EditText mEditText;
+        private String mAppentText;
+
+        public AutoAddTextWatcher(EditText editText, String appendText, int... position){
+            this.mEditText = editText;
+            this.mAppentText = appendText;
+            this.mArray_pos = position.clone();
+        }
+        public AutoAddTextWatcher(EditText editText, String appendText, TextWatcher textWatcher, int... position){
+            this(editText, appendText, position);
+            this.mTextWatcher = textWatcher;
+        }
+
+        @Override
+        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            mBeforeTextChanged = s.toString();
+
+            if(mTextWatcher != null)
+                mTextWatcher.beforeTextChanged(s, start, count, after);
+
+        }
+
+        @Override
+        public void onTextChanged(CharSequence s, int start, int before, int count) {
+            for (int i = 0; i < mArray_pos.length; i++) {
+                if(((mBeforeTextChanged.length() - mAppentText.length() * i) == (mArray_pos[i] - 1) &&
+                        (s.length() - mAppentText.length() * i) == mArray_pos[i])){
+                    mEditText.append(mAppentText);
+
+                    break;
+                }
+
+                if(((mBeforeTextChanged.length() - mAppentText.length() * i) == mArray_pos[i] &&
+                        (s.length() - mAppentText.length() * i) == (mArray_pos[i] + 1))){
+                    int idx_start = mArray_pos[i] + mAppentText.length() * i;
+                    int idx_end = Math.min(idx_start + mAppentText.length(), s.length());
+
+                    String sub = mEditText.getText().toString().substring(idx_start,  idx_end);
+
+                    if(!sub.equals(mAppentText)){
+                        mEditText.getText().insert(s.length() - 1, mAppentText);
+                    }
+
+                    break;
+                }
+
+                if(mAppentText.length() > 1 &&
+                        (mBeforeTextChanged.length() - mAppentText.length() * i) == (mArray_pos[i] + mAppentText.length()) &&
+                        (s.length() - mAppentText.length() * i) == (mArray_pos[i] + mAppentText.length() - 1)){
+                    int idx_start = mArray_pos[i] + mAppentText.length() * i;
+                    int idx_end = Math.min(idx_start + mAppentText.length(), s.length());
+
+                    mEditText.getText().delete(idx_start, idx_end);
+
+                    break;
+                }
+
+            }
+
+            if(mTextWatcher != null)
+                mTextWatcher.onTextChanged(s, start, before, count);
+
+        }
+
+        @Override
+        public void afterTextChanged(Editable s) {
+            if(mTextWatcher != null) {
+                mTextWatcher.afterTextChanged(s);
+            }
+            validationFields();
+
+
+        }
+
+    }
+
 }

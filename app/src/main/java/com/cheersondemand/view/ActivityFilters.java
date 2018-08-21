@@ -52,7 +52,7 @@ public class ActivityFilters extends AppCompatActivity implements View.OnClickLi
     @BindView(R.id.tvClearAll)
     TextView tvClearAll;
     String minRange = "0", maxRange = "5000";
-
+    String catId;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -69,6 +69,7 @@ public class ActivityFilters extends AppCompatActivity implements View.OnClickLi
         getSupportActionBar().setHomeAsUpIndicator(upArrow);
         ButterKnife.bind(this);
         bundleg = getIntent().getBundleExtra(C.BUNDLE);
+        catId=bundleg.getString(C.CAT_ID);
         //int fragmentAction = getIntent().getIntExtra(C.FRAGMENT_ACTION, 100);
         brandList = (List<Brand>) bundleg.getSerializable(C.BRANDS_LIST);
         for (int i = 0; i < brandList.size(); i++) {
@@ -185,19 +186,30 @@ public class ActivityFilters extends AppCompatActivity implements View.OnClickLi
 
     void getSubCategoryList() {
         // Fragment fragment = getVisibleFragment();
-        if (fragment != null && fragment instanceof FragmentSubcategoryFilter) {
-            subCategoriesList = ((FragmentSubcategoryFilter) fragment).getSubCategoriesList();
+        try {
+            if (fragment != null && fragment instanceof FragmentSubcategoryFilter) {
+                subCategoriesList = ((FragmentSubcategoryFilter) fragment).getSubCategoriesList();
 
+            }
+        }
+        catch (Exception e){
+            e.printStackTrace();
         }
     }
 
     public List<Categories> getCategoryListFilter() {
-        //  Fragment fragment = getVisibleFragment();
-        if (fragment != null && fragment instanceof FragmentCategoryFilter) {
-            categoriesList = ((FragmentCategoryFilter) fragment).getCategoriesList();
+        try {
+            //  Fragment fragment = getVisibleFragment();
+            if (fragment != null && fragment instanceof FragmentCategoryFilter) {
+                categoriesList = ((FragmentCategoryFilter) fragment).getCategoriesList();
 
+            }
+            return categoriesList;
         }
-        return categoriesList;
+        catch (Exception e){
+            e.printStackTrace();
+        }
+        return null;
     }
 
     @Override
@@ -209,10 +221,15 @@ public class ActivityFilters extends AppCompatActivity implements View.OnClickLi
     }
 
     public void getBrandsList() {
-        //   Fragment fragment = getVisibleFragment();
-        if (fragment != null && fragment instanceof FragmentBrandsFilter) {
-            brandList = ((FragmentBrandsFilter) fragment).getBrandList();
+        try {
+            //   Fragment fragment = getVisibleFragment();
+            if (fragment != null && fragment instanceof FragmentBrandsFilter) {
+                brandList = ((FragmentBrandsFilter) fragment).getBrandList();
 
+            }
+        }
+        catch (Exception e){
+            e.printStackTrace();
         }
     }
 
@@ -258,9 +275,23 @@ public class ActivityFilters extends AppCompatActivity implements View.OnClickLi
                         brandList.get(i).setSelected(false);
                     }
                 }
-                if(categoriesList!=null) {
-                    for (int i = 0; i < categoriesList.size(); i++) {
-                        categoriesList.get(i).setSelected(false);
+                if(catId==null) {
+                    if (categoriesList != null) {
+                        for (int i = 0; i < categoriesList.size(); i++) {
+                            categoriesList.get(i).setSelected(false);
+                        }
+                    }
+                }
+                else {
+                    if (categoriesList != null) {
+                        for (int i = 0; i < categoriesList.size(); i++) {
+                            if(Integer.parseInt(catId)==categoriesList.get(i).getId()){
+                                categoriesList.get(i).setSelected(true);
+                            }
+                            else {
+                                categoriesList.get(i).setSelected(false);
+                            }
+                        }
                     }
                 }
                 if(subCategoriesList!=null) {

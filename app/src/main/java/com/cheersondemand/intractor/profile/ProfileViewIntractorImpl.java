@@ -54,7 +54,7 @@ public class ProfileViewIntractorImpl implements IProfileViewIntractor {
     }
 
     @Override
-    public void updateProfile(String token, String UserId, MultipartBody.Part part, RequestBody name, RequestBody phone, final OnLoginFinishedListener listener) {
+    public void updateProfile(String token, String UserId, MultipartBody.Part part, RequestBody name, RequestBody phone,RequestBody isDeleted, final OnLoginFinishedListener listener) {
         try {
 
             WebServicesWrapper.getInstance().updateProfile(new ResponseResolver<GuestUserCreateResponse>() {
@@ -79,7 +79,7 @@ public class ProfileViewIntractorImpl implements IProfileViewIntractor {
                         listener.onError(error.getError());
                     }
                 }
-            },token,UserId,part,name,phone);
+            },token,UserId,part,name,phone,isDeleted);
         }
         catch (Exception e){
             e.printStackTrace();

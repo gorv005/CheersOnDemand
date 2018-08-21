@@ -16,7 +16,7 @@ import okhttp3.RequestBody;
 public interface IProfileViewPresenter {
 
     public void logout(LogoutRequest logoutRequest);
-    public void updateProfile(String token, String UserId, MultipartBody.Part part, RequestBody name, RequestBody phone);
+    public void updateProfile(String token, String UserId, MultipartBody.Part part, RequestBody name, RequestBody phone,RequestBody IsDeleted);
     public void updateProfile(String token, String userId, ProfileUpdateRequest profileUpdateRequest);
 
 

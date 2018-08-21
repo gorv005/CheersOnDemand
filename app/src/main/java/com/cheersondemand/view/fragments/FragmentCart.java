@@ -210,8 +210,7 @@ public class FragmentCart extends Fragment implements View.OnClickListener, IOrd
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.btnBrowseProduct:
-
-                ((ActivityHome) getActivity()).setHome();
+                gotoHome();
                 break;
             case R.id.btnProceed:
                /* Intent intent = new Intent(getActivity(), ActivityContainer.class);
@@ -231,7 +230,14 @@ public class FragmentCart extends Fragment implements View.OnClickListener, IOrd
                 break;
         }
     }
-
+    public void gotoHome(){
+        Intent intent = new Intent(getActivity(), ActivityHome.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        Bundle bundle=new Bundle();
+        bundle.putInt(C.FRAGMENT_ACTION,C.FRAGMENT_PRODUCTS_HOME);
+        intent.putExtra(C.BUNDLE,bundle);
+        startActivity(intent);
+    }
 
     void dialogError() {
         final Dialog dialog = new Dialog(getActivity(), R.style.FullHeightDialog); //this is a reference to the style above

@@ -24,7 +24,7 @@ public interface IProfileViewIntractor {
         Context getAPPContext();
     }
     public void logout(LogoutRequest logoutRequest, OnLoginFinishedListener listener);
-    public void updateProfile(String token, String UserId, MultipartBody.Part part, RequestBody name, RequestBody phone, OnLoginFinishedListener listener);
+    public void updateProfile(String token, String UserId, MultipartBody.Part part, RequestBody name, RequestBody phone, RequestBody isDeleted,OnLoginFinishedListener listener);
     public void updateProfile(String token, String userId, ProfileUpdateRequest profileUpdateRequest, OnLoginFinishedListener listener);
 
 

@@ -146,6 +146,7 @@ public class FragmentProductDescription extends Fragment implements View.OnClick
     private boolean isAdd;
     private boolean isProductDes = false, isBuyNow = false;
     boolean isReadMore=false;
+    boolean isProgressShow=false;
     public FragmentProductDescription() {
         // Required empty public constructor
     }
@@ -201,6 +202,7 @@ public class FragmentProductDescription extends Fragment implements View.OnClick
     }
 
     void getSimilarProducts() {
+        isProgressShow=false;
         if (SharedPreference.getInstance(getActivity()).getBoolean(C.IS_LOGIN_GUEST)) {
             iProductDescViewPresenter.getSimilarProducts("" + product.getId(), Util.id(getActivity()), "1", "10");
         } else {
@@ -397,6 +399,7 @@ public class FragmentProductDescription extends Fragment implements View.OnClick
     }
 
     void addToCart() {
+        isProgressShow=true;
         AddToCartRequest addToCartRequest = new AddToCartRequest();
         addToCartRequest.setUuid(Util.id(getActivity()));
         addToCartRequest.setProductId(product.getId());
@@ -550,6 +553,7 @@ public class FragmentProductDescription extends Fragment implements View.OnClick
     }
 
     void getCouponList() {
+        isProgressShow=false;
         String order_id = SharedPreference.getInstance(getActivity()).getString(C.ORDER_ID);
 
         if (SharedPreference.getInstance(getActivity()).getBoolean(C.IS_LOGIN_GUEST)) {
@@ -765,14 +769,17 @@ public class FragmentProductDescription extends Fragment implements View.OnClick
 
     @Override
     public void showProgress() {
-        //  util.showDialog(C.MSG,getActivity());
+        if(isProgressShow) {
+            util.showDialog(C.MSG, getActivity());
+        }
 
     }
 
     @Override
     public void hideProgress() {
-        // util.hideDialog();
-
+        if(isProgressShow) {
+            util.hideDialog();
+        }
     }
 
     @Override

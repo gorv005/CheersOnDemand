@@ -96,7 +96,15 @@ public class FragmentSubcategoryFilter extends Fragment implements IHomeViewPres
     }
 
     public List<SubCategory> getSubCategoriesList(){
-        return adapterSubCategory.getSubCategoryList();
+        try {
+            if(adapterSubCategory!=null) {
+                return adapterSubCategory.getSubCategoryList();
+            }
+        }
+        catch (Exception e){
+            e.printStackTrace();
+        }
+        return null;
     }
 
     void getSubCatList(){

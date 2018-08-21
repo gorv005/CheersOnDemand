@@ -729,6 +729,14 @@ public class FragmentProductsListing extends Fragment implements View.OnClickLis
         try {
             if (response.getSuccess()) {
                 categoriesList = response.getData();
+                if(catId!=null) {
+                    for (int i = 0; i < categoriesList.size(); i++) {
+                        if (Integer.parseInt(catId)==categoriesList.get(i).getId()) {
+                            categoriesList.get(i).setSelected(true);
+                            break;
+                        }
+                    }
+                }
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -876,6 +884,8 @@ public class FragmentProductsListing extends Fragment implements View.OnClickLis
     void sendFilterData() {
         Intent intent = new Intent(getContext(), ActivityFilters.class);
         Bundle bundle = new Bundle();
+        bundle.putSerializable(C.CAT_ID, catId);
+
         bundle.putSerializable(C.BRANDS_LIST, (Serializable) brandList);
         bundle.putSerializable(C.CATEGORY_LIST, (Serializable) categoriesList);
         bundle.putSerializable(C.SUB_CATEGORY_LIST, (Serializable) subCatList);
