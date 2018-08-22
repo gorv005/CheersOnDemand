@@ -19,6 +19,7 @@ import com.cheersondemand.model.address.Address;
 import com.cheersondemand.model.order.addtocart.Order;
 import com.cheersondemand.model.order.updatecart.UpdateCartRequest;
 import com.cheersondemand.util.C;
+import com.cheersondemand.util.Util;
 import com.cheersondemand.view.fragments.FragmentAddAddress;
 import com.cheersondemand.view.fragments.FragmentAddCard;
 import com.cheersondemand.view.fragments.FragmentAddressList;
@@ -408,7 +409,12 @@ public class ActivityContainer extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-
+        try {
+            Util.hideKeyboard(this);
+        }
+        catch (Exception e){
+            e.printStackTrace();
+        }
        /* getSupportFragmentManager().executePendingTransactions();
         if (getSupportFragmentManager().getBackStackEntryCount() > 1) {
             int fragmentCount = getSupportFragmentManager().getBackStackEntryCount();

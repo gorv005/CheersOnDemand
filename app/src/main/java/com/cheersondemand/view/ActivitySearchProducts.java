@@ -225,7 +225,7 @@ public class ActivitySearchProducts extends Activity implements View.OnClickList
 
             if (response.getData() != null && response.getData().getRecentSearch() != null && response.getData().getRecentSearch().size() > 0) {
                 rlRecentSearch.setVisibility(View.VISIBLE);
-                tvRecenetSearch.setVisibility(View.GONE);
+                tvRecenetSearch.setVisibility(View.VISIBLE);
                 isRecentSearch=true;
                 adapterRecentProductSearch = new AdapterRecentProductSearches(response.getData().getRecentSearch(), this);
                 lvRecentSearches.setAdapter(adapterRecentProductSearch);
@@ -235,16 +235,17 @@ public class ActivitySearchProducts extends Activity implements View.OnClickList
                 tvRecenetSearch.setVisibility(View.GONE);
             }
             if (response.getData() != null && response.getData().getCategories() != null && response.getData().getCategories().size() > 0) {
-
+                boolean isViewMore=false;
                 List<Categories> categories = new ArrayList<>();
                 if (response.getData().getCategories().size() > 5) {
+                    isViewMore=true;
                     for (int i = 0; i < 5; i++) {
                         categories.add(response.getData().getCategories().get(i));
                     }
                 } else {
                     categories.addAll(response.getData().getCategories());
                 }
-                adapterHomeBrands = new AdapterHomeBrands(categories, this);
+                adapterHomeBrands = new AdapterHomeBrands(C.FRAGMENT_SEARCH_PRODUCT_RESULTS,isViewMore,categories, this);
                 lvCategory.setAdapter(adapterHomeBrands);
 
             }
@@ -273,13 +274,13 @@ public class ActivitySearchProducts extends Activity implements View.OnClickList
             if (response.getData() != null && response.getData().getResultsCount() > 0) {
                 llSearchResult.setVisibility(View.VISIBLE);
                 searchProducts=response.getData().getProducts();
-                if(adapterProductSearcheResults!=null){
+                /*if(adapterProductSearcheResults!=null){
                     adapterProductSearcheResults.notifyDataSetChanged();
                 }
-                else {
+                else {*/
                     adapterProductSearcheResults = new AdapterProductSearcheResults(searchProducts, this);
                     lvSearchResult.setAdapter(adapterProductSearcheResults);
-                }
+                //}
             } else {
                 if(searchProducts!=null && searchProducts.size()>0) {
                     searchProducts.clear();

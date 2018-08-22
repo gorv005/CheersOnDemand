@@ -30,11 +30,13 @@ public class AdapterHomeBrands extends RecyclerView.Adapter<RecyclerView.ViewHol
     Activity context;
     ImageLoader imageLoader;
     private List<Categories> horizontalList;
-
-    public AdapterHomeBrands(List<Categories> horizontalList, Activity context) {
+    boolean isViewMore;
+    int source;
+    public AdapterHomeBrands(int source,boolean isViewMore,List<Categories> horizontalList, Activity context) {
         this.horizontalList = horizontalList;
-
+        this.isViewMore=isViewMore;
         this.context = context;
+        this.source=source;
         imageLoader = new ImageLoader(context);
 
     }
@@ -108,9 +110,19 @@ public class AdapterHomeBrands extends RecyclerView.Adapter<RecyclerView.ViewHol
                     /*Intent intent = new Intent(context, ActivityContainer.class);
                     intent.putExtra(C.FRAGMENT_ACTION, C.FRAGMENT_CATEGORIES);
                     context.startActivity(intent);*/
-                    Bundle bundle = new Bundle();
-                    bundle.putInt(C.SOURCE, C.FRAGMENT_PRODUCTS_HOME);
-                    ((ActivityHome)context).fragmnetLoader(C.FRAGMENT_CATEGORIES,bundle);
+                    if(source==C.FRAGMENT_PRODUCTS_HOME) {
+                        Bundle bundle = new Bundle();
+                        bundle.putInt(C.SOURCE, C.FRAGMENT_PRODUCTS_HOME);
+                        ((ActivityHome) context).fragmnetLoader(C.FRAGMENT_CATEGORIES, bundle);
+                    }
+                   else if(source==C.FRAGMENT_SEARCH_PRODUCT_RESULTS) {
+                           Intent intent = new Intent(context, ActivityContainer.class);
+                        Bundle bundle = new Bundle();
+                        bundle.putInt(C.SOURCE, C.FRAGMENT_CATEGORIES);
+                        intent.putExtra(C.BUNDLE,bundle);
+                        intent.putExtra(C.FRAGMENT_ACTION, C.FRAGMENT_CATEGORIES);
+                             context.startActivity(intent);
+                    }
                     //   Toast.makeText(context, "More", Toast.LENGTH_SHORT).show();
 
                 }
@@ -128,7 +140,7 @@ public class AdapterHomeBrands extends RecyclerView.Adapter<RecyclerView.ViewHol
 
     @Override
     public int getItemCount() {
-        if(horizontalList.size()>5) {
+        if(isViewMore) {
             return horizontalList.size() + 1;
         }
         else {

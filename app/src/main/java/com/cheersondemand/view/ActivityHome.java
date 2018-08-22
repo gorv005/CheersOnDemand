@@ -357,6 +357,12 @@ public class ActivityHome extends AppCompatActivity implements View.OnClickListe
 
     @Override
     public void onBackPressed() {
+        try {
+            Util.hideKeyboard(this);
+        }
+        catch (Exception e){
+            e.printStackTrace();
+        }
         Fragment fragment=getVisibleFragment();
         if(fragment!=null && fragment instanceof FragmentCoupons){
             setCart();

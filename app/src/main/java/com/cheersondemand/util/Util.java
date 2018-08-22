@@ -159,7 +159,7 @@ public class Util {
     public static void setImage(Context context, String url, ImageView imageView){
         Glide.with(context)
                 .load(url)
-                .placeholder(R.drawable.missing)
+                //.placeholder(R.drawable.missing)
     .error(R.drawable.missing)
                 .into(imageView);
     }
@@ -240,14 +240,19 @@ public class Util {
 
     }
     public static void hideKeyboard(Activity activity) {
-        InputMethodManager imm = (InputMethodManager) activity.getSystemService(Activity.INPUT_METHOD_SERVICE);
-        //Find the currently focused view, so we can grab the correct window token from it.
-        View view = activity.getCurrentFocus();
-        //If no view currently has focus, create a new one, just so we can grab a window token from it
-        if (view == null) {
-            view = new View(activity);
+        try {
+            InputMethodManager imm = (InputMethodManager) activity.getSystemService(Activity.INPUT_METHOD_SERVICE);
+            //Find the currently focused view, so we can grab the correct window token from it.
+            View view = activity.getCurrentFocus();
+            //If no view currently has focus, create a new one, just so we can grab a window token from it
+            if (view == null) {
+                view = new View(activity);
+            }
+            imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
         }
-        imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+        catch (Exception e){
+
+        }
     }
     public static Bitmap scaleDown(Bitmap realImage, float maxImageSize,
                                    boolean filter) {

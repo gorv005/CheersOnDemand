@@ -319,14 +319,16 @@ public class FragmentHome extends Fragment implements SwipeRefreshLayout.OnRefre
 
                 if (response.getData() != null && response.getData().getCategories() != null && response.getData().getCategories().size() > 0) {
                     rlBrands.setVisibility(View.VISIBLE);
+                    boolean isViewMore=false;
                     if (response.getData().getCategories().size() > 5) {
-                        for (int i = 0; i < 5; i++) {
+                        isViewMore=true;
+                        for (int i = 0; i <5; i++) {
                             categories.add(response.getData().getCategories().get(i));
                         }
                     } else {
                         categories.addAll(response.getData().getCategories());
                     }
-                    adapterHomeBrands = new AdapterHomeBrands(categories, getActivity());
+                    adapterHomeBrands = new AdapterHomeBrands(C.FRAGMENT_PRODUCTS_HOME,isViewMore,categories, getActivity());
                     rvBrands.setAdapter(adapterHomeBrands);
                 } else {
                     rlBrands.setVisibility(View.GONE);
