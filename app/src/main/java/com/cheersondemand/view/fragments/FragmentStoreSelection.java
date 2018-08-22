@@ -170,6 +170,13 @@ public class FragmentStoreSelection extends Fragment implements IStoreViewPresen
     public void updateStoreSuccess(UpdateStoreResponse response) {
         try {
             if (response.getSuccess()) {
+                if (response.getData() != null && response.getData().getIsQuantityUpdated()) {
+                    SharedPreference.getInstance(getActivity()).setBoolean(C.IS_QUANTITY_UPDATED, response.getData().getIsQuantityUpdated());
+                }
+                else {
+                    SharedPreference.getInstance(getActivity()).setBoolean(C.IS_QUANTITY_UPDATED, false);
+
+                }
                 SharedPreference.getInstance(getActivity()).setStore(C.SELECTED_STORE, store);
                 if (from == C.SEARCH) {
                     gotoHome();

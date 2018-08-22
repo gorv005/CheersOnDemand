@@ -137,4 +137,5 @@ public interface C {
     String IS_RETRY_PAYEMNT = "is_retry_payement";
     String TAG_FRAGMENT_PAYMENT_CONFIRMATION = "TAG_FRAGMENT_PAYMENT_CONFIRMATION";
     int FRAGMENT_ADD_ADDRESS_1 =34 ;
+    String IS_QUANTITY_UPDATED = "is_quantity_updated";
 }

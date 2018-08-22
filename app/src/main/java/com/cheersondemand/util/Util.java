@@ -28,6 +28,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * Created by AB on 5/23/2018.
@@ -381,5 +382,8 @@ public class Util {
 
         return sbFormattedNumber.toString();
     }
-
+    private final static AtomicInteger c = new AtomicInteger(0);
+    public static int getID() {
+        return c.incrementAndGet();
+    }
 }

@@ -231,7 +231,9 @@ public class ActivityContainer extends AppCompatActivity {
             case C.FRAGMENT_ORDER_DETAIL:
                 fragment = new FragmentOrderDetail();
                 fragmentTransaction.replace(R.id.container, fragment);
-                fragmentTransaction.addToBackStack(C.TAG_FRAGMENT_ORDER_DETAIL);
+                if (!bundle.getBoolean(C.IS_NOTIFICATION)) {
+                    fragmentTransaction.addToBackStack(C.TAG_FRAGMENT_ORDER_DETAIL);
+                }
                 break;
             case C.FRAGMENT_CART:
                 fragment = new FragmentCart();

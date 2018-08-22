@@ -162,6 +162,9 @@ public class FragmentHome extends Fragment implements SwipeRefreshLayout.OnRefre
     @Override
     public void onResume() {
         super.onResume();
+        if(SharedPreference.getInstance(getActivity()).getBoolean(C.IS_QUANTITY_UPDATED)){
+            dialog();
+        }
         setStoreLocation();
        /* CategoryRequest categoryRequest = new CategoryRequest();
         categoryRequest.setUuid(Util.id(getActivity()));*/
@@ -607,8 +610,15 @@ public class FragmentHome extends Fragment implements SwipeRefreshLayout.OnRefre
         isProgressShown=true;
         if (response.getSuccess()) {
             if (response.getData() != null && response.getData().getIsQuantityUpdated()) {
+                SharedPreference.getInstance(getActivity()).setBoolean(C.IS_QUANTITY_UPDATED, response.getData().getIsQuantityUpdated());
+
+
                 dialog();
             }
+        else {
+            SharedPreference.getInstance(getActivity()).setBoolean(C.IS_QUANTITY_UPDATED, false);
+
+        }
         }
     }
 
@@ -910,7 +920,7 @@ public class FragmentHome extends Fragment implements SwipeRefreshLayout.OnRefre
     void dialog() {
         final Dialog dialog = new Dialog(getActivity(), R.style.FullHeightDialog); //this is a reference to the style above
         dialog.setContentView(R.layout.dialog_ok); //I saved the xml file above as yesnomessage.xml
-        dialog.setCancelable(true);
+        dialog.setCancelable(false);
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
 
 //to set the message
@@ -926,7 +936,7 @@ public class FragmentHome extends Fragment implements SwipeRefreshLayout.OnRefre
 
             public void onClick(View v) {
                 dialog.dismiss();
-
+                SharedPreference.getInstance(getActivity()).setBoolean(C.IS_QUANTITY_UPDATED,false);
 
             }
         });

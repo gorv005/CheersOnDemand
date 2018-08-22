@@ -198,7 +198,9 @@ public class ItemViewHolder extends RecyclerView.ViewHolder {
                 @Override
                 public void onClick(View v) {
                     Bundle bundle=new Bundle();
-                    bundle.putSerializable(C.ORDER,horizontalList.get(position));
+                    bundle.putString(C.ORDER_ID,""+horizontalList.get(position).getId());
+                    bundle.putBoolean(C.IS_NOTIFICATION,false);
+
                     ((ActivityContainer)context).fragmnetLoader(C.FRAGMENT_ORDER_DETAIL,bundle);
                 }
             });
@@ -206,7 +208,8 @@ public class ItemViewHolder extends RecyclerView.ViewHolder {
                 @Override
                 public void onClick(View v) {
                     Bundle bundle=new Bundle();
-                    bundle.putSerializable(C.ORDER,horizontalList.get(position));
+                    bundle.putString(C.ORDER_ID,""+horizontalList.get(position).getId());
+                    bundle.putBoolean(C.IS_NOTIFICATION,false);
                     ((ActivityContainer)context).fragmnetLoader(C.FRAGMENT_ORDER_DETAIL,bundle);
                 }
             });

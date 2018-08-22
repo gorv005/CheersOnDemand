@@ -1,5 +1,6 @@
 package com.cheersondemand.view;
 
+import android.app.ActivityManager;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -25,7 +26,7 @@ public class    MainActivity extends AppCompatActivity {
     private Bundle bundle;
     private int fragmentAction;
     private Fragment fragment;
-
+    boolean isNotification=false,isFirstTime=true;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -35,21 +36,51 @@ public class    MainActivity extends AppCompatActivity {
                         | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
         setContentView(R.layout.activity_main);
         try {
-            Intent intent = getIntent();
-            Uri data = intent.getData();
-         //   Log.e("DEBUG","DATA="+data.toString());
-            if(data!=null && data.toString()!=null){
-                String d=data.toString().substring(data.toString().lastIndexOf('/') + 1);
-                Intent i = new Intent(this, ActivityContainer.class);
-                Bundle bundle = new Bundle();
-                i.putExtra(C.FRAGMENT_ACTION, C.FRAGMENT_RESET_PASSWORD);
-                bundle.putString(C.TOKEN, d);
-                i.putExtra(C.BUNDLE, bundle);
-                startActivity(i);
-            }
-            else {
-                gotoSplash();
-            }
+            isNotification=false;
+            isFirstTime=true;
+
+
+                Intent extras = getIntent();
+            Log.e("extras",""+extras);
+
+            if(extras!=null) {
+                    boolean isNoti = extras.getBooleanExtra(C.IS_NOTIFICATION, false);
+                    Log.e("IS nOTI",""+isNoti);
+                    if (isNoti) {
+                        isNotification=true;
+                        isFirstTime=false;
+                        Intent intent = new Intent(this, ActivityContainer.class);
+                     /*   intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);*/
+                        Bundle bundle = new Bundle();
+                        bundle.putBoolean(C.IS_NOTIFICATION,true);
+                        intent.putExtra(C.FRAGMENT_ACTION, C.FRAGMENT_ORDER_DETAIL);
+                        bundle.putString(C.ORDER_ID, extras.getStringExtra(C.ORDER_ID));
+                        intent.putExtra(C.BUNDLE, bundle);
+                        startActivity(intent);
+                    }
+                    else {
+                       // Intent intent = getIntent();
+                        Uri data = extras.getData();
+                        //   Log.e("DEBUG","DATA="+data.toString());
+                        if(data!=null && data.toString()!=null){
+                            String d=data.toString().substring(data.toString().lastIndexOf('/') + 1);
+                            Intent i = new Intent(this, ActivityContainer.class);
+                            Bundle bundle = new Bundle();
+                            i.putExtra(C.FRAGMENT_ACTION, C.FRAGMENT_RESET_PASSWORD);
+                            bundle.putString(C.TOKEN, d);
+                            i.putExtra(C.BUNDLE, bundle);
+                            startActivity(i);
+                        }
+                        else {
+                            gotoSplash();
+                        }
+                    }
+                }
+                else {
+                    gotoSplash();
+                }
+
         }
         catch (Exception e){
             e.printStackTrace();
@@ -71,10 +102,37 @@ public class    MainActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        Log.d("Firebase", "token "+ FirebaseInstanceId.getInstance().getToken());
+        if(isNotification && isFirstTime){
+            if(isAnyActivityInStack()) {
+                finish();
+            }
+            else {
+                gotoSplash();
+            }
+        }
+        else {
+            isFirstTime=true;
+        }
+        //Log.d("Firebase", "token "+ FirebaseInstanceId.getInstance().getToken());
 
     }
 
+
+    boolean isAnyActivityInStack(){
+        try {
+            ActivityManager mngr = (ActivityManager) getSystemService(ACTIVITY_SERVICE);
+
+            List<ActivityManager.RunningTaskInfo> taskList = mngr.getRunningTasks(10);
+
+            if (taskList.get(0).numActivities > 1) {
+                return true;
+            }
+        }
+        catch (Exception e){
+            e.printStackTrace();
+        }
+        return  false;
+    }
     void  getToken(){
         FirebaseInstanceId.getInstance().getInstanceId().addOnSuccessListener( MainActivity.this,  new OnSuccessListener<InstanceIdResult>() {
             @Override
@@ -136,6 +194,9 @@ public class    MainActivity extends AppCompatActivity {
         }
 
     }
+
+
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         try {

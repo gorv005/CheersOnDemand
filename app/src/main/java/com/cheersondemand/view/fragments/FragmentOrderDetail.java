@@ -91,7 +91,7 @@ public class FragmentOrderDetail extends Fragment implements View.OnClickListene
     LinearLayout llTrackOrder;
     private LinearLayoutManager mLinearLayoutManager;
     AdapterOrderStatus adapterOrderStatus;
-
+    String orderId;
     public FragmentOrderDetail() {
         // Required empty public constructor
     }
@@ -101,7 +101,8 @@ public class FragmentOrderDetail extends Fragment implements View.OnClickListene
         super.onCreate(savedInstanceState);
         iOrderDetailViewPresenter = new OrderDetailViewPresenterImpl(this, getActivity());
         util = new Util();
-        order = (Order) getArguments().getSerializable(C.ORDER);
+        //order = (Order) getArguments().getSerializable(C.ORDER);
+        orderId =  getArguments().getString(C.ORDER_ID);
     }
 
     @Override
@@ -136,7 +137,7 @@ public class FragmentOrderDetail extends Fragment implements View.OnClickListene
     void getCartList() {
         String id = "" + SharedPreference.getInstance(getActivity()).getUser(C.AUTH_USER).getData().getUser().getId();
         String token = C.bearer + SharedPreference.getInstance(getActivity()).getUser(C.AUTH_USER).getData().getToken().getAccessToken();
-        iOrderDetailViewPresenter.getCartList(token, id, "" + order.getId(), Util.id(getActivity()), false);
+        iOrderDetailViewPresenter.getCartList(token, id,  orderId, Util.id(getActivity()), false);
 
     }
 
