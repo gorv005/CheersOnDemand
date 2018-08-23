@@ -179,9 +179,9 @@ public class FragmentStoreSelection extends Fragment implements IStoreViewPresen
                 }
                 SharedPreference.getInstance(getActivity()).setStore(C.SELECTED_STORE, store);
                 if (from == C.SEARCH) {
-                    gotoHome();
+                    showHome();
                 } else if (from == C.HOME) {
-                    gotoHome();
+                    showHome();
                 }
                 else if (from == C.FRAGMENT_PRODUCT_LISTING) {
                     getActivity().onBackPressed();
@@ -273,5 +273,29 @@ public class FragmentStoreSelection extends Fragment implements IStoreViewPresen
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    void  showHome(){
+        if(SharedPreference.getInstance(getActivity()).getBoolean(C.IS_SHOW_FROM_MAIL)){
+            String s=SharedPreference.getInstance(getActivity()).getString(C.SOURCE);
+            if(s!=null){
+                gotoSource(Integer.parseInt(s));
+            }
+            else {
+                gotoHome();
+            }
+        }
+        else {
+            gotoHome();
+        }
+    }
+    public void gotoSource(int source){
+        SharedPreference.getInstance(getActivity()).setBoolean(C.IS_SHOW_FROM_MAIL,false);
+        Intent intent = new Intent(getActivity(), ActivityHome.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        Bundle bundle=new Bundle();
+        bundle.putInt(C.FRAGMENT_ACTION,source);
+        intent.putExtra(C.BUNDLE,bundle);
+        startActivity(intent);
     }
 }

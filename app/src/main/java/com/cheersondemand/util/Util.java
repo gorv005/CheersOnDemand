@@ -35,12 +35,18 @@ import java.util.concurrent.atomic.AtomicInteger;
  */
 
 public class Util {
+    private static final int JCB = 7;
+    private static final int UNION =8 ;
     Snackbar snackbar;
     ProgressDialog progressDialog=null;
     public static final String VISA_PREFIX = "4";
+    public static final String UNION_PREFIX = "62";
+
     public static final String MASTERCARD_PREFIX = "51,52,53,54,55,";
     public static final String DISCOVER_PREFIX = "6011";
     public static final String AMEX_PREFIX = "34,37,";
+    public static final String DINERS_PREFIX = "30,36,38,";
+
     public static final int NONE = 0;
 
     public static final int VISA = 1;
@@ -48,6 +54,7 @@ public class Util {
     public static final int DISCOVER = 3;
     public static final int AMEX = 4;
     public static final int PHONE =5;
+    public static final int DINERS = 6;
 
     public static boolean isNetworkConnectivity(Activity activity) {
         ConnectivityManager cm = (ConnectivityManager) activity
@@ -220,8 +227,8 @@ public class Util {
 
     public  static Date getCurrentDate(){
         Calendar calendar = Calendar.getInstance();
-        calendar.add(Calendar.HOUR, 1);
-        calendar.add(Calendar.MINUTE, 30);
+        calendar.set(Calendar.HOUR, 1);
+        calendar.set(Calendar.MINUTE, 30);
 
        return calendar.getTime();
 
@@ -229,7 +236,8 @@ public class Util {
     public  static Date getDefaultDate(){
         Calendar calendar = Calendar.getInstance();
         calendar.add(Calendar.HOUR, 1);
-        calendar.add(Calendar.MINUTE, 31);
+        calendar.add(Calendar.MINUTE, 30);
+        calendar.add(Calendar.SECOND, 10);
 
         return calendar.getTime();
 
@@ -282,7 +290,12 @@ public class Util {
             return AMEX;
       else   if (cardType.equalsIgnoreCase(C.Discover))
             return DISCOVER;
-
+        else   if (cardType.equalsIgnoreCase(C.DINERS))
+            return DINERS;
+        else   if (cardType.equalsIgnoreCase(C.JCB))
+            return JCB;
+        else   if (cardType.equalsIgnoreCase(C.UNION))
+            return UNION;
         return NONE;
     }
     public static String getCardTypeUsingBrandName(int cardType) {
@@ -295,7 +308,12 @@ public class Util {
             return C.AMEX;
       else   if (cardType==DISCOVER)
             return C.Discover;
-
+        else   if (cardType==DINERS)
+            return C.DINERS;
+        else   if (cardType==JCB)
+            return C.JCB;
+        else   if (cardType==UNION)
+            return C.UNION;
         return "";
     }
     public static int getCardType(String cardNumber) {
@@ -308,7 +326,12 @@ public class Util {
             return AMEX;
         else if (cardNumber.substring(0, 4).equals(DISCOVER_PREFIX))
             return DISCOVER;
-
+        else if (DINERS_PREFIX.contains(cardNumber.substring(0, 2) + ","))
+            return DINERS;
+        else if (Integer.parseInt(cardNumber.substring(0, 4))>=3528 &&Integer.parseInt(cardNumber.substring(0, 4))<=3589)
+            return JCB;
+       else if (cardNumber.substring(0, 2).equals(UNION_PREFIX))
+            return UNION;
         return NONE;
     }
 
@@ -328,6 +351,15 @@ public class Util {
                 break;
             case DISCOVER:
                 ivType.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.ic_discover));
+                break;
+            case DINERS:
+                ivType.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.ic_diners_club));
+                break;
+            case JCB:
+                ivType.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.ic_jcb));
+                break;
+            case UNION:
+                ivType.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.ic_union_pay));
                 break;
             case NONE:
                 ivType.setImageResource(android.R.color.transparent);

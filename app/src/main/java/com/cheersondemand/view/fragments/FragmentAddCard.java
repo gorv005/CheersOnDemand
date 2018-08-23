@@ -516,6 +516,12 @@ public class FragmentAddCard extends Fragment implements ICardViewPresenter.ICar
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.btnSaveAdd:
+                try {
+                    Util.hideKeyboard(getActivity());
+                }
+                catch (Exception e){
+                    e.printStackTrace();
+                }
                 String a[] = etExpire.getText().toString().split("/");
                 addCardToStripe(etCardNumber.getText().toString(), a[0], a[1], tvCvv.getText().toString());
                 break;

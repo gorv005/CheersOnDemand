@@ -452,7 +452,7 @@ public class ActivityContainer extends AppCompatActivity {
                Bundle bundle = new Bundle();
                intent.putExtra(C.FRAGMENT_ACTION, C.FRAGMENT_AUTHNITICATION);
                bundle.putBoolean(C.IS_LOGIN_SCREEN, true);
-
+               bundle.putBoolean(C.IS_FROM_HOME, false);
                intent.putExtra(C.BUNDLE, bundle);
                startActivity(intent);
            }

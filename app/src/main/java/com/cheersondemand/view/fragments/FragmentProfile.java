@@ -255,11 +255,12 @@ public class FragmentProfile extends Fragment implements View.OnClickListener, I
             case R.id.llProfileView:
                 // move to login screen if not login
                 if (!isLogin) {
-                    intent.putExtra(C.FRAGMENT_ACTION, C.FRAGMENT_AUTHNITICATION);
+                   /* intent.putExtra(C.FRAGMENT_ACTION, C.FRAGMENT_AUTHNITICATION);
                     bundle.putBoolean(C.IS_LOGIN_SCREEN, true);
 
                     intent.putExtra(C.BUNDLE, bundle);
-                    startActivity(intent);
+                    startActivity(intent);*/
+                    gotoLogin();
                 }
                 break;
             case R.id.btnEdit:
@@ -367,8 +368,10 @@ public class FragmentProfile extends Fragment implements View.OnClickListener, I
         Intent intent = new Intent(getActivity(), MainActivity.class);
         Bundle bundle = new Bundle();
         bundle.putBoolean(C.IS_LOGIN_SCREEN, true);
+        bundle.putBoolean(C.IS_FROM_HOME, true);
+        bundle.putInt(C.SOURCE, C.FRAGMENT_PROFILE_HOME);
         intent.putExtra(C.FRAGMENT_ACTION, C.FRAGMENT_AUTHNITICATION);
-        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+       // intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         intent.putExtra(C.BUNDLE, bundle);
         getActivity().startActivity(intent);
     }

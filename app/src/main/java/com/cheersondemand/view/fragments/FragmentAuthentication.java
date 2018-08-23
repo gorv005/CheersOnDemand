@@ -160,8 +160,9 @@ public class FragmentAuthentication extends Fragment implements IAuthenitication
     String accessToken;
     boolean isClicked = false;
     boolean isPasswordVisibleLogin = false;
-    boolean isLoginScreen = false;
+    boolean isLoginScreen = false, isFromHome = false;
     IAutheniticationPresenter iAutheniticationPresenter;
+    int source;
     private String mAccessToken;
     private Handler handler;
 
@@ -191,7 +192,10 @@ public class FragmentAuthentication extends Fragment implements IAuthenitication
         iAutheniticationPresenter = new AuthenicationPresenterImpl(this, getActivity());
 
         isLoginScreen = getArguments().getBoolean(C.IS_LOGIN_SCREEN);
-
+        isFromHome = getArguments().getBoolean(C.IS_FROM_HOME);
+        if(isFromHome) {
+            source = getArguments().getInt(C.SOURCE);
+        }
     }
 
     @Override
@@ -431,7 +435,7 @@ public class FragmentAuthentication extends Fragment implements IAuthenitication
 
 
     void socailLogin(String token, String provider) {
-        SharedPreference.getInstance(getActivity()).setBoolean(C.IS_SOCAIL,true);
+        SharedPreference.getInstance(getActivity()).setBoolean(C.IS_SOCAIL, true);
         SocialLoginRequest socialLoginRequest = new SocialLoginRequest();
         socialLoginRequest.setAccessToken(token);
         socialLoginRequest.setLoginType(2);
@@ -566,7 +570,7 @@ public class FragmentAuthentication extends Fragment implements IAuthenitication
 
 
     void login() {
-        SharedPreference.getInstance(getActivity()).setBoolean(C.IS_SOCAIL,false);
+        SharedPreference.getInstance(getActivity()).setBoolean(C.IS_SOCAIL, false);
         LoginRequest loginRequest = new LoginRequest();
         loginRequest.setEmail(etEmailLogin.getText().toString().toLowerCase());
         loginRequest.setGrantType("password");
@@ -581,7 +585,7 @@ public class FragmentAuthentication extends Fragment implements IAuthenitication
     }
 
     void signUp() {
-        SharedPreference.getInstance(getActivity()).setBoolean(C.IS_SOCAIL,false);
+        SharedPreference.getInstance(getActivity()).setBoolean(C.IS_SOCAIL, false);
 
         SignUpRequest signUpRequest = new SignUpRequest();
         User user = new User();
@@ -962,8 +966,12 @@ public class FragmentAuthentication extends Fragment implements IAuthenitication
                     SharedPreference.getInstance(getActivity()).setBoolean(C.IS_NOTIFICATION, response.getData().getUser().getIsNotificationEnabled());
                     SharedPreference.getInstance(getActivity()).setUser(C.AUTH_USER, response);
                     SharedPreference.getInstance(getActivity()).setString(C.ORDER_ID, response.getData().getUser().getOrderId());
-
-                    gotoSearchLocationAuth();
+                    if(isFromHome){
+                        gotoHome();
+                    }
+                    else {
+                        gotoSearchLocationAuth();
+                    }
                 }
             } else {
 
@@ -993,7 +1001,12 @@ public class FragmentAuthentication extends Fragment implements IAuthenitication
                 if (response.getMessage().trim().equalsIgnoreCase(C.GUEST_USER_ALLREADY_CREATED)) {
                     SharedPreference.getInstance(getActivity()).setBoolean(C.IS_LOGIN_GUEST, true);
                     SharedPreference.getInstance(getActivity()).seGuestUser(C.GUEST_USER, response.getData());
-                    gotoSearchLocation();
+                    if(isFromHome){
+                        gotoHome();
+                    }
+                    else {
+                        gotoSearchLocation();
+                    }
                 } else {
                     util.setSnackbarMessage(getActivity(), response.getMessage(), LLView, true);
                 }
@@ -1051,11 +1064,14 @@ public class FragmentAuthentication extends Fragment implements IAuthenitication
 
     }
 
-    public void gotoHome() {
+
+    public void gotoHome(){
         Intent intent = new Intent(getActivity(), ActivityHome.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-        getActivity().startActivity(intent);
+        Bundle bundle=new Bundle();
+        bundle.putInt(C.FRAGMENT_ACTION,source);
+        intent.putExtra(C.BUNDLE,bundle);
+        startActivity(intent);
     }
-
 
 }

@@ -117,6 +117,10 @@ public interface C {
     String VISA = "Visa";
     String MasterCard="MasterCard";
     String Discover="Discover";
+    String DINERS="Diners Club";
+    String JCB = "JCB";
+    String UNION = "UnionPay";
+
     String AMEX = "American Express";
     String CARD_DATA = "cardData";
     String PAYMENT_SUCCESS = "paymentSuccess";
@@ -138,4 +142,6 @@ public interface C {
     String TAG_FRAGMENT_PAYMENT_CONFIRMATION = "TAG_FRAGMENT_PAYMENT_CONFIRMATION";
     int FRAGMENT_ADD_ADDRESS_1 =34 ;
     String IS_QUANTITY_UPDATED = "is_quantity_updated";
+    String IS_FROM_HOME = "is_from_home";
+    String IS_SHOW_FROM_MAIL ="is_show_from_mail" ;
 }

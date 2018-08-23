@@ -177,6 +177,8 @@ public class FragmentCart extends Fragment implements View.OnClickListener, IOrd
         } else {
             llNoProductInCount.setVisibility(View.VISIBLE);
             rvCartList.setVisibility(View.GONE);
+            btnProceed.setVisibility(View.GONE);
+            rlStoreAlert.setVisibility(View.GONE);
         }
     }
 
@@ -268,6 +270,8 @@ public class FragmentCart extends Fragment implements View.OnClickListener, IOrd
         Intent intent = new Intent(getActivity(), MainActivity.class);
         Bundle bundle = new Bundle();
         bundle.putBoolean(C.IS_LOGIN_SCREEN, true);
+        bundle.putBoolean(C.IS_FROM_HOME, true);
+        bundle.putInt(C.SOURCE, C.FRAGMENT_CART);
         intent.putExtra(C.FRAGMENT_ACTION, C.FRAGMENT_AUTHNITICATION);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         intent.putExtra(C.BUNDLE, bundle);
@@ -509,6 +513,7 @@ public class FragmentCart extends Fragment implements View.OnClickListener, IOrd
                 //  util.setSnackbarMessage(getActivity(), response.getMessage(), LLView, true);
                 llNoProductInCount.setVisibility(View.VISIBLE);
                 rvCartList.setVisibility(View.GONE);
+                btnProceed.setVisibility(View.GONE);
 
             }
         } catch (Exception e) {

@@ -439,7 +439,7 @@ public class FragmentWishList extends Fragment implements IOrderViewPresenterPre
 
                 } else {
                     tvNoProduct.setVisibility(View.VISIBLE);
-
+                    rvProductsList.setVisibility(View.GONE);
                 }
             } else {
                 tvNoProduct.setVisibility(View.VISIBLE);

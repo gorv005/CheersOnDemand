@@ -244,7 +244,6 @@ public class FragmentPaymentConfirmation extends Fragment implements ICardViewPr
         dateTimeFragment.setHighlightAMPMSelection(true);
         dateTimeFragment.setMinimumDateTime(Util.getCurrentDate());
         dateTimeFragment.setMaximumDateTime(Util.get1monthLaterDate());
-
         // Define new day and month format
         try {
             dateTimeFragment.setSimpleDateMonthAndDayFormat(new SimpleDateFormat("MMMM dd", Locale.getDefault()));
@@ -274,11 +273,20 @@ public class FragmentPaymentConfirmation extends Fragment implements ICardViewPr
             }
         });
     }
+
+    void setDefaultDateTime(){
+        if(tvScheduleTime.getText().toString().equals(getString(R.string.scheduleTime))){
+            mCurrentDate=Util.getDefaultDate();
+        }
+        dateTimeFragment.startAtCalendarView();
+        dateTimeFragment.setDefaultDateTime(mCurrentDate);
+        dateTimeFragment.show(getActivity().getSupportFragmentManager(), TAG_DATETIME_FRAGMENT);
+    }
     private void setUiPageViewController() {
 
         dotsCount = adapterCardPayment.getItemCount();
         dots = new ImageView[dotsCount];
-
+        llIndicatore.removeAllViews();
         for (int i = 0; i < dotsCount; i++) {
             dots[i] = new ImageView(getActivity());
             dots[i].setImageDrawable(getResources().getDrawable(R.drawable.nonselecteditem_dot));
@@ -570,6 +578,7 @@ public class FragmentPaymentConfirmation extends Fragment implements ICardViewPr
                 else {
                     Bundle bundle2 = new Bundle();
                     bundle2.putInt(C.ADDRESS_ID, cartProduct.getOrder().getDeliveryAddress().getId());
+                    bundle2.putBoolean(C.IS_FROM_CHECKOUT, true);
                     ((ActivityContainer) getActivity()).fragmnetLoader(C.FRAGMENT_SELECT_ADDRESS, bundle2);
                 }
                 break;
@@ -589,10 +598,9 @@ public class FragmentPaymentConfirmation extends Fragment implements ICardViewPr
                 }
                 break;
             case R.id.rlSchedileTime:
-                dateTimeFragment.startAtCalendarView();
-                dateTimeFragment.setDefaultDateTime(mCurrentDate);
-                dateTimeFragment.show(getActivity().getSupportFragmentManager(), TAG_DATETIME_FRAGMENT);
+               setDefaultDateTime();
                 break;
         }
     }
+
 }

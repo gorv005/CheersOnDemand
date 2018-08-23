@@ -111,6 +111,7 @@ public class FragmentSplash extends Fragment {
                                     } else {
                                         Bundle bundle = new Bundle();
                                         bundle.putBoolean(C.IS_LOGIN_SCREEN, false);
+                                        bundle.putBoolean(C.IS_FROM_HOME, false);
                                         ((MainActivity) getActivity()).fragmnetLoader(C.FRAGMENT_AUTHNITICATION, bundle);
                                     }
                                 } catch (Exception e) {
