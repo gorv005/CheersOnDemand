@@ -8,7 +8,7 @@
 
     <RelativeLayout
         android:id="@+id/rlbar"
-        android:background="@drawable/top_banner"
+        android:background="@drawable/top_banner1"
         android:layout_width="match_parent"
 
         android:paddingBottom="10dp"

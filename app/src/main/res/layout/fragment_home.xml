@@ -203,7 +203,7 @@
 
         <com.cooltechworks.views.shimmer.ShimmerRecyclerView
             xmlns:app="http://schemas.android.com/apk/res-auto"
-            android:id="@+id/rvBrands"
+            android:id="@+id/rvBrandsShimmer"
 
             android:scrollbars="none"
             android:background="@color/brands_back_color"
@@ -215,6 +215,16 @@
             app:shimmer_demo_layout_manager_type="linear_horizontal"
             app:shimmer_demo_angle="20"
              />
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/rvBrands"
+            android:visibility="gone"
+
+            android:scrollbars="none"
+            android:background="@color/brands_back_color"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_centerHorizontal="true" />
     </RelativeLayout>
 
 
@@ -224,10 +234,11 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
+
             <com.cooltechworks.views.shimmer.ShimmerRecyclerView
                 xmlns:app="http://schemas.android.com/apk/res-auto"
 
-                android:id="@+id/rvProducts"
+                android:id="@+id/rvProductsShimmer"
                 android:scrollbars="none"
                 android:background="@color/white"
                 android:layout_width="match_parent"
@@ -238,6 +249,15 @@
                 app:shimmer_demo_layout="@layout/layout_shimmer_products"
                 app:shimmer_demo_layout_manager_type="linear_horizontal"
                 app:shimmer_demo_angle="20"/>
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/rvProducts"
+                android:scrollbars="none"
+                android:visibility="gone"
+                android:background="@color/white"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_centerHorizontal="true" />
         </RelativeLayout>
         </LinearLayout>
     </ScrollView>

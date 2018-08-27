@@ -1,6 +1,9 @@
 package com.cheersondemand.view.fragments;
 
 
+import android.app.Dialog;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -278,6 +281,12 @@ public class FragmentPaymentConfirmation extends Fragment implements ICardViewPr
         if(tvScheduleTime.getText().toString().equals(getString(R.string.scheduleTime))){
             mCurrentDate=Util.getDefaultDate();
         }
+        else {
+            if(mCurrentDate.getTime()<Util.getDefaultDate().getTime() ||mCurrentDate.getTime()>Util.get1monthLaterDate().getTime()){
+                mCurrentDate=Util.getDefaultDate();
+
+            }
+        }
         dateTimeFragment.startAtCalendarView();
         dateTimeFragment.setDefaultDateTime(mCurrentDate);
         dateTimeFragment.show(getActivity().getSupportFragmentManager(), TAG_DATETIME_FRAGMENT);
@@ -405,6 +414,7 @@ public class FragmentPaymentConfirmation extends Fragment implements ICardViewPr
     }
 
     void doPayment() {
+
         String order_id = SharedPreference.getInstance(getActivity()).getString(C.ORDER_ID);
 
         PaymentRequest paymentRequest = new PaymentRequest();
@@ -590,17 +600,56 @@ public class FragmentPaymentConfirmation extends Fragment implements ICardViewPr
                 ((ActivityContainer) getActivity()).fragmnetLoader(C.FRAGMENT_ADD_CARD, bundle3);
                 break;
             case R.id.btnProceedToPay:
-                if(isRetryPayment){
-                    retryPayment();
+                if(!isScheduleTimeselected) {
+                   paymentCall();
                 }
                 else {
-                    doPayment();
+                    if(mCurrentDate.getTime()>=Util.getCurrentDate().getTime() && mCurrentDate.getTime()<=Util.get1monthLaterDate().getTime()){
+                        paymentCall();
+                    }
+                    else {
+                        dialogDateTimeIssue();
+                    }
                 }
                 break;
             case R.id.rlSchedileTime:
                setDefaultDateTime();
                 break;
         }
+    }
+
+
+    void  paymentCall(){
+        if (isRetryPayment) {
+            retryPayment();
+        } else {
+            doPayment();
+        }
+    }
+    void dialogDateTimeIssue() {
+        final Dialog dialog = new Dialog(getActivity(), R.style.FullHeightDialog); //this is a reference to the style above
+        dialog.setContentView(R.layout.dialog_ok); //I saved the xml file above as yesnomessage.xml
+        dialog.setCancelable(false);
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+
+//to set the message
+        TextView title = (TextView) dialog.findViewById(R.id.tvmessagedialogtitle);
+
+        TextView message = (TextView) dialog.findViewById(R.id.tvmessagedialogtext);
+        title.setText(getString(R.string.app_name));
+        message.setText(getString(R.string.date_time_validation));
+//add some action to the buttons
+        Button yes = (Button) dialog.findViewById(R.id.bmessageDialogOK);
+        yes.setText(getString(R.string.ok));
+        yes.setOnClickListener(new View.OnClickListener() {
+
+            public void onClick(View v) {
+                dialog.dismiss();
+
+            }
+        });
+
+        dialog.show();
     }
 
 }

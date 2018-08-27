@@ -144,4 +144,5 @@ public interface C {
     String IS_QUANTITY_UPDATED = "is_quantity_updated";
     String IS_FROM_HOME = "is_from_home";
     String IS_SHOW_FROM_MAIL ="is_show_from_mail" ;
+    java.lang.String POS = "pos";
 }

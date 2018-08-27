@@ -88,23 +88,60 @@ public class FragmentUpdateProfile extends Fragment implements View.OnClickListe
     RelativeLayout rlView;
     @BindView(R.id.ivCamera)
     ImageView ivCamera;
-    private Uri fileUri = null;
     Util util;
-    private int GALLERY = 1, CAMERA = 2;
     IProfileViewPresenter iProfileViewPresenter;
-    boolean isRemoved=false;
+    boolean isRemoved = false;
     ImageLoader imageLoader;
+    private Uri fileUri = null;
+    private int GALLERY = 1, CAMERA = 2;
+    private InputFilter filter = new InputFilter() {
+
+        @Override
+        public CharSequence filter(CharSequence source, int start, int end, Spanned dest, int dstart, int dend) {
+
+           /* if (source.toString().equals("-")){
+                return "";
+            }*/
+            return source.toString();
+        }
+    };
+
+
     public FragmentUpdateProfile() {
         // Required empty public constructor
     }
 
+    public static Bitmap rotateImageIfRequired(Bitmap img, String selectedImage) throws IOException {
+
+        ExifInterface ei = new ExifInterface(selectedImage);
+        int orientation = ei.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_NORMAL);
+
+        switch (orientation) {
+            case ExifInterface.ORIENTATION_ROTATE_90:
+                return rotateImage(img, 90);
+            case ExifInterface.ORIENTATION_ROTATE_180:
+                return rotateImage(img, 180);
+            case ExifInterface.ORIENTATION_ROTATE_270:
+                return rotateImage(img, 270);
+            default:
+                return img;
+        }
+    }
+
+    public static Bitmap rotateImage(Bitmap img, int degree) {
+        Matrix matrix = new Matrix();
+        matrix.postRotate(degree);
+        Bitmap rotatedImg = Bitmap.createBitmap(img, 0, 0, img.getWidth(), img.getHeight(), matrix, true);
+        img.recycle();
+        return rotatedImg;
+    }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         iProfileViewPresenter = new ProfileViewPresenterImpl(this, getActivity());
         util = new Util();
-        imageLoader=new ImageLoader(getActivity());
+        imageLoader = new ImageLoader(getActivity());
     }
 
     @Override
@@ -115,7 +152,6 @@ public class FragmentUpdateProfile extends Fragment implements View.OnClickListe
         unbinder = ButterKnife.bind(this, view);
         return view;
     }
-
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
@@ -129,7 +165,6 @@ public class FragmentUpdateProfile extends Fragment implements View.OnClickListe
 
     }
 
-
     void setDetail(AuthenticationResponse authenticationResponse) {
         etName.setText(authenticationResponse.getData().getUser().getName());
         etEmail.setText(authenticationResponse.getData().getUser().getEmail());
@@ -139,12 +174,12 @@ public class FragmentUpdateProfile extends Fragment implements View.OnClickListe
         etPhoneNo.clearFocus();
         if (authenticationResponse.getData().getUser().getProfilePicture() != null) {
             imageLoader.DisplayImage(authenticationResponse.getData().getUser().getProfilePicture(), imgProfile);
-          //  Util.setImage(getActivity(),authenticationResponse.getData().getUser().getProfilePicture(),imgProfile);
-            ivCamera.setVisibility(View.GONE);
+            //  Util.setImage(getActivity(),authenticationResponse.getData().getUser().getProfilePicture(),imgProfile);
+            ivCamera.setVisibility(View.VISIBLE);
 
         } else {
-          //  Util.setImage(getActivity(),"",imgProfile);
-          //  imageLoader.DisplayImage("", imgProfile);
+            //  Util.setImage(getActivity(),"",imgProfile);
+            //  imageLoader.DisplayImage("", imgProfile);
             ivCamera.setVisibility(View.VISIBLE);
             //imgProfile.setImageResource(R.drawable.missing);
 
@@ -163,20 +198,8 @@ public class FragmentUpdateProfile extends Fragment implements View.OnClickListe
         unbinder.unbind();
     }
 
-    private InputFilter filter = new InputFilter() {
-
-        @Override
-        public CharSequence filter(CharSequence source, int start, int end, Spanned dest, int dstart, int dend) {
-
-           /* if (source.toString().equals("-")){
-                return "";
-            }*/
-            return source.toString();
-        }
-    };
-
     void initFields() {
-     //   etPhoneNo.setFilters(new InputFilter[]{filter});
+        //   etPhoneNo.setFilters(new InputFilter[]{filter});
 
         btnSaveProfile.setEnabled(false);
         etName.addTextChangedListener(new TextWatcher() {
@@ -201,7 +224,7 @@ public class FragmentUpdateProfile extends Fragment implements View.OnClickListe
         });
         etPhoneNo.addTextChangedListener(new AutoAddTextWatcher(etPhoneNo,
                 "-",
-                3,6));
+                3, 6));
 /*
         etPhoneNo.addTextChangedListener(new TextWatcher() {
 
@@ -251,7 +274,6 @@ public class FragmentUpdateProfile extends Fragment implements View.OnClickListe
 
     }
 
-
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
@@ -261,53 +283,6 @@ public class FragmentUpdateProfile extends Fragment implements View.OnClickListe
             case R.id.btnSaveProfile:
                 updateProfile();
                 break;
-        }
-    }
-
-
-    void updateProfile() {
-        ProfileUpdateRequest profileUpdateRequest = new ProfileUpdateRequest();
-        profileUpdateRequest.setName(etName.getText().toString());
-        profileUpdateRequest.setPhoneNumber(etPhoneNo.getText().toString());
-
-        String id = "" + SharedPreference.getInstance(getActivity()).getUser(C.AUTH_USER).getData().getUser().getId();
-
-        String token = C.bearer + SharedPreference.getInstance(getActivity()).getUser(C.AUTH_USER).getData().getToken().getAccessToken();
-        if (fileUri != null) {
-            File file = new File(getRealPathFromURI(fileUri));
-           // File file = new File(fileUri.getPath());
-            RequestBody isDeleted = RequestBody.create(MediaType.parse("text/plain"), ""+0);
-
-            RequestBody name = RequestBody.create(MediaType.parse("text/plain"), etName.getText().toString());
-            RequestBody phone = RequestBody.create(MediaType.parse("text/plain"), etPhoneNo.getText().toString());
-            RequestBody requestFile = RequestBody.create(MediaType.parse("image/*"), file);
-
-          //  RequestBody requestFile = RequestBody.create(MediaType.parse(getActivity().getContentResolver().getType(fileUri)), file);
-            MultipartBody.Part body = MultipartBody.Part.createFormData("profile_picture", "image.jpg", requestFile);
-
-
-            iProfileViewPresenter.updateProfile(token, id, body, name, phone,isDeleted);
-        }
-      else  if(fileUri ==null && isRemoved){
-            File file = new File(Environment.getExternalStorageDirectory()+"");
-            RequestBody isDeleted = RequestBody.create(MediaType.parse("text/plain"), ""+1);
-            RequestBody name = RequestBody.create(MediaType.parse("text/plain"), etName.getText().toString());
-            RequestBody phone = RequestBody.create(MediaType.parse("text/plain"), etPhoneNo.getText().toString());
-         //   RequestBody requestFile = RequestBody.create(MediaType.parse("image/*"), file);
-
-          // MultipartBody.Part body = MultipartBody.Part.createFormData("profile_picture", "image.jpg", requestFile);
-            iProfileViewPresenter.updateProfile(token, id, null, name, phone,isDeleted);
-        }
-        else {
-            iProfileViewPresenter.updateProfile(token, id, profileUpdateRequest);
-        }
-    }
-
-    void openPopUpForImageChange() {
-        if (isCameraPermissionGranted()) {
-            showPictureDialog();
-        } else {
-            requestPermissionForCamera();
         }
     }
 
@@ -322,12 +297,61 @@ public class FragmentUpdateProfile extends Fragment implements View.OnClickListe
         return result;
     }*/
 
- /*   public String getRealPathFromURI(Uri uri) {
-        Cursor cursor = getActivity().getContentResolver().query(uri, null, null, null, null);
-        cursor.moveToFirst();
-        int idx = cursor.getColumnIndex(MediaStore.Images.ImageColumns.DATA);
-        return cursor.getString(idx);
-    }*/
+    void updateProfile() {
+        try {
+            ProfileUpdateRequest profileUpdateRequest = new ProfileUpdateRequest();
+            profileUpdateRequest.setName(etName.getText().toString());
+            profileUpdateRequest.setPhoneNumber(etPhoneNo.getText().toString());
+
+            String id = "" + SharedPreference.getInstance(getActivity()).getUser(C.AUTH_USER).getData().getUser().getId();
+
+            String token = C.bearer + SharedPreference.getInstance(getActivity()).getUser(C.AUTH_USER).getData().getToken().getAccessToken();
+            if (fileUri != null) {
+                //   File file = new File(getRealPathFromURI(fileUri));
+                File file = Util.getCompressed(getActivity(), getRealPathFromURI(fileUri));
+                // File file = new File(fileUri.getPath());
+                RequestBody isDeleted = RequestBody.create(MediaType.parse("text/plain"), "" + 0);
+
+                RequestBody name = RequestBody.create(MediaType.parse("text/plain"), etName.getText().toString());
+                RequestBody phone = RequestBody.create(MediaType.parse("text/plain"), etPhoneNo.getText().toString());
+                RequestBody requestFile = RequestBody.create(MediaType.parse("image/*"), file);
+
+                //  RequestBody requestFile = RequestBody.create(MediaType.parse(getActivity().getContentResolver().getType(fileUri)), file);
+                MultipartBody.Part body = MultipartBody.Part.createFormData("profile_picture", "image.jpg", requestFile);
+
+
+                iProfileViewPresenter.updateProfile(token, id, body, name, phone, isDeleted);
+            } else if (fileUri == null && isRemoved) {
+                File file = new File(Environment.getExternalStorageDirectory() + "");
+                RequestBody isDeleted = RequestBody.create(MediaType.parse("text/plain"), "" + 1);
+                RequestBody name = RequestBody.create(MediaType.parse("text/plain"), etName.getText().toString());
+                RequestBody phone = RequestBody.create(MediaType.parse("text/plain"), etPhoneNo.getText().toString());
+                //   RequestBody requestFile = RequestBody.create(MediaType.parse("image/*"), file);
+
+                // MultipartBody.Part body = MultipartBody.Part.createFormData("profile_picture", "image.jpg", requestFile);
+                iProfileViewPresenter.updateProfile(token, id, null, name, phone, isDeleted);
+            } else {
+                iProfileViewPresenter.updateProfile(token, id, profileUpdateRequest);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    void openPopUpForImageChange() {
+        if (isCameraPermissionGranted()) {
+            showPictureDialog();
+        } else {
+            requestPermissionForCamera();
+        }
+    }
+
+    /*   public String getRealPathFromURI(Uri uri) {
+           Cursor cursor = getActivity().getContentResolver().query(uri, null, null, null, null);
+           cursor.moveToFirst();
+           int idx = cursor.getColumnIndex(MediaStore.Images.ImageColumns.DATA);
+           return cursor.getString(idx);
+       }*/
     private String getRealPathFromURI(Uri contentURI) {
         Cursor cursor = getActivity().getContentResolver().query(contentURI, null, null, null, null);
         if (cursor == null) {
@@ -338,41 +362,41 @@ public class FragmentUpdateProfile extends Fragment implements View.OnClickListe
             return cursor.getString(idx);
         }
     }
-/*
-    private String getRealPathFromURI(Uri contentUri) {
-        Cursor cursor = null;
-        try {
-            String[] proj = { MediaStore.Images.Media.DATA };
-            cursor = getActivity().getContentResolver().query(contentUri,  proj, null, null, null);
 
-            int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
-            cursor.moveToFirst();
-            return cursor.getString(column_index);
-        } catch (Exception e) {
-            Log.e("DEBUG", "getRealPathFromURI Exception : " + e.toString());
-            return "";
-        } finally {
-            if (cursor != null) {
-                cursor.close();
+    /*
+        private String getRealPathFromURI(Uri contentUri) {
+            Cursor cursor = null;
+            try {
+                String[] proj = { MediaStore.Images.Media.DATA };
+                cursor = getActivity().getContentResolver().query(contentUri,  proj, null, null, null);
+
+                int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
+                cursor.moveToFirst();
+                return cursor.getString(column_index);
+            } catch (Exception e) {
+                Log.e("DEBUG", "getRealPathFromURI Exception : " + e.toString());
+                return "";
+            } finally {
+                if (cursor != null) {
+                    cursor.close();
+                }
             }
         }
-    }
-*/
+    */
     private void showPictureDialog() {
         AlertDialog.Builder pictureDialog = new AlertDialog.Builder(getActivity());
         pictureDialog.setTitle("Select Action");
         String[] pictureDialogItems;
 
-        if(authenticationResponse.getData().getUser().getProfilePicture()==null || isRemoved) {
-           pictureDialogItems = new String[]{
-                   "Select photo from gallery",
-                   "Capture photo from camera"};
-        }
-        else {
-             pictureDialogItems = new String[]{
-                     "Select photo from gallery",
-                     "Capture photo from camera",
-                     "Remove"};
+        if (authenticationResponse.getData().getUser().getProfilePicture() == null || isRemoved) {
+            pictureDialogItems = new String[]{
+                    "Select photo from gallery",
+                    "Capture photo from camera"};
+        } else {
+            pictureDialogItems = new String[]{
+                    "Select photo from gallery",
+                    "Capture photo from camera",
+                    "Remove"};
         }
         pictureDialog.setItems(pictureDialogItems,
                 new DialogInterface.OnClickListener() {
@@ -386,7 +410,7 @@ public class FragmentUpdateProfile extends Fragment implements View.OnClickListe
                                 takePhotoFromCamera();
                                 break;
                             case 2:
-                                isRemoved=true;
+                                isRemoved = true;
                                 imgProfile.setImageResource(R.drawable.missing);
                                 ivCamera.setVisibility(View.VISIBLE);
                                 break;
@@ -395,7 +419,6 @@ public class FragmentUpdateProfile extends Fragment implements View.OnClickListe
                 });
         pictureDialog.show();
     }
-
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -414,8 +437,8 @@ public class FragmentUpdateProfile extends Fragment implements View.OnClickListe
                     //   String path = saveImage(bitmap);
                     bitmap = Util.scaleDown(bitmap, 500, true);
                     imgProfile.setImageBitmap(bitmap);
-                    isRemoved=false;
-                    ivCamera.setVisibility(View.GONE);
+                    isRemoved = false;
+                    ivCamera.setVisibility(View.VISIBLE);
                 } catch (IOException e) {
                     e.printStackTrace();
 
@@ -429,45 +452,20 @@ public class FragmentUpdateProfile extends Fragment implements View.OnClickListe
 
                 // downsizing image as it throws OutOfMemory Exception for larger
                 // images
-                options.inSampleSize = 8;
+                options.inSampleSize = 1;
 
                 Bitmap bitmap = BitmapFactory.decodeFile(fileUri.getPath(),
                         options);
 
-                bitmap = rotateImageIfRequired(bitmap, fileUri.getPath());
+                  bitmap = rotateImageIfRequired(bitmap, fileUri.getPath());
                 imgProfile.setImageBitmap(bitmap);
-                isRemoved=false;
-                ivCamera.setVisibility(View.GONE);
+                isRemoved = false;
+                ivCamera.setVisibility(View.VISIBLE);
             } catch (Exception e) {
                 e.printStackTrace();
             }
 
         }
-    }
-
-    public static Bitmap rotateImageIfRequired(Bitmap img, String selectedImage) throws IOException {
-
-        ExifInterface ei = new ExifInterface(selectedImage);
-        int orientation = ei.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_NORMAL);
-
-        switch (orientation) {
-            case ExifInterface.ORIENTATION_ROTATE_90:
-                return rotateImage(img, 90);
-            case ExifInterface.ORIENTATION_ROTATE_180:
-                return rotateImage(img, 180);
-            case ExifInterface.ORIENTATION_ROTATE_270:
-                return rotateImage(img, 270);
-            default:
-                return img;
-        }
-    }
-
-    public static Bitmap rotateImage(Bitmap img, int degree) {
-        Matrix matrix = new Matrix();
-        matrix.postRotate(degree);
-        Bitmap rotatedImg = Bitmap.createBitmap(img, 0, 0, img.getWidth(), img.getHeight(), matrix, true);
-        img.recycle();
-        return rotatedImg;
     }
 
     public void choosePhotoFromGallary() {
@@ -491,7 +489,7 @@ public class FragmentUpdateProfile extends Fragment implements View.OnClickListe
                 intent.putExtra(MediaStore.EXTRA_OUTPUT, tempFileUri);
             } else {
                 Uri tempFileUri = Uri.fromFile(file);
-                fileUri=tempFileUri;
+                fileUri = tempFileUri;
                 intent.putExtra(MediaStore.EXTRA_OUTPUT, tempFileUri);
             }
             // intent.putExtra(MediaStore.EXTRA_OUTPUT, fileUri);
@@ -551,27 +549,26 @@ public class FragmentUpdateProfile extends Fragment implements View.OnClickListe
     @Override
     public void onSuccessUpdateProfile(GuestUserCreateResponse Response) {
         try {
-        if (Response.getSuccess()) {
-            util.setSnackbarMessage(getActivity(), getString(R.string.profile_updated), rlView, false);
+            if (Response.getSuccess()) {
+                util.setSnackbarMessage(getActivity(), getString(R.string.profile_updated), rlView, false);
 
-            Gson gson = new Gson();
-            String json = gson.toJson(Response.getData());
-            UserResponse response = gson.fromJson(json, UserResponse.class);
-            authenticationResponse.getData().setUser(response);
-            SharedPreference.getInstance(getActivity()).setUser(C.AUTH_USER, authenticationResponse);
-            Handler handler = new Handler();
-            handler.postDelayed(new Runnable() {
-                public void run() {
-                    // Actions to do after 10 seconds
-                    getActivity().finish();
-                }
-            }, 2000);
-        } else {
-            util.setSnackbarMessage(getActivity(), Response.getMessage(), rlView, true);
+                Gson gson = new Gson();
+                String json = gson.toJson(Response.getData());
+                UserResponse response = gson.fromJson(json, UserResponse.class);
+                authenticationResponse.getData().setUser(response);
+                SharedPreference.getInstance(getActivity()).setUser(C.AUTH_USER, authenticationResponse);
+                Handler handler = new Handler();
+                handler.postDelayed(new Runnable() {
+                    public void run() {
+                        // Actions to do after 10 seconds
+                        getActivity().finish();
+                    }
+                }, 2000);
+            } else {
+                util.setSnackbarMessage(getActivity(), Response.getMessage(), rlView, true);
 
-        }
-        }
-        catch (Exception e){
+            }
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
@@ -593,6 +590,7 @@ public class FragmentUpdateProfile extends Fragment implements View.OnClickListe
         util.hideDialog();
 
     }
+
     public class AutoAddTextWatcher implements TextWatcher {
         private CharSequence mBeforeTextChanged;
         private TextWatcher mTextWatcher;
@@ -600,12 +598,13 @@ public class FragmentUpdateProfile extends Fragment implements View.OnClickListe
         private EditText mEditText;
         private String mAppentText;
 
-        public AutoAddTextWatcher(EditText editText, String appendText, int... position){
+        public AutoAddTextWatcher(EditText editText, String appendText, int... position) {
             this.mEditText = editText;
             this.mAppentText = appendText;
             this.mArray_pos = position.clone();
         }
-        public AutoAddTextWatcher(EditText editText, String appendText, TextWatcher textWatcher, int... position){
+
+        public AutoAddTextWatcher(EditText editText, String appendText, TextWatcher textWatcher, int... position) {
             this(editText, appendText, position);
             this.mTextWatcher = textWatcher;
         }
@@ -614,7 +613,7 @@ public class FragmentUpdateProfile extends Fragment implements View.OnClickListe
         public void beforeTextChanged(CharSequence s, int start, int count, int after) {
             mBeforeTextChanged = s.toString();
 
-            if(mTextWatcher != null)
+            if (mTextWatcher != null)
                 mTextWatcher.beforeTextChanged(s, start, count, after);
 
         }
@@ -623,30 +622,30 @@ public class FragmentUpdateProfile extends Fragment implements View.OnClickListe
         public void onTextChanged(CharSequence s, int start, int before, int count) {
 
             for (int i = 0; i < mArray_pos.length; i++) {
-                if(((mBeforeTextChanged.length() - mAppentText.length() * i) == (mArray_pos[i] - 1) &&
-                        (s.length() - mAppentText.length() * i) == mArray_pos[i])){
+                if (((mBeforeTextChanged.length() - mAppentText.length() * i) == (mArray_pos[i] - 1) &&
+                        (s.length() - mAppentText.length() * i) == mArray_pos[i])) {
                     mEditText.append(mAppentText);
 
                     break;
                 }
 
-                if(((mBeforeTextChanged.length() - mAppentText.length() * i) == mArray_pos[i] &&
-                        (s.length() - mAppentText.length() * i) == (mArray_pos[i] + 1))){
+                if (((mBeforeTextChanged.length() - mAppentText.length() * i) == mArray_pos[i] &&
+                        (s.length() - mAppentText.length() * i) == (mArray_pos[i] + 1))) {
                     int idx_start = mArray_pos[i] + mAppentText.length() * i;
                     int idx_end = Math.min(idx_start + mAppentText.length(), s.length());
 
-                    String sub = mEditText.getText().toString().substring(idx_start,  idx_end);
+                    String sub = mEditText.getText().toString().substring(idx_start, idx_end);
 
-                    if(!sub.equals(mAppentText)){
+                    if (!sub.equals(mAppentText)) {
                         mEditText.getText().insert(s.length() - 1, mAppentText);
                     }
 
                     break;
                 }
 
-                if(mAppentText.length() > 1 &&
+                if (mAppentText.length() > 1 &&
                         (mBeforeTextChanged.length() - mAppentText.length() * i) == (mArray_pos[i] + mAppentText.length()) &&
-                        (s.length() - mAppentText.length() * i) == (mArray_pos[i] + mAppentText.length() - 1)){
+                        (s.length() - mAppentText.length() * i) == (mArray_pos[i] + mAppentText.length() - 1)) {
                     int idx_start = mArray_pos[i] + mAppentText.length() * i;
                     int idx_end = Math.min(idx_start + mAppentText.length(), s.length());
 
@@ -657,14 +656,14 @@ public class FragmentUpdateProfile extends Fragment implements View.OnClickListe
 
             }
 
-            if(mTextWatcher != null)
+            if (mTextWatcher != null)
                 mTextWatcher.onTextChanged(s, start, before, count);
 
         }
 
         @Override
         public void afterTextChanged(Editable s) {
-            if(mTextWatcher != null) {
+            if (mTextWatcher != null) {
                 mTextWatcher.afterTextChanged(s);
             }
             validationFields();

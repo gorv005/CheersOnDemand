@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.support.design.widget.Snackbar;
@@ -22,11 +23,17 @@ import com.cheersondemand.R;
 import com.cheersondemand.model.SideMenuItem;
 import com.cheersondemand.model.productList.Sort;
 
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.text.DecimalFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 import java.util.UUID;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -417,5 +424,71 @@ public class Util {
     private final static AtomicInteger c = new AtomicInteger(0);
     public static int getID() {
         return c.incrementAndGet();
+    }
+
+
+    public static final SimpleDateFormat SDF = new SimpleDateFormat("yyyymmddhhmmss", Locale.getDefault());
+    public static File getCompressed(Context context, String path) throws IOException {
+
+        if(context == null)
+            throw new NullPointerException("Context must not be null.");
+        //getting device external cache directory, might not be available on some devices,
+        // so our code fall back to internal storage cache directory, which is always available but in smaller quantity
+        File cacheDir = context.getExternalCacheDir();
+        if(cacheDir == null)
+            //fall back
+            cacheDir = context.getCacheDir();
+
+        String rootDir = cacheDir.getAbsolutePath() + "/ImageCompressor";
+        File root = new File(rootDir);
+
+//Create ImageCompressor folder if it doesnt already exists.
+        if(!root.exists())
+            root.mkdirs();
+
+//decode and resize the original bitmap from @param path.
+        Bitmap bitmap = decodeImageFromFiles(path, /* your desired width*/300, /*your desired height*/ 300);
+
+//create placeholder for the compressed image file
+        File compressed = new File(root, SDF.format(new Date()) + ".jpg" /*Your desired format*/);
+
+//convert the decoded bitmap to stream
+        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+
+/*compress bitmap into byteArrayOutputStream
+ Bitmap.compress(Format, Quality, OutputStream)
+
+Where Quality ranges from 1–100.
+ */
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 80, byteArrayOutputStream);
+
+/*
+ Right now, we have our bitmap inside byteArrayOutputStream Object, all we need next is to write it to the compressed file we created earlier,
+ java.io.FileOutputStream can help us do just That!
+
+*/
+        FileOutputStream fileOutputStream = new FileOutputStream(compressed);
+        fileOutputStream.write(byteArrayOutputStream.toByteArray());
+        fileOutputStream.flush();
+
+        fileOutputStream.close();
+
+//File written, return to the caller. Done!
+        return compressed;
+    }
+
+    public static Bitmap decodeImageFromFiles(String path, int width, int height) {
+        BitmapFactory.Options scaleOptions = new BitmapFactory.Options();
+        scaleOptions.inJustDecodeBounds = true;
+        BitmapFactory.decodeFile(path, scaleOptions);
+        int scale = 1;
+        while (scaleOptions.outWidth / scale / 2 >= width
+                && scaleOptions.outHeight / scale / 2 >= height) {
+            scale *= 2;
+        }
+        // decode with the sample size
+        BitmapFactory.Options outOptions = new BitmapFactory.Options();
+        outOptions.inSampleSize = scale;
+        return BitmapFactory.decodeFile(path, outOptions);
     }
 }

@@ -13,6 +13,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.view.ContextThemeWrapper;
 import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -123,14 +124,19 @@ public class FragmentHome extends Fragment implements SwipeRefreshLayout.OnRefre
     @BindView(R.id.swipe_refresh_layout)
     SwipeRefreshLayout swipeRefreshLayout;
     @BindView(R.id.rvBrands)
-    ShimmerRecyclerView rvBrands;
+    RecyclerView rvBrands;
     @BindView(R.id.rvProducts)
-    ShimmerRecyclerView rvProducts;
+    RecyclerView rvProducts;
+    @BindView(R.id.rvBrandsShimmer)
+    ShimmerRecyclerView rvBrandsShimmer;
+    @BindView(R.id.rvProductsShimmer)
+    ShimmerRecyclerView rvProductsShimmer;
 
     private int productPos;
     private int secPos;
     private boolean isAdd;
-    boolean isProgressShown=false;
+    boolean isProgressShown = false;
+
     public FragmentHome() {
         // Required empty public constructor
     }
@@ -162,23 +168,25 @@ public class FragmentHome extends Fragment implements SwipeRefreshLayout.OnRefre
     @Override
     public void onResume() {
         super.onResume();
-        if(SharedPreference.getInstance(getActivity()).getBoolean(C.IS_QUANTITY_UPDATED)){
+        if (SharedPreference.getInstance(getActivity()).getBoolean(C.IS_QUANTITY_UPDATED)) {
             dialog();
         }
         setStoreLocation();
+        getProductsAndCategories();
+
        /* CategoryRequest categoryRequest = new CategoryRequest();
         categoryRequest.setUuid(Util.id(getActivity()));*/
         // iHomeViewPresenterPresenter.getCategories(categoryRequest);
         //  iHomeViewPresenterPresenter.getBrands(SharedPreference.getInstance(getActivity()).getUser(C.AUTH_USER).getData().getToken().getAccessToken(),categoryRequest);
         //  ((ActivityHome)getActivity()).getCartHasItem();
-        getProductsAndCategories();
     }
 
 
     void getProductsAndCategories() {
-        isProgressShown=false;
-        rvBrands.showShimmerAdapter();
-        rvProducts.showShimmerAdapter();
+        isProgressShown = false;
+        rvBrandsShimmer.showShimmerAdapter();
+        rvProductsShimmer.showShimmerAdapter();
+
         if (SharedPreference.getInstance(getActivity()).getBoolean(C.IS_LOGIN_GUEST)) {
             iHomeViewPresenterPresenter.getProductWithCategories(Util.id(getActivity()));
         } else {
@@ -228,6 +236,9 @@ public class FragmentHome extends Fragment implements SwipeRefreshLayout.OnRefre
 
             }
         });*/
+        rvProducts.hasFixedSize();
+        rvProducts.smoothScrollToPosition(10);
+        //  rvProducts.setNestedScrollingEnabled(false);
         rlSearchProduct.setClickable(true);
         rlSearchProduct.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -237,15 +248,16 @@ public class FragmentHome extends Fragment implements SwipeRefreshLayout.OnRefre
         });
         horizontalLayout = new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false);
         rvBrands.setLayoutManager(horizontalLayout);
-
-        rvBrands.setNestedScrollingEnabled(false);
+        rvBrands.setLayoutFrozen(true);
 
         horizontalLayout1 = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
 
         rvProducts.setLayoutManager(horizontalLayout1);
-        rvProducts.setHasFixedSize(true);
-        rvProducts.setNestedScrollingEnabled(false);
+
+        rvProducts.setLayoutFrozen(true);
+
         swipeRefreshLayout.setOnRefreshListener(this);
+
         //setStoreLocation();
 
   /*      adapterHomeBrands = new AdapterHomeBrands(setHomeBrands(), getActivity());
@@ -299,10 +311,12 @@ public class FragmentHome extends Fragment implements SwipeRefreshLayout.OnRefre
     @Override
     public void getProductWithCategoriesSuccess(ProductsWithCategoryResponse response) {
         try {
-            isProgressShown=true;
+            isProgressShown = true;
 
-            rvBrands.hideShimmerAdapter();
-            rvProducts.hideShimmerAdapter();
+            rvBrandsShimmer.hideShimmerAdapter();
+            rvProductsShimmer.hideShimmerAdapter();
+            rvBrands.setVisibility(View.VISIBLE);
+            rvProducts.setVisibility(View.VISIBLE);
             if (swipeRefreshLayout != null && swipeRefreshLayout.isRefreshing()) {
                 swipeRefreshLayout.setRefreshing(false);
 
@@ -322,16 +336,16 @@ public class FragmentHome extends Fragment implements SwipeRefreshLayout.OnRefre
 
                 if (response.getData() != null && response.getData().getCategories() != null && response.getData().getCategories().size() > 0) {
                     rlBrands.setVisibility(View.VISIBLE);
-                    boolean isViewMore=false;
+                    boolean isViewMore = false;
                     if (response.getData().getCategories().size() > 5) {
-                        isViewMore=true;
-                        for (int i = 0; i <5; i++) {
+                        isViewMore = true;
+                        for (int i = 0; i < 5; i++) {
                             categories.add(response.getData().getCategories().get(i));
                         }
                     } else {
                         categories.addAll(response.getData().getCategories());
                     }
-                    adapterHomeBrands = new AdapterHomeBrands(C.FRAGMENT_PRODUCTS_HOME,isViewMore,categories, getActivity());
+                    adapterHomeBrands = new AdapterHomeBrands(C.FRAGMENT_PRODUCTS_HOME, isViewMore, categories, getActivity());
                     rvBrands.setAdapter(adapterHomeBrands);
                 } else {
                     rlBrands.setVisibility(View.GONE);
@@ -461,7 +475,7 @@ public class FragmentHome extends Fragment implements SwipeRefreshLayout.OnRefre
     }
 
     void updateStore() {
-        isProgressShown=false;
+        isProgressShown = false;
         store = SharedPreference.getInstance(getActivity()).getStore(C.SELECTED_STORE);
         if (store != null) {
 
@@ -607,18 +621,17 @@ public class FragmentHome extends Fragment implements SwipeRefreshLayout.OnRefre
 
     @Override
     public void updateStoreSuccess(UpdateStoreResponse response) {
-        isProgressShown=true;
+        isProgressShown = true;
         if (response.getSuccess()) {
             if (response.getData() != null && response.getData().getIsQuantityUpdated()) {
                 SharedPreference.getInstance(getActivity()).setBoolean(C.IS_QUANTITY_UPDATED, response.getData().getIsQuantityUpdated());
 
 
                 dialog();
-            }
-        else {
-            SharedPreference.getInstance(getActivity()).setBoolean(C.IS_QUANTITY_UPDATED, false);
+            } else {
+                SharedPreference.getInstance(getActivity()).setBoolean(C.IS_QUANTITY_UPDATED, false);
 
-        }
+            }
         }
     }
 
@@ -627,19 +640,18 @@ public class FragmentHome extends Fragment implements SwipeRefreshLayout.OnRefre
         try {
             if (swipeRefreshLayout != null && swipeRefreshLayout.isRefreshing()) {
                 swipeRefreshLayout.setRefreshing(false);
-                rvBrands.hideShimmerAdapter();
-                rvProducts.hideShimmerAdapter();
+                rvProductsShimmer.hideShimmerAdapter();
+                rvBrandsShimmer.hideShimmerAdapter();
             }
             util.setSnackbarMessage(getActivity(), response, rlHomeView, true);
-        }
-        catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
     @Override
     public void showProgress() {
-        if(isProgressShown) {
+        if (isProgressShown) {
             util.showDialog(C.MSG, getActivity());
         }
 
@@ -647,7 +659,7 @@ public class FragmentHome extends Fragment implements SwipeRefreshLayout.OnRefre
 
     @Override
     public void hideProgress() {
-        if(isProgressShown) {
+        if (isProgressShown) {
             util.hideDialog();
         }
 
@@ -936,7 +948,7 @@ public class FragmentHome extends Fragment implements SwipeRefreshLayout.OnRefre
 
             public void onClick(View v) {
                 dialog.dismiss();
-                SharedPreference.getInstance(getActivity()).setBoolean(C.IS_QUANTITY_UPDATED,false);
+                SharedPreference.getInstance(getActivity()).setBoolean(C.IS_QUANTITY_UPDATED, false);
 
             }
         });
