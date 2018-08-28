@@ -12,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.cheersondemand.R;
+import com.cheersondemand.frameworks.retrofit.WebServicesWrapper;
 import com.cheersondemand.model.HelpCenter.HelpCenterList;
 import com.cheersondemand.view.ActivityContainer;
 import com.cheersondemand.view.adapter.helpcenter.AdapterHelpCenter;
@@ -76,12 +77,12 @@ public class FragmentHelpCenter extends Fragment {
 
         List<HelpCenterList> helpCenterLists=new ArrayList<>();
 
-        helpCenterLists.add(new HelpCenterList(getString(R.string.faq),"http://ror.anasource.com:8090/cheers_on_demand/static_pages/faq"));
-        helpCenterLists.add(new HelpCenterList(getString(R.string.about_us),"http://ror.anasource.com:8090/cheers_on_demand/static_pages/about-us"));
-        helpCenterLists.add(new HelpCenterList(getString(R.string.contact_us),"http://ror.anasource.com:8090/cheers_on_demand/static_pages/contact-us"));
-        helpCenterLists.add(new HelpCenterList(getString(R.string.how_it_works),"http://ror.anasource.com:8090/cheers_on_demand/static_pages/how-it-works"));
-        helpCenterLists.add(new HelpCenterList(getString(R.string.terms_od_services),"http://ror.anasource.com:8090/cheers_on_demand/static_pages/terms-of-service"));
-        helpCenterLists.add(new HelpCenterList(getString(R.string.privacy_policy),"http://ror.anasource.com:8090/cheers_on_demand/static_pages/privacy-policy"));
+        helpCenterLists.add(new HelpCenterList(getString(R.string.faq), WebServicesWrapper.BASE_URL+"/static_pages/faq"));
+        helpCenterLists.add(new HelpCenterList(getString(R.string.about_us),WebServicesWrapper.BASE_URL+"/static_pages/about-us"));
+        helpCenterLists.add(new HelpCenterList(getString(R.string.contact_us),WebServicesWrapper.BASE_URL+"/static_pages/contact-us"));
+        helpCenterLists.add(new HelpCenterList(getString(R.string.how_it_works),WebServicesWrapper.BASE_URL+"/static_pages/how-it-works"));
+        helpCenterLists.add(new HelpCenterList(getString(R.string.terms_od_services),WebServicesWrapper.BASE_URL+"/static_pages/terms-of-service"));
+        helpCenterLists.add(new HelpCenterList(getString(R.string.privacy_policy),WebServicesWrapper.BASE_URL+"/static_pages/privacy-policy"));
         //helpCenterLists.add(new HelpCenterList(getString(R.string.del),"http://ror.anasource.com:8090/cheers_on_demand/static_pages/faq"));
         return helpCenterLists;
 

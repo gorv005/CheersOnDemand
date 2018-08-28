@@ -255,7 +255,7 @@ public class FragmentHome extends Fragment implements SwipeRefreshLayout.OnRefre
         rvProducts.setLayoutManager(horizontalLayout1);
 
         rvProducts.setLayoutFrozen(true);
-
+        swipeRefreshLayout.setDistanceToTriggerSync(20);
         swipeRefreshLayout.setOnRefreshListener(this);
 
         //setStoreLocation();

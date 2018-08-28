@@ -234,8 +234,8 @@ public class Util {
 
     public  static Date getCurrentDate(){
         Calendar calendar = Calendar.getInstance();
-        calendar.set(Calendar.HOUR, 1);
-        calendar.set(Calendar.MINUTE, 30);
+        calendar.add(Calendar.HOUR, 1);
+        calendar.add(Calendar.MINUTE, 30);
 
        return calendar.getTime();
 
