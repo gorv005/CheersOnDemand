@@ -7,6 +7,8 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.net.Uri;
+import android.provider.MediaStore;
 import android.support.design.widget.Snackbar;
 import android.support.v4.content.ContextCompat;
 import android.text.TextUtils;
@@ -491,4 +493,21 @@ Where Quality ranges from 1–100.
         outOptions.inSampleSize = scale;
         return BitmapFactory.decodeFile(path, outOptions);
     }
+
+    public static Uri getImageUri(Context context, Bitmap inImage) {
+        try {
+            ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+            inImage.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
+            String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new
+                    Date());
+            String path = MediaStore.Images.Media.insertImage(context.getContentResolver(), inImage, "IMG_" + timeStamp, null);
+            return Uri.parse(path);
+        }
+        catch (Exception e){
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+
 }

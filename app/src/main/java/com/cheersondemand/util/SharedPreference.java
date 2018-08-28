@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 
+import com.cheersondemand.model.AllProduct;
 import com.cheersondemand.model.authentication.AuthenticationResponse;
 import com.cheersondemand.model.authentication.GuestUser;
 import com.cheersondemand.model.card.CardList;
@@ -132,6 +133,44 @@ public class SharedPreference {
         prefs.edit().putString(key, json).apply();
 
     }
+
+    public void setProducts(String key, List<AllProduct> productList) {
+        Gson gson = new Gson();
+        String json = gson.toJson(productList);
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        prefs.edit().putString(key, json).apply();
+
+    }
+
+    public List<AllProduct> getProducts(String key) {
+        List<AllProduct> recentSearches;
+
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+
+
+        if (prefs.contains(key)) {
+            String jsonFavorites = prefs.getString(key, null);
+            if(jsonFavorites!=null) {
+                Gson gson = new Gson();
+                AllProduct[] recent = gson.fromJson(jsonFavorites,
+                        AllProduct[].class);
+                if(recent!=null) {
+                    recentSearches = Arrays.asList(recent);
+                    recentSearches = new ArrayList<AllProduct>(recentSearches);
+                }
+                else {
+                    return null;
+                }
+            }
+            else {
+                return null;
+            }
+        } else
+            return null;
+
+        return (List<AllProduct>) recentSearches;
+    }
+
     void clearCardList(){
 
     }

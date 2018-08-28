@@ -94,6 +94,8 @@ public class FragmentUpdateProfile extends Fragment implements View.OnClickListe
     ImageLoader imageLoader;
     private Uri fileUri = null;
     private int GALLERY = 1, CAMERA = 2;
+    boolean isGallery=false;
+    boolean isRotated=false;
     private InputFilter filter = new InputFilter() {
 
         @Override
@@ -111,7 +113,8 @@ public class FragmentUpdateProfile extends Fragment implements View.OnClickListe
         // Required empty public constructor
     }
 
-    public static Bitmap rotateImageIfRequired(Bitmap img, String selectedImage) throws IOException {
+    public  Bitmap rotateImageIfRequired(Bitmap img, String selectedImage) throws IOException {
+        isRotated=false;
 
         ExifInterface ei = new ExifInterface(selectedImage);
         int orientation = ei.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_NORMAL);
@@ -128,7 +131,8 @@ public class FragmentUpdateProfile extends Fragment implements View.OnClickListe
         }
     }
 
-    public static Bitmap rotateImage(Bitmap img, int degree) {
+    public  Bitmap rotateImage(Bitmap img, int degree) {
+        isRotated=true;
         Matrix matrix = new Matrix();
         matrix.postRotate(degree);
         Bitmap rotatedImg = Bitmap.createBitmap(img, 0, 0, img.getWidth(), img.getHeight(), matrix, true);
@@ -411,6 +415,7 @@ public class FragmentUpdateProfile extends Fragment implements View.OnClickListe
                                 break;
                             case 2:
                                 isRemoved = true;
+                                isGallery=false;
                                 imgProfile.setImageResource(R.drawable.missing);
                                 ivCamera.setVisibility(View.VISIBLE);
                                 break;
@@ -436,9 +441,15 @@ public class FragmentUpdateProfile extends Fragment implements View.OnClickListe
                     Bitmap bitmap = MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(), contentURI);
                     //   String path = saveImage(bitmap);
                     bitmap = rotateImageIfRequired(bitmap, getRealPathFromURI(fileUri));
-
+                    if(isRotated) {
+                        fileUri = Util.getImageUri(getActivity(), bitmap);
+                        if (fileUri == null) {
+                            fileUri = contentURI;
+                        }
+                    }
                     bitmap = Util.scaleDown(bitmap, 500, true);
                     imgProfile.setImageBitmap(bitmap);
+                    isGallery=true;
                     isRemoved = false;
                     ivCamera.setVisibility(View.VISIBLE);
                 } catch (IOException e) {
@@ -462,6 +473,7 @@ public class FragmentUpdateProfile extends Fragment implements View.OnClickListe
                   bitmap = rotateImageIfRequired(bitmap, fileUri.getPath());
                 imgProfile.setImageBitmap(bitmap);
                 isRemoved = false;
+                isGallery=false;
                 ivCamera.setVisibility(View.VISIBLE);
             } catch (Exception e) {
                 e.printStackTrace();
@@ -469,6 +481,8 @@ public class FragmentUpdateProfile extends Fragment implements View.OnClickListe
 
         }
     }
+
+
  /*   private void storeImage(Bitmap image) {
         File pictureFile = getOutputMediaFile();
         if (pictureFile == null) {
@@ -512,6 +526,7 @@ public class FragmentUpdateProfile extends Fragment implements View.OnClickListe
         return mediaFile;
     }*/
     public void choosePhotoFromGallary() {
+
         Intent galleryIntent = new Intent(Intent.ACTION_PICK,
                 MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
 
@@ -600,6 +615,21 @@ public class FragmentUpdateProfile extends Fragment implements View.OnClickListe
                 UserResponse response = gson.fromJson(json, UserResponse.class);
                 authenticationResponse.getData().setUser(response);
                 SharedPreference.getInstance(getActivity()).setUser(C.AUTH_USER, authenticationResponse);
+                try {
+                    if (fileUri != null && isGallery && isRotated) {
+                        File file = new File(fileUri.getPath());
+                        file.delete();
+                        if (file.exists()) {
+                            file.getCanonicalFile().delete();
+                            if (file.exists()) {
+                                getActivity().deleteFile(file.getName());
+                            }
+                        }
+                    }
+                }
+                catch (Exception e){
+                    e.printStackTrace();
+                }
                 Handler handler = new Handler();
                 handler.postDelayed(new Runnable() {
                     public void run() {

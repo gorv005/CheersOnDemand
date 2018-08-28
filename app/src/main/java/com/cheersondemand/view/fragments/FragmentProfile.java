@@ -355,7 +355,7 @@ public class FragmentProfile extends Fragment implements View.OnClickListener, I
         if (response.getSuccess()) {
             SharedPreference.getInstance(getActivity()).setBoolean(C.IS_LOGIN, false);
             SharedPreference.getInstance(getActivity()).clearData();
-            gotoLogin();
+            gotoLoginLogout();
         }
         }
         catch (Exception e){
@@ -375,7 +375,17 @@ public class FragmentProfile extends Fragment implements View.OnClickListener, I
         intent.putExtra(C.BUNDLE, bundle);
         getActivity().startActivity(intent);
     }
-
+    void gotoLoginLogout() {
+        Intent intent = new Intent(getActivity(), MainActivity.class);
+        Bundle bundle = new Bundle();
+        bundle.putBoolean(C.IS_LOGIN_SCREEN, true);
+        bundle.putBoolean(C.IS_FROM_HOME, true);
+        bundle.putInt(C.SOURCE, C.FRAGMENT_PRODUCTS_HOME);
+        intent.putExtra(C.FRAGMENT_ACTION, C.FRAGMENT_AUTHNITICATION);
+         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        intent.putExtra(C.BUNDLE, bundle);
+        getActivity().startActivity(intent);
+    }
     void updateProfile(boolean isNotified) {
         ProfileUpdateRequest profileUpdateRequest = new ProfileUpdateRequest();
         profileUpdateRequest.setIsNotificationEnabled(isNotified);

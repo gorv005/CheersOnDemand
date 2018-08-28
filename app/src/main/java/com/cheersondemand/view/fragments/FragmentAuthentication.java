@@ -6,7 +6,6 @@ import android.graphics.Typeface;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
-import android.os.Looper;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -54,7 +53,6 @@ import com.facebook.FacebookSdk;
 import com.facebook.GraphRequest;
 import com.facebook.GraphResponse;
 import com.facebook.appevents.AppEventsLogger;
-import com.facebook.login.LoginBehavior;
 import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
@@ -506,15 +504,16 @@ public class FragmentAuthentication extends Fragment implements IAuthenitication
                 break;
             case R.id.btnFbLoginViewLogin:
                 if (Util.isNetworkConnectivity(getActivity())) {
+                    loginButton.performClick();
 
-                    Handler handler = new Handler(Looper.getMainLooper());
+                  /*  Handler handler = new Handler(Looper.getMainLooper());
                     handler.post(new Runnable() {
                         public void run() {
                             loginButton.setLoginBehavior(LoginBehavior.DEVICE_AUTH);
 
                             loginButton.performClick();
                         }
-                    });
+                    });*/
                 }
                 break;
             case R.id.btnGoogleLogin:

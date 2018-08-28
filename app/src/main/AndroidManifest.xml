@@ -107,7 +107,6 @@
                 android:resource="@xml/provider_paths" />
         </provider>
 
-        <activity android:name=".DeepLinkActivity"></activity>
     </application>
 
 </manifest>

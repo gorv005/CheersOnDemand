@@ -53,7 +53,6 @@ import butterknife.ButterKnife;
 
 public class ActivityContainer extends AppCompatActivity {
     public static TextView tvTitle, tvClearAll;
-
     private Fragment fragment;
 
     @Override

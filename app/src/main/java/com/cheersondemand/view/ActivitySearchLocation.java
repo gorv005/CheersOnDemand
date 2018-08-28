@@ -273,7 +273,7 @@ public class ActivitySearchLocation extends AppCompatActivity implements
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
         Log.v("Google API Callback", "Connection Failed");
         Log.v("Error Code", String.valueOf(connectionResult.getErrorCode()));
-        Toast.makeText(this, "API_NOT_CONNECTED", Toast.LENGTH_SHORT).show();
+        //Toast.makeText(this, "API_NOT_CONNECTED", Toast.LENGTH_SHORT).show();
     }
 
     @Override
