@@ -19,7 +19,7 @@ import java.util.List;
 import static android.content.Context.MODE_PRIVATE;
 
 /**
- * Created by AB.garg on 08-09-2016.
+ * Created by AB on 08-09-2016.
  */
 public class SharedPreference {
 

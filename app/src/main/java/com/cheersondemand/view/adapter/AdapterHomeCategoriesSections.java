@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.cheersondemand.R;
+import com.cheersondemand.model.AllProduct;
 import com.cheersondemand.model.HomeCategoriesSectionList;
 import com.cheersondemand.util.C;
 import com.cheersondemand.view.ActivityContainer;
@@ -23,6 +24,7 @@ public class AdapterHomeCategoriesSections extends RecyclerView.Adapter<AdapterH
 
     private ArrayList<HomeCategoriesSectionList> dataList;
     private Activity mContext;
+    List<AllProduct> allProductList;
     AdapterHomeCategories adapterHomeCategories;
     public AdapterHomeCategoriesSections(Activity context, ArrayList<HomeCategoriesSectionList> dataList) {
         this.dataList = dataList;
@@ -35,17 +37,20 @@ public class AdapterHomeCategoriesSections extends RecyclerView.Adapter<AdapterH
         ItemRowHolder mh = new ItemRowHolder(v);
         return mh;
     }
+    public void modifyList(){
+        adapterHomeCategories.modifyList();
+    }
 
     @Override
     public void onBindViewHolder(ItemRowHolder itemRowHolder, int i) {
 
         final String sectionName = dataList.get(i).getHeaderTitle();
 
-        List category = dataList.get(i).getAllProducts();
+        allProductList = dataList.get(i).getAllProducts();
 
         itemRowHolder.itemTitle.setText(sectionName);
 
-         adapterHomeCategories = new AdapterHomeCategories (true,category,mContext);
+         adapterHomeCategories = new AdapterHomeCategories (true,allProductList,mContext);
 
         itemRowHolder.recyclerProductList.setHasFixedSize(true);
         itemRowHolder.recyclerProductList.setLayoutManager(new LinearLayoutManager(mContext, LinearLayoutManager.HORIZONTAL, false));
@@ -109,6 +114,6 @@ public class AdapterHomeCategoriesSections extends RecyclerView.Adapter<AdapterH
     }
 
    public void notified(){
-        adapterHomeCategories.notifyDataSetChanged();
+        adapterHomeCategories.modifyList();
     }
 }

@@ -100,6 +100,7 @@ public class FragmentCategoryList extends Fragment implements IHomeViewPresenter
 
 
     void getCategories() {
+        showProgress();
         String order_id = SharedPreference.getInstance(getActivity()).getString(C.ORDER_ID);
 
         if (SharedPreference.getInstance(getActivity()).getBoolean(C.IS_LOGIN_GUEST)) {
@@ -137,6 +138,7 @@ public class FragmentCategoryList extends Fragment implements IHomeViewPresenter
     @Override
     public void getResponseSuccess(CategoriesResponse response) {
         try {
+            hideProgress();
         if (response.getSuccess()) {
             adapterCategories = new AdapterCategories(response.getData(), getActivity());
             rvBrands.setAdapter(adapterCategories);
@@ -152,6 +154,7 @@ public class FragmentCategoryList extends Fragment implements IHomeViewPresenter
 
     @Override
     public void getResponseError(String response) {
+        hideProgress();
         util.setSnackbarMessage(getActivity(), response, rlView, true);
 
     }

@@ -24,6 +24,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.cheersondemand.R;
+import com.cheersondemand.model.AllProduct;
 import com.cheersondemand.model.address.AddressAddResponse;
 import com.cheersondemand.model.address.AddressResponse;
 import com.cheersondemand.model.coupon.CouponInfoResponse;
@@ -47,6 +48,7 @@ import com.cheersondemand.presenter.home.order.IOrderViewPresenterPresenter;
 import com.cheersondemand.presenter.home.order.OrderViewPresenterImpl;
 import com.cheersondemand.util.C;
 import com.cheersondemand.util.SharedPreference;
+import com.cheersondemand.util.StoreProducts;
 import com.cheersondemand.util.Util;
 import com.cheersondemand.view.ActivityContainer;
 import com.cheersondemand.view.ActivityHome;
@@ -99,8 +101,9 @@ public class FragmentCart extends Fragment implements View.OnClickListener, IOrd
     ImageView ivAlert;
     @BindView(R.id.rlStoreAlert)
     RelativeLayout rlStoreAlert;
+    boolean isBtnEnable = true;
     private LinearLayoutManager mLinearLayoutManager;
-    boolean isBtnEnable=true;
+    Integer id;
     public FragmentCart() {
         // Required empty public constructor
     }
@@ -134,7 +137,7 @@ public class FragmentCart extends Fragment implements View.OnClickListener, IOrd
         if (source == C.FRAGMENT_PRODUCT_DESC) {
             tvMyCart.setVisibility(View.GONE);
             viewLine.setVisibility(View.GONE);
-            ((ActivityContainer)getActivity()).setTitle(getString(R.string.my_cart));
+            ((ActivityContainer) getActivity()).setTitle(getString(R.string.my_cart));
 
             ((ActivityContainer) getActivity()).showToolBar();
         }
@@ -151,7 +154,7 @@ public class FragmentCart extends Fragment implements View.OnClickListener, IOrd
         if (source == C.FRAGMENT_PRODUCT_DESC) {
             tvMyCart.setVisibility(View.GONE);
             viewLine.setVisibility(View.GONE);
-            ((ActivityContainer)getActivity()).setTitle(getString(R.string.my_cart));
+            ((ActivityContainer) getActivity()).setTitle(getString(R.string.my_cart));
 
             ((ActivityContainer) getActivity()).showToolBar();
 
@@ -192,24 +195,26 @@ public class FragmentCart extends Fragment implements View.OnClickListener, IOrd
 
 
     public void disableProceedButton() {
-        isBtnEnable=false;
+        isBtnEnable = false;
 
         btnProceed.setEnabled(false);
         btnProceed.setBackground(ContextCompat.getDrawable(getActivity(), R.drawable.button_disable));
 
     }
+
     public void enableProceedButton() {
-        isBtnEnable=true;
+        isBtnEnable = true;
         btnProceed.setEnabled(true);
         btnProceed.setBackground(ContextCompat.getDrawable(getActivity(), R.drawable.button_select));
 
     }
 
-    public void showMessage(){
+    public void showMessage() {
         tvStoreClosed.setText(getString(R.string.price_change));
 
         rlStoreAlert.setVisibility(View.VISIBLE);
     }
+
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
@@ -234,12 +239,13 @@ public class FragmentCart extends Fragment implements View.OnClickListener, IOrd
                 break;
         }
     }
-    public void gotoHome(){
+
+    public void gotoHome() {
         Intent intent = new Intent(getActivity(), ActivityHome.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-        Bundle bundle=new Bundle();
-        bundle.putInt(C.FRAGMENT_ACTION,C.FRAGMENT_PRODUCTS_HOME);
-        intent.putExtra(C.BUNDLE,bundle);
+        Bundle bundle = new Bundle();
+        bundle.putInt(C.FRAGMENT_ACTION, C.FRAGMENT_PRODUCTS_HOME);
+        intent.putExtra(C.BUNDLE, bundle);
         startActivity(intent);
     }
 
@@ -313,7 +319,7 @@ public class FragmentCart extends Fragment implements View.OnClickListener, IOrd
         if (orderItemsList != null && orderItemsList.size() > 0) {
 
             orderItem = orderItemsList.get(productPos);
-
+            id=orderItem.getProduct().getId();
             UpdateCartRequest updateCartRequest = new UpdateCartRequest();
             updateCartRequest.setUuid(Util.id(getActivity()));
             updateCartRequest.setProductId(orderItem.getProduct().getId());
@@ -340,6 +346,7 @@ public class FragmentCart extends Fragment implements View.OnClickListener, IOrd
         this.isAdd = isAdd;
         if (orderItemsList != null && orderItemsList.size() > 0) {
             orderItem = orderItemsList.get(productPos);
+            id=orderItem.getProduct().getId();
 
             WishListRequest wishListRequest = new WishListRequest();
             wishListRequest.setProductId(orderItem.getProduct().getId());
@@ -375,6 +382,8 @@ public class FragmentCart extends Fragment implements View.OnClickListener, IOrd
     }
 
     public void removeProduct(UpdateCartRequest updateCartRequest) {
+        id=updateCartRequest.getProductId();
+
         String order_id = SharedPreference.getInstance(getActivity()).getString(C.ORDER_ID);
         if (SharedPreference.getInstance(getActivity()).getBoolean(C.IS_LOGIN_GUEST)) {
             String id = "" + SharedPreference.getInstance(getActivity()).geGuestUser(C.GUEST_USER).getId();
@@ -414,7 +423,7 @@ public class FragmentCart extends Fragment implements View.OnClickListener, IOrd
     public void getUpdateCartSuccess(UpdateCartResponse response) {
         try {
             if (response.getSuccess()) {
-                if(response.getData()!=null && response.getData().getCouponMessage()!=null && !response.getData().getCouponMessage().equals("")){
+                if (response.getData() != null && response.getData().getCouponMessage() != null && !response.getData().getCouponMessage().equals("")) {
                     dialog(response.getData().getCouponMessage());
                 }
                 util.setSnackbarMessage(getActivity(), response.getMessage(), LLView, false);
@@ -422,6 +431,20 @@ public class FragmentCart extends Fragment implements View.OnClickListener, IOrd
 
                 orderItemsList.clear();
                 orderItemsList = response.getData().getOrder().getOrderItems();
+
+                AllProduct allProduct = StoreProducts.getInstance().getProduct(id);
+                if (allProduct != null) {
+                    if (isAdd) {
+                        if (allProduct.getCartQunatity() != null) {
+                            allProduct.setCartQunatity("" + (Integer.parseInt(allProduct.getCartQunatity()) + 1));
+                        }
+                    } else {
+                        if (allProduct.getCartQunatity() != null) {
+                            allProduct.setCartQunatity("" + (Integer.parseInt(allProduct.getCartQunatity()) - 1));
+                        }
+                    }
+                    StoreProducts.getInstance().addProduct(allProduct);
+                }
                 adapterCartList.setData(cartProduct, orderItemsList);
 
             /*for(int i=0;i<response.getData().getOrder().getOrderItems().size();i++) {
@@ -446,6 +469,15 @@ public class FragmentCart extends Fragment implements View.OnClickListener, IOrd
                     cartProduct = response.getData();
                     orderItemsList.clear();
                     orderItemsList = response.getData().getOrder().getOrderItems();
+
+                    AllProduct allProduct = StoreProducts.getInstance().getProduct(id);
+                    if (allProduct != null) {
+
+                        allProduct.setCartQunatity(null);
+                        allProduct.setIsInCart(false);
+                        StoreProducts.getInstance().addProduct(allProduct);
+
+                    }
                     adapterCartList.setData(cartProduct, orderItemsList);
                     llNoProductInCount.setVisibility(View.GONE);
                     rvCartList.setVisibility(View.VISIBLE);
@@ -498,10 +530,9 @@ public class FragmentCart extends Fragment implements View.OnClickListener, IOrd
                     for (int i = 0; i < cartProduct.getOrder().getOrderItems().size(); i++) {
                         if (cartProduct.getOrder().getOrderItems().get(i).getOldUnitPrice() != null) {
                             rlStoreAlert.setVisibility(View.VISIBLE);
-                            if(isBtnEnable){
+                            if (isBtnEnable) {
                                 tvStoreClosed.setText(getString(R.string.price_change));
-                            }
-                            else {
+                            } else {
                                 tvStoreClosed.setText(getString(R.string.store_closed_and_prices_changed));
                             }
                             break;
@@ -522,9 +553,10 @@ public class FragmentCart extends Fragment implements View.OnClickListener, IOrd
             e.printStackTrace();
         }
     }
+
     void dialog(String msg) {
         final Dialog dialog = new Dialog(getActivity(), R.style.FullHeightDialog); //this is a reference to the style above
-        dialog.setContentView(R.layout.dialog_ok ); //I saved the xml file above as yesnomessage.xml
+        dialog.setContentView(R.layout.dialog_ok); //I saved the xml file above as yesnomessage.xml
         dialog.setCancelable(true);
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
 
@@ -555,6 +587,15 @@ public class FragmentCart extends Fragment implements View.OnClickListener, IOrd
             if (response.getSuccess()) {
                 util.setSnackbarMessage(getActivity(), response.getMessage(), LLView, false);
                 orderItemsList.get(productPos).getProduct().setIsWishlisted(true);
+
+
+                AllProduct allProduct = StoreProducts.getInstance().getProduct(id);
+                if (allProduct != null) {
+
+                    allProduct.setIsWishlisted(true);
+                    StoreProducts.getInstance().addProduct(allProduct);
+
+                }
                 adapterCartList.notifyDataSetChanged();
 
             } else {
@@ -572,7 +613,13 @@ public class FragmentCart extends Fragment implements View.OnClickListener, IOrd
             if (response.getSuccess()) {
                 util.setSnackbarMessage(getActivity(), response.getMessage(), LLView, false);
                 orderItemsList.get(productPos).getProduct().setIsWishlisted(false);
+                AllProduct allProduct = StoreProducts.getInstance().getProduct(id);
+                if (allProduct != null) {
 
+                    allProduct.setIsWishlisted(false);
+                    StoreProducts.getInstance().addProduct(allProduct);
+
+                }
                 adapterCartList.notifyDataSetChanged();
 
             } else {

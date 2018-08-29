@@ -26,6 +26,7 @@ import com.cheersondemand.presenter.store.IStoreViewPresenter;
 import com.cheersondemand.presenter.store.StoreViewPresenterImpl;
 import com.cheersondemand.util.C;
 import com.cheersondemand.util.SharedPreference;
+import com.cheersondemand.util.StoreProducts;
 import com.cheersondemand.util.Util;
 import com.cheersondemand.view.ActivityContainer;
 import com.cheersondemand.view.ActivityHome;
@@ -172,6 +173,7 @@ public class FragmentStoreSelection extends Fragment implements IStoreViewPresen
     public void updateStoreSuccess(UpdateStoreResponse response) {
         try {
             if (response.getSuccess()) {
+                StoreProducts.getInstance().clear();
                 if (response.getData() != null && response.getData().getIsQuantityUpdated()) {
                     SharedPreference.getInstance(getActivity()).setBoolean(C.IS_QUANTITY_UPDATED, response.getData().getIsQuantityUpdated());
                 }
@@ -186,6 +188,7 @@ public class FragmentStoreSelection extends Fragment implements IStoreViewPresen
                     showHome();
                 }
                 else if (from == C.FRAGMENT_PRODUCT_LISTING) {
+                    SharedPreference.getInstance(getActivity()).setBoolean(C.IS_STORE_UPDATED, true);
                     getActivity().onBackPressed();
                 }
             } else {
@@ -249,12 +252,7 @@ public class FragmentStoreSelection extends Fragment implements IStoreViewPresen
                 }
                 break;
             case R.id.imgBack:
-                if (from == C.SEARCH) {
-
-                    getActivity().finish();
-                } else {
-                    updateStore();
-                }
+               back();
                 break;
             case R.id.btnSubmit:
 
@@ -267,6 +265,20 @@ public class FragmentStoreSelection extends Fragment implements IStoreViewPresen
         }
     }
 
+    public void back(){
+        if (from == C.SEARCH) {
+
+            getActivity().finish();
+        }
+        else if (from == C.HOME) {
+            updateStore();
+        }
+        else {
+            getActivity().finish();
+
+        }
+
+    }
     public void gotoHome() {
         try {
             Intent intent = new Intent(getActivity(), ActivityHome.class);

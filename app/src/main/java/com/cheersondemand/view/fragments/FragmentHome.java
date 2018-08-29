@@ -54,6 +54,7 @@ import com.cheersondemand.presenter.store.IStoreViewPresenter;
 import com.cheersondemand.presenter.store.StoreViewPresenterImpl;
 import com.cheersondemand.util.C;
 import com.cheersondemand.util.SharedPreference;
+import com.cheersondemand.util.StoreProducts;
 import com.cheersondemand.util.Util;
 import com.cheersondemand.view.ActivityContainer;
 import com.cheersondemand.view.ActivityHome;
@@ -135,8 +136,9 @@ public class FragmentHome extends Fragment implements SwipeRefreshLayout.OnRefre
     private int productPos;
     private int secPos;
     private boolean isAdd;
-    boolean isProgressShown = false;
+    boolean isProgressShown = false,isApiWorking=false;
 
+    List<AllProduct> allProductList;
     public FragmentHome() {
         // Required empty public constructor
     }
@@ -172,8 +174,10 @@ public class FragmentHome extends Fragment implements SwipeRefreshLayout.OnRefre
             dialog();
         }
         setStoreLocation();
-        getProductsAndCategories();
-
+        if (allProductList != null && allProductList.size() > 0) {
+            //allProductList=StoreProducts.getInstance().getListOfProducts();
+            adapterHomeCategoriesSections.modifyList();
+        }
        /* CategoryRequest categoryRequest = new CategoryRequest();
         categoryRequest.setUuid(Util.id(getActivity()));*/
         // iHomeViewPresenterPresenter.getCategories(categoryRequest);
@@ -257,6 +261,7 @@ public class FragmentHome extends Fragment implements SwipeRefreshLayout.OnRefre
         rvProducts.setLayoutFrozen(true);
         swipeRefreshLayout.setDistanceToTriggerSync(20);
         swipeRefreshLayout.setOnRefreshListener(this);
+        getProductsAndCategories();
 
         //setStoreLocation();
 
@@ -311,6 +316,7 @@ public class FragmentHome extends Fragment implements SwipeRefreshLayout.OnRefre
     @Override
     public void getProductWithCategoriesSuccess(ProductsWithCategoryResponse response) {
         try {
+            StoreProducts.getInstance().clear();
             isProgressShown = true;
 
             rvBrandsShimmer.hideShimmerAdapter();
@@ -354,7 +360,9 @@ public class FragmentHome extends Fragment implements SwipeRefreshLayout.OnRefre
                 if (response.getData() != null && response.getData().getAllProducts() != null && response.getData().getAllProducts().size() > 0) {
                     rlProducts.setVisibility(View.VISIBLE);
                     homeCategoriesSectionList = new ArrayList<>();
-                    homeCategoriesSectionList.add(new HomeCategoriesSectionList("All products", response.getData().getAllProducts()));
+                    allProductList=response.getData().getAllProducts();
+                    StoreProducts.getInstance().saveProducts(allProductList);
+                    homeCategoriesSectionList.add(new HomeCategoriesSectionList("All products", allProductList));
 
                     adapterHomeCategoriesSections = new AdapterHomeCategoriesSections(getActivity(), homeCategoriesSectionList);
                     rvProducts.setAdapter(adapterHomeCategoriesSections);
@@ -414,6 +422,7 @@ public class FragmentHome extends Fragment implements SwipeRefreshLayout.OnRefre
     @Override
     public void getCreateOrderSuccess(CreateOrderResponse response) {
         try {
+            isApiWorking=false;
             if (response.getSuccess()) {
                 SharedPreference.getInstance(getActivity()).setString(C.ORDER_ID, "" + response.getData().getOrder().getId());
                 addToCart();
@@ -429,6 +438,7 @@ public class FragmentHome extends Fragment implements SwipeRefreshLayout.OnRefre
     @Override
     public void getAddToCartSucess(AddToCartResponse response) {
         try {
+            isApiWorking=false;
             if (response.getSuccess()) {
                 util.setSnackbarMessage(getActivity(), response.getMessage(), rlHomeView, false);
                 updateCart();
@@ -461,6 +471,7 @@ public class FragmentHome extends Fragment implements SwipeRefreshLayout.OnRefre
     @Override
     public void getUpdateCartSuccess(UpdateCartResponse response) {
         try {
+            isApiWorking=false;
             if (response.getSuccess()) {
                 util.setSnackbarMessage(getActivity(), response.getMessage(), rlHomeView, false);
                 updateCart();
@@ -518,6 +529,7 @@ public class FragmentHome extends Fragment implements SwipeRefreshLayout.OnRefre
 
             }
         }
+        StoreProducts.getInstance().addProduct(product);
 
         homeCategoriesSectionList.get(secPos).getAllProducts().set(productPos, product);
         adapterHomeCategoriesSections.notified();
@@ -526,12 +538,15 @@ public class FragmentHome extends Fragment implements SwipeRefreshLayout.OnRefre
     @Override
     public void getRemoveItemFromCartSuccess(UpdateCartResponse response) {
         try {
+            isApiWorking=false;
             if (response.getSuccess()) {
 
 
                 util.setSnackbarMessage(getActivity(), response.getMessage(), rlHomeView, false);
                 product.setCartQunatity(null);
                 product.setIsInCart(false);
+                StoreProducts.getInstance().addProduct(product);
+
                 homeCategoriesSectionList.get(secPos).getAllProducts().set(productPos, product);
                 adapterHomeCategoriesSections.notified();
 
@@ -578,9 +593,12 @@ public class FragmentHome extends Fragment implements SwipeRefreshLayout.OnRefre
     @Override
     public void addTowishListSuccess(WishListResponse response) {
         try {
+            isApiWorking=false;
             if (response.getSuccess()) {
                 util.setSnackbarMessage(getActivity(), response.getMessage(), rlHomeView, false);
                 product.setIsWishlisted(true);
+                StoreProducts.getInstance().addProduct(product);
+
                 adapterHomeCategoriesSections.notified();
 
             } else {
@@ -595,9 +613,12 @@ public class FragmentHome extends Fragment implements SwipeRefreshLayout.OnRefre
     @Override
     public void removeFromWishListSuccess(WishListResponse response) {
         try {
+            isApiWorking=false;
             if (response.getSuccess()) {
                 util.setSnackbarMessage(getActivity(), response.getMessage(), rlHomeView, false);
                 product.setIsWishlisted(false);
+                StoreProducts.getInstance().addProduct(product);
+
                 adapterHomeCategoriesSections.notified();
 
             } else {
@@ -702,10 +723,11 @@ public class FragmentHome extends Fragment implements SwipeRefreshLayout.OnRefre
         productPos = pos;
         this.secPos = secPos;
         this.isAdd = isAdd;
-        if (homeCategoriesSectionList != null && homeCategoriesSectionList.size() > 0) {
-            HomeCategoriesSectionList section = homeCategoriesSectionList.get(secPos);
-
-            product = section.getAllProducts().get(pos);
+        if (allProductList != null && allProductList.size() > 0) {
+            product= StoreProducts.getInstance().getProduct(allProductList.get(pos).getId());
+            if(product==null) {
+                product = allProductList.get(pos);
+            }
             if (SharedPreference.getInstance(getActivity()).getString(C.ORDER_ID) == null) {
                 createOrder();
             } else {
@@ -720,10 +742,11 @@ public class FragmentHome extends Fragment implements SwipeRefreshLayout.OnRefre
         productPos = pos;
         this.secPos = secPos;
         this.isAdd = isAdd;
-        if (homeCategoriesSectionList != null && homeCategoriesSectionList.size() > 0) {
-            HomeCategoriesSectionList section = homeCategoriesSectionList.get(secPos);
-
-            product = section.getAllProducts().get(pos);
+        if (allProductList != null && allProductList.size() > 0) {
+            product= StoreProducts.getInstance().getProduct(allProductList.get(pos).getId());
+            if(product==null) {
+                product = allProductList.get(pos);
+            }
             if (SharedPreference.getInstance(getActivity()).getString(C.ORDER_ID) == null) {
                 createOrder();
             } else {
@@ -732,25 +755,29 @@ public class FragmentHome extends Fragment implements SwipeRefreshLayout.OnRefre
         }
 
 
+
     }
 
 
     public void wishListUpdate(int secPos, int pos, boolean isAdd) {
-        productPos = pos;
-        this.secPos = secPos;
-        this.isAdd = isAdd;
-        if (homeCategoriesSectionList != null && homeCategoriesSectionList.size() > 0) {
-            HomeCategoriesSectionList section = homeCategoriesSectionList.get(secPos);
-
-            product = section.getAllProducts().get(pos);
+        if(!isApiWorking) {
+            isApiWorking=true;
+            productPos = pos;
+            this.secPos = secPos;
+            this.isAdd = isAdd;
+            if (allProductList != null && allProductList.size() > 0) {
+                product= StoreProducts.getInstance().getProduct(allProductList.get(pos).getId());
+                if(product==null) {
+                    product = allProductList.get(pos);
+                }
             WishListRequest wishListRequest = new WishListRequest();
-            wishListRequest.setProductId(product.getId());
-            wishListRequest.setUuid(Util.id(getActivity()));
+                wishListRequest.setProductId(product.getId());
+                wishListRequest.setUuid(Util.id(getActivity()));
 
-            updateWishList(wishListRequest, isAdd);
+                updateWishList(wishListRequest, isAdd);
+            }
+
         }
-
-
     }
 
 
@@ -807,30 +834,34 @@ public class FragmentHome extends Fragment implements SwipeRefreshLayout.OnRefre
     }
 
     public void updateCart(int secPos, int productPos, boolean isAdd) {
-        this.secPos = secPos;
-        this.productPos = productPos;
-        this.isAdd = isAdd;
-        if (homeCategoriesSectionList != null && homeCategoriesSectionList.size() > 0) {
-            HomeCategoriesSectionList section = homeCategoriesSectionList.get(secPos);
-
-            product = section.getAllProducts().get(productPos);
-
-            UpdateCartRequest updateCartRequest = new UpdateCartRequest();
-            updateCartRequest.setUuid(Util.id(getActivity()));
-            updateCartRequest.setProductId(product.getId());
-            updateCartRequest.setIsIncrease(isAdd);
-            if (isAdd) {
-                updateCartRequest.setQuantity(Integer.parseInt(product.getCartQunatity()) + 1);
-                updateProduct(updateCartRequest);
-            } else {
-                if (Integer.parseInt(product.getCartQunatity()) == 1) {
-                    removeProduct(updateCartRequest);
-                } else {
-                    updateCartRequest.setQuantity(Integer.parseInt(product.getCartQunatity()) - 1);
-                    updateProduct(updateCartRequest);
+        if(!isApiWorking) {
+            isApiWorking=true;
+            this.secPos = secPos;
+            this.productPos = productPos;
+            this.isAdd = isAdd;
+            if (allProductList != null && allProductList.size() > 0) {
+                product= StoreProducts.getInstance().getProduct(allProductList.get(productPos).getId());
+                if(product==null) {
+                    product = allProductList.get(productPos);
                 }
-            }
 
+                UpdateCartRequest updateCartRequest = new UpdateCartRequest();
+                updateCartRequest.setUuid(Util.id(getActivity()));
+                updateCartRequest.setProductId(product.getId());
+                updateCartRequest.setIsIncrease(isAdd);
+                if (isAdd) {
+                    updateCartRequest.setQuantity(Integer.parseInt(product.getCartQunatity()) + 1);
+                    updateProduct(updateCartRequest);
+                } else {
+                    if (Integer.parseInt(product.getCartQunatity()) == 1) {
+                        removeProduct(updateCartRequest);
+                    } else {
+                        updateCartRequest.setQuantity(Integer.parseInt(product.getCartQunatity()) - 1);
+                        updateProduct(updateCartRequest);
+                    }
+                }
+
+            }
         }
     }
 

@@ -92,6 +92,7 @@
 
         <activity
             android:name=".view.ActivityFilters"
+            android:theme="@style/ActivityTheme"
             android:screenOrientation="portrait" />
         <activity
             android:name=".view.ActivitySearchProducts"

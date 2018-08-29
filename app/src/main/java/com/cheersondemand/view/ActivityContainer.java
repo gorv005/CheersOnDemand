@@ -455,6 +455,9 @@ public class ActivityContainer extends AppCompatActivity {
                gotoHome();
 
            }
+           else if (fragment != null && fragment instanceof FragmentStoreSelection) {
+               ((FragmentStoreSelection)fragment).back();
+           }
             else if (fragment != null && fragment instanceof FragmentResetPassword) {
                Intent intent = new Intent(this, MainActivity.class);
                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);

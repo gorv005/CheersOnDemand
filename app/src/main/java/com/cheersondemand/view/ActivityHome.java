@@ -25,6 +25,7 @@ import com.cheersondemand.presenter.home.order.IOrderViewPresenterPresenter;
 import com.cheersondemand.presenter.home.order.OrderViewPresenterImpl;
 import com.cheersondemand.util.C;
 import com.cheersondemand.util.SharedPreference;
+import com.cheersondemand.util.StoreProducts;
 import com.cheersondemand.util.Util;
 import com.cheersondemand.view.fragments.FragmentCart;
 import com.cheersondemand.view.fragments.FragmentCategoryList;
@@ -72,7 +73,7 @@ public class ActivityHome extends AppCompatActivity implements View.OnClickListe
 */
         setContentView(R.layout.activity_home);
         ButterKnife.bind(this);
-
+        StoreProducts.getInstance().clear();
         try {
             Bundle bundle = getIntent().getBundleExtra(C.BUNDLE);
             action = bundle.getInt(C.FRAGMENT_ACTION);
@@ -253,6 +254,16 @@ public class ActivityHome extends AppCompatActivity implements View.OnClickListe
         }
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        try {
+            StoreProducts.getInstance().clear();
+        }
+        catch (Exception e){
+            e.printStackTrace();
+        }
+    }
 
     public void updateCart(int secPos, int pos, boolean isAdd) {
         Fragment fragment = getVisibleFragment();
@@ -370,8 +381,7 @@ public class ActivityHome extends AppCompatActivity implements View.OnClickListe
         }
         else {
             if (doubleBackToExitPressedOnce) {
-                super.onBackPressed();
-                return;
+                finish();
             }
 
             this.doubleBackToExitPressedOnce = true;

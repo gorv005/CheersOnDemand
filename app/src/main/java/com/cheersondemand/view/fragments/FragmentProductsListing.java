@@ -60,6 +60,7 @@ import com.cheersondemand.presenter.products.IProductViewPresenter;
 import com.cheersondemand.presenter.products.ProductViewPresenterImpl;
 import com.cheersondemand.util.C;
 import com.cheersondemand.util.SharedPreference;
+import com.cheersondemand.util.StoreProducts;
 import com.cheersondemand.util.Util;
 import com.cheersondemand.view.ActivityContainer;
 import com.cheersondemand.view.ActivityFilters;
@@ -138,7 +139,7 @@ public class FragmentProductsListing extends Fragment implements View.OnClickLis
     private GridLayoutManager lLayout;
     private int productPos;
     private int secPos;
-    private boolean isAdd, isFilter = false, isSort = false,isloadMore=false;
+    private boolean isAdd, isFilter = false, isSort = false,isloadMore=false,isApiWorking=false;
 
     public FragmentProductsListing() {
         // Required empty public constructor
@@ -217,6 +218,8 @@ public class FragmentProductsListing extends Fragment implements View.OnClickLis
         });
         getBrands();
         getCategories();
+        page = 1;
+        getProducts(page);
     }
 
     void setStoreName() {
@@ -285,10 +288,19 @@ public class FragmentProductsListing extends Fragment implements View.OnClickLis
     public void onResume() {
         super.onResume();
         setStoreName();
-        page = 1;
-        getProducts(page);
-        ((ActivityContainer)getActivity()).setTitle(getString(R.string.product_listing));
 
+        ((ActivityContainer)getActivity()).setTitle(getString(R.string.product_listing));
+        if(SharedPreference.getInstance(getActivity()).getBoolean(C.IS_STORE_UPDATED)){
+            SharedPreference.getInstance(getActivity()).setBoolean(C.IS_STORE_UPDATED, false);
+            page = 1;
+            getProducts(page);
+        }
+        else {
+            if (allProductList != null && allProductList.size() > 0) {
+                //allProductList=StoreProducts.getInstance().getListOfProducts();
+                adapterProducts.modifyList();
+            }
+        }
     }
 
     @Override
@@ -399,6 +411,7 @@ public class FragmentProductsListing extends Fragment implements View.OnClickLis
                         llNoProductInCount.setVisibility(View.VISIBLE);
                     }
                 }
+                StoreProducts.getInstance().saveProducts(allProductList);
                 loading = true;
             } else {
                 util.setSnackbarMessage(getActivity(), response.getMessage(), rlView, true);
@@ -474,20 +487,25 @@ public class FragmentProductsListing extends Fragment implements View.OnClickLis
     }
 
     public void wishListUpdate(int secPos, int pos, boolean isAdd) {
-        productPos = pos;
-        this.secPos = secPos;
-        this.isAdd = isAdd;
-        if (allProductList != null && allProductList.size() > 0) {
+        if(!isApiWorking) {
+            isApiWorking=true;
+            productPos = pos;
+            this.secPos = secPos;
+            this.isAdd = isAdd;
+            if (allProductList != null && allProductList.size() > 0) {
 
-            product = allProductList.get(pos);
-            WishListRequest wishListRequest = new WishListRequest();
-            wishListRequest.setProductId(product.getId());
-            wishListRequest.setUuid(Util.id(getActivity()));
+                product= StoreProducts.getInstance().getProduct(allProductList.get(pos).getId());
+                if(product==null) {
+                    product = allProductList.get(pos);
+                }
+                WishListRequest wishListRequest = new WishListRequest();
+                wishListRequest.setProductId(product.getId());
+                wishListRequest.setUuid(Util.id(getActivity()));
 
-            updateWishList(wishListRequest, isAdd);
+                updateWishList(wishListRequest, isAdd);
+            }
+
         }
-
-
     }
 
 
@@ -514,30 +532,36 @@ public class FragmentProductsListing extends Fragment implements View.OnClickLis
     }
 
     public void updateCart(int secPos, int productPos, boolean isAdd) {
-        this.secPos = secPos;
-        this.productPos = productPos;
-        this.isAdd = isAdd;
-        if (allProductList != null && allProductList.size() > 0) {
+       if(!isApiWorking) {
+           this.secPos = secPos;
+           this.productPos = productPos;
+           this.isAdd = isAdd;
+           isApiWorking = true;
+           if (allProductList != null && allProductList.size() > 0) {
 
-            product = allProductList.get(productPos);
+               product= StoreProducts.getInstance().getProduct(allProductList.get(productPos).getId());
+               if(product==null) {
+                   product = allProductList.get(productPos);
+               }
 
-            UpdateCartRequest updateCartRequest = new UpdateCartRequest();
-            updateCartRequest.setUuid(Util.id(getActivity()));
-            updateCartRequest.setProductId(product.getId());
-            updateCartRequest.setIsIncrease(isAdd);
-            if (isAdd) {
-                updateCartRequest.setQuantity(Integer.parseInt(product.getCartQunatity()) + 1);
-                updateProduct(updateCartRequest);
-            } else {
-                if (Integer.parseInt(product.getCartQunatity()) == 1) {
-                    removeProduct(updateCartRequest);
-                } else {
-                    updateCartRequest.setQuantity(Integer.parseInt(product.getCartQunatity()) - 1);
-                    updateProduct(updateCartRequest);
-                }
-            }
+               UpdateCartRequest updateCartRequest = new UpdateCartRequest();
+               updateCartRequest.setUuid(Util.id(getActivity()));
+               updateCartRequest.setProductId(product.getId());
+               updateCartRequest.setIsIncrease(isAdd);
+               if (isAdd) {
+                   updateCartRequest.setQuantity(Integer.parseInt(product.getCartQunatity()) + 1);
+                   updateProduct(updateCartRequest);
+               } else {
+                   if (Integer.parseInt(product.getCartQunatity()) == 1) {
+                       removeProduct(updateCartRequest);
+                   } else {
+                       updateCartRequest.setQuantity(Integer.parseInt(product.getCartQunatity()) - 1);
+                       updateProduct(updateCartRequest);
+                   }
+               }
 
-        }
+           }
+       }
     }
 
 
@@ -571,6 +595,7 @@ public class FragmentProductsListing extends Fragment implements View.OnClickLis
     @Override
     public void getCreateOrderSuccess(CreateOrderResponse response) {
         try {
+            isApiWorking=false;
             if (response.getSuccess()) {
                 SharedPreference.getInstance(getActivity()).setString(C.ORDER_ID, "" + response.getData().getOrder().getId());
                 addToCart();
@@ -586,6 +611,7 @@ public class FragmentProductsListing extends Fragment implements View.OnClickLis
     @Override
     public void getAddToCartSucess(AddToCartResponse response) {
         try {
+            isApiWorking=false;
             if (response.getSuccess()) {
                 util.setSnackbarMessage(getActivity(), response.getMessage(), rlView, false);
                 updateCart();
@@ -601,6 +627,7 @@ public class FragmentProductsListing extends Fragment implements View.OnClickLis
     @Override
     public void getUpdateCartSuccess(UpdateCartResponse response) {
         try {
+            isApiWorking=false;
             if (response.getSuccess()) {
                 util.setSnackbarMessage(getActivity(), response.getMessage(), rlView, false);
                 updateCart();
@@ -635,7 +662,7 @@ public class FragmentProductsListing extends Fragment implements View.OnClickLis
 
             }
         }
-
+        StoreProducts.getInstance().addProduct(product);
         allProductList.set(productPos, product);
         adapterProducts.notifyDataSetChanged();
     }
@@ -643,11 +670,13 @@ public class FragmentProductsListing extends Fragment implements View.OnClickLis
     @Override
     public void getRemoveItemFromCartSuccess(UpdateCartResponse response) {
         try {
+            isApiWorking=false;
             if (response.getSuccess()) {
                 util.setSnackbarMessage(getActivity(), response.getMessage(), rlView, false);
 
                 product.setCartQunatity(null);
                 product.setIsInCart(false);
+                StoreProducts.getInstance().addProduct(product);
                 allProductList.set(productPos, product);
                 adapterProducts.notifyDataSetChanged();
                 if(response.getData()==null){
@@ -672,9 +701,12 @@ public class FragmentProductsListing extends Fragment implements View.OnClickLis
     @Override
     public void addTowishListSuccess(WishListResponse response) {
         try {
+            isApiWorking=false;
             if (response.getSuccess()) {
                 util.setSnackbarMessage(getActivity(), response.getMessage(), rlView, false);
                 product.setIsWishlisted(true);
+                StoreProducts.getInstance().addProduct(product);
+
                 adapterProducts.notifyDataSetChanged();
 
             } else {
@@ -689,9 +721,12 @@ public class FragmentProductsListing extends Fragment implements View.OnClickLis
     @Override
     public void removeFromWishListSuccess(WishListResponse response) {
         try {
+            isApiWorking=false;
             if (response.getSuccess()) {
                 util.setSnackbarMessage(getActivity(), response.getMessage(), rlView, false);
                 product.setIsWishlisted(false);
+                StoreProducts.getInstance().addProduct(product);
+
                 adapterProducts.notifyDataSetChanged();
 
             } else {
@@ -730,8 +765,9 @@ public class FragmentProductsListing extends Fragment implements View.OnClickLis
         try {
             if (response.getSuccess()) {
                 categoriesList = response.getData();
-                if(catId!=null) {
+                if(catId!=null && !catId.equals("")) {
                     for (int i = 0; i < categoriesList.size(); i++) {
+
                         if (Integer.parseInt(catId)==categoriesList.get(i).getId()) {
                             categoriesList.get(i).setSelected(true);
                             break;
@@ -767,6 +803,7 @@ public class FragmentProductsListing extends Fragment implements View.OnClickLis
                         llNoProductInCount.setVisibility(View.VISIBLE);
                     }
                 }
+                StoreProducts.getInstance().saveProducts(allProductList);
                 loading = true;
             } else {
                 util.setSnackbarMessage(getActivity(), response.getMessage(), rlView, true);
@@ -779,6 +816,7 @@ public class FragmentProductsListing extends Fragment implements View.OnClickLis
 
     @Override
     public void getResponseError(String response) {
+        isApiWorking=false;
         util.setSnackbarMessage(getActivity(), response, rlView, true);
 
     }
@@ -884,7 +922,10 @@ public class FragmentProductsListing extends Fragment implements View.OnClickLis
                 isFilter = true;
             }
 
-            page = 1;
+            if(allProductList!=null && allProductList.size()>0){
+                allProductList.clear();
+            }
+            page=1;
             getProducts(page);
 
         }
@@ -950,7 +991,12 @@ public class FragmentProductsListing extends Fragment implements View.OnClickLis
                     orderField = "sold";
                 }
                 isSort = true;
-                getProducts(1);
+                if(allProductList!=null && allProductList.size()>0){
+                    allProductList.clear();
+                }
+                page=1;
+                getProducts(page);
+
             }
         });
         btnDone.setOnClickListener(new View.OnClickListener() {

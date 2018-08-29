@@ -54,6 +54,7 @@ import com.cheersondemand.util.CustomSpannable;
 import com.cheersondemand.util.ImageLoader.ImageLoader;
 import com.cheersondemand.util.NonScrollListView;
 import com.cheersondemand.util.SharedPreference;
+import com.cheersondemand.util.StoreProducts;
 import com.cheersondemand.util.Util;
 import com.cheersondemand.view.ActivityContainer;
 import com.cheersondemand.view.adapter.AdapterHomeCategories;
@@ -148,6 +149,7 @@ public class FragmentProductDescription extends Fragment implements View.OnClick
     boolean isReadMore=false;
     boolean isProgressShow=false;
     boolean isClicked=false;
+    Integer id;
     public FragmentProductDescription() {
         // Required empty public constructor
     }
@@ -158,6 +160,7 @@ public class FragmentProductDescription extends Fragment implements View.OnClick
         imageLoader = new ImageLoader(getActivity());
         product = (AllProduct) getArguments().getSerializable(C.PRODUCT);
         productDes = (AllProduct) getArguments().getSerializable(C.PRODUCT);
+        id=product.getId();
         iProductDescViewPresenter = new ProductDescViewPresenterImpl(this, getActivity());
         iOrderViewPresenterPresenter = new OrderViewPresenterImpl(this, getActivity());
         iCouponViewPresenter = new CouponViewPresenterImpl(this, getActivity());
@@ -188,69 +191,84 @@ public class FragmentProductDescription extends Fragment implements View.OnClick
         ivCart.setOnClickListener(this);
         imgBack.setOnClickListener(this);
         tvReadMore.setOnClickListener(this);
-        setDetail();
-        initCollapsingToolbar();
+
+        getSimilarProducts();
+        getCouponList();
     }
 
     @Override
     public void onResume() {
         super.onResume();
         isClicked=false;
-        getSimilarProducts();
-        getCouponList();
-        ((ActivityContainer) getActivity()).hideToolBar();
+        product=StoreProducts.getInstance().getProduct(id);
+        if(product==null){
+            StoreProducts.getInstance().addProduct(product);
+            product=productDes;
+        }
+        else {
+            productDes=product;
+        }
+        setDetail();
 
+        ((ActivityContainer) getActivity()).hideToolBar();
+        if (allProductList != null && allProductList.size() > 0) {
+            //allProductList=StoreProducts.getInstance().getListOfProducts();
+            adapterSimilarProducts.modifyList();
+        }
         //  ActivityContainer.tvTitle.setText(productDes.getName());
     }
 
     void getSimilarProducts() {
         isProgressShow=false;
         if (SharedPreference.getInstance(getActivity()).getBoolean(C.IS_LOGIN_GUEST)) {
-            iProductDescViewPresenter.getSimilarProducts("" + product.getId(), Util.id(getActivity()), "1", "10");
+            iProductDescViewPresenter.getSimilarProducts("" + id, Util.id(getActivity()), "1", "10");
         } else {
             String token = C.bearer + SharedPreference.getInstance(getActivity()).getUser(C.AUTH_USER).getData().getToken().getAccessToken();
-            iProductDescViewPresenter.getSimilarProducts(token, "" + product.getId(), Util.id(getActivity()), "1", "10");
+            iProductDescViewPresenter.getSimilarProducts(token, "" +id, Util.id(getActivity()), "1", "10");
 
         }
     }
 
     void setDetail() {
-        tvDesc.setText(product.getDescription());
+        try {
+            tvDesc.setText(product.getDescription());
 
-        //  imageLoader.DisplayImage(product.getImage(), imgProduct);
-        Util.setImage(getActivity(), product.getImage(), imgProduct);
-        if (product.getIsWishlisted()) {
-            imgLike.setImageResource(R.drawable.like);
-        } else {
-            imgLike.setImageResource(R.drawable.unlike);
+            //  imageLoader.DisplayImage(product.getImage(), imgProduct);
+            Util.setImage(getActivity(), product.getImage(), imgProduct);
+            if (product.getIsWishlisted()) {
+                imgLike.setImageResource(R.drawable.like);
+            } else {
+                imgLike.setImageResource(R.drawable.unlike);
 
-        }
-        if (product.getIsInCart()) {
-            btnAddToCart.setText(getString(R.string.added_to_cart));
-        } else {
-            btnAddToCart.setText(getString(R.string.add_to_cart));
+            }
+            if (product.getIsInCart()) {
+                btnAddToCart.setText(getString(R.string.added_to_cart));
+            } else {
+                btnAddToCart.setText(getString(R.string.add_to_cart));
 
-        }
-        tvProductName.setText(product.getName());
-        tvProductPrice.setText("$" + product.getPrice());
-        tvType.setText(product.getSubCategory().getName());
-        if(product.getAbv()==null) {
-            tvalcohalVol.setText("-");
-        }
-        else {
-            tvalcohalVol.setText(product.getAbv());
-        }
-        tvRegion.setText(product.getRegion());
-        if(product.getQuantity()==null) {
-            tvQuantity.setText("");
-        }
-        else {
-            tvQuantity.setText(product.getQuantity());
+            }
+            tvProductName.setText(product.getName());
+            tvProductPrice.setText("$" + product.getPrice());
+            tvType.setText(product.getSubCategory().getName());
+            if (product.getAbv() == null) {
+                tvalcohalVol.setText("-");
+            } else {
+                tvalcohalVol.setText(product.getAbv());
+            }
+            tvRegion.setText(product.getRegion());
+            if (product.getQuantity() == null) {
+                tvQuantity.setText("");
+            } else {
+                tvQuantity.setText(product.getQuantity());
 
+            }
+
+            makeTextViewResizable(tvDesc, 3, "See More", true);
+            initCollapsingToolbar();
         }
-
-        makeTextViewResizable(tvDesc, 3, "See More", true);
-
+        catch (Exception e){
+            e.printStackTrace();
+        }
     }
     public  void makeTextViewResizable(final TextView tv, final int maxLine, final String expandText, final boolean viewMore) {
 
@@ -431,7 +449,10 @@ public class FragmentProductDescription extends Fragment implements View.OnClick
         this.isAdd = isAdd;
         if (allProductList != null && allProductList.size() > 0) {
 
-            product = allProductList.get(pos);
+            product= StoreProducts.getInstance().getProduct(allProductList.get(pos).getId());
+            if(product==null) {
+                product = allProductList.get(pos);
+            }
             WishListRequest wishListRequest = new WishListRequest();
             wishListRequest.setProductId(product.getId());
             wishListRequest.setUuid(Util.id(getActivity()));
@@ -471,8 +492,10 @@ public class FragmentProductDescription extends Fragment implements View.OnClick
         this.isAdd = isAdd;
         if (allProductList != null && allProductList.size() > 0) {
 
-            product = allProductList.get(productPos);
-
+            product= StoreProducts.getInstance().getProduct(allProductList.get(productPos).getId());
+            if(product==null) {
+                product = allProductList.get(productPos);
+            }
             UpdateCartRequest updateCartRequest = new UpdateCartRequest();
             updateCartRequest.setUuid(Util.id(getActivity()));
             updateCartRequest.setProductId(product.getId());
@@ -525,6 +548,7 @@ public class FragmentProductDescription extends Fragment implements View.OnClick
             if (response.getSuccess()) {
                 if (response.getData().getSimilarProducts().size() > 0) {
                     allProductList = response.getData().getSimilarProducts();
+                    StoreProducts.getInstance().saveProducts(allProductList);
                     if (allProductList.size() > 0) {
                         adapterSimilarProducts = new AdapterHomeCategories(false, allProductList, getActivity());
                         rvSimilarDrinks.setAdapter(adapterSimilarProducts);
@@ -568,6 +592,14 @@ public class FragmentProductDescription extends Fragment implements View.OnClick
             iCouponViewPresenter.getListOfCoupons(true, token, Util.id(getActivity()), order_id);
         }
     }
+    void updateCartDesc() {
+
+        if (productDes.getCartQunatity() == null || productDes.getCartQunatity().equalsIgnoreCase("0")) {
+            productDes.setCartQunatity("1");
+            productDes.setIsInCart(true);
+            StoreProducts.getInstance().addProduct(productDes);
+        }
+    }
 
     @Override
     public void getAddToCartSucess(AddToCartResponse response) {
@@ -578,11 +610,12 @@ public class FragmentProductDescription extends Fragment implements View.OnClick
 
                 if (isProductDes) {
                     btnAddToCart.setText(getString(R.string.added_to_cart));
-                    productDes.setIsInCart(true);
+                   updateCartDesc();
                     isProductDes = false;
                 } else if (isBuyNow) {
+
                     btnAddToCart.setText(getString(R.string.added_to_cart));
-                    productDes.setIsInCart(true);
+                    updateCartDesc();
                     isProductDes = false;
                     isBuyNow = false;
                     Handler handler = new Handler();
@@ -643,7 +676,7 @@ public class FragmentProductDescription extends Fragment implements View.OnClick
 
             }
         }
-
+         StoreProducts.getInstance().addProduct(product);
         allProductList.set(productPos, product);
         adapterSimilarProducts.notifyDataSetChanged();
     }
@@ -657,6 +690,7 @@ public class FragmentProductDescription extends Fragment implements View.OnClick
                 product.setCartQunatity(null);
                 product.setIsInCart(false);
                 allProductList.set(productPos, product);
+                StoreProducts.getInstance().addProduct(product);
                 adapterSimilarProducts.notifyDataSetChanged();
                 if (response.getData() == null) {
                     SharedPreference.getInstance(getActivity()).setBoolean(C.CART_HAS_ITEM, false);
@@ -685,9 +719,12 @@ public class FragmentProductDescription extends Fragment implements View.OnClick
                     isProductDes = false;
 
                     productDes.setIsWishlisted(true);
+                    StoreProducts.getInstance().addProduct(productDes);
+
                     imgLike.setImageResource(R.drawable.like);
                 } else {
                     product.setIsWishlisted(true);
+                    StoreProducts.getInstance().addProduct(product);
                     adapterSimilarProducts.notifyDataSetChanged();
                 }
             } else {
@@ -708,10 +745,13 @@ public class FragmentProductDescription extends Fragment implements View.OnClick
                 if (isProductDes) {
                     isProductDes = false;
                     productDes.setIsWishlisted(false);
+                    StoreProducts.getInstance().addProduct(productDes);
+
                     imgLike.setImageResource(R.drawable.unlike);
 
                 } else {
                     product.setIsWishlisted(false);
+                    StoreProducts.getInstance().addProduct(product);
 
                     adapterSimilarProducts.notifyDataSetChanged();
                 }

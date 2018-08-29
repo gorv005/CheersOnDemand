@@ -373,6 +373,7 @@ public class FragmentWishList extends Fragment implements IOrderViewPresenterPre
 
             }
         }
+      //  StoreProducts.getInstance().addProduct(product);
 
         allProductList.set(productPos, product);
         adapterProducts.notifyDataSetChanged();
@@ -386,6 +387,8 @@ public class FragmentWishList extends Fragment implements IOrderViewPresenterPre
 
                 product.setCartQunatity(null);
                 product.setIsInCart(false);
+              //  StoreProducts.getInstance().addProduct(product);
+
                 allProductList.set(productPos, product);
                 adapterProducts.notifyDataSetChanged();
                 if (response.getData() == null) {
@@ -412,6 +415,8 @@ public class FragmentWishList extends Fragment implements IOrderViewPresenterPre
             if (response.getSuccess()) {
                 util.setSnackbarMessage(getActivity(), response.getMessage(), rlView, false);
                 product.setIsWishlisted(true);
+              //  StoreProducts.getInstance().addProduct(product);
+
                 adapterProducts.notifyDataSetChanged();
 
             } else {
@@ -429,6 +434,8 @@ public class FragmentWishList extends Fragment implements IOrderViewPresenterPre
             if (response.getSuccess()) {
                 util.setSnackbarMessage(getActivity(), response.getMessage(), rlView, false);
                 product.setIsWishlisted(false);
+               // StoreProducts.getInstance().addProduct(product);
+
                 allProductList.remove(productPos);
                 if (allProductList.size() == 0) {
                     tvNoProduct.setVisibility(View.VISIBLE);
@@ -451,6 +458,7 @@ public class FragmentWishList extends Fragment implements IOrderViewPresenterPre
             if (response.getSuccess()) {
                 if (response.getData() != null && response.getData().size() > 0) {
                     allProductList = response.getData();
+                   // StoreProducts.getInstance().saveProducts(allProductList);
                     adapterProducts = new AdapterWishlistProducts(allProductList, getActivity());
                     rvProductsList.setAdapter(adapterProducts);
 

@@ -15,6 +15,7 @@ import com.cheersondemand.R;
 import com.cheersondemand.model.AllProduct;
 import com.cheersondemand.util.C;
 import com.cheersondemand.util.ImageLoader.ImageLoader;
+import com.cheersondemand.util.StoreProducts;
 import com.cheersondemand.util.Util;
 import com.cheersondemand.view.ActivityContainer;
 import com.cheersondemand.view.ActivityHome;
@@ -32,7 +33,9 @@ private List<AllProduct> horizontalList;
     Activity context;
     ImageLoader imageLoader;
     boolean isHome;
-public class ItemViewHolder extends RecyclerView.ViewHolder {
+    private AllProduct allProduct;
+
+    public class ItemViewHolder extends RecyclerView.ViewHolder {
     public TextView tvProductName,tvProductPrice,tvQuantity;
     public ImageView ivProductImage,ivLike;
     View rlProduct,btnAddToCart,rlMinus,rlPlus,llQuantity;
@@ -61,7 +64,9 @@ public class ItemViewHolder extends RecyclerView.ViewHolder {
         this.isHome=isHome;
         imageLoader=new ImageLoader(context);
     }
-
+    public void modifyList(){
+        notifyDataSetChanged();
+    }
     @Override
     public RecyclerView.ViewHolder  onCreateViewHolder(ViewGroup parent, int viewType) {
     if(viewType==TYPE_ITEM) {
@@ -79,7 +84,13 @@ public class ItemViewHolder extends RecyclerView.ViewHolder {
     public void onBindViewHolder(final RecyclerView.ViewHolder  holder, final int position) {
         if (holder instanceof ItemViewHolder) {
             final ItemViewHolder itemViewHolder = (ItemViewHolder) holder;
-             final AllProduct allProduct=horizontalList.get(position);
+             AllProduct  allProduct= StoreProducts.getInstance().getProduct(horizontalList.get(position).getId());
+            if(allProduct==null){
+                allProduct=horizontalList.get(position);
+            }
+            else {
+                horizontalList.set(position,allProduct);
+            }
             itemViewHolder.tvProductName.setText(allProduct.getName());
             itemViewHolder.tvProductPrice.setText("$"+allProduct.getPrice());
           //  imageLoader.DisplayImage(horizontalList.get(position).getImage(),itemViewHolder.ivProductImage);
@@ -154,10 +165,10 @@ public class ItemViewHolder extends RecyclerView.ViewHolder {
                 @Override
                 public void onClick(View v) {
                     if (isHome) {
-                        ((ActivityHome) context).wishListUpdate(0, position, !allProduct.getIsWishlisted());
+                        ((ActivityHome) context).wishListUpdate(0, position, !horizontalList.get(position).getIsWishlisted());
 
                     } else {
-                        ((ActivityContainer) context).wishListUpdate(0, position, !allProduct.getIsWishlisted());
+                        ((ActivityContainer) context).wishListUpdate(0, position, !horizontalList.get(position).getIsWishlisted());
                     }
                 }
             });
