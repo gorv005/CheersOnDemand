@@ -67,6 +67,8 @@ public class FragmentCategoryList extends Fragment implements IHomeViewPresenter
         if(source!=C.FRAGMENT_PRODUCTS_HOME) {
             ((ActivityContainer) getActivity()).hideToolBar();
         }
+        getCategories();
+
     }
 
     @Override
@@ -94,7 +96,6 @@ public class FragmentCategoryList extends Fragment implements IHomeViewPresenter
         rvBrands.setLayoutManager(layoutManager);
         rvBrands.setHasFixedSize(true);
         imgBack.setOnClickListener(this);
-        getCategories();
     }
 
 
