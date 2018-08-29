@@ -36,7 +36,8 @@ public class FragmentSearchProductResults extends Fragment {
         super.onResume();
 
         ((ActivityContainer) getActivity()).showToolBar();
-         ActivityContainer.tvTitle.setText(searchString);
+        ((ActivityContainer)getActivity()).setTitle(searchString);
+
     }
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,

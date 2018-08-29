@@ -95,18 +95,21 @@ public class FragmentPaymentResult extends Fragment implements View.OnClickListe
             llCancelPayment.setVisibility(View.GONE);
             llFailedPayment.setVisibility(View.GONE);
             llSuccessPayment.setVisibility(View.VISIBLE);
-            ActivityContainer.tvTitle.setText(R.string.order_confirm);
+            ((ActivityContainer)getActivity()).setTitle(getString(R.string.order_confirm));
+
         } else if (paymentResult.equalsIgnoreCase(C.PAYMENT_FAILED)) {
             llCancelPayment.setVisibility(View.GONE);
             llFailedPayment.setVisibility(View.VISIBLE);
             llSuccessPayment.setVisibility(View.GONE);
-            ActivityContainer.tvTitle.setText(R.string.transaction_failed);
+            ((ActivityContainer)getActivity()).setTitle(getString(R.string.transaction_failed));
+
 
         } else if (paymentResult.equalsIgnoreCase(C.ORDER_CANCEL)) {
             llCancelPayment.setVisibility(View.VISIBLE);
             llFailedPayment.setVisibility(View.GONE);
             llSuccessPayment.setVisibility(View.GONE);
-            ActivityContainer.tvTitle.setText(R.string.cancel_orders);
+            ((ActivityContainer)getActivity()).setTitle(getString(R.string.cancel_orders));
+
 
         }
     }

@@ -287,7 +287,8 @@ public class FragmentProductsListing extends Fragment implements View.OnClickLis
         setStoreName();
         page = 1;
         getProducts(page);
-        ActivityContainer.tvTitle.setText(R.string.product_listing);
+        ((ActivityContainer)getActivity()).setTitle(getString(R.string.product_listing));
+
     }
 
     @Override

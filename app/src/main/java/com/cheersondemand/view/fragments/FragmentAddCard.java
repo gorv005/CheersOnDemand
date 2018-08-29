@@ -146,7 +146,8 @@ public class FragmentAddCard extends Fragment implements ICardViewPresenter.ICar
     @Override
     public void onResume() {
         super.onResume();
-        ActivityContainer.tvTitle.setText(getString(R.string.new_card));
+        ((ActivityContainer)getActivity()).setTitle(getString(R.string.new_card));
+
     }
 
     @Override

@@ -213,14 +213,15 @@ public class FragmentPaymentConfirmation extends Fragment implements ICardViewPr
 
             }
         });
+
         initDateTimePicker();
     }
 
     @Override
     public void onResume() {
         super.onResume();
+        ((ActivityContainer)getActivity()).setTitle(getString(R.string.payment));
         getCardList();
-        ActivityContainer.tvTitle.setText(getString(R.string.payment));
     }
 
 

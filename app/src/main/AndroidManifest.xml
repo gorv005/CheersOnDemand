@@ -66,6 +66,8 @@
         </activity>
         <activity
             android:name=".view.ActivityHome"
+            android:theme="@style/ActivityTheme"
+
             android:screenOrientation="portrait" />
         <activity
             android:name=".view.ActivityContainer"

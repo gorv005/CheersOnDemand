@@ -104,9 +104,10 @@ public class FragmentAddAddress extends Fragment implements View.OnClickListener
     public void onResume() {
         super.onResume();
         if (isEdit) {
-            ActivityContainer.tvTitle.setText(getString(R.string.edit_address));
+            ((ActivityContainer)getActivity()).setTitle(getString(R.string.edit_address));
+
         } else {
-            ActivityContainer.tvTitle.setText(getString(R.string.add_address));
+            ((ActivityContainer)getActivity()).setTitle(getString(R.string.add_address));
 
         }
     }

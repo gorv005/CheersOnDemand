@@ -87,7 +87,7 @@ public class FragmentCoupons extends Fragment implements View.OnClickListener, I
         if (source == C.FRAGMENT_PRODUCT_DESC) {
             rlBar.setVisibility(View.GONE);
             viewLine.setVisibility(View.GONE);
-            ActivityContainer.tvTitle.setText(getString(R.string.coupon_code));
+            ((ActivityContainer)getActivity()).setTitle(getString(R.string.coupon_code));
             ((ActivityContainer) getActivity()).showToolBar();
         }
     }
@@ -118,7 +118,7 @@ public class FragmentCoupons extends Fragment implements View.OnClickListener, I
         if (source == C.FRAGMENT_PRODUCT_DESC) {
             rlBar.setVisibility(View.GONE);
             viewLine.setVisibility(View.GONE);
-            ActivityContainer.tvTitle.setText(getString(R.string.coupon_code));
+            ((ActivityContainer)getActivity()).setTitle(getString(R.string.coupon_code));
             ((ActivityContainer) getActivity()).showToolBar();
         }
         imgBack.setOnClickListener(this);

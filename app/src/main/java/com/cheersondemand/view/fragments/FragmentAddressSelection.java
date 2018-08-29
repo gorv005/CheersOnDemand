@@ -109,7 +109,8 @@ public class FragmentAddressSelection extends Fragment implements View.OnClickLi
     @Override
     public void onResume() {
         super.onResume();
-        ActivityContainer.tvTitle.setText(getString(R.string.address));
+        ((ActivityContainer)getActivity()).setTitle(getString(R.string.address));
+
         getAddressList();
     }
 
@@ -238,7 +239,7 @@ public class FragmentAddressSelection extends Fragment implements View.OnClickLi
             if (response.getData() != null && response.getData().size() > 0) {
                 Bundle bundle=new Bundle();
                 bundle.putBoolean(C.IS_RETRY_PAYEMNT,false);
-                 ((ActivityContainer)getActivity()).fragmnetLoader(C.FRAGMENT_PAYMENT_CONFIRMATION,bundle);
+                ((ActivityContainer)getActivity()).fragmnetLoader(C.FRAGMENT_PAYMENT_CONFIRMATION,bundle);
 
 
             } else {

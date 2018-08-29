@@ -88,7 +88,7 @@ public class FragmentNotification extends Fragment implements View.OnClickListen
     @Override
     public void onResume() {
         super.onResume();
-        ActivityContainer.tvTitle.setText(R.string.notification);
+        ((ActivityContainer)getActivity()).setTitle(getString(R.string.notification));
 
         getNotificationList("" + page);
     }

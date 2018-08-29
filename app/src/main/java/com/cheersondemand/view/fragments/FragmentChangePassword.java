@@ -89,7 +89,7 @@ public class FragmentChangePassword extends Fragment implements View.OnClickList
     @Override
     public void onResume() {
         super.onResume();
-        ActivityContainer.tvTitle.setText(R.string.change_password);
+        ((ActivityContainer)getActivity()).setTitle(getString(R.string.change_password));
     }
 
 

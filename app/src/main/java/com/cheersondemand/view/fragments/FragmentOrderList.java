@@ -92,7 +92,8 @@ public class FragmentOrderList extends Fragment implements IOrderDetailViewPrese
     public void onResume() {
         super.onResume();
         ((ActivityContainer) getActivity()).showToolBar();
-        ActivityContainer.tvTitle.setText(getString(R.string.my_orders));
+        ((ActivityContainer)getActivity()).setTitle(getString(R.string.my_orders));
+
     }
 
     @Override

@@ -1,6 +1,7 @@
 package com.cheersondemand.view.fragments;
 
 
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -9,10 +10,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.WebView;
+import android.webkit.WebViewClient;
 
 import com.cheersondemand.R;
 import com.cheersondemand.model.HelpCenter.HelpCenterList;
 import com.cheersondemand.util.C;
+import com.cheersondemand.util.Util;
 import com.cheersondemand.view.ActivityContainer;
 
 import butterknife.BindView;
@@ -29,6 +32,7 @@ public class FragmentHelpCenterPages extends Fragment {
     WebView webview;
     Unbinder unbinder;
     HelpCenterList helpCenterList;
+    Util util;
     public FragmentHelpCenterPages() {
         // Required empty public constructor
     }
@@ -38,6 +42,7 @@ public class FragmentHelpCenterPages extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         helpCenterList=(HelpCenterList)getArguments().getSerializable(C.HELP_ITEM);
+        util=new Util();
     }
 
     @Override
@@ -52,7 +57,7 @@ public class FragmentHelpCenterPages extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        ActivityContainer.tvTitle.setText(helpCenterList.getName());
+        ((ActivityContainer)getActivity()).setTitle(helpCenterList.getName());
 
     }
 
@@ -60,9 +65,28 @@ public class FragmentHelpCenterPages extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        util.showDialog(C.MSG,getActivity());
+        webview.setWebViewClient(new CustomWebViewClient());
+        webview.getSettings().setJavaScriptEnabled(true);
         webview.loadUrl(helpCenterList.getLink());
+
     }
 
+    private class CustomWebViewClient extends WebViewClient {
+
+        @Override
+        public void onPageStarted(WebView webview, String url, Bitmap favicon) {
+        }
+
+        @Override
+        public void onPageFinished(WebView view, String url) {
+
+
+            util.hideDialog();
+            super.onPageFinished(view, url);
+
+        }
+    }
     @Override
     public void onDestroyView() {
         super.onDestroyView();

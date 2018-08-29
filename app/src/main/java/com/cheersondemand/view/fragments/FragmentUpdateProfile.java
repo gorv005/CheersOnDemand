@@ -193,7 +193,8 @@ public class FragmentUpdateProfile extends Fragment implements View.OnClickListe
     @Override
     public void onResume() {
         super.onResume();
-        ActivityContainer.tvTitle.setText(R.string.edit_profile);
+        ((ActivityContainer)getActivity()).setTitle(getString(R.string.edit_profile));
+
     }
 
     @Override

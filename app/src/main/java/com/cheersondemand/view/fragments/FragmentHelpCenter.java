@@ -52,7 +52,8 @@ public class FragmentHelpCenter extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        ActivityContainer.tvTitle.setText(getString(R.string.help_center));
+        ((ActivityContainer)getActivity()).setTitle(getString(R.string.help_center));
+
     }
 
     @Override

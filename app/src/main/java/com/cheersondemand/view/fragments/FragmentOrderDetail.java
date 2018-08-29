@@ -117,7 +117,8 @@ public class FragmentOrderDetail extends Fragment implements View.OnClickListene
     @Override
     public void onResume() {
         super.onResume();
-        ActivityContainer.tvTitle.setText(getString(R.string.order_detail));
+        ((ActivityContainer)getActivity()).setTitle(getString(R.string.order_detail));
+
     }
 
     @Override

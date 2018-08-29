@@ -150,13 +150,15 @@ public class FragmentStoreSelection extends Fragment implements IStoreViewPresen
                     lvStoreList.setAdapter(adapterStore);
                 } else {
                     ((ActivityContainer) getActivity()).hideToolBar();
-                    ActivityContainer.tvTitle.setText(getString(R.string.coming_soon_));
+                    ((ActivityContainer)getActivity()).setTitle(getString(R.string.coming_soon_));
+
                     llNoStore.setVisibility(View.VISIBLE);
                 }
             } else {
                 // util.setSnackbarMessage(getActivity(), response.getMessage(), LLView, true);
                 llNoStore.setVisibility(View.VISIBLE);
-                ActivityContainer.tvTitle.setText(getString(R.string.coming_soon_));
+                ((ActivityContainer)getActivity()).setTitle(getString(R.string.coming_soon_));
+
                 ((ActivityContainer) getActivity()).hideToolBar();
 
 

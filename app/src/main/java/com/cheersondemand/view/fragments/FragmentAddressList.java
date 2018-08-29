@@ -89,7 +89,8 @@ public class FragmentAddressList extends Fragment implements View.OnClickListene
     @Override
     public void onResume() {
         super.onResume();
-        ActivityContainer.tvTitle.setText(getString(R.string.saved_addresses));
+        ((ActivityContainer)getActivity()).setTitle(getString(R.string.saved_addresses));
+
         getAddressList();
     }
 

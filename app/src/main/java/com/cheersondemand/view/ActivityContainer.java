@@ -52,9 +52,9 @@ import java.util.List;
 import butterknife.ButterKnife;
 
 public class ActivityContainer extends AppCompatActivity {
-    public static TextView tvTitle, tvClearAll;
+    public static TextView tvClearAll;
     private Fragment fragment;
-
+    public  TextView tvTitle;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -87,7 +87,10 @@ public class ActivityContainer extends AppCompatActivity {
         getSupportActionBar().show();
 
     }
+    public void setTitle(String title) {
+        tvTitle.setText(title);
 
+    }
     public void fragmnetLoader(int fragmentType, Bundle bundle) {
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
@@ -221,6 +224,7 @@ public class ActivityContainer extends AppCompatActivity {
                 // fragmentTransaction.addToBackStack(C.TAG_FRAGMENT_FRAGMENT_ADD_CARD);
                 break;
             case C.FRAGMENT_PAYMENT_CONFIRMATION:
+                tvTitle.setText(getString(R.string.payment));
                 fragment = new FragmentPaymentConfirmation();
                 fragmentTransaction.replace(R.id.container, fragment);
                 if (bundle!=null && bundle.getBoolean(C.IS_RETRY_PAYEMNT)) {
@@ -285,6 +289,12 @@ public class ActivityContainer extends AppCompatActivity {
         Fragment fragment = getVisibleFragment();
         if (fragment != null && fragment instanceof FragmentCart) {
             ((FragmentCart) fragment).disableProceedButton();
+        }
+    }
+    public void showAlert(){
+        Fragment fragment = getVisibleFragment();
+        if (fragment != null && fragment instanceof FragmentWishList) {
+            ((FragmentWishList) fragment).showAlert();
         }
     }
     public void showMessage(){

@@ -134,7 +134,8 @@ public class FragmentCart extends Fragment implements View.OnClickListener, IOrd
         if (source == C.FRAGMENT_PRODUCT_DESC) {
             tvMyCart.setVisibility(View.GONE);
             viewLine.setVisibility(View.GONE);
-            ActivityContainer.tvTitle.setText(getString(R.string.my_cart));
+            ((ActivityContainer)getActivity()).setTitle(getString(R.string.my_cart));
+
             ((ActivityContainer) getActivity()).showToolBar();
         }
         btnProceed.setOnClickListener(this);
@@ -150,7 +151,8 @@ public class FragmentCart extends Fragment implements View.OnClickListener, IOrd
         if (source == C.FRAGMENT_PRODUCT_DESC) {
             tvMyCart.setVisibility(View.GONE);
             viewLine.setVisibility(View.GONE);
-            ActivityContainer.tvTitle.setText(getString(R.string.my_cart));
+            ((ActivityContainer)getActivity()).setTitle(getString(R.string.my_cart));
+
             ((ActivityContainer) getActivity()).showToolBar();
 
         }

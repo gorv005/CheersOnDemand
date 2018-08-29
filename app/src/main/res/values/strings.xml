@@ -48,6 +48,7 @@
     <string name="no_product_found">No Products found</string>
     <string name="no_product_in_cart_yet">No Products in cart yet !</string>
     <string name="no_product_found_">No Product(s) found.</string>
+    <string name="no_product_available">No product(s) available.</string>
 
     <string name="try_search_diff">Try searching with a different terms or browse our categories.</string>
     <string name="browse_product">Browse Products</string>
@@ -263,6 +264,8 @@
     <string name="you_need_to_sign_in">You need to Sign in first in order to use this functionality.</string>
     <string name="store_closed">Sorry currently store is not open. It will open soon. \nPlease use some other location.</string>
     <string name="store_closed_and_prices_changed">Sorry currently store is not open. It will open soon. \nSome of the items in your cart are either not available at this new store or the prices may have changed. Please review below.</string>
+    <string name="sorry_some_of_items_in_wishlist">Sorry, some of your items in your wishlist is not available in this</string>
+    <string name="please_check_it_below">\nPlease check it below</string>
 
     <string name="price_change">Some of the items in your cart are either not available at this new store or the prices may have changed. Please review below.</string>
     <string name="sorry_delivery_not_available">Sorry delivery to this location is not available. Please use some other location.</string>

@@ -3,8 +3,38 @@
     android:layout_width="match_parent"
     android:id="@+id/rlView"
     android:layout_height="match_parent">
-
     <RelativeLayout
+        android:id="@+id/rlStoreAlert"
+        android:background="@color/orange"
+        android:layout_width="match_parent"
+        android:minHeight="40dp"
+        android:padding="10dp"
+        android:visibility="visible"
+        android:layout_height="wrap_content">
+        <ImageView
+            android:visibility="gone"
+            android:id="@+id/ivAlert"
+            android:layout_centerVertical="true"
+            android:src="@drawable/error_icon"
+            android:layout_width="30dp"
+            android:layout_height="30dp" />
+        <TextView
+            android:layout_marginLeft="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_gravity="left"
+            android:layout_toRightOf="@id/ivAlert"
+
+            android:id="@+id/tvStoreClosed"
+            android:fontFamily="@font/sf_ui_display_regular"
+            android:gravity="left"
+            android:textColor="@color/white"
+            android:textSize="14sp"
+            android:text="@string/price_change" />
+    </RelativeLayout>
+    <RelativeLayout
+        android:layout_below="@id/rlStoreAlert"
         android:layout_marginTop="10dp"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -19,12 +49,12 @@
 
 
     <TextView
-        android:fontFamily="@font/sf_ui_display_bold"
+        android:fontFamily="@font/sf_ui_display_regular"
         android:id="@+id/tvNoProduct"
         android:textSize="18sp"
         android:visibility="gone"
         android:layout_centerInParent="true"
-        android:text="@string/no_product_found"
+        android:text="@string/no_product_available"
         android:textColor="@color/profile_text_color"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />

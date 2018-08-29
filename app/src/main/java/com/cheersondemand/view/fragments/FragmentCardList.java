@@ -79,7 +79,8 @@ public class FragmentCardList extends Fragment implements ICardViewPresenter.ICa
     @Override
     public void onResume() {
         super.onResume();
-        ActivityContainer.tvTitle.setText(getString(R.string.payment_info));
+        ((ActivityContainer)getActivity()).setTitle(getString(R.string.payment_info));
+
         getCardList();
     }
 
