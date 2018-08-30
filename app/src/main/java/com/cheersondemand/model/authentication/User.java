@@ -20,6 +20,9 @@ public class User {
     @SerializedName("device_token")
     @Expose
     private String deviceToken;
+    @SerializedName("platform")
+    @Expose
+    private String platform;
     @SerializedName("uuid")
     @Expose
     private String uuid;
@@ -57,6 +60,14 @@ public class User {
 
     public void setUuid(String uuid) {
         this.uuid = uuid;
+    }
+
+    public String getPlatform() {
+        return platform;
+    }
+
+    public void setPlatform(String platform) {
+        this.platform = platform;
     }
 
     public void setDeviceToken(String deviceToken) {

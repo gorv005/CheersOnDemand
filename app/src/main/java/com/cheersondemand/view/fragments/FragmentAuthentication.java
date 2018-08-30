@@ -437,6 +437,7 @@ public class FragmentAuthentication extends Fragment implements IAuthenitication
         SocialLoginRequest socialLoginRequest = new SocialLoginRequest();
         socialLoginRequest.setAccessToken(token);
         socialLoginRequest.setLoginType(2);
+        socialLoginRequest.setPlatform(C.ANDROID);
         socialLoginRequest.setGrantType("password");
         socialLoginRequest.setProvider(provider);
         socialLoginRequest.setUuid(Util.id(getActivity()));
@@ -574,6 +575,8 @@ public class FragmentAuthentication extends Fragment implements IAuthenitication
         loginRequest.setEmail(etEmailLogin.getText().toString().toLowerCase());
         loginRequest.setGrantType("password");
         loginRequest.setLoginType(1);
+        loginRequest.setPlatform(C.ANDROID);
+
         loginRequest.setUuid(Util.id(getActivity()));
         loginRequest.setPassword(etPasswordLogin.getText().toString());
         if (SharedPreference.getInstance(getActivity()).getString(C.DEVICE_TOKEN) != null) {
@@ -589,7 +592,7 @@ public class FragmentAuthentication extends Fragment implements IAuthenitication
         SignUpRequest signUpRequest = new SignUpRequest();
         User user = new User();
         user.setName(etName.getText().toString());
-
+        user.setPlatform(C.ANDROID);
         user.setUuid(Util.id(getActivity()));
         user.setEmail(etEmail.getText().toString().toLowerCase());
         user.setPassword(etPassword.getText().toString());

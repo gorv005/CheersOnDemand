@@ -23,6 +23,9 @@ public class SocialLoginRequest {
     @SerializedName("uuid")
     @Expose
     private String uuid;
+    @SerializedName("platform")
+    @Expose
+    private String platform;
     @SerializedName("device_token")
     @Expose
     private String deviceToken;
@@ -68,6 +71,14 @@ public class SocialLoginRequest {
 
     public String getDeviceToken() {
         return deviceToken;
+    }
+
+    public String getPlatform() {
+        return platform;
+    }
+
+    public void setPlatform(String platform) {
+        this.platform = platform;
     }
 
     public void setDeviceToken(String deviceToken) {

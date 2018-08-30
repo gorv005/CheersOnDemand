@@ -147,4 +147,5 @@ public interface C {
     java.lang.String POS = "pos";
     String IS_STORE_UPDATED = "is_store_updated";
     String IS_LOCATION_CHANGED = "is_location_changed";
+    String ANDROID = "android";
 }
