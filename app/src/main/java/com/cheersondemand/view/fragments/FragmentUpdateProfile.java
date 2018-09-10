@@ -461,7 +461,7 @@ public class FragmentUpdateProfile extends Fragment implements View.OnClickListe
 
         } else if (requestCode == CAMERA) {
             try {
-
+                Uri contentURI=fileUri;
                 BitmapFactory.Options options = new BitmapFactory.Options();
 
                 // downsizing image as it throws OutOfMemory Exception for larger
@@ -471,7 +471,15 @@ public class FragmentUpdateProfile extends Fragment implements View.OnClickListe
                 Bitmap bitmap = BitmapFactory.decodeFile(fileUri.getPath(),
                         options);
 
-                  bitmap = rotateImageIfRequired(bitmap, fileUri.getPath());
+                bitmap = rotateImageIfRequired(bitmap, fileUri.getPath());
+                if(isRotated) {
+                    fileUri = Util.getImageUri(getActivity(), bitmap);
+                    if (fileUri == null) {
+                        fileUri = contentURI;
+                    }
+                }
+                bitmap = Util.scaleDown(bitmap, 500, true);
+
                 imgProfile.setImageBitmap(bitmap);
                 isRemoved = false;
                 isGallery=false;
