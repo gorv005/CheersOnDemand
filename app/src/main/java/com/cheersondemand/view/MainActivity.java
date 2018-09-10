@@ -118,7 +118,20 @@ public class    MainActivity extends AppCompatActivity {
                 }
             }
             else {
-                gotoSplash();
+
+                Uri data = extras.getData();
+                //   Log.e("DEBUG","DATA="+data.toString());
+                if (data != null && data.toString() != null && data.toString().contains("resetPassword")) {
+                    String d = data.toString().substring(data.toString().lastIndexOf('/') + 1);
+                    Intent i = new Intent(this, ActivityContainer.class);
+                    Bundle bundle = new Bundle();
+                    i.putExtra(C.FRAGMENT_ACTION, C.FRAGMENT_RESET_PASSWORD);
+                    bundle.putString(C.TOKEN, d);
+                    i.putExtra(C.BUNDLE, bundle);
+                    startActivity(i);
+                }else {
+                    gotoSplash();
+                }
             }
 
         }
