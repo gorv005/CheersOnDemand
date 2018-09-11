@@ -77,14 +77,19 @@ public class ItemViewHolder extends RecyclerView.ViewHolder {
             final ItemViewHolder itemViewHolder = (ItemViewHolder) holder;
              final AllProduct allProduct=horizontalList.get(position);
             itemViewHolder.tvProductName.setText(allProduct.getName());
-            if(allProduct.getPrice()!=null) {
+            if(allProduct.getDeliverable() && allProduct.getPrice()!=null) {
                 itemViewHolder.tvProductPrice.setText("$" + allProduct.getPrice());
                 itemViewHolder.rlProduct.setBackgroundResource(R.drawable.product_border);
 
             }
             else {
                 ((ActivityContainer) context).showAlert();
-                itemViewHolder.tvProductPrice.setText("");
+                if(allProduct.getPrice()==null) {
+                    itemViewHolder.tvProductPrice.setText("");
+                }
+                else {
+                    itemViewHolder.tvProductPrice.setText("$" + allProduct.getPrice());
+                }
                 itemViewHolder.rlProduct.setBackgroundResource(R.drawable.card_border);
             }
           //  imageLoader.DisplayImage(horizontalList.get(position).getImage(),itemViewHolder.ivProductImage);
@@ -111,7 +116,7 @@ public class ItemViewHolder extends RecyclerView.ViewHolder {
                 @Override
                 public void onClick(View v) {
 
-                    if(allProduct.getPrice()!=null) {
+                    if(allProduct.getDeliverable() && allProduct.getPrice()!=null) {
                         ActivityOptionsCompat OptionsCompat = ActivityOptionsCompat.makeSceneTransitionAnimation(context, itemViewHolder.ivProductImage, context.getString(R.string.shared_image));
                         Intent intent = new Intent(context, ActivityContainer.class);
                         Bundle bundle = new Bundle();
@@ -125,7 +130,7 @@ public class ItemViewHolder extends RecyclerView.ViewHolder {
             itemViewHolder.btnAddToCart.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                        if(allProduct.getPrice()!=null) {
+                        if(allProduct.getDeliverable() && allProduct.getPrice()!=null) {
                             ((ActivityContainer) context).addToCart(0, position, true);
                         }
 
@@ -136,7 +141,7 @@ public class ItemViewHolder extends RecyclerView.ViewHolder {
                 public void onClick(View v) {
 
 
-                    if(allProduct.getPrice()!=null) {
+                    if(allProduct.getDeliverable() && allProduct.getPrice()!=null) {
                         ((ActivityContainer) context).updateCart(0, position, true);
                     }
                 }
@@ -144,7 +149,7 @@ public class ItemViewHolder extends RecyclerView.ViewHolder {
             itemViewHolder.rlMinus.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if(allProduct.getPrice()!=null) {
+                    if(allProduct.getDeliverable()&& allProduct.getPrice()!=null) {
                         ((ActivityContainer) context).updateCart(0, position, false);
                     }
                 }

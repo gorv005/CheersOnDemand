@@ -47,6 +47,9 @@ public class AllProduct implements Serializable {
     @SerializedName("price")
     @Expose
     private String price;
+    @SerializedName("is_deliverable")
+    @Expose
+    private Boolean isDeliverable;
     @SerializedName("is_in_cart")
     @Expose
     private Boolean isInCart;
@@ -213,5 +216,13 @@ public class AllProduct implements Serializable {
 
     public void setQuantity(String quantity) {
         this.quantity = quantity;
+    }
+
+    public Boolean getDeliverable() {
+        return isDeliverable;
+    }
+
+    public void setDeliverable(Boolean deliverable) {
+        isDeliverable = deliverable;
     }
 }
