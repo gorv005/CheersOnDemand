@@ -116,6 +116,10 @@ public class FragmentWishList extends Fragment implements IOrderViewPresenterPre
                rlStoreAlert.setVisibility(View.VISIBLE);
                tvStoreClosed.setText(getString(R.string.sorry_some_of_items_in_wishlist) +" "+store.getName()+"."+getString(R.string.please_check_it_below));
            }
+           else{
+               rlStoreAlert.setVisibility(View.VISIBLE);
+               tvStoreClosed.setText(getString(R.string.sorry_some_of_items_in_wishlist) +". "+getString(R.string.please_check_it_below_));
+           }
     }
 
     /* void  showWishlist(){

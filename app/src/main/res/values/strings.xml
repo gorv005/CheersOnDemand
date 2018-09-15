@@ -266,6 +266,7 @@
     <string name="store_closed_and_prices_changed">Sorry currently store is not open. It will open soon. \nSome of the items in your cart are either not available at this new store or the prices may have changed. Please review below.</string>
     <string name="sorry_some_of_items_in_wishlist">Sorry, some of your items in your wishlist is not available in this</string>
     <string name="please_check_it_below">\nPlease check it below</string>
+    <string name="please_check_it_below_">Please check it below</string>
 
     <string name="price_change">Some of the items in your cart are either not available at this new store or the prices may have changed. Please review below.</string>
     <string name="sorry_delivery_not_available">Sorry delivery to this location is not available. Please use some other location.</string>
