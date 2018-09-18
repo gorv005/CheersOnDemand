@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.ActivityOptionsCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -31,7 +32,7 @@ private List<AllProduct> horizontalList;
     Activity context;
     ImageLoader imageLoader;
 public class ItemViewHolder extends RecyclerView.ViewHolder {
-    public TextView tvProductName,tvProductPrice,tvQuantity;
+    public TextView tvProductName,tvProductPrice,tvQuantity,tvAddToCart;
     public ImageView ivProductImage,ivLike;
     View rlProduct,btnAddToCart,rlMinus,rlPlus,llQuantity;
     public ItemViewHolder(View view) {
@@ -39,7 +40,7 @@ public class ItemViewHolder extends RecyclerView.ViewHolder {
         tvProductName = (TextView) view.findViewById(R.id.tvProductName);
         tvProductPrice = (TextView) view.findViewById(R.id.tvProductPrice);
         tvQuantity = (TextView) view.findViewById(R.id.tvQuantity);
-
+        tvAddToCart = (TextView) view.findViewById(R.id.tvAddtoCart);
         ivProductImage = (ImageView) view.findViewById(R.id.ivProductImage);
         rlProduct = (View) view.findViewById(R.id.rlProduct);
         btnAddToCart = (View) view.findViewById(R.id.btnAddToCart);
@@ -84,6 +85,7 @@ public class ItemViewHolder extends RecyclerView.ViewHolder {
             }
             else {
                 ((ActivityContainer) context).showAlert();
+                itemViewHolder.tvAddToCart.setTextColor(ContextCompat.getColor(context, R.color.green_disable));
                 if(allProduct.getPrice()==null) {
                     itemViewHolder.tvProductPrice.setText("");
                 }

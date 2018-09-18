@@ -34,6 +34,7 @@
     <color name="cart_quantity_border_color">#EAF0FB</color>
     <color name="brand_text_color">#4F5F7B</color>
     <color name="green_light">#43b05c</color>
+    <color name="green_disable">#C4E6D3</color>
     <color name="view_all_color">#51617C</color>
     <color name="latest_add_color">#929CAD</color>
     <color name="red_error_color">#ca2b32</color>
