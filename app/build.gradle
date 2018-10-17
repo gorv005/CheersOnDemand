@@ -38,7 +38,6 @@ android {
 
 }
 
-apply plugin: 'com.jakewharton.butterknife'
 
 dependencies {
     compile 'com.google.firebase:firebase-messaging:17.1.0'
