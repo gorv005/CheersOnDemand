@@ -4,8 +4,60 @@
     android:background="@color/brands_back_color"
     android:layout_height="wrap_content">
 
+    <android.support.v7.widget.CardView
+        android:id="@+id/card_view"
+        xmlns:card_view="http://schemas.android.com/apk/res-auto"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        card_view:cardBackgroundColor="@color/white"
+        card_view:cardCornerRadius="5dp"
+        card_view:cardUseCompatPadding="true">
 
-    <RelativeLayout
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:orientation="horizontal"
+            >
+            <RelativeLayout
+
+                android:id="@+id/ivProductImageRl"
+                android:background="@drawable/product_circular_border"
+                android:layout_width="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_height="match_parent">
+            <ImageView
+                android:id="@+id/ivProductImage"
+                android:tag="image_tag"
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="5dp"
+                android:layout_centerVertical="true"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/bitmap_copy"/>
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                >
+                <TextView
+                    android:layout_centerHorizontal="true"
+                    android:id="@+id/tvBrandName"
+                    android:text="beers"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    android:layout_centerVertical="true"
+                    android:fontFamily="@font/sf_ui_display_regular"
+                    android:textColor="@color/brand_text_color"
+                    android:maxLines="2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+            </RelativeLayout>
+        </LinearLayout>
+
+    </android.support.v7.widget.CardView>
+  <!--  <RelativeLayout
         android:paddingTop="20dp"
         android:paddingLeft="20dp"
         android:paddingRight="20dp"
@@ -46,5 +98,5 @@
             android:maxLines="1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
-    </RelativeLayout>
+    </RelativeLayout>-->
 </RelativeLayout>

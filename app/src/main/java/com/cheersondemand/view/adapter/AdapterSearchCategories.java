@@ -1,5 +1,4 @@
 package com.cheersondemand.view.adapter;
-
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -7,7 +6,6 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.cheersondemand.R;
@@ -25,7 +23,7 @@ import java.util.List;
  * Created by AB on 6/7/2018.
  */
 
-public class AdapterHomeBrands extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+public class AdapterSearchCategories extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private static final int TYPE_FOOTER = 1;
     private static final int TYPE_ITEM = 0;
     Activity context;
@@ -33,7 +31,7 @@ public class AdapterHomeBrands extends RecyclerView.Adapter<RecyclerView.ViewHol
     private List<Categories> horizontalList;
     boolean isViewMore;
     int source;
-    public AdapterHomeBrands(int source,boolean isViewMore,List<Categories> horizontalList, Activity context) {
+    public AdapterSearchCategories(int source,boolean isViewMore,List<Categories> horizontalList, Activity context) {
         this.horizontalList = horizontalList;
         this.isViewMore=isViewMore;
         this.context = context;
@@ -46,7 +44,7 @@ public class AdapterHomeBrands extends RecyclerView.Adapter<RecyclerView.ViewHol
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         if (viewType == TYPE_ITEM) {
             View itemView = LayoutInflater.from(parent.getContext())
-                    .inflate(R.layout.product_round_item, parent, false);
+                    .inflate(R.layout.caregory_search_round_item, parent, false);
 
             return new ItemViewHolder(itemView);
         } else if (viewType == TYPE_FOOTER) {
@@ -116,13 +114,13 @@ public class AdapterHomeBrands extends RecyclerView.Adapter<RecyclerView.ViewHol
                         bundle.putInt(C.SOURCE, C.FRAGMENT_PRODUCTS_HOME);
                         ((ActivityHome) context).fragmnetLoader(C.FRAGMENT_CATEGORIES, bundle);
                     }
-                   else if(source==C.FRAGMENT_SEARCH_PRODUCT_RESULTS) {
-                           Intent intent = new Intent(context, ActivityContainer.class);
+                    else if(source==C.FRAGMENT_SEARCH_PRODUCT_RESULTS) {
+                        Intent intent = new Intent(context, ActivityContainer.class);
                         Bundle bundle = new Bundle();
                         bundle.putInt(C.SOURCE, C.FRAGMENT_CATEGORIES);
                         intent.putExtra(C.BUNDLE,bundle);
                         intent.putExtra(C.FRAGMENT_ACTION, C.FRAGMENT_CATEGORIES);
-                             context.startActivity(intent);
+                        context.startActivity(intent);
                     }
                     //   Toast.makeText(context, "More", Toast.LENGTH_SHORT).show();
 
@@ -145,18 +143,18 @@ public class AdapterHomeBrands extends RecyclerView.Adapter<RecyclerView.ViewHol
             return horizontalList.size() + 1;
         }
         else {
-           return horizontalList.size();
+            return horizontalList.size();
         }
     }
 
     public class ItemViewHolder extends RecyclerView.ViewHolder {
         public TextView tvBrandName;
-        public ImageView ivProductImage;
+        public CircularImageView ivProductImage;
 
         public ItemViewHolder(View view) {
             super(view);
             tvBrandName = (TextView) view.findViewById(R.id.tvBrandName);
-            ivProductImage = (ImageView) view.findViewById(R.id.ivProductImage);
+            ivProductImage = (CircularImageView) view.findViewById(R.id.ivProductImage);
         }
     }
 
@@ -166,7 +164,6 @@ public class AdapterHomeBrands extends RecyclerView.Adapter<RecyclerView.ViewHol
         public FooterViewHolder(View view) {
             super(view);
             ivMore = (CircularImageView) view.findViewById(R.id.ivProductMore);
-
         }
     }
 

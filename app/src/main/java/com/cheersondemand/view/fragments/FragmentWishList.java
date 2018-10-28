@@ -103,7 +103,7 @@ public class FragmentWishList extends Fragment implements IOrderViewPresenterPre
         super.onViewCreated(view, savedInstanceState);
         lLayout = new GridLayoutManager(getActivity(), 2);
         rvProductsList.setLayoutManager(lLayout);
-        rvProductsList.addItemDecoration(new GridSpacingItemDecoration(2, dpToPx(10), true));
+        rvProductsList.addItemDecoration(new GridSpacingItemDecoration(2, Util.dpToPx(10,getActivity()), true));
         rvProductsList.setItemAnimator(new DefaultItemAnimator());
         rlStoreAlert.setVisibility(View.GONE);
         // showWishlist();
@@ -501,10 +501,7 @@ public class FragmentWishList extends Fragment implements IOrderViewPresenterPre
     /**
      * Converting dp to pixel
      */
-    private int dpToPx(int dp) {
-        Resources r = getResources();
-        return Math.round(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, r.getDisplayMetrics()));
-    }
+
 
     public class GridSpacingItemDecoration extends RecyclerView.ItemDecoration {
 

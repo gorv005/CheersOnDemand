@@ -5,6 +5,7 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.Rect;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -12,6 +13,8 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.view.ContextThemeWrapper;
+import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -132,7 +135,9 @@ public class FragmentHome extends Fragment implements SwipeRefreshLayout.OnRefre
     ShimmerRecyclerView rvBrandsShimmer;
     @BindView(R.id.rvProductsShimmer)
     ShimmerRecyclerView rvProductsShimmer;
-
+    private GridLayoutManager lLayout;
+    @BindView(R.id.rlViewMoreCategory)
+    RelativeLayout rlViewMoreCategory;
     private int productPos;
     private int secPos;
     private boolean isAdd;
@@ -231,6 +236,7 @@ public class FragmentHome extends Fragment implements SwipeRefreshLayout.OnRefre
         ivNotification.setOnClickListener(this);
         llLocationSelect.setOnClickListener(this);
         llStoreSelect.setOnClickListener(this);
+        rlViewMoreCategory.setOnClickListener(this);
         //  etSearchProduct.setOnClickListener(this);
         // rlSearchProduct.setOnClickListener(this);
         /*rlSearch.setOnClickListener(new View.OnClickListener() {
@@ -250,10 +256,12 @@ public class FragmentHome extends Fragment implements SwipeRefreshLayout.OnRefre
                 gotoSearchProduct();
             }
         });
-        horizontalLayout = new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false);
-        rvBrands.setLayoutManager(horizontalLayout);
-        rvBrands.setLayoutFrozen(true);
+       // horizontalLayout = new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false);
+        lLayout = new GridLayoutManager(getActivity(), 2);
 
+        rvBrands.setLayoutManager(lLayout);
+        rvBrands.addItemDecoration(new GridSpacingItemDecoration(2, Util.dpToPx(1,getActivity()), true));
+        rvBrands.setItemAnimator(new DefaultItemAnimator());
         horizontalLayout1 = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
 
         rvProducts.setLayoutManager(horizontalLayout1);
@@ -343,15 +351,22 @@ public class FragmentHome extends Fragment implements SwipeRefreshLayout.OnRefre
                 if (response.getData() != null && response.getData().getCategories() != null && response.getData().getCategories().size() > 0) {
                     rlBrands.setVisibility(View.VISIBLE);
                     boolean isViewMore = false;
-                    if (response.getData().getCategories().size() > 5) {
+                    if (response.getData().getCategories().size() > 4) {
                         isViewMore = true;
-                        for (int i = 0; i < 5; i++) {
+                        for (int i = 0; i < 4; i++) {
                             categories.add(response.getData().getCategories().get(i));
                         }
                     } else {
                         categories.addAll(response.getData().getCategories());
                     }
-                    adapterHomeBrands = new AdapterHomeBrands(C.FRAGMENT_PRODUCTS_HOME, isViewMore, categories, getActivity());
+                    if(isViewMore){
+                        rlViewMoreCategory.setVisibility(View.VISIBLE);
+                    }
+                    else {
+                        rlViewMoreCategory.setVisibility(View.GONE);
+
+                    }
+                    adapterHomeBrands = new AdapterHomeBrands(C.FRAGMENT_PRODUCTS_HOME, false, categories, getActivity());
                     rvBrands.setAdapter(adapterHomeBrands);
                 } else {
                     rlBrands.setVisibility(View.GONE);
@@ -713,10 +728,21 @@ public class FragmentHome extends Fragment implements SwipeRefreshLayout.OnRefre
             case R.id.rlSearchProduct:
                 gotoSearchProduct();
                 break;
+            case R.id.rlViewMoreCategory:
+                showViewMore();
+                break;
         }
     }
 
 
+    void showViewMore(){
+
+            Bundle bundle = new Bundle();
+            bundle.putInt(C.SOURCE, C.FRAGMENT_PRODUCTS_HOME);
+            ((ActivityHome) getActivity()).fragmnetLoader(C.FRAGMENT_CATEGORIES, bundle);
+
+
+    }
     public void addToCart(int secPos, int pos, boolean isAdd, View v1, View v2) {
         this.v1 = v1;
         this.v2 = v2;
@@ -985,6 +1011,40 @@ public class FragmentHome extends Fragment implements SwipeRefreshLayout.OnRefre
         });
 
         dialog.show();
+    }
+    public class GridSpacingItemDecoration extends RecyclerView.ItemDecoration {
+
+        private int spanCount;
+        private int spacing;
+        private boolean includeEdge;
+
+        public GridSpacingItemDecoration(int spanCount, int spacing, boolean includeEdge) {
+            this.spanCount = spanCount;
+            this.spacing = spacing;
+            this.includeEdge = includeEdge;
+        }
+
+        @Override
+        public void getItemOffsets(Rect outRect, View view, RecyclerView parent, RecyclerView.State state) {
+            int position = parent.getChildAdapterPosition(view); // item position
+            int column = position % spanCount; // item column
+
+            if (includeEdge) {
+                outRect.left = spacing - column * spacing / spanCount; // spacing - column * ((1f / spanCount) * spacing)
+                outRect.right = (column + 1) * spacing / spanCount; // (column + 1) * ((1f / spanCount) * spacing)
+
+                if (position < spanCount) { // top edge
+                    outRect.top = spacing;
+                }
+                outRect.bottom = spacing; // item bottom
+            } else {
+                outRect.left = column * spacing / spanCount; // column * ((1f / spanCount) * spacing)
+                outRect.right = spacing - (column + 1) * spacing / spanCount; // spacing - (column + 1) * ((1f /    spanCount) * spacing)
+                if (position >= spanCount) {
+                    outRect.top = spacing; // item top
+                }
+            }
+        }
     }
 
     @Override

@@ -32,6 +32,7 @@ import com.cheersondemand.util.ChatEditText;
 import com.cheersondemand.util.SharedPreference;
 import com.cheersondemand.util.Util;
 import com.cheersondemand.view.adapter.AdapterHomeBrands;
+import com.cheersondemand.view.adapter.AdapterSearchCategories;
 import com.cheersondemand.view.search.AdapterProductSearcheResults;
 import com.cheersondemand.view.search.AdapterRecentProductSearches;
 
@@ -60,7 +61,7 @@ public class ActivitySearchProducts extends Activity implements View.OnClickList
     @BindView(R.id.LLView)
     LinearLayout LLView;
     ISearchViewPresenter iSearchViewPresenter;
-    AdapterHomeBrands adapterHomeBrands;
+    AdapterSearchCategories adapterHomeBrands;
     @BindView(R.id.lvRecentSearches)
     RecyclerView lvRecentSearches;
     @BindView(R.id.lvCategory)
@@ -245,7 +246,7 @@ public class ActivitySearchProducts extends Activity implements View.OnClickList
                 } else {
                     categories.addAll(response.getData().getCategories());
                 }
-                adapterHomeBrands = new AdapterHomeBrands(C.FRAGMENT_SEARCH_PRODUCT_RESULTS,isViewMore,categories, this);
+                adapterHomeBrands = new AdapterSearchCategories(C.FRAGMENT_SEARCH_PRODUCT_RESULTS,isViewMore,categories, this);
                 lvCategory.setAdapter(adapterHomeBrands);
 
             }
