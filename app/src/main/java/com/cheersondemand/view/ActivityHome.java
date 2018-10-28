@@ -33,6 +33,7 @@ import com.cheersondemand.view.fragments.FragmentCoupons;
 import com.cheersondemand.view.fragments.FragmentHome;
 import com.cheersondemand.view.fragments.FragmentProductDescription;
 import com.cheersondemand.view.fragments.FragmentProfile;
+import com.cheersondemand.view.fragments.FragmentWishList;
 
 import java.util.List;
 
@@ -61,12 +62,20 @@ public class ActivityHome extends AppCompatActivity implements View.OnClickListe
     IOrderViewPresenterPresenter iOrderViewPresenterPresenter;
     @BindView(R.id.ivDot)
     ImageView ivDot;
+    @BindView(R.id.ivSearch)
+    ImageView ivSearch;
+    @BindView(R.id.rlSearch)
+    RelativeLayout rlSearch;
+    @BindView(R.id.ivFav)
+    ImageView ivFav;
+    @BindView(R.id.rlFav)
+    RelativeLayout rlFav;
     private Fragment fragment;
     boolean doubleBackToExitPressedOnce = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-       // setTheme(R.style.ActivityTheme);
+        // setTheme(R.style.ActivityTheme);
         super.onCreate(savedInstanceState);
      /*  requestWindowFeature(Window.FEATURE_NO_TITLE);
         this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
@@ -81,7 +90,11 @@ public class ActivityHome extends AppCompatActivity implements View.OnClickListe
                 setProfile();
             } else if (action == C.FRAGMENT_CART) {
                 setCart();
-            } else {
+            }
+            else if (action == C.FRAGMENT_WISHLIST) {
+                setWishlist();
+            }
+            else {
                 setHome();
             }
         } catch (Exception e) {
@@ -92,6 +105,8 @@ public class ActivityHome extends AppCompatActivity implements View.OnClickListe
         rlCart.setOnClickListener(this);
         rlProfile.setOnClickListener(this);
         rlHome.setOnClickListener(this);
+        rlFav.setOnClickListener(this);
+
         iOrderViewPresenterPresenter = new OrderViewPresenterImpl(this, this);
     }
 
@@ -121,13 +136,19 @@ public class ActivityHome extends AppCompatActivity implements View.OnClickListe
                 //fragmentTransaction.addToBackStack(C.TAG_FRAGMENT_PRODUCTS_HOME);
                 break;
             case C.FRAGMENT_CATEGORIES:
-                currentPage="Categories";
+                currentPage = "Categories";
                 fragment = new FragmentCategoryList();
                 fragmentTransaction.replace(R.id.container, fragment);
                 fragmentTransaction.addToBackStack(C.TAG_FRAGMENT_CATEGORY);
                 break;
+            case C.FRAGMENT_WISHLIST:
+                currentPage = getString(R.string.wishList);
+                fragment = new FragmentWishList();
+                fragmentTransaction.replace(R.id.container, fragment);
+                fragmentTransaction.addToBackStack(C.TAG_FRAGMENT_WISHLIST);
+                break;
             case C.FRAGMENT_COUPON_LIST:
-                currentPage="coupon";
+                currentPage = "coupon";
                 fragment = new FragmentCoupons();
                 fragmentTransaction.replace(R.id.container, fragment);
                 fragmentTransaction.addToBackStack(C.TAG_FRAGMENT_COUPONS);
@@ -161,14 +182,21 @@ public class ActivityHome extends AppCompatActivity implements View.OnClickListe
                     setProfile();
                 }
                 break;
+            case R.id.rlFav:
+                if (!currentPage.equals(getString(R.string.wishList))) {
+
+                    setWishlist();
+                }
+                break;
         }
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-     //   getCartList();
+        //   getCartList();
     }
+
     public void applyCoupon(String couponName) {
 
         Fragment fragment = getVisibleFragment();
@@ -177,6 +205,7 @@ public class ActivityHome extends AppCompatActivity implements View.OnClickListe
 
         }
     }
+
     private Fragment getVisibleFragment() {
         FragmentManager fragmentManager = getSupportFragmentManager();
         @SuppressLint("RestrictedApi") List<Fragment> fragments = fragmentManager.getFragments();
@@ -194,11 +223,11 @@ public class ActivityHome extends AppCompatActivity implements View.OnClickListe
             if (SharedPreference.getInstance(this).getBoolean(C.IS_LOGIN_GUEST)) {
                 String id = "" + SharedPreference.getInstance(this).geGuestUser(C.GUEST_USER).getId();
 
-                iOrderViewPresenterPresenter.getCartList(id, order_id, Util.id(this),false);
+                iOrderViewPresenterPresenter.getCartList(id, order_id, Util.id(this), false);
             } else {
                 String id = "" + SharedPreference.getInstance(this).getUser(C.AUTH_USER).getData().getUser().getId();
                 String token = C.bearer + SharedPreference.getInstance(this).getUser(C.AUTH_USER).getData().getToken().getAccessToken();
-                iOrderViewPresenterPresenter.getCartList(token, id, order_id, Util.id(this),false);
+                iOrderViewPresenterPresenter.getCartList(token, id, order_id, Util.id(this), false);
             }
         } else {
             ivDot.setVisibility(View.GONE);
@@ -244,10 +273,11 @@ public class ActivityHome extends AppCompatActivity implements View.OnClickListe
 
         }
     }
-    public void addToCart(int secPos, int pos, boolean isAdd,View v1,View v2) {
+
+    public void addToCart(int secPos, int pos, boolean isAdd, View v1, View v2) {
         Fragment fragment = getVisibleFragment();
         if (fragment != null && fragment instanceof FragmentHome) {
-            ((FragmentHome) fragment).addToCart(secPos, pos, isAdd,v1,v2);
+            ((FragmentHome) fragment).addToCart(secPos, pos, isAdd, v1, v2);
         } else if (fragment != null && fragment instanceof FragmentProductDescription) {
             ((FragmentProductDescription) fragment).addToCart(secPos, pos, isAdd);
 
@@ -259,8 +289,7 @@ public class ActivityHome extends AppCompatActivity implements View.OnClickListe
         super.onDestroy();
         try {
             StoreProducts.getInstance().clear();
-        }
-        catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
@@ -276,10 +305,11 @@ public class ActivityHome extends AppCompatActivity implements View.OnClickListe
 
         }
     }
-    public void updateCart(int secPos, int pos, boolean isAdd,View v1,View v2) {
+
+    public void updateCart(int secPos, int pos, boolean isAdd, View v1, View v2) {
         Fragment fragment = getVisibleFragment();
         if (fragment != null && fragment instanceof FragmentHome) {
-            ((FragmentHome) fragment).updateCart(secPos, pos, isAdd,v1,v2);
+            ((FragmentHome) fragment).updateCart(secPos, pos, isAdd, v1, v2);
         } else if (fragment != null && fragment instanceof FragmentCart) {
             ((FragmentCart) fragment).updateCart(secPos, pos, isAdd);
         } else if (fragment != null && fragment instanceof FragmentProductDescription) {
@@ -287,6 +317,7 @@ public class ActivityHome extends AppCompatActivity implements View.OnClickListe
 
         }
     }
+
     public void wishListUpdate(int secPos, int pos, boolean isAdd) {
         Fragment fragment = getVisibleFragment();
         if (fragment != null && fragment instanceof FragmentHome) {
@@ -301,7 +332,7 @@ public class ActivityHome extends AppCompatActivity implements View.OnClickListe
 
     public void setHome() {
         currentPage = getString(R.string.home);
-
+        ivFav.setImageResource(R.drawable.unlike);
         ivHome.setImageResource(R.drawable.ic_bar_home_enabled);
         ivCart.setImageResource(R.drawable.ic_bar_cart);
         ivProfile.setImageResource(R.drawable.ic_bar_profile);
@@ -312,7 +343,7 @@ public class ActivityHome extends AppCompatActivity implements View.OnClickListe
         setTheme(R.style.ActivityTheme);
 
         currentPage = getString(R.string.my_cart);
-
+        ivFav.setImageResource(R.drawable.unlike);
         ivCart.setImageResource(R.drawable.cart_enable);
         ivProfile.setImageResource(R.drawable.ic_bar_profile);
         ivHome.setImageResource(R.drawable.home_disable);
@@ -321,17 +352,30 @@ public class ActivityHome extends AppCompatActivity implements View.OnClickListe
         fragmnetLoader(C.FRAGMENT_CART, bundle);
 
     }
+    public void setWishlist() {
+        setTheme(R.style.ActivityTheme);
+
+        currentPage = getString(R.string.wishList);
+        ivFav.setImageResource(R.drawable.like);
+
+        ivCart.setImageResource(R.drawable.ic_bar_cart);
+        ivProfile.setImageResource(R.drawable.ic_bar_profile);
+        ivHome.setImageResource(R.drawable.home_disable);
+        Bundle bundle = new Bundle();
+        bundle.putInt(C.SOURCE, C.FRAGMENT_PRODUCTS_HOME);
+        fragmnetLoader(C.FRAGMENT_WISHLIST, bundle);
+
+    }
 
     public void setProfile() {
         currentPage = getString(R.string.profile);
+        ivFav.setImageResource(R.drawable.unlike);
 
         ivProfile.setImageResource(R.drawable.profile_enabled);
         ivCart.setImageResource(R.drawable.ic_bar_cart);
         ivHome.setImageResource(R.drawable.home_disable);
         fragmnetLoader(C.FRAGMENT_PROFILE_HOME, null);
     }
-
-
 
 
     @Override
@@ -356,12 +400,11 @@ public class ActivityHome extends AppCompatActivity implements View.OnClickListe
 
     @Override
     public void getCartListSuccess(UpdateCartResponse response) {
-        if (response.getData() != null && response.getData().getOrder() !=null &&response.getData().getOrder().getOrderItems()!=null &&response.getData().getOrder().getOrderItems().size() > 0) {
+        if (response.getData() != null && response.getData().getOrder() != null && response.getData().getOrder().getOrderItems() != null && response.getData().getOrder().getOrderItems().size() > 0) {
             // SharedPreference.getInstance(this).setBoolean(C.CART_HAS_ITEM, response.getData().getHasCartProduct());
             //  SharedPreference.getInstance(this).setString(C.ORDER_ID, "" + response.getData().getOrderId());
             ivDot.setVisibility(View.VISIBLE);
-        }
-        else {
+        } else {
             ivDot.setVisibility(View.GONE);
         }
     }
@@ -371,15 +414,13 @@ public class ActivityHome extends AppCompatActivity implements View.OnClickListe
     public void onBackPressed() {
         try {
             Util.hideKeyboard(this);
-        }
-        catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
-        Fragment fragment=getVisibleFragment();
-        if(fragment!=null && fragment instanceof FragmentCoupons){
+        Fragment fragment = getVisibleFragment();
+        if (fragment != null && fragment instanceof FragmentCoupons) {
             setCart();
-        }
-        else {
+        } else {
             if (doubleBackToExitPressedOnce) {
                 finish();
             }
@@ -391,33 +432,35 @@ public class ActivityHome extends AppCompatActivity implements View.OnClickListe
 
                 @Override
                 public void run() {
-                    doubleBackToExitPressedOnce=false;
+                    doubleBackToExitPressedOnce = false;
                 }
             }, 2000);
         }
     }
 
-    public void disableProceedButton(){
-            Fragment fragment = getVisibleFragment();
-            if (fragment != null && fragment instanceof FragmentCart) {
-                ((FragmentCart) fragment).disableProceedButton();
-            }
+    public void disableProceedButton() {
+        Fragment fragment = getVisibleFragment();
+        if (fragment != null && fragment instanceof FragmentCart) {
+            ((FragmentCart) fragment).disableProceedButton();
         }
-    public void showMessage(){
+    }
+
+    public void showMessage() {
         Fragment fragment = getVisibleFragment();
         if (fragment != null && fragment instanceof FragmentCart) {
             ((FragmentCart) fragment).showMessage();
         }
     }
-    public  void setDot(boolean isCartHasProduct){
-        if(isCartHasProduct) {
+
+    public void setDot(boolean isCartHasProduct) {
+        if (isCartHasProduct) {
             ivDot.setVisibility(View.VISIBLE);
-        }
-        else {
+        } else {
             ivDot.setVisibility(View.GONE);
 
         }
     }
+
     @Override
     public void addTowishListSuccess(WishListResponse response) {
 

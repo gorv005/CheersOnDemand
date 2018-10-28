@@ -141,9 +141,10 @@ public class FragmentHome extends Fragment implements SwipeRefreshLayout.OnRefre
     private int productPos;
     private int secPos;
     private boolean isAdd;
-    boolean isProgressShown = false,isApiWorking=false;
+    boolean isProgressShown = false, isApiWorking = false;
 
     List<AllProduct> allProductList;
+
     public FragmentHome() {
         // Required empty public constructor
     }
@@ -256,11 +257,11 @@ public class FragmentHome extends Fragment implements SwipeRefreshLayout.OnRefre
                 gotoSearchProduct();
             }
         });
-       // horizontalLayout = new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false);
+        // horizontalLayout = new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false);
         lLayout = new GridLayoutManager(getActivity(), 2);
 
         rvBrands.setLayoutManager(lLayout);
-        rvBrands.addItemDecoration(new GridSpacingItemDecoration(2, Util.dpToPx(1,getActivity()), true));
+        rvBrands.addItemDecoration(new GridSpacingItemDecoration(2, Util.dpToPx(1, getActivity()), true));
         rvBrands.setItemAnimator(new DefaultItemAnimator());
         horizontalLayout1 = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
 
@@ -359,10 +360,9 @@ public class FragmentHome extends Fragment implements SwipeRefreshLayout.OnRefre
                     } else {
                         categories.addAll(response.getData().getCategories());
                     }
-                    if(isViewMore){
+                    if (isViewMore) {
                         rlViewMoreCategory.setVisibility(View.VISIBLE);
-                    }
-                    else {
+                    } else {
                         rlViewMoreCategory.setVisibility(View.GONE);
 
                     }
@@ -375,7 +375,7 @@ public class FragmentHome extends Fragment implements SwipeRefreshLayout.OnRefre
                 if (response.getData() != null && response.getData().getAllProducts() != null && response.getData().getAllProducts().size() > 0) {
                     rlProducts.setVisibility(View.VISIBLE);
                     homeCategoriesSectionList = new ArrayList<>();
-                    allProductList=response.getData().getAllProducts();
+                    allProductList = response.getData().getAllProducts();
                     StoreProducts.getInstance().saveProducts(allProductList);
                     homeCategoriesSectionList.add(new HomeCategoriesSectionList("All products", allProductList));
 
@@ -437,7 +437,7 @@ public class FragmentHome extends Fragment implements SwipeRefreshLayout.OnRefre
     @Override
     public void getCreateOrderSuccess(CreateOrderResponse response) {
         try {
-            isApiWorking=false;
+            isApiWorking = false;
             if (response.getSuccess()) {
                 SharedPreference.getInstance(getActivity()).setString(C.ORDER_ID, "" + response.getData().getOrder().getId());
                 addToCart();
@@ -453,7 +453,7 @@ public class FragmentHome extends Fragment implements SwipeRefreshLayout.OnRefre
     @Override
     public void getAddToCartSucess(AddToCartResponse response) {
         try {
-            isApiWorking=false;
+            isApiWorking = false;
             if (response.getSuccess()) {
                 util.setSnackbarMessage(getActivity(), response.getMessage(), rlHomeView, false);
                 updateCart();
@@ -486,7 +486,7 @@ public class FragmentHome extends Fragment implements SwipeRefreshLayout.OnRefre
     @Override
     public void getUpdateCartSuccess(UpdateCartResponse response) {
         try {
-            isApiWorking=false;
+            isApiWorking = false;
             if (response.getSuccess()) {
                 util.setSnackbarMessage(getActivity(), response.getMessage(), rlHomeView, false);
                 updateCart();
@@ -553,7 +553,7 @@ public class FragmentHome extends Fragment implements SwipeRefreshLayout.OnRefre
     @Override
     public void getRemoveItemFromCartSuccess(UpdateCartResponse response) {
         try {
-            isApiWorking=false;
+            isApiWorking = false;
             if (response.getSuccess()) {
 
 
@@ -608,7 +608,7 @@ public class FragmentHome extends Fragment implements SwipeRefreshLayout.OnRefre
     @Override
     public void addTowishListSuccess(WishListResponse response) {
         try {
-            isApiWorking=false;
+            isApiWorking = false;
             if (response.getSuccess()) {
                 util.setSnackbarMessage(getActivity(), response.getMessage(), rlHomeView, false);
                 product.setIsWishlisted(true);
@@ -628,7 +628,7 @@ public class FragmentHome extends Fragment implements SwipeRefreshLayout.OnRefre
     @Override
     public void removeFromWishListSuccess(WishListResponse response) {
         try {
-            isApiWorking=false;
+            isApiWorking = false;
             if (response.getSuccess()) {
                 util.setSnackbarMessage(getActivity(), response.getMessage(), rlHomeView, false);
                 product.setIsWishlisted(false);
@@ -735,14 +735,12 @@ public class FragmentHome extends Fragment implements SwipeRefreshLayout.OnRefre
     }
 
 
-    void showViewMore(){
-
-            Bundle bundle = new Bundle();
-            bundle.putInt(C.SOURCE, C.FRAGMENT_PRODUCTS_HOME);
-            ((ActivityHome) getActivity()).fragmnetLoader(C.FRAGMENT_CATEGORIES, bundle);
-
-
+    void showViewMore() {
+        Bundle bundle = new Bundle();
+        bundle.putInt(C.SOURCE, C.FRAGMENT_PRODUCTS_HOME);
+        ((ActivityHome) getActivity()).fragmnetLoader(C.FRAGMENT_CATEGORIES, bundle);
     }
+
     public void addToCart(int secPos, int pos, boolean isAdd, View v1, View v2) {
         this.v1 = v1;
         this.v2 = v2;
@@ -750,8 +748,8 @@ public class FragmentHome extends Fragment implements SwipeRefreshLayout.OnRefre
         this.secPos = secPos;
         this.isAdd = isAdd;
         if (allProductList != null && allProductList.size() > 0) {
-            product= StoreProducts.getInstance().getProduct(allProductList.get(pos).getId());
-            if(product==null) {
+            product = StoreProducts.getInstance().getProduct(allProductList.get(pos).getId());
+            if (product == null) {
                 product = allProductList.get(pos);
             }
             if (SharedPreference.getInstance(getActivity()).getString(C.ORDER_ID) == null) {
@@ -769,8 +767,8 @@ public class FragmentHome extends Fragment implements SwipeRefreshLayout.OnRefre
         this.secPos = secPos;
         this.isAdd = isAdd;
         if (allProductList != null && allProductList.size() > 0) {
-            product= StoreProducts.getInstance().getProduct(allProductList.get(pos).getId());
-            if(product==null) {
+            product = StoreProducts.getInstance().getProduct(allProductList.get(pos).getId());
+            if (product == null) {
                 product = allProductList.get(pos);
             }
             if (SharedPreference.getInstance(getActivity()).getString(C.ORDER_ID) == null) {
@@ -781,22 +779,21 @@ public class FragmentHome extends Fragment implements SwipeRefreshLayout.OnRefre
         }
 
 
-
     }
 
 
     public void wishListUpdate(int secPos, int pos, boolean isAdd) {
-        if(!isApiWorking) {
-            isApiWorking=true;
+        if (!isApiWorking) {
+            isApiWorking = true;
             productPos = pos;
             this.secPos = secPos;
             this.isAdd = isAdd;
             if (allProductList != null && allProductList.size() > 0) {
-                product= StoreProducts.getInstance().getProduct(allProductList.get(pos).getId());
-                if(product==null) {
+                product = StoreProducts.getInstance().getProduct(allProductList.get(pos).getId());
+                if (product == null) {
                     product = allProductList.get(pos);
                 }
-            WishListRequest wishListRequest = new WishListRequest();
+                WishListRequest wishListRequest = new WishListRequest();
                 wishListRequest.setProductId(product.getId());
                 wishListRequest.setUuid(Util.id(getActivity()));
 
@@ -860,14 +857,14 @@ public class FragmentHome extends Fragment implements SwipeRefreshLayout.OnRefre
     }
 
     public void updateCart(int secPos, int productPos, boolean isAdd) {
-        if(!isApiWorking) {
-            isApiWorking=true;
+        if (!isApiWorking) {
+            isApiWorking = true;
             this.secPos = secPos;
             this.productPos = productPos;
             this.isAdd = isAdd;
             if (allProductList != null && allProductList.size() > 0) {
-                product= StoreProducts.getInstance().getProduct(allProductList.get(productPos).getId());
-                if(product==null) {
+                product = StoreProducts.getInstance().getProduct(allProductList.get(productPos).getId());
+                if (product == null) {
                     product = allProductList.get(productPos);
                 }
 
@@ -1012,6 +1009,7 @@ public class FragmentHome extends Fragment implements SwipeRefreshLayout.OnRefre
 
         dialog.show();
     }
+
     public class GridSpacingItemDecoration extends RecyclerView.ItemDecoration {
 
         private int spanCount;

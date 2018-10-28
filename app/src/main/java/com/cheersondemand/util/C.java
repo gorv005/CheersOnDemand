@@ -148,4 +148,5 @@ public interface C {
     String IS_STORE_UPDATED = "is_store_updated";
     String IS_LOCATION_CHANGED = "is_location_changed";
     String ANDROID = "android";
+    String TAG_FRAGMENT_WISHLIST = "TAG_FRAGMENT_WISHLIST";
 }
