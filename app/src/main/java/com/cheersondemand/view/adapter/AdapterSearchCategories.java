@@ -114,7 +114,7 @@ public class AdapterSearchCategories extends RecyclerView.Adapter<RecyclerView.V
                         bundle.putInt(C.SOURCE, C.FRAGMENT_PRODUCTS_HOME);
                         ((ActivityHome) context).fragmnetLoader(C.FRAGMENT_CATEGORIES, bundle);
                     }
-                    else if(source==C.FRAGMENT_SEARCH_PRODUCT_RESULTS) {
+                    else if(source==C.FRAGMENT_SEARCH_PRODUCT) {
                         Intent intent = new Intent(context, ActivityContainer.class);
                         Bundle bundle = new Bundle();
                         bundle.putInt(C.SOURCE, C.FRAGMENT_CATEGORIES);

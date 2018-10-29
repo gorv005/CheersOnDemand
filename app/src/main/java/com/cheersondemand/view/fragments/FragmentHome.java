@@ -62,7 +62,6 @@ import com.cheersondemand.util.Util;
 import com.cheersondemand.view.ActivityContainer;
 import com.cheersondemand.view.ActivityHome;
 import com.cheersondemand.view.ActivitySearchLocation;
-import com.cheersondemand.view.ActivitySearchProducts;
 import com.cheersondemand.view.adapter.AdapterHomeBrands;
 import com.cheersondemand.view.adapter.AdapterHomeCategoriesSections;
 import com.cheersondemand.view.adapter.AdapterHomeProductsSections;
@@ -979,7 +978,13 @@ public class FragmentHome extends Fragment implements SwipeRefreshLayout.OnRefre
     }
 
     void gotoSearchProduct() {
-        Intent intent = new Intent(getActivity(), ActivitySearchProducts.class);
+       /* Intent intent = new Intent(getActivity(), ActivitySearchProducts.class);
+        startActivity(intent);*/
+        Intent intent = new Intent(getActivity(), ActivityContainer.class);
+        Bundle bundle = new Bundle();
+        bundle.putInt(C.SOURCE, C.FRAGMENT_SEARCH_PRODUCT);
+        intent.putExtra(C.BUNDLE,bundle);
+        intent.putExtra(C.FRAGMENT_ACTION, C.FRAGMENT_SEARCH_PRODUCT);
         startActivity(intent);
     }
 

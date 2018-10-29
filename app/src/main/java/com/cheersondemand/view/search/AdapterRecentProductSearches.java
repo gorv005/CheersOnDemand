@@ -16,6 +16,7 @@ import com.cheersondemand.util.C;
 import com.cheersondemand.util.ImageLoader.ImageLoader;
 import com.cheersondemand.util.Util;
 import com.cheersondemand.view.ActivityContainer;
+import com.cheersondemand.view.ActivityHome;
 import com.cheersondemand.view.ActivitySearchProducts;
 
 import java.util.List;
@@ -28,6 +29,7 @@ public class AdapterRecentProductSearches extends RecyclerView.Adapter<RecyclerV
     private static final int TYPE_FOOTER = 1;
     private static final int TYPE_ITEM = 0;
 private List<RecentSearch> horizontalList;
+int source;
     Activity context;
     ImageLoader imageLoader;
 public class ItemViewHolder extends RecyclerView.ViewHolder {
@@ -42,7 +44,8 @@ public class ItemViewHolder extends RecyclerView.ViewHolder {
 }
 
 
-    public AdapterRecentProductSearches(List<RecentSearch> horizontalList, Activity context) {
+    public AdapterRecentProductSearches(int source,List<RecentSearch> horizontalList, Activity context) {
+        this.source=source;
         this.horizontalList = horizontalList;
         this.context=context;
         imageLoader=new ImageLoader(context);
@@ -101,8 +104,16 @@ public class ItemViewHolder extends RecyclerView.ViewHolder {
                         context.startActivity(intent);
                     }
                    else if(horizontalList.get(position).getClassName().equals("Product")) {
-                        ((ActivitySearchProducts)context).getProductDesc(horizontalList.get(position).getName(),
-                                horizontalList.get(position).getClassName(),""+horizontalList.get(position).getClassId());
+
+                        if(source==C.FRAGMENT_PRODUCTS_HOME){
+                            ((ActivityHome)context).getProductDesc(horizontalList.get(position).getName(),
+                                    horizontalList.get(position).getClassName(),""+horizontalList.get(position).getClassId());
+                        }
+                        else if(source==C.FRAGMENT_SEARCH_PRODUCT){
+                            ((ActivityContainer)context).getProductDesc(horizontalList.get(position).getName(),
+                                    horizontalList.get(position).getClassName(),""+horizontalList.get(position).getClassId());
+                        }
+
                     }
                     else if(horizontalList.get(position).getClassName().equals("ProductType")) {
                         Intent intent = new Intent(context, ActivityContainer.class);

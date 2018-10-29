@@ -43,6 +43,7 @@ import com.cheersondemand.view.fragments.FragmentProductsListing;
 import com.cheersondemand.view.fragments.FragmentProfile;
 import com.cheersondemand.view.fragments.FragmentResetPassword;
 import com.cheersondemand.view.fragments.FragmentSearchProductResults;
+import com.cheersondemand.view.fragments.FragmentSearchProducts;
 import com.cheersondemand.view.fragments.FragmentStoreSelection;
 import com.cheersondemand.view.fragments.FragmentUpdateProfile;
 import com.cheersondemand.view.fragments.FragmentWishList;
@@ -179,6 +180,11 @@ public class ActivityContainer extends AppCompatActivity {
                     fragmentTransaction.addToBackStack(C.TAG_FRAGMENT_ADD_ADDRESS);
                 }*/
                 break;
+            case C.FRAGMENT_SEARCH_PRODUCT:
+                fragment = new FragmentSearchProducts();
+                fragmentTransaction.replace(R.id.container, fragment);
+                //fragmentTransaction.addToBackStack(C.TAG_FRAGMENT_SEARCH_PRODUCTS);
+                break;
             case C.FRAGMENT_ADD_ADDRESS_1:
                 fragment = new FragmentAddAddress();
                 fragmentTransaction.replace(R.id.container, fragment);
@@ -271,7 +277,12 @@ public class ActivityContainer extends AppCompatActivity {
         return null;
     }
 
-
+    public void getProductDesc(String query, String class_name, String class_id) {
+        Fragment fragment = getVisibleFragment();
+        if (fragment != null && fragment instanceof FragmentSearchProducts) {
+            ((FragmentSearchProducts) fragment).getProductDesc(query,class_name,class_id);
+        }
+    }
     public void deleteNotification(int pos) {
         Fragment fragment = getVisibleFragment();
         if (fragment != null && fragment instanceof FragmentNotification) {

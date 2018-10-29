@@ -1,6 +1,7 @@
 package com.cheersondemand.view;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
@@ -19,10 +20,15 @@ import com.cheersondemand.model.order.CreateOrderResponse;
 import com.cheersondemand.model.order.addtocart.AddToCartResponse;
 import com.cheersondemand.model.order.updatecart.UpdateCartRequest;
 import com.cheersondemand.model.order.updatecart.UpdateCartResponse;
+import com.cheersondemand.model.search.SearchProductResponse;
+import com.cheersondemand.model.search.SearchResponse;
+import com.cheersondemand.model.search.SearchResultsResponse;
 import com.cheersondemand.model.wishlist.WishListDataResponse;
 import com.cheersondemand.model.wishlist.WishListResponse;
 import com.cheersondemand.presenter.home.order.IOrderViewPresenterPresenter;
 import com.cheersondemand.presenter.home.order.OrderViewPresenterImpl;
+import com.cheersondemand.presenter.search.ISearchViewPresenter;
+import com.cheersondemand.presenter.search.SearchViewPresenterImpl;
 import com.cheersondemand.util.C;
 import com.cheersondemand.util.SharedPreference;
 import com.cheersondemand.util.StoreProducts;
@@ -33,6 +39,7 @@ import com.cheersondemand.view.fragments.FragmentCoupons;
 import com.cheersondemand.view.fragments.FragmentHome;
 import com.cheersondemand.view.fragments.FragmentProductDescription;
 import com.cheersondemand.view.fragments.FragmentProfile;
+import com.cheersondemand.view.fragments.FragmentSearchProducts;
 import com.cheersondemand.view.fragments.FragmentWishList;
 
 import java.util.List;
@@ -72,6 +79,7 @@ public class ActivityHome extends AppCompatActivity implements View.OnClickListe
     RelativeLayout rlFav;
     private Fragment fragment;
     boolean doubleBackToExitPressedOnce = false;
+    ISearchViewPresenter iSearchViewPresenter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -94,6 +102,9 @@ public class ActivityHome extends AppCompatActivity implements View.OnClickListe
             else if (action == C.FRAGMENT_WISHLIST) {
                 setWishlist();
             }
+            else if (action == C.FRAGMENT_SEARCH_PRODUCT) {
+                setSearchProducts();
+            }
             else {
                 setHome();
             }
@@ -106,8 +117,10 @@ public class ActivityHome extends AppCompatActivity implements View.OnClickListe
         rlProfile.setOnClickListener(this);
         rlHome.setOnClickListener(this);
         rlFav.setOnClickListener(this);
+        rlSearch.setOnClickListener(this);
 
         iOrderViewPresenterPresenter = new OrderViewPresenterImpl(this, this);
+
     }
 
     public void fragmnetLoader(int fragmentType, Bundle bundle) {
@@ -146,6 +159,12 @@ public class ActivityHome extends AppCompatActivity implements View.OnClickListe
                 fragment = new FragmentWishList();
                 fragmentTransaction.replace(R.id.container, fragment);
                 fragmentTransaction.addToBackStack(C.TAG_FRAGMENT_WISHLIST);
+                break;
+            case C.FRAGMENT_SEARCH_PRODUCT:
+                currentPage = getString(R.string.search_result);
+                fragment = new FragmentSearchProducts();
+                fragmentTransaction.replace(R.id.container, fragment);
+                fragmentTransaction.addToBackStack(C.TAG_FRAGMENT_SEARCH_PRODUCTS);
                 break;
             case C.FRAGMENT_COUPON_LIST:
                 currentPage = "coupon";
@@ -186,6 +205,11 @@ public class ActivityHome extends AppCompatActivity implements View.OnClickListe
                 if (!currentPage.equals(getString(R.string.wishList))) {
 
                     setWishlist();
+                }
+            case R.id.rlSearch:
+                if (!currentPage.equals(getString(R.string.search_result))) {
+
+                    setSearchProducts();
                 }
                 break;
         }
@@ -335,12 +359,14 @@ public class ActivityHome extends AppCompatActivity implements View.OnClickListe
         ivFav.setImageResource(R.drawable.unlike);
         ivHome.setImageResource(R.drawable.ic_bar_home_enabled);
         ivCart.setImageResource(R.drawable.ic_bar_cart);
+        ivSearch.setImageResource(R.drawable.ic_search);
         ivProfile.setImageResource(R.drawable.ic_bar_profile);
         fragmnetLoader(C.FRAGMENT_PRODUCTS_HOME, null);
     }
 
     public void setCart() {
         setTheme(R.style.ActivityTheme);
+        ivSearch.setImageResource(R.drawable.ic_search);
 
         currentPage = getString(R.string.my_cart);
         ivFav.setImageResource(R.drawable.unlike);
@@ -357,6 +383,7 @@ public class ActivityHome extends AppCompatActivity implements View.OnClickListe
 
         currentPage = getString(R.string.wishList);
         ivFav.setImageResource(R.drawable.like);
+        ivSearch.setImageResource(R.drawable.ic_search);
 
         ivCart.setImageResource(R.drawable.ic_bar_cart);
         ivProfile.setImageResource(R.drawable.ic_bar_profile);
@@ -366,10 +393,23 @@ public class ActivityHome extends AppCompatActivity implements View.OnClickListe
         fragmnetLoader(C.FRAGMENT_WISHLIST, bundle);
 
     }
+    public void setSearchProducts() {
+        currentPage = getString(R.string.search_result);
+        ivFav.setImageResource(R.drawable.unlike);
+        ivSearch.setImageResource(R.drawable.places_ic_search);
+        ivCart.setImageResource(R.drawable.ic_bar_cart);
+        ivProfile.setImageResource(R.drawable.ic_bar_profile);
+        ivHome.setImageResource(R.drawable.home_disable);
+        Bundle bundle = new Bundle();
+        bundle.putInt(C.SOURCE, C.FRAGMENT_PRODUCTS_HOME);
+        fragmnetLoader(C.FRAGMENT_SEARCH_PRODUCT, bundle);
+
+    }
 
     public void setProfile() {
         currentPage = getString(R.string.profile);
         ivFav.setImageResource(R.drawable.unlike);
+        ivSearch.setImageResource(R.drawable.ic_search);
 
         ivProfile.setImageResource(R.drawable.profile_enabled);
         ivCart.setImageResource(R.drawable.ic_bar_cart);
@@ -444,7 +484,12 @@ public class ActivityHome extends AppCompatActivity implements View.OnClickListe
             ((FragmentCart) fragment).disableProceedButton();
         }
     }
-
+    public void getProductDesc(String query, String class_name, String class_id) {
+        Fragment fragment = getVisibleFragment();
+        if (fragment != null && fragment instanceof FragmentSearchProducts) {
+            ((FragmentSearchProducts) fragment).getProductDesc(query,class_name,class_id);
+        }
+    }
     public void showMessage() {
         Fragment fragment = getVisibleFragment();
         if (fragment != null && fragment instanceof FragmentCart) {
@@ -480,6 +525,8 @@ public class ActivityHome extends AppCompatActivity implements View.OnClickListe
     public void getResponseError(String response) {
 
     }
+
+
 
     @Override
     public void showProgress() {

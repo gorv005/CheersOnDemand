@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:id="@+id/LLView"
+    android:background="@color/profile_back"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    >
+
+
+
+    <LinearLayout
+        android:background="@color/white"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingLeft="15dp"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            android:orientation="horizontal">
+
+            <com.cheersondemand.util.ChatEditText
+                android:layout_marginTop="20dp"
+                android:id="@+id/etSearch"
+                android:layout_width="match_parent"
+                android:layout_height="44dp"
+                android:maxLines="1"
+                android:lines="1"
+                android:singleLine="true"
+                android:layout_marginRight="10dp"
+                android:fontFamily="@font/sf_ui_display_regular"
+                android:textSize="21sp"
+                android:paddingLeft="5dp"
+                android:imeOptions="actionSearch"
+                android:background="@color/white"
+                android:layout_centerHorizontal="true"
+                android:layout_centerVertical="true"
+                android:hint="@string/enter_search_name_brand"
+                android:textColor="@color/editext_text_color"
+                android:textColorHint="@color/hint_color" />
+
+        </RelativeLayout>
+
+    </LinearLayout>
+
+
+
+
+    <ScrollView
+        android:fillViewport="true"
+        android:layout_width="match_parent"
+        android:scrollbars="none"
+        android:layout_height="wrap_content">
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <LinearLayout
+                android:visibility="visible"
+                android:layout_marginTop="5dp"
+                android:id="@+id/llSearchResult"
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="14.4sp"
+                    android:layout_gravity="center_vertical"
+                    android:paddingLeft="15dp"
+                    android:textColor="@color/profile_updated_text_color"
+                    android:text="@string/search_result"
+                    />
+                <android.support.v7.widget.RecyclerView
+                    android:layout_marginTop="5dp"
+                    android:id="@+id/lvSearchResult"
+                    android:background="@color/white"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                </android.support.v7.widget.RecyclerView>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:visibility="gone"
+                android:layout_marginTop="5dp"
+                android:id="@+id/rlRecentSearch"
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="14.4sp"
+                    android:id="@+id/tvRecenetSearch"
+                    android:layout_gravity="center_vertical"
+                    android:paddingLeft="15dp"
+                    android:textColor="@color/profile_updated_text_color"
+                    android:text="@string/recent_searches"
+                    />
+                <android.support.v7.widget.RecyclerView
+                    android:layout_marginTop="5dp"
+                    android:divider="@null"
+                    android:id="@+id/lvRecentSearches"
+                    android:background="@color/white"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                </android.support.v7.widget.RecyclerView>
+
+            </LinearLayout>
+
+
+
+            <LinearLayout
+                android:visibility="visible"
+                android:layout_marginTop="5dp"
+                android:id="@+id/rlCategories"
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="14.4sp"
+                    android:layout_gravity="center_vertical"
+                    android:paddingLeft="15dp"
+                    android:textColor="@color/profile_updated_text_color"
+                    android:text="@string/categories"
+                    />
+
+                <android.support.v7.widget.RecyclerView
+                    android:layout_marginTop="5dp"
+                    android:id="@+id/lvCategory"
+                    android:background="@color/white"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                </android.support.v7.widget.RecyclerView>
+
+            </LinearLayout>
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>
