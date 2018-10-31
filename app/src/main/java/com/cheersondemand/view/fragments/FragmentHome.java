@@ -135,8 +135,7 @@ public class FragmentHome extends Fragment implements SwipeRefreshLayout.OnRefre
     @BindView(R.id.rvProductsShimmer)
     ShimmerRecyclerView rvProductsShimmer;
     private GridLayoutManager lLayout;
-    @BindView(R.id.rlViewMoreCategory)
-    RelativeLayout rlViewMoreCategory;
+
     private int productPos;
     private int secPos;
     private boolean isAdd;
@@ -236,7 +235,6 @@ public class FragmentHome extends Fragment implements SwipeRefreshLayout.OnRefre
         ivNotification.setOnClickListener(this);
         llLocationSelect.setOnClickListener(this);
         llStoreSelect.setOnClickListener(this);
-        rlViewMoreCategory.setOnClickListener(this);
         //  etSearchProduct.setOnClickListener(this);
         // rlSearchProduct.setOnClickListener(this);
         /*rlSearch.setOnClickListener(new View.OnClickListener() {
@@ -351,21 +349,21 @@ public class FragmentHome extends Fragment implements SwipeRefreshLayout.OnRefre
                 if (response.getData() != null && response.getData().getCategories() != null && response.getData().getCategories().size() > 0) {
                     rlBrands.setVisibility(View.VISIBLE);
                     boolean isViewMore = false;
-                    if (response.getData().getCategories().size() > 4) {
+                    if (response.getData().getCategories().size() > 5) {
                         isViewMore = true;
-                        for (int i = 0; i < 4; i++) {
+                        for (int i = 0; i < 5; i++) {
                             categories.add(response.getData().getCategories().get(i));
                         }
                     } else {
                         categories.addAll(response.getData().getCategories());
                     }
-                    if (isViewMore) {
+                    /*if (isViewMore) {
                         rlViewMoreCategory.setVisibility(View.VISIBLE);
                     } else {
                         rlViewMoreCategory.setVisibility(View.GONE);
 
-                    }
-                    adapterHomeBrands = new AdapterHomeBrands(C.FRAGMENT_PRODUCTS_HOME, false, categories, getActivity());
+                    }*/
+                    adapterHomeBrands = new AdapterHomeBrands(C.FRAGMENT_PRODUCTS_HOME, isViewMore, categories, getActivity());
                     rvBrands.setAdapter(adapterHomeBrands);
                 } else {
                     rlBrands.setVisibility(View.GONE);
@@ -727,9 +725,9 @@ public class FragmentHome extends Fragment implements SwipeRefreshLayout.OnRefre
             case R.id.rlSearchProduct:
                 gotoSearchProduct();
                 break;
-            case R.id.rlViewMoreCategory:
+           /* case R.id.rlViewMoreCategory:
                 showViewMore();
-                break;
+                break;*/
         }
     }
 

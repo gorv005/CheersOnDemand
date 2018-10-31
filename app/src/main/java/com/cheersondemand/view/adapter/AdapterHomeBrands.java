@@ -51,7 +51,7 @@ public class AdapterHomeBrands extends RecyclerView.Adapter<RecyclerView.ViewHol
             return new ItemViewHolder(itemView);
         } else if (viewType == TYPE_FOOTER) {
             //Inflating footer view
-            View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.product_round_item_footer, parent, false);
+            View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.product_card_item_footer, parent, false);
             return new FooterViewHolder(itemView);
         } else return null;
     }
@@ -103,7 +103,7 @@ public class AdapterHomeBrands extends RecyclerView.Adapter<RecyclerView.ViewHol
             });
         } else if (holder instanceof FooterViewHolder) {
             final FooterViewHolder footerViewHolder = (FooterViewHolder) holder;
-            footerViewHolder.ivMore.setOnClickListener(new View.OnClickListener() {
+            footerViewHolder.rlViewMore.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     Util.hideKeyboard(context);
@@ -161,11 +161,12 @@ public class AdapterHomeBrands extends RecyclerView.Adapter<RecyclerView.ViewHol
     }
 
     public class FooterViewHolder extends RecyclerView.ViewHolder {
-        CircularImageView ivMore;
-
+        ImageView ivMore;
+        View rlViewMore;
         public FooterViewHolder(View view) {
             super(view);
-            ivMore = (CircularImageView) view.findViewById(R.id.ivProductMore);
+            ivMore = (ImageView) view.findViewById(R.id.ivProductMore);
+            rlViewMore = (View) view.findViewById(R.id.rlViewMore);
 
         }
     }

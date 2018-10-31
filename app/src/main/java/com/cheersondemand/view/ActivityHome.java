@@ -206,6 +206,7 @@ public class ActivityHome extends AppCompatActivity implements View.OnClickListe
 
                     setWishlist();
                 }
+                break;
             case R.id.rlSearch:
                 if (!currentPage.equals(getString(R.string.search_result))) {
 
@@ -356,20 +357,20 @@ public class ActivityHome extends AppCompatActivity implements View.OnClickListe
 
     public void setHome() {
         currentPage = getString(R.string.home);
-        ivFav.setImageResource(R.drawable.unlike);
+        ivFav.setImageResource(R.drawable.heart);
         ivHome.setImageResource(R.drawable.ic_bar_home_enabled);
         ivCart.setImageResource(R.drawable.ic_bar_cart);
-        ivSearch.setImageResource(R.drawable.ic_search);
+        ivSearch.setImageResource(R.drawable.search);
         ivProfile.setImageResource(R.drawable.ic_bar_profile);
         fragmnetLoader(C.FRAGMENT_PRODUCTS_HOME, null);
     }
 
     public void setCart() {
         setTheme(R.style.ActivityTheme);
-        ivSearch.setImageResource(R.drawable.ic_search);
+        ivSearch.setImageResource(R.drawable.search);
 
         currentPage = getString(R.string.my_cart);
-        ivFav.setImageResource(R.drawable.unlike);
+        ivFav.setImageResource(R.drawable.heart);
         ivCart.setImageResource(R.drawable.cart_enable);
         ivProfile.setImageResource(R.drawable.ic_bar_profile);
         ivHome.setImageResource(R.drawable.home_disable);
@@ -382,8 +383,8 @@ public class ActivityHome extends AppCompatActivity implements View.OnClickListe
         setTheme(R.style.ActivityTheme);
 
         currentPage = getString(R.string.wishList);
-        ivFav.setImageResource(R.drawable.like);
-        ivSearch.setImageResource(R.drawable.ic_search);
+        ivFav.setImageResource(R.drawable.heart_hover);
+        ivSearch.setImageResource(R.drawable.search);
 
         ivCart.setImageResource(R.drawable.ic_bar_cart);
         ivProfile.setImageResource(R.drawable.ic_bar_profile);
@@ -395,8 +396,8 @@ public class ActivityHome extends AppCompatActivity implements View.OnClickListe
     }
     public void setSearchProducts() {
         currentPage = getString(R.string.search_result);
-        ivFav.setImageResource(R.drawable.unlike);
-        ivSearch.setImageResource(R.drawable.places_ic_search);
+        ivFav.setImageResource(R.drawable.heart);
+        ivSearch.setImageResource(R.drawable.search_hover);
         ivCart.setImageResource(R.drawable.ic_bar_cart);
         ivProfile.setImageResource(R.drawable.ic_bar_profile);
         ivHome.setImageResource(R.drawable.home_disable);
@@ -408,8 +409,8 @@ public class ActivityHome extends AppCompatActivity implements View.OnClickListe
 
     public void setProfile() {
         currentPage = getString(R.string.profile);
-        ivFav.setImageResource(R.drawable.unlike);
-        ivSearch.setImageResource(R.drawable.ic_search);
+        ivFav.setImageResource(R.drawable.heart);
+        ivSearch.setImageResource(R.drawable.search);
 
         ivProfile.setImageResource(R.drawable.profile_enabled);
         ivCart.setImageResource(R.drawable.ic_bar_cart);
