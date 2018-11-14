@@ -22,6 +22,14 @@ public class RecentLocation {
     @Expose
     private String latitude;
 
+    public RecentLocation() {
+    }
+
+    public RecentLocation(Integer id, String address) {
+        this.id = id;
+        this.address = address;
+    }
+
     public Integer getId() {
         return id;
     }

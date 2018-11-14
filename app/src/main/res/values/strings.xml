@@ -15,7 +15,7 @@
     <string name="fb_login_protocol_scheme">fb2183625151924410</string>
     <string name="facebook">Facebook</string>
     <string name="google">Google</string>
-    <string name="agreement">By Signing Up you agree with our</string>
+    <string name="agreement">By Signing Up, you agree with our</string>
     <string name="login">Login</string>
     <string name="log_in">Log In</string>
 
@@ -28,7 +28,7 @@
     <string name="search_hint">Search for Brand, Type …</string>
     <string name="edit">Edit</string>
     <string name="wishList">Wishlist</string>
-    <string name="my_orders">My Order</string>
+    <string name="my_orders">My Orders</string>
     <string name="my_orders_">My Orders</string>
 
     <string name="saved_add">Saved Addresses</string>
@@ -171,7 +171,7 @@
     <string name="store_name">Store Name</string>
     <string name="contact_number">Contact Number</string>
     <string name="submit_request">Submit Request</string>
-    <string name="become_partner">Become Partner</string>
+    <string name="become_partner">Become a partner</string>
     <string name="are_you_sure_logout">Are you sure you want to logout from Cheers On Demand ?</string>
     <string name="profile_updated">Profile has been updated successfully</string>
 
@@ -294,6 +294,11 @@
     <string name="refunded">Refunded</string>
     <string name="payment_failed">Payment failed</string>
     <string name="date_time_validation">Date and time should be  between 90 minutes from current time and 1 month from current date.</string>
+    <string name="change_address">Change Address</string>
+    <string name="shop_from_specific_store">Shop from specific stores below</string>
+    <string name="add_to_cart_"><u>Add to Cart</u></string>
+    <string name="added_to_cart_"><u>Added to cart</u></string>
+    <string name="view_all_categories">View All Categories</string>
 
     <!--
         <string name="default_web_client_id">999387565226-hdnnhm6rhgik5ljvm06shotsi7j9883c.apps.googleusercontent.com</string>

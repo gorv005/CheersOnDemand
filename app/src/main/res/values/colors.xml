@@ -55,5 +55,7 @@
     <color name="warning">#FFCF47</color>
     <color name="clock_back">#E0E0E0</color>
     <color name="demo_dark_transparent">#24000000</color>
+    <color name="blue_dark">#017A98</color>
+    <color name="light_grey">#F2F2F2</color>
 
 </resources>

@@ -33,15 +33,16 @@ private List<AllProduct> horizontalList;
     ImageLoader imageLoader;
 
     public class ItemViewHolder extends RecyclerView.ViewHolder {
-    public TextView tvProductName,tvProductPrice,tvQuantity;
+    public TextView tvProductName,tvProductPrice,tvQuantity,tvAddToCart;
     public ImageView ivProductImage,ivLike;
-    View rlProduct,btnAddToCart,rlMinus,rlPlus,llQuantity;
+    View rlProduct,btnAddToCart,rlMinus,rlPlus,llQuantity,btnAddedToCart;
     public ItemViewHolder(View view) {
         super(view);
         tvProductName = (TextView) view.findViewById(R.id.tvProductName);
         tvProductPrice = (TextView) view.findViewById(R.id.tvProductPrice);
         tvQuantity = (TextView) view.findViewById(R.id.tvQuantity);
-
+        tvAddToCart = (TextView) view.findViewById(R.id.tvAddtoCart);
+        btnAddedToCart= (View) view.findViewById(R.id.btnAddedToCart);
         ivProductImage = (ImageView) view.findViewById(R.id.ivProductImage);
         rlProduct = (View) view.findViewById(R.id.rlProduct);
         btnAddToCart = (View) view.findViewById(R.id.btnAddToCart);
@@ -87,17 +88,24 @@ private List<AllProduct> horizontalList;
                 horizontalList.set(position,allProduct);
             }
             itemViewHolder.tvProductName.setText(allProduct.getName());
-            itemViewHolder.tvProductPrice.setText("$"+allProduct.getPrice());
+            if(allProduct.getOnSale()){
+                itemViewHolder.tvProductPrice.setText("$"+allProduct.getSalePrice());
+            }
+            else {
+                itemViewHolder.tvProductPrice.setText("$"+allProduct.getPrice());
+            }
           //  imageLoader.DisplayImage(horizontalList.get(position).getImage(),itemViewHolder.ivProductImage);
             Util.setImage(context,allProduct.getImage(),itemViewHolder.ivProductImage);
 
              if(allProduct.getIsInCart()){
                  itemViewHolder.btnAddToCart.setVisibility(View.GONE);
-                 itemViewHolder.llQuantity.setVisibility(View.VISIBLE);
+                 itemViewHolder.btnAddedToCart.setVisibility(View.VISIBLE);
+                 itemViewHolder.llQuantity.setVisibility(View.GONE);
                  itemViewHolder.tvQuantity.setText( context.getString(R.string.qty)+" "+allProduct.getCartQunatity());
              }
              else {
                  itemViewHolder.btnAddToCart.setVisibility(View.VISIBLE);
+                 itemViewHolder.btnAddedToCart.setVisibility(View.GONE);
                  itemViewHolder.llQuantity.setVisibility(View.GONE);
              }
 

@@ -138,30 +138,27 @@
     </LinearLayout>
 
 
-
-
-
-    <LinearLayout
-        android:visibility="visible"
-        android:layout_marginTop="10dp"
-        android:id="@+id/rlRecentSearch"
-        android:background="@color/white"
-        android:orientation="vertical"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-
-        <ListView
-            android:id="@+id/lvStoreList"
-            android:divider="@null"
-            android:background="@color/white"
+        <LinearLayout
+            android:id="@+id/rlRecentSearch"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="57dp">
+            android:layout_height="match_parent"
+            android:layout_marginTop="10dp"
+            android:background="@color/white"
+            android:orientation="vertical"
+            android:visibility="visible">
 
-        </ListView>
 
-    </LinearLayout>
+            <ListView
+                android:id="@+id/lvStoreList"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="57dp"
+                android:background="@color/white"
+                android:divider="@null">
+
+            </ListView>
+
+        </LinearLayout>
 
     </LinearLayout>
 

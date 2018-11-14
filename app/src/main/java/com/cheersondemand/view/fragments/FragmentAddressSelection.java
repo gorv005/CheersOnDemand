@@ -138,7 +138,7 @@ public class FragmentAddressSelection extends Fragment implements View.OnClickLi
         String id = "" + SharedPreference.getInstance(getActivity()).getUser(C.AUTH_USER).getData().getUser().getId();
 
         String token = C.bearer + SharedPreference.getInstance(getActivity()).getUser(C.AUTH_USER).getData().getToken().getAccessToken();
-        iAddressViewPresenter.getAddresses(token, id);
+        iAddressViewPresenter.getAddresses(true,token, id,Util.id(getActivity()));
     }
 
     @Override

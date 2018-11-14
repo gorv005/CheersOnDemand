@@ -20,12 +20,17 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.cheersondemand.R;
+import com.cheersondemand.model.address.AddressAddResponse;
+import com.cheersondemand.model.address.AddressRequest;
+import com.cheersondemand.model.address.AddressResponse;
 import com.cheersondemand.model.location.RecentLocation;
 import com.cheersondemand.model.location.RecentLocationResponse;
 import com.cheersondemand.model.location.SaveLocation;
 import com.cheersondemand.model.location.SaveLocationResponse;
 import com.cheersondemand.model.store.StoreListResponse;
 import com.cheersondemand.model.store.UpdateStoreResponse;
+import com.cheersondemand.presenter.address.AddressViewPresenterImpl;
+import com.cheersondemand.presenter.address.IAddressViewPresenter;
 import com.cheersondemand.presenter.location.ILocationViewPresenter;
 import com.cheersondemand.presenter.location.LocationViewPresenterImpl;
 import com.cheersondemand.presenter.store.IStoreViewPresenter;
@@ -37,6 +42,7 @@ import com.cheersondemand.util.location.LocationHelper;
 import com.cheersondemand.view.adapter.location.AdapterLocation;
 import com.cheersondemand.view.adapter.location.AdapterRecentSearches;
 import com.cheersondemand.view.adapter.location.RecyclerItemClickListener;
+import com.cheersondemand.view.address.AdapterAddress;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.PendingResult;
@@ -51,7 +57,7 @@ import butterknife.ButterKnife;
 
 public class ActivitySearchLocation extends AppCompatActivity implements
         GoogleApiClient.OnConnectionFailedListener,
-        GoogleApiClient.ConnectionCallbacks, ILocationViewPresenter.ILocationView, View.OnClickListener, IStoreViewPresenter.IStoreView {
+        GoogleApiClient.ConnectionCallbacks, ILocationViewPresenter.ILocationView, View.OnClickListener, IStoreViewPresenter.IStoreView,IAddressViewPresenter.IAddressView {
     private static final String LOG_TAG = "ActivitySearchLocation";
     private static final int GOOGLE_API_CLIENT_ID = 0;
     @BindView(R.id.rvSearchResult)
@@ -83,6 +89,7 @@ public class ActivitySearchLocation extends AppCompatActivity implements
     private LinearLayoutManager mLinearLayoutManager;
     private Location mLastLocation;
     IStoreViewPresenter iStoreViewPresenter;
+    IAddressViewPresenter iAddressViewPresenter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -91,6 +98,8 @@ public class ActivitySearchLocation extends AppCompatActivity implements
         this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);*/
         setContentView(R.layout.activity_search_location);
         iStoreViewPresenter = new StoreViewPresenterImpl(this, this);
+        iAddressViewPresenter = new AddressViewPresenterImpl(this, this);
+
         from = getIntent().getIntExtra(C.FROM, 1);
         buildAPIClient();
         ButterKnife.bind(this);
@@ -106,6 +115,21 @@ public class ActivitySearchLocation extends AppCompatActivity implements
             locationHelper.buildGoogleApiClient();
         }
         getRecentSearches();
+      //  getAddressList();
+    }
+    void getAddressList() {
+        if (SharedPreference.getInstance(ActivitySearchLocation.this).getBoolean(C.IS_LOGIN_GUEST)) {
+            String id = "" + SharedPreference.getInstance(this).geGuestUser(C.GUEST_USER).getId();
+
+            iAddressViewPresenter.getAddresses(false, "",id,Util.id(this));
+
+        }
+         else {
+            String id = "" + SharedPreference.getInstance(this).getUser(C.AUTH_USER).getData().getUser().getId();
+
+            String token = C.bearer + SharedPreference.getInstance(this).getUser(C.AUTH_USER).getData().getToken().getAccessToken();
+            iAddressViewPresenter.getAddresses(true,token, id,Util.id(this));
+        }
     }
 
     void getRecentSearches() {
@@ -170,19 +194,16 @@ public class ActivitySearchLocation extends AppCompatActivity implements
 
 
         AutocompleteFilter autocompleteFilter = new AutocompleteFilter.Builder()
-                .setTypeFilter(Place.TYPE_COUNTRY)
+                .setTypeFilter(Place.TYPE_GEOCODE)
                  //.setCountry("US")
                 .setTypeFilter(AutocompleteFilter.TYPE_FILTER_ADDRESS)
                 .build();
         adapterLocation = new AdapterLocation(this, R.layout.item_address,
                 mGoogleApiClient, null, autocompleteFilter);
 //        mAutocompleteTextView.setAdapter(mAdapterAddress);
-
         mLinearLayoutManager = new LinearLayoutManager(this);
         rvSearchResult.setLayoutManager(mLinearLayoutManager);
         rvSearchResult.setAdapter(adapterLocation);
-
-
         rvSearchResult.addOnItemTouchListener(new RecyclerItemClickListener(this, new RecyclerItemClickListener.OnItemClickListener() {
                     @Override
                     public void onItemClick(View view, int position) {
@@ -206,8 +227,9 @@ public class ActivitySearchLocation extends AppCompatActivity implements
                                         //      Toast.makeText(getApplicationContext(), String.valueOf(places.get(0).getLatLng()), Toast.LENGTH_SHORT).show();
                                         selectedLocation.setLatitude(String.valueOf(places.get(0).getLatLng().latitude));
                                         selectedLocation.setLongitude(String.valueOf(places.get(0).getLatLng().longitude));
+                                        selectedLocation.setAddress(String.valueOf(places.get(0).getAddress()));
                                         saveLocation(selectedLocation);
-
+                                        //addAddress(selectedLocation);
                                     } else {
                                         //    Toast.makeText(getApplicationContext(), "SOMETHING_WENT_WRONG", Toast.LENGTH_SHORT).show();
                                     }
@@ -247,6 +269,27 @@ public class ActivitySearchLocation extends AppCompatActivity implements
 
         }
     }
+
+    void addAddress(RecentLocation selectedLocation) {
+
+        AddressRequest addressRequest = new AddressRequest();
+        com.cheersondemand.model.address.Address address = new com.cheersondemand.model.address.Address();
+        // address.setName(selectedLocation.getAddress());
+
+        address.setAddress(selectedLocation.getAddress());
+      //  address.setFlatNo(etFlat.getText().toString());
+       // address.setAddressFirst(etAddLine1.getText().toString());
+       // address.setAddressSecond(etAddLine2.getText().toString());
+      //  address.setZipCode(etPincode.getText().toString());
+       // address.setPhoneNumber(etPhoneNo.getText().toString());
+        addressRequest.setAddress(address);
+
+        String id = "" + SharedPreference.getInstance(this).getUser(C.AUTH_USER).getData().getUser().getId();
+
+        String token = C.bearer + SharedPreference.getInstance(this).getUser(C.AUTH_USER).getData().getToken().getAccessToken();
+        iAddressViewPresenter.AddAddress(token, id, addressRequest);
+    }
+
 
     void buildAPIClient() {
         mGoogleApiClient = new GoogleApiClient.Builder(ActivitySearchLocation.this)
@@ -336,11 +379,14 @@ public class ActivitySearchLocation extends AppCompatActivity implements
     public void getSaveLocationSuccess(SaveLocationResponse response) {
         if (response.getSuccess()) {
 
-            if (from == C.SEARCH) {
+           /* if (from == C.SEARCH) {
                 gotoStoreList();
             } else if (from == C.HOME) {
                 getStoreList();
-            }
+            }*/
+            gotoLocationAndStoreList();
+            finish();
+
         } else {
             if(response.getErrors()!=null){
                 util.setSnackbarMessage(this,response.getErrors().get(0).getField(), LLView, true);
@@ -353,6 +399,16 @@ public class ActivitySearchLocation extends AppCompatActivity implements
 
     }
 
+    void gotoLocationAndStoreList() {
+        Intent intent = new Intent(this, ActivityContainer.class);
+        Bundle bundle = new Bundle();
+        intent.putExtra(C.FRAGMENT_ACTION, C.FRAGMENT_STORE_LOCATION_LIST);
+        bundle.putInt(C.FROM, C.HOME);
+        SharedPreference.getInstance(this).setStore(C.SELECTED_STORE, null);
+        intent.putExtra(C.BUNDLE, bundle);
+        startActivity(intent);
+
+    }
 
     void gotoStoreList() {
         Intent intent = new Intent(this, ActivityContainer.class);
@@ -380,15 +436,53 @@ public class ActivitySearchLocation extends AppCompatActivity implements
     public void getStoreListSuccess(StoreListResponse response) {
         if (!response.getSuccess()) {
             SharedPreference.getInstance(this).setStore(C.SELECTED_STORE, null);
+            SharedPreference.getInstance(this).setStore(C.SELECTED_LOCATION, null);
             SharedPreference.getInstance(this).setString(C.STORE_MSG, response.getMessage());
             finish();
         } else {
-            gotoStoreList();
+          //  gotoStoreList();  //TODO AFTER CLERFY
+            gotoLocationAndStoreList();
         }
     }
 
     @Override
     public void updateStoreSuccess(UpdateStoreResponse response) {
+
+    }
+
+    @Override
+    public void onRemoveAddressSuccess(AddressAddResponse Response) {
+
+    }
+
+    @Override
+    public void onAddAddressSuccess(AddressAddResponse Response) {
+
+    }
+
+    @Override
+    public void onEditAddressSuccess(AddressAddResponse Response) {
+
+    }
+
+    @Override
+    public void onAddressListSuccess(AddressResponse Response) {
+        try {
+            if (Response.getSuccess()) {
+                if (Response.getData() != null && Response.getData().size() > 0) {
+
+                    gotoLocationAndStoreList();
+                    finish();
+                }
+            }
+        }
+        catch (Exception e){
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void onAddDeliveryAddressSuccess(AddressAddResponse Response) {
 
     }
 
@@ -401,16 +495,19 @@ public class ActivitySearchLocation extends AppCompatActivity implements
     @Override
     public void onRecentLocationSuccess(RecentLocationResponse response) {
         if (response.getSuccess()) {
-            rlRecentSearch.setVisibility(View.VISIBLE);
+            rlRecentSearch.setVisibility(View.GONE);
             rlLocationSearch.setVisibility(View.GONE);
 
             if (response.getData() != null && response.getData().size() > 0) {
-                tvRecentSearch.setVisibility(View.VISIBLE);
+               /* tvRecentSearch.setVisibility(View.GONE);
 
                 adapterRecentSearches = new AdapterRecentSearches(response.getData(), ActivitySearchLocation.this);
                 mLinearLayoutManager = new LinearLayoutManager(this);
                 rvRecentSearches.setLayoutManager(mLinearLayoutManager);
-                rvRecentSearches.setAdapter(adapterRecentSearches);
+                rvRecentSearches.setAdapter(adapterRecentSearches);*/
+
+               gotoLocationAndStoreList();
+               finish();
             }
             else {
                 tvRecentSearch.setVisibility(View.GONE);

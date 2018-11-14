@@ -98,6 +98,9 @@ public class FragmentSplash extends Fragment {
                         if (CheckingPermissionIsEnabledOrNot()) {
                             if (SharedPreference.getNoti(getActivity(),C.IS_NOTIFICATION_PERMISSION_ASK)) {
                                 try {
+                                    SharedPreference.getInstance(getActivity()).setStore(C.SELECTED_STORE,null);
+                                    SharedPreference.getInstance(getActivity()).setString(C.LOCATION_SELECTED,null);
+                                    SharedPreference.getInstance(getActivity()).setLocation(C.SELECTED_LOCATION, null);
 
                                     if (SharedPreference.getInstance(getActivity()).getBoolean(C.IS_LOGIN)) {
 

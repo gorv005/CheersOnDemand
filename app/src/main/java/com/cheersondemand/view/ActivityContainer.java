@@ -16,6 +16,7 @@ import android.widget.TextView;
 
 import com.cheersondemand.R;
 import com.cheersondemand.model.address.Address;
+import com.cheersondemand.model.location.RecentLocation;
 import com.cheersondemand.model.order.addtocart.Order;
 import com.cheersondemand.model.order.updatecart.UpdateCartRequest;
 import com.cheersondemand.util.C;
@@ -44,6 +45,7 @@ import com.cheersondemand.view.fragments.FragmentProfile;
 import com.cheersondemand.view.fragments.FragmentResetPassword;
 import com.cheersondemand.view.fragments.FragmentSearchProductResults;
 import com.cheersondemand.view.fragments.FragmentSearchProducts;
+import com.cheersondemand.view.fragments.FragmentSelectAddressAndStore;
 import com.cheersondemand.view.fragments.FragmentStoreSelection;
 import com.cheersondemand.view.fragments.FragmentUpdateProfile;
 import com.cheersondemand.view.fragments.FragmentWishList;
@@ -209,6 +211,11 @@ public class ActivityContainer extends AppCompatActivity {
                 fragmentTransaction.replace(R.id.container, fragment);
                 // fragmentTransaction.addToBackStack(C.TAG_FRAGMENT_ADD_ADDRESS);
                 break;
+            case C.FRAGMENT_STORE_LOCATION_LIST:
+                fragment = new FragmentSelectAddressAndStore();
+                fragmentTransaction.replace(R.id.container, fragment);
+                // fragmentTransaction.addToBackStack(C.TAG_FRAGMENT_ADD_ADDRESS);
+                break;
             case C.FRAGMENT_HELP_CENTER_PAGES:
                 fragment = new FragmentHelpCenterPages();
                 fragmentTransaction.replace(R.id.container, fragment);
@@ -328,7 +335,27 @@ public class ActivityContainer extends AppCompatActivity {
         }
 
     }
+    public void saveLocation(RecentLocation recentLocation) {
+        Fragment fragment = getVisibleFragment();
+        if (fragment != null && fragment instanceof FragmentSelectAddressAndStore) {
+            ((FragmentSelectAddressAndStore) fragment).saveLocation(recentLocation);
+        }
 
+    }
+    public void enableButton() {
+        Fragment fragment = getVisibleFragment();
+        if (fragment != null && fragment instanceof FragmentSelectAddressAndStore) {
+            ((FragmentSelectAddressAndStore) fragment).enableButton();
+        }
+
+    }
+    public void disableButton() {
+        Fragment fragment = getVisibleFragment();
+        if (fragment != null && fragment instanceof FragmentSelectAddressAndStore) {
+            ((FragmentSelectAddressAndStore) fragment).disableButton();
+        }
+
+    }
     public void removeAddress(Address address, int pos) {
         Fragment fragment = getVisibleFragment();
         if (fragment != null && fragment instanceof FragmentAddressList) {

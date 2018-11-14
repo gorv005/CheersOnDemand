@@ -108,7 +108,7 @@ public class FragmentStoreSelection extends Fragment implements IStoreViewPresen
             iStoreViewPresenter.getStoreList(Util.id(getActivity()));
         } else {
 
-            String token = "bearer " + SharedPreference.getInstance(getActivity()).getUser(C.AUTH_USER).getData().getToken().getAccessToken();
+            String token = C.bearer+ SharedPreference.getInstance(getActivity()).getUser(C.AUTH_USER).getData().getToken().getAccessToken();
 
             iStoreViewPresenter.getStoreList(token, Util.id(getActivity()));
 

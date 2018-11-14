@@ -474,7 +474,7 @@ public class FragmentWishList extends Fragment implements IOrderViewPresenterPre
                 if (response.getData() != null && response.getData().size() > 0) {
                     allProductList = response.getData();
                     // StoreProducts.getInstance().saveProducts(allProductList);
-                    adapterProducts = new AdapterWishlistProducts(allProductList, getActivity());
+                    adapterProducts = new AdapterWishlistProducts(source,allProductList, getActivity());
                     rvProductsList.setAdapter(adapterProducts);
 
                 } else {

@@ -1,16 +1,13 @@
-package com.cheersondemand.model;
+package com.cheersondemand.model.products;
 
+import com.cheersondemand.model.Brand;
+import com.cheersondemand.model.Categories;
+import com.cheersondemand.model.ProductType;
+import com.cheersondemand.model.SubCategory;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-import java.io.Serializable;
-
-/**
- * Created by AB on 6/15/2018.
- */
-
-public class AllProduct implements Serializable {
-
+public class OnSaleProduct {
     @SerializedName("id")
     @Expose
     private Integer id;
@@ -43,13 +40,10 @@ public class AllProduct implements Serializable {
     private Boolean isWishlisted;
     @SerializedName("cart_quantity")
     @Expose
-    private String cartQunatity;
+    private String cartQuantity;
     @SerializedName("price")
     @Expose
     private String price;
-    @SerializedName("is_deliverable")
-    @Expose
-    private Boolean isDeliverable;
     @SerializedName("is_in_cart")
     @Expose
     private Boolean isInCart;
@@ -71,6 +65,58 @@ public class AllProduct implements Serializable {
     @SerializedName("category")
     @Expose
     private Categories category;
+
+    /**
+     * No args constructor for use in serialization
+     *
+     */
+    public OnSaleProduct() {
+    }
+
+/**
+ *
+ * @param region
+ * @param onSale
+ * @param subCategory
+ * @param cartQuantity
+ * @param image
+ * @param productType
+ * @param id
+ * @param category
+ * @param price
+ * @param abv
+ * @param description
+ * @param name
+ * @param brand
+ * @param salePrice
+ * @param quantity
+ * @param isWishlisted
+ * @param manufactureDate
+ * @param isInCart
+ * @param currentAvailability
+ */
+
+    public OnSaleProduct(Integer id, String name, String image, String description, String abv, String region, String currentAvailability, String manufactureDate, String quantity, Boolean isWishlisted, String cartQuantity, String price, Boolean isInCart, Boolean onSale, String salePrice, SubCategory subCategory, Brand brand, ProductType productType, Categories category) {
+        this.id = id;
+        this.name = name;
+        this.image = image;
+        this.description = description;
+        this.abv = abv;
+        this.region = region;
+        this.currentAvailability = currentAvailability;
+        this.manufactureDate = manufactureDate;
+        this.quantity = quantity;
+        this.isWishlisted = isWishlisted;
+        this.cartQuantity = cartQuantity;
+        this.price = price;
+        this.isInCart = isInCart;
+        this.onSale = onSale;
+        this.salePrice = salePrice;
+        this.subCategory = subCategory;
+        this.brand = brand;
+        this.productType = productType;
+        this.category = category;
+    }
 
     public Integer getId() {
         return id;
@@ -136,20 +182,28 @@ public class AllProduct implements Serializable {
         this.manufactureDate = manufactureDate;
     }
 
-    public Boolean getIsWishlisted() {
+    public String getQuantity() {
+        return quantity;
+    }
+
+    public void setQuantity(String quantity) {
+        this.quantity = quantity;
+    }
+
+    public Boolean getWishlisted() {
         return isWishlisted;
     }
 
-    public void setIsWishlisted(Boolean isWishlisted) {
-        this.isWishlisted = isWishlisted;
+    public void setWishlisted(Boolean wishlisted) {
+        isWishlisted = wishlisted;
     }
 
-    public String getCartQunatity() {
-        return cartQunatity;
+    public String getCartQuantity() {
+        return cartQuantity;
     }
 
-    public void setCartQunatity(String cartQunatity) {
-        this.cartQunatity = cartQunatity;
+    public void setCartQuantity(String cartQuantity) {
+        this.cartQuantity = cartQuantity;
     }
 
     public String getPrice() {
@@ -160,12 +214,28 @@ public class AllProduct implements Serializable {
         this.price = price;
     }
 
-    public Boolean getIsInCart() {
+    public Boolean getInCart() {
         return isInCart;
     }
 
-    public void setIsInCart(Boolean isInCart) {
-        this.isInCart = isInCart;
+    public void setInCart(Boolean inCart) {
+        isInCart = inCart;
+    }
+
+    public Boolean getOnSale() {
+        return onSale;
+    }
+
+    public void setOnSale(Boolean onSale) {
+        this.onSale = onSale;
+    }
+
+    public String getSalePrice() {
+        return salePrice;
+    }
+
+    public void setSalePrice(String salePrice) {
+        this.salePrice = salePrice;
     }
 
     public SubCategory getSubCategory() {
@@ -198,53 +268,5 @@ public class AllProduct implements Serializable {
 
     public void setCategory(Categories category) {
         this.category = category;
-    }
-
-    public Boolean getWishlisted() {
-        return isWishlisted;
-    }
-
-    public void setWishlisted(Boolean wishlisted) {
-        isWishlisted = wishlisted;
-    }
-
-    public Boolean getInCart() {
-        return isInCart;
-    }
-
-    public void setInCart(Boolean inCart) {
-        isInCart = inCart;
-    }
-
-    public String getQuantity() {
-        return quantity;
-    }
-
-    public void setQuantity(String quantity) {
-        this.quantity = quantity;
-    }
-
-    public Boolean getDeliverable() {
-        return isDeliverable;
-    }
-
-    public Boolean getOnSale() {
-        return onSale;
-    }
-
-    public void setOnSale(Boolean onSale) {
-        this.onSale = onSale;
-    }
-
-    public String getSalePrice() {
-        return salePrice;
-    }
-
-    public void setSalePrice(String salePrice) {
-        this.salePrice = salePrice;
-    }
-
-    public void setDeliverable(Boolean deliverable) {
-        isDeliverable = deliverable;
     }
 }

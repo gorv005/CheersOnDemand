@@ -25,6 +25,9 @@ public class Address implements Serializable{
     @SerializedName("address_second")
     @Expose
     private String addressSecond;
+    @SerializedName("address")
+    @Expose
+    private String address;
     @SerializedName("zip_code")
     @Expose
     private String zipCode;
@@ -86,5 +89,13 @@ public class Address implements Serializable{
 
     public void setId(Integer id) {
         this.id = id;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
     }
 }

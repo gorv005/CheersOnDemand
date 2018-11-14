@@ -1,5 +1,7 @@
 package com.cheersondemand.model;
 
+import com.cheersondemand.model.products.Banner;
+import com.cheersondemand.model.products.OnSaleProduct;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
@@ -15,6 +17,9 @@ public class ProductWithCategory implements Serializable{
     @SerializedName("has_cart_product")
     @Expose
     private Boolean hasCartProduct;
+    @SerializedName("banner")
+    @Expose
+    private Banner banner;
     @SerializedName("categories")
     @Expose
     private List<Categories> categories = null;
@@ -24,7 +29,9 @@ public class ProductWithCategory implements Serializable{
     @SerializedName("user")
     @Expose
     private UserResponse user;
-
+    @SerializedName("on_sale_products")
+    @Expose
+    private List<AllProduct> onSaleProducts = null;
     public Boolean getHasCartProduct() {
         return hasCartProduct;
     }
@@ -55,5 +62,21 @@ public class ProductWithCategory implements Serializable{
 
     public void setUser(UserResponse user) {
         this.user = user;
+    }
+
+    public Banner getBanner() {
+        return banner;
+    }
+
+    public void setBanner(Banner banner) {
+        this.banner = banner;
+    }
+
+    public List<AllProduct> getOnSaleProducts() {
+        return onSaleProducts;
+    }
+
+    public void setOnSaleProducts(List<AllProduct> onSaleProducts) {
+        this.onSaleProducts = onSaleProducts;
     }
 }

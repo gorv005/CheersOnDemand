@@ -22,38 +22,42 @@
 
                 android:id="@+id/ivProductImageRl"
                 android:background="@drawable/product_circular_border"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_marginLeft="10dp"
                 android:layout_height="match_parent">
+                <LinearLayout
+                    android:layout_centerInParent="true"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent">
             <ImageView
                 android:id="@+id/ivProductImage"
                 android:tag="image_tag"
                 android:layout_marginTop="5dp"
                 android:layout_marginBottom="5dp"
+                android:layout_marginRight="5dp"
+                android:layout_gravity="center_vertical"
                 android:layout_centerVertical="true"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:src="@drawable/bitmap_copy"/>
-            </RelativeLayout>
-
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                >
                 <TextView
                     android:layout_centerHorizontal="true"
                     android:id="@+id/tvBrandName"
                     android:text="beers"
                     android:textSize="16sp"
                     android:textStyle="bold"
+                    android:layout_marginLeft="5dp"
+                    android:layout_gravity="center_vertical"
                     android:layout_centerVertical="true"
                     android:fontFamily="@font/sf_ui_display_regular"
                     android:textColor="@color/brand_text_color"
                     android:maxLines="2"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content" />
-
+                </LinearLayout>
             </RelativeLayout>
+
+
         </LinearLayout>
 
     </android.support.v7.widget.CardView>

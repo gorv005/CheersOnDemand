@@ -15,7 +15,7 @@ public interface IAddressViewPresenter {
 
     public void EditAddAddress(String token, String userId, String id, AddressRequest addressRequest);
 
-    public void getAddresses(String token, String userId);
+    public void getAddresses(boolean isAuth ,String token,String userId, String uuid);
 
     public void RemoveAddAddress(String token, String userId, String id);
     public void addDeliveryAddress(String token, String userId, String cardId, AddDeliveryAddressRequest addDeliveryAddressRequest);

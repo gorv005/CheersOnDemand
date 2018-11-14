@@ -10,7 +10,7 @@
     <RelativeLayout
         android:paddingLeft="10dp"
         android:paddingRight="10dp"
-        android:layout_marginTop="15dp"
+        android:paddingTop="15dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         >
@@ -20,11 +20,11 @@
             android:id="@+id/tvTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="14sp"
+            android:textSize="16sp"
             android:textStyle="bold"
             android:layout_alignParentStart="true"
             android:fontFamily="@font/sf_ui_display_regular"
-            android:textColor="@color/latest_add_color"
+            android:textColor="@color/view_all_color"
             android:text="@string/latest_addition"
             />
 
@@ -34,7 +34,7 @@
             android:layout_height="wrap_content"
             android:textSize="14sp"
             android:textStyle="bold"
-
+            android:visibility="gone"
             android:layout_alignParentEnd="true"
             android:fontFamily="@font/sf_ui_display_regular"
             android:textColor="@color/view_all_color"
@@ -46,8 +46,8 @@
 
     <android.support.v7.widget.RecyclerView
         android:layout_marginTop="10dp"
-        android:paddingLeft="10dp"
-        android:paddingRight="10dp"
+        android:paddingLeft="4dp"
+        android:paddingRight="4dp"
         android:id="@+id/recyclerProductlist"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -58,6 +58,7 @@
         android:layout_marginTop="20dp"
         android:background="@color/product_add_to_cart_back_color"
         android:layout_width="match_parent"
+        android:visibility="gone"
         android:layout_height="5dp"/>
 
 </LinearLayout>

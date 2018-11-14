@@ -79,7 +79,7 @@ public class AddressViewIntractorImpl implements IAddressViewIntractor {
     }
 
     @Override
-    public void getAddresses(String token, String userId, final OnFinishedListener listener) {
+    public void getAddresses(boolean isAuth,String token,String userId, String uuid, final OnFinishedListener listener) {
         try {
 
             WebServicesWrapper.getInstance().getAddressList(new ResponseResolver<AddressResponse>() {
@@ -102,7 +102,7 @@ public class AddressViewIntractorImpl implements IAddressViewIntractor {
                         listener.onError(error.getError());
                     }
                 }
-            }, token, userId);
+            }, isAuth,token,userId, uuid);
         } catch (Exception e) {
             e.printStackTrace();
         }

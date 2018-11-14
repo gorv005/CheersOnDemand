@@ -24,7 +24,7 @@ public interface IAddressViewIntractor {
     }
     public void AddAddress(String token, String userId, AddressRequest addressRequest, OnFinishedListener listener);
     public void EditAddAddress(String token, String userId,String id, AddressRequest addressRequest, OnFinishedListener listener);
-    public void getAddresses(String token, String userId, OnFinishedListener listener);
+    public void getAddresses(boolean isAuth,String token,String userId, String uuid, OnFinishedListener listener);
     public void RemoveAddAddress(String token, String userId,String id,OnFinishedListener listener);
 
     public void addDeliveryAddress(String token, String userId, String cardId, AddDeliveryAddressRequest addDeliveryAddressRequest,OnFinishedListener listener);

@@ -94,11 +94,11 @@ public class AddressViewPresenterImpl implements IAddressViewPresenter, IAddress
     }
 
     @Override
-    public void getAddresses(String token, String userId) {
+    public void getAddresses(boolean isAuth,String token,String userId, String uuid) {
         if (mView != null) {
             mView.showProgress();
 
-            iAddressViewIntractor.getAddresses(token,userId, this);
+            iAddressViewIntractor.getAddresses(isAuth,token,userId,uuid, this);
         }
     }
 

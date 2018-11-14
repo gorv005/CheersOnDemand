@@ -8,6 +8,7 @@ import com.cheersondemand.model.AllProduct;
 import com.cheersondemand.model.authentication.AuthenticationResponse;
 import com.cheersondemand.model.authentication.GuestUser;
 import com.cheersondemand.model.card.CardList;
+import com.cheersondemand.model.location.RecentLocation;
 import com.cheersondemand.model.location.SelectedLocation;
 import com.cheersondemand.model.store.StoreList;
 import com.google.gson.Gson;
@@ -126,6 +127,21 @@ public class SharedPreference {
         return gson.fromJson(data, StoreList.class);
 
     }
+
+    public void setLocation(String key, RecentLocation recentLocation) {
+        Gson gson = new Gson();
+        String json = gson.toJson(recentLocation);
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        prefs.edit().putString(key, json).apply();
+
+    }
+    public RecentLocation getLocation(String key) {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        String data = prefs.getString(key, null);
+        Gson gson = new Gson();
+        return gson.fromJson(data, RecentLocation.class);
+
+    }
     public void setCard(String key, List<CardList> storeList) {
         Gson gson = new Gson();
         String json = gson.toJson(storeList);
@@ -174,7 +190,7 @@ public class SharedPreference {
     void clearCardList(){
 
     }
-    public void setLocation(String key, List<SelectedLocation> storeList) {
+    public void setLocationList(String key, List<SelectedLocation> storeList) {
         Gson gson = new Gson();
         String json = gson.toJson(storeList);
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
@@ -189,7 +205,7 @@ public class SharedPreference {
         if (recentLocations == null) {
             recentLocations = new ArrayList<SelectedLocation>();
             recentLocations.add(location);
-            setLocation(key, recentLocations);
+            setLocationList(key, recentLocations);
         }
         else {
             for (int i = 0; i < recentLocations.size(); i++) {
@@ -204,7 +220,7 @@ public class SharedPreference {
             }
             else {
                 recentLocations.add(location);
-                setLocation(key, recentLocations);
+                setLocationList(key, recentLocations);
             }
         }
 
@@ -216,7 +232,7 @@ public class SharedPreference {
                 if (selectedLocation.getName().trim().equalsIgnoreCase(selectedLocationList.get(i).getName().trim())) {
 
                     selectedLocationList.remove(selectedLocationList.remove(i));
-                    setLocation(key, selectedLocationList);
+                    setLocationList(key, selectedLocationList);
 
                 }
             }

@@ -287,6 +287,7 @@ public class FragmentProfile extends Fragment implements View.OnClickListener, I
                 Intent intent2 = new Intent(getActivity(), ActivityContainer.class);
                 Bundle bundle2 = new Bundle();
                 bundle2.putSerializable(C.PRODUCT_LIST, productListResponse);
+                bundle.putInt(C.SOURCE, C.FRAGMENT_PROFILE_HOME);
                 intent2.putExtra(C.BUNDLE, bundle2);
                 intent2.putExtra(C.FRAGMENT_ACTION, C.FRAGMENT_WISHLIST);
                 startActivity(intent2);

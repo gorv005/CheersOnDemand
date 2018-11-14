@@ -5,6 +5,7 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.Point;
 import android.graphics.Rect;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
@@ -17,6 +18,7 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -42,6 +44,8 @@ import com.cheersondemand.model.order.addtocart.AddToCartRequest;
 import com.cheersondemand.model.order.addtocart.AddToCartResponse;
 import com.cheersondemand.model.order.updatecart.UpdateCartRequest;
 import com.cheersondemand.model.order.updatecart.UpdateCartResponse;
+import com.cheersondemand.model.products.Banner;
+import com.cheersondemand.model.products.OnSaleProduct;
 import com.cheersondemand.model.store.StoreList;
 import com.cheersondemand.model.store.StoreListResponse;
 import com.cheersondemand.model.store.UpdateStore;
@@ -134,13 +138,20 @@ public class FragmentHome extends Fragment implements SwipeRefreshLayout.OnRefre
     ShimmerRecyclerView rvBrandsShimmer;
     @BindView(R.id.rvProductsShimmer)
     ShimmerRecyclerView rvProductsShimmer;
+    @BindView(R.id.ivBanner)
+    ImageView ivBanner;
+    @BindView(R.id.rlBanner)
+    LinearLayout rlBanner;
+    @BindView(R.id.rlImage)
+    RelativeLayout rlImage;
     private GridLayoutManager lLayout;
-
+    int width;
     private int productPos;
     private int secPos;
     private boolean isAdd;
     boolean isProgressShown = false, isApiWorking = false;
-
+    Banner banner;
+    List<AllProduct> onSaleProductList;
     List<AllProduct> allProductList;
 
     public FragmentHome() {
@@ -155,6 +166,7 @@ public class FragmentHome extends Fragment implements SwipeRefreshLayout.OnRefre
         iOrderViewPresenterPresenter = new OrderViewPresenterImpl(this, getActivity());
         iStoreViewPresenter = new StoreViewPresenterImpl(this, getActivity());
         util = new Util();
+        getDisplayCoordinate();
     }
 
     @Override
@@ -169,6 +181,14 @@ public class FragmentHome extends Fragment implements SwipeRefreshLayout.OnRefre
         View view = inflater.inflate(R.layout.fragment_home, container, false);
         unbinder = ButterKnife.bind(this, view);
         return view;
+    }
+
+    void getDisplayCoordinate() {
+        Display display = getActivity().getWindowManager().getDefaultDisplay();
+        Point size = new Point();
+        display.getSize(size);
+        width = size.x;
+        width -= 50;
     }
 
     @Override
@@ -334,7 +354,12 @@ public class FragmentHome extends Fragment implements SwipeRefreshLayout.OnRefre
 
             }
             if (response.getSuccess()) {
-
+                banner = response.getData().getBanner();
+                onSaleProductList = response.getData().getOnSaleProducts();
+                if (banner != null) {
+                    rlImage.setLayoutParams(new LinearLayout.LayoutParams(width, 389 * width / 1242));
+                    Util.setImage(getActivity(), banner.getImage(), ivBanner);
+                }
                 rvBrands.setVisibility(View.VISIBLE);
                 rvProducts.setVisibility(View.VISIBLE);
                 tvNoStoreAvailable.setVisibility(View.GONE);
@@ -374,8 +399,10 @@ public class FragmentHome extends Fragment implements SwipeRefreshLayout.OnRefre
                     homeCategoriesSectionList = new ArrayList<>();
                     allProductList = response.getData().getAllProducts();
                     StoreProducts.getInstance().saveProducts(allProductList);
-                    homeCategoriesSectionList.add(new HomeCategoriesSectionList("All products", allProductList));
-
+                    homeCategoriesSectionList.add(new HomeCategoriesSectionList("Recommended products", allProductList));
+                    if(onSaleProductList!=null && onSaleProductList.size()>0) {
+                        homeCategoriesSectionList.add(new HomeCategoriesSectionList("Products On Sale", onSaleProductList));
+                    }
                     adapterHomeCategoriesSections = new AdapterHomeCategoriesSections(getActivity(), homeCategoriesSectionList);
                     rvProducts.setAdapter(adapterHomeCategoriesSections);
 
@@ -712,7 +739,8 @@ public class FragmentHome extends Fragment implements SwipeRefreshLayout.OnRefre
                 break;
             case R.id.llStoreSelect:
                 if (SharedPreference.getInstance(getActivity()).getStore(C.SELECTED_STORE) != null) {
-                    gotoStoreList();
+                    // gotoStoreList();
+                    gotoLocationAndStoreList();
                 }
                 break;
 
@@ -957,6 +985,16 @@ public class FragmentHome extends Fragment implements SwipeRefreshLayout.OnRefre
         }
     }
 
+    void gotoLocationAndStoreList() {
+        Intent intent = new Intent(getActivity(), ActivityContainer.class);
+        Bundle bundle = new Bundle();
+        intent.putExtra(C.FRAGMENT_ACTION, C.FRAGMENT_STORE_LOCATION_LIST);
+        bundle.putInt(C.FROM, C.HOME);
+        intent.putExtra(C.BUNDLE, bundle);
+        startActivity(intent);
+
+    }
+
     void gotoStoreList() {
         Intent intent = new Intent(getActivity(), ActivityContainer.class);
         Bundle bundle = new Bundle();
@@ -981,7 +1019,7 @@ public class FragmentHome extends Fragment implements SwipeRefreshLayout.OnRefre
         Intent intent = new Intent(getActivity(), ActivityContainer.class);
         Bundle bundle = new Bundle();
         bundle.putInt(C.SOURCE, C.FRAGMENT_SEARCH_PRODUCT);
-        intent.putExtra(C.BUNDLE,bundle);
+        intent.putExtra(C.BUNDLE, bundle);
         intent.putExtra(C.FRAGMENT_ACTION, C.FRAGMENT_SEARCH_PRODUCT);
         startActivity(intent);
     }
