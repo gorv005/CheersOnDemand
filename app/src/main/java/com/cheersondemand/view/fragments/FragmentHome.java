@@ -129,7 +129,7 @@ public class FragmentHome extends Fragment implements SwipeRefreshLayout.OnRefre
     @BindView(R.id.rlBrands)
     RelativeLayout rlBrands;
     @BindView(R.id.rlProducts)
-    LinearLayout rlProducts;
+    RelativeLayout rlProducts;
     @BindView(R.id.swipe_refresh_layout)
     SwipeRefreshLayout swipeRefreshLayout;
     @BindView(R.id.rvBrands)
@@ -210,7 +210,13 @@ public class FragmentHome extends Fragment implements SwipeRefreshLayout.OnRefre
         setStoreLocation();
         if (allProductList != null && allProductList.size() > 0) {
             //allProductList=StoreProducts.getInstance().getListOfProducts();
-            adapterHomeCategoriesSections.modifyList();
+            //adapterHomeCategoriesSections.modifyList();
+            adapterHomeCategories.notifyDataSetChanged();
+        }
+        if (onSaleProductList != null && onSaleProductList.size() > 0) {
+            //allProductList=StoreProducts.getInstance().getListOfProducts();
+            //adapterHomeCategoriesSections.modifyList();
+            adapterHomeProductOnSale.notifyDataSetChanged();
         }
        /* CategoryRequest categoryRequest = new CategoryRequest();
         categoryRequest.setUuid(Util.id(getActivity()));*/
@@ -275,8 +281,7 @@ public class FragmentHome extends Fragment implements SwipeRefreshLayout.OnRefre
 
             }
         });*/
-        rvProducts.hasFixedSize();
-        rvProducts.smoothScrollToPosition(10);
+
         //  rvProducts.setNestedScrollingEnabled(false);
         rlSearchProduct.setClickable(true);
         rlSearchProduct.setOnClickListener(new View.OnClickListener() {
