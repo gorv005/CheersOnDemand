@@ -404,7 +404,6 @@ public class ActivitySearchLocation extends AppCompatActivity implements
         Bundle bundle = new Bundle();
         intent.putExtra(C.FRAGMENT_ACTION, C.FRAGMENT_STORE_LOCATION_LIST);
         bundle.putInt(C.FROM, C.HOME);
-        SharedPreference.getInstance(this).setStore(C.SELECTED_STORE, null);
         intent.putExtra(C.BUNDLE, bundle);
         startActivity(intent);
 

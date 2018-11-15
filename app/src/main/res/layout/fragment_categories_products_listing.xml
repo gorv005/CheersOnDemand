@@ -1,143 +1,208 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
     android:id="@+id/rlView"
+    android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.cheersondemand.view.fragments.FragmentProductsListing">
 
 
     <RelativeLayout
         android:id="@+id/rlbar"
-        android:background="@drawable/top_banner1"
         android:layout_width="match_parent"
+        android:layout_height="50dp"
 
-        android:paddingBottom="10dp"
-        android:layout_height="50dp">
+        android:background="@drawable/top_banner1"
+        android:paddingBottom="10dp">
+
         <RelativeLayout
             android:id="@+id/imgBack"
-            android:layout_marginTop="21dp"
-            android:layout_marginLeft="25dp"
             android:layout_width="25dp"
+            android:layout_height="25dp"
             android:layout_alignParentBottom="true"
+            android:layout_marginLeft="25dp"
 
-            android:layout_height="25dp">
+            android:layout_marginTop="21dp">
+
             <ImageView
                 android:layout_width="15dp"
-                android:src="@drawable/back_white"
-                android:layout_height="15dp" />
+                android:layout_height="15dp"
+                android:src="@drawable/back_white" />
         </RelativeLayout>
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="16sp"
-            android:layout_centerHorizontal="true"
-            android:fontFamily="@font/sf_ui_display_regular"
             android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
             android:layout_marginLeft="10dp"
-            android:textColor="@color/white"
+            android:fontFamily="@font/sf_ui_display_regular"
             android:gravity="center_horizontal"
             android:text="@string/product_listing"
-            />
+            android:textColor="@color/white"
+            android:textSize="16sp" />
 
     </RelativeLayout>
 
     <RelativeLayout
         android:id="@+id/rlMainView"
-        android:layout_below="@id/rlbar"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-    <LinearLayout
-        android:id="@+id/llSortView"
-        android:weightSum="10"
-        android:layout_width="match_parent"
-        android:layout_height="50dp">
+        android:layout_height="wrap_content"
+        android:layout_below="@id/rlbar">
 
-        <LinearLayout
-            android:id="@+id/llSort"
-            android:gravity="center"
-            android:layout_gravity="center"
-            android:layout_width="0dp"
-            android:layout_weight="5"
-            android:layout_height="match_parent">
-
-            <ImageView
-                android:src="@drawable/sort"
-                android:layout_width="20dp"
-                android:layout_gravity="center_vertical"
-                android:layout_height="20dp" />
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="14.4sp"
-                android:fontFamily="@font/sf_ui_display_regular"
-
-                android:layout_marginLeft="10dp"
-                android:textColor="@color/profile_text_color"
-                android:gravity="center_horizontal"
-                android:text="@string/sort"
-                />
-
-        </LinearLayout>
-        <View
-            android:layout_below="@id/llProfileView"
-            android:background="@color/profile_text_color"
-            android:layout_width="1dp"
-            android:paddingTop="10dp"
-            android:paddingBottom="10dp"
-            android:layout_gravity="center_vertical"
-            android:layout_height="30dp"/>
-        <LinearLayout
-            android:id="@+id/llFilter"
-            android:gravity="center"
-            android:layout_gravity="center"
-            android:layout_width="0dp"
-            android:layout_weight="5"
-            android:layout_height="match_parent">
-            <ImageView
-                android:src="@drawable/filter"
-                android:layout_width="20dp"
-                android:layout_height="20dp" />
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="14.4sp"
-                android:fontFamily="@font/sf_ui_display_regular"
-
-                android:layout_marginLeft="10dp"
-                android:textColor="@color/profile_text_color"
-                android:gravity="center_horizontal"
-                android:text="@string/filter"
-                />
-
-        </LinearLayout>
-
-
-    </LinearLayout>
-    <View
-        android:id="@+id/v"
-        android:layout_below="@id/llSortView"
-        android:background="@color/edit_text_border"
-        android:layout_width="match_parent"
-
-        android:layout_height="1dp"/>
-        <LinearLayout
-            android:layout_below="@id/v"
-            android:id="@+id/llStoreSelect"
-            android:layout_weight="1"
-            android:background="@color/white"
-            android:visibility="visible"
-            android:paddingTop="15dp"
-            android:paddingLeft="15dp"
-            android:paddingRight="15dp"
+        <RelativeLayout
+            android:id="@+id/llSortView"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:orientation="vertical">
+            android:layout_height="50dp"
+            android:background="@color/white"
+            android:paddingEnd="10dp"
+            android:paddingStart="10dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:textStyle="bold"
+                android:fontFamily="@font/sf_ui_display_regular"
+                android:text="@string/categories"
+                android:textColor="@color/profile_text_color"
+                android:textSize="16sp" />
 
             <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true">
+
+                <RelativeLayout
+                    android:id="@+id/llSort"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center"
+                    android:gravity="center">
+
+                    <ImageView
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:layout_gravity="center_vertical"
+                        android:src="@drawable/sort_new" />
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:id="@+id/llFilter"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+
+                    android:layout_gravity="center"
+                    android:layout_marginLeft="10dp"
+                    android:gravity="center">
+
+                    <ImageView
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:src="@drawable/filter_new" />
+                </RelativeLayout>
+
+
+            </LinearLayout>
+        </RelativeLayout>
+<!--
+            <LinearLayout
+                android:weightSum="10"
+                android:visibility="gone"
+                android:layout_width="match_parent"
+                android:layout_height="50dp">
+
+                <LinearLayout
+                    android:gravity="center"
+                    android:layout_gravity="center"
+                    android:layout_width="0dp"
+                    android:layout_weight="5"
+                    android:layout_height="match_parent">
+
+                    <ImageView
+                        android:src="@drawable/sort"
+                        android:layout_width="20dp"
+                        android:layout_gravity="center_vertical"
+                        android:layout_height="20dp" />
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="14.4sp"
+                        android:fontFamily="@font/sf_ui_display_regular"
+
+                        android:layout_marginLeft="10dp"
+                        android:textColor="@color/profile_text_color"
+                        android:gravity="center_horizontal"
+                        android:text="@string/sort"
+                        />
+
+                </LinearLayout>
+                <View
+                    android:layout_below="@id/llProfileView"
+                    android:background="@color/profile_text_color"
+                    android:layout_width="1dp"
+                    android:paddingTop="10dp"
+                    android:paddingBottom="10dp"
+                    android:layout_gravity="center_vertical"
+                    android:layout_height="30dp"/>
+                <LinearLayout
+                    android:gravity="center"
+                    android:layout_gravity="center"
+                    android:layout_width="0dp"
+                    android:layout_weight="5"
+                    android:layout_height="match_parent">
+                    <ImageView
+                        android:src="@drawable/filter"
+                        android:layout_width="20dp"
+                        android:layout_height="20dp" />
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="14.4sp"
+                        android:fontFamily="@font/sf_ui_display_regular"
+
+                        android:layout_marginLeft="10dp"
+                        android:textColor="@color/profile_text_color"
+                        android:gravity="center_horizontal"
+                        android:text="@string/filter"
+                        />
+
+                </LinearLayout>
+
+
+            </LinearLayout>
+-->
+        <View
+            android:id="@+id/v"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:visibility="gone"
+            android:layout_below="@id/llSortView"
+
+            android:background="@color/edit_text_border" />
+
+        <LinearLayout
+            android:id="@+id/llStoreSelect"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/v"
+            android:layout_centerVertical="true"
+            android:layout_weight="1"
+            android:background="@drawable/shadow_white"
+            android:orientation="vertical"
+            android:paddingLeft="15dp"
+            android:paddingRight="15dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
+            android:paddingTop="5dp"
+            android:paddingBottom="5dp"
+            android:visibility="visible">
+
+            <LinearLayout
+                android:visibility="gone"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
+
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -149,66 +214,73 @@
             </LinearLayout>
 
             <LinearLayout
+                android:padding="5dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
-            <TextView
-                android:maxLines="1"
-                android:ellipsize="end"
-                android:singleLine="true"
-                android:layout_width="wrap_content"
-                android:id="@+id/tvStoreName"
-                android:layout_height="wrap_content"
-                android:fontFamily="@font/sf_ui_display_regular"
-                android:text="@string/select_a_location"
-                android:textColor="@color/profile_text_color"
-                android:textSize="16sp" />
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="25dp">
-                <ImageView
-                    android:layout_marginLeft="10dp"
-                    android:layout_alignParentRight="true"
-                    android:layout_gravity="right"
-                    android:src="@drawable/down_arrow"
+
+                <TextView
+                    android:id="@+id/tvStoreName"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
-            </RelativeLayout>
+                    android:layout_height="wrap_content"
+                    android:ellipsize="end"
+                    android:fontFamily="@font/sf_ui_display_regular"
+                    android:maxLines="1"
+                    android:singleLine="true"
+                    android:text="@string/select_a_location"
+                    android:textColor="@color/blue_dark"
+                    android:textSize="14sp" />
+
+                <RelativeLayout
+                    android:layout_gravity="center_vertical"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:layout_gravity="right"
+                        android:layout_marginLeft="10dp"
+                        android:src="@drawable/down_arrow_new" />
+                </RelativeLayout>
             </LinearLayout>
+
             <View
                 android:id="@+id/v1"
-                android:layout_marginTop="5dp"
-                android:background="@color/edit_text_border"
                 android:layout_width="match_parent"
-
-                android:layout_height="1dp"/>
+                android:layout_height="1dp"
+                android:layout_marginTop="5dp"
+                android:visibility="gone"
+                android:background="@color/edit_text_border" />
         </LinearLayout>
 
         <RelativeLayout
-        android:layout_below="@id/llStoreSelect"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-    <android.support.v7.widget.RecyclerView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@id/llStoreSelect">
 
-        android:id="@+id/rvProductsList"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_gravity="center_vertical"
-         />
+            <android.support.v7.widget.RecyclerView
+
+                android:id="@+id/rvProductsList"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="center_vertical" />
+        </RelativeLayout>
+
+
     </RelativeLayout>
 
-
-    </RelativeLayout>
     <LinearLayout
-        android:visibility="gone"
-        android:layout_below="@id/rlbar"
-        android:background="@color/white"
         android:id="@+id/llNoProductInCount"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_below="@id/rlbar"
+        android:background="@color/white"
         android:gravity="center"
         android:orientation="vertical"
         android:paddingLeft="40dp"
-        android:paddingRight="40dp">
+        android:paddingRight="40dp"
+        android:visibility="gone">
 
         <ImageView
 
@@ -260,10 +332,10 @@
         android:id="@+id/progressbar"
         style="?android:attr/progressBarStyleLarge"
         android:layout_width="30dp"
-        android:layout_marginBottom="5dp"
-        android:layout_centerHorizontal="true"
-        android:layout_alignParentBottom="true"
         android:layout_height="30dp"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="5dp"
         android:visibility="gone" />
 
 

@@ -85,9 +85,9 @@ public class FragmentProductsListing extends Fragment implements View.OnClickLis
 
 
     @BindView(R.id.llSort)
-    LinearLayout llSort;
+    RelativeLayout llSort;
     @BindView(R.id.llFilter)
-    LinearLayout llFilter;
+    RelativeLayout llFilter;
     @BindView(R.id.rvProductsList)
     RecyclerView rvProductsList;
     Unbinder unbinder;

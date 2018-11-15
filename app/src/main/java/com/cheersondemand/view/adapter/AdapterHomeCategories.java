@@ -77,7 +77,11 @@ private List<AllProduct> horizontalList;
 
         return new ItemViewHolder(itemView);
     }
-
+    else if (viewType == TYPE_FOOTER) {
+        //Inflating footer view
+        View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.product_card_item_home_footer, parent, false);
+        return new FooterViewHolder(itemView);
+    }
     else
         return null;
     }
@@ -191,16 +195,54 @@ private List<AllProduct> horizontalList;
                 }
             });*/
         }
+        else if (holder instanceof FooterViewHolder) {
+            final FooterViewHolder footerViewHolder = (FooterViewHolder) holder;
+            footerViewHolder.rlViewAlProduct.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Util.hideKeyboard(context);
 
+                    Intent intent=new Intent(context,ActivityContainer.class);
+
+                    Bundle bundle=new Bundle();
+                    bundle.putString(C.CAT_ID,"");
+                    bundle.putString(C.SUB_CAT_ID,"");
+
+                    bundle.putInt(C.SOURCE,C.FRAGMENT_PRODUCTS_HOME);
+                    intent.putExtra(C.BUNDLE,bundle);
+                    intent.putExtra(C.FRAGMENT_ACTION,C.FRAGMENT_PRODUCT_LISTING);
+
+                    context.startActivity(intent);
+
+                }
+            });
+        }
     }
     @Override
     public int getItemViewType(int position) {
 
+        if (position == horizontalList.size()) {
+            return TYPE_FOOTER;
+        }
         return TYPE_ITEM;
     }
     @Override
     public int getItemCount() {
-        return horizontalList.size();
+        if(horizontalList.size()>=5) {
+            return horizontalList.size()+1;
+        }
+        else {
+            return horizontalList.size();
+        }
+    }
+
+    public class FooterViewHolder extends RecyclerView.ViewHolder {
+        View rlViewAlProduct;
+        public FooterViewHolder(View view) {
+            super(view);
+            rlViewAlProduct = (View) view.findViewById(R.id.rlViewAlProduct);
+
+        }
     }
 
 }

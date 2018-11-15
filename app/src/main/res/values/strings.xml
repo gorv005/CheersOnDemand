@@ -299,6 +299,8 @@
     <string name="add_to_cart_"><u>Add to Cart</u></string>
     <string name="added_to_cart_"><u>Added to cart</u></string>
     <string name="view_all_categories">View All Categories</string>
+    <string name="view_all_products">View All</string>
+    <string name="show_results">Show Result</string>
 
     <!--
         <string name="default_web_client_id">999387565226-hdnnhm6rhgik5ljvm06shotsi7j9883c.apps.googleusercontent.com</string>

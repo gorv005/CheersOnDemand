@@ -76,6 +76,8 @@ public class FragmentSelectAddressAndStore extends Fragment implements ILocation
     AdapterStoresListing adapterStore;
     @BindView(R.id.btnSubmit)
     Button btnSubmit;
+    @BindView(R.id.llStoreList)
+    LinearLayout llStoreList;
 
     public FragmentSelectAddressAndStore() {
         // Required empty public constructor
@@ -106,6 +108,7 @@ public class FragmentSelectAddressAndStore extends Fragment implements ILocation
         super.onViewCreated(view, savedInstanceState);
         btnSubmit.setOnClickListener(this);
         btnSubmit.setEnabled(false);
+        llStoreList.setVisibility(View.GONE);
         getRecentSearches();
     }
 
@@ -159,14 +162,16 @@ public class FragmentSelectAddressAndStore extends Fragment implements ILocation
     }
 
 
-   public void enableButton(){
+    public void enableButton() {
         btnSubmit.setBackground(ContextCompat.getDrawable(getActivity(), R.drawable.bg_button_enable));
         btnSubmit.setEnabled(true);
     }
-   public void disableButton(){
+
+    public void disableButton() {
         btnSubmit.setBackground(ContextCompat.getDrawable(getActivity(), R.drawable.button_disable));
         btnSubmit.setEnabled(false);
     }
+
     void updateStore() {
         store = adapterStore.getSelectedItem();
         if (store != null && storeList != null) {
@@ -197,7 +202,7 @@ public class FragmentSelectAddressAndStore extends Fragment implements ILocation
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()){
+        switch (v.getId()) {
             case R.id.btnSubmit:
                 updateStore();
                 break;
@@ -225,12 +230,16 @@ public class FragmentSelectAddressAndStore extends Fragment implements ILocation
             if (response.getSuccess()) {
                 storeList = response.getData();
                 if (storeList != null && storeList.size() > 0) {
-                    rlStoreView.setVisibility(View.VISIBLE);
+                    llStoreList.setVisibility(View.VISIBLE);
                     ((ActivityContainer) getActivity()).hideToolBar();
                     StoreList storeList1 = SharedPreference.getInstance(getActivity()).getStore(C.SELECTED_STORE);
                     adapterStore = new AdapterStoresListing(source, getActivity(), storeList, storeList1);
                     lvStoreList.setAdapter(adapterStore);
                 }
+            }
+            else {
+                util.setSnackbarMessage(getActivity(), response.getMessage(), LLView, true);
+
             }
         } catch (Exception e) {
             e.printStackTrace();

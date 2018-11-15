@@ -17,7 +17,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/profile_back"
+            android:background="@color/white"
             android:orientation="vertical">
 
             <LinearLayout
@@ -62,14 +62,14 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="@color/profile_back"
+                android:background="@color/white"
                 android:layout_marginBottom="50dp"
                 android:orientation="vertical">
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="@color/profile_back"
+                    android:background="@color/white"
                     android:orientation="vertical">
 
                     <RelativeLayout
@@ -117,7 +117,7 @@
                         android:id="@+id/rlRecentSearch"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:background="@color/profile_back"
+                        android:background="@color/white"
                         android:orientation="vertical"
                         android:visibility="visible">
 
@@ -137,8 +137,9 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="@color/profile_back"
-
+                    android:background="@color/white"
+                    android:id="@+id/llStoreList"
+                    android:visibility="gone"
                     android:orientation="vertical">
 
                     <RelativeLayout
@@ -180,7 +181,7 @@
                         android:id="@+id/rlStoreList"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:background="@color/profile_back"
+                        android:background="@color/white"
                         android:orientation="vertical"
                         android:visibility="visible">
 
@@ -202,17 +203,17 @@
     </RelativeLayout>
     <Button
         android:id="@+id/btnSubmit"
-        android:layout_width="match_parent"
+        android:layout_width="200dp"
         android:layout_height="45dp"
         android:layout_alignParentBottom="true"
         android:layout_gravity="center_horizontal"
-
+        android:layout_centerHorizontal="true"
         android:layout_marginEnd="5dp"
         android:layout_marginStart="5dp"
         android:layout_marginBottom="5dp"
         android:background="@drawable/bg_button_noborder_disable"
         android:fontFamily="@font/sf_ui_display_regular"
-        android:text="@string/submit"
+        android:text="@string/show_results"
         android:textAllCaps="true"
         android:textColor="@color/white"/>
 </RelativeLayout>
