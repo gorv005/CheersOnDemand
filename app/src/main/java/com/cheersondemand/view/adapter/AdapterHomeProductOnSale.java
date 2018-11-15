@@ -26,7 +26,7 @@ import java.util.List;
  * Created by AB on 6/7/2018.
  */
 
-public class AdapterHomeCategories extends RecyclerView.Adapter<RecyclerView.ViewHolder > {
+public class AdapterHomeProductOnSale extends RecyclerView.Adapter<RecyclerView.ViewHolder > {
     private static final int TYPE_FOOTER = 1;
     private static final int TYPE_ITEM = 0;
 private List<AllProduct> horizontalList;
@@ -60,7 +60,7 @@ private List<AllProduct> horizontalList;
 
 
 
-    public AdapterHomeCategories(boolean isHome, List<AllProduct> horizontalList, Activity context) {
+    public AdapterHomeProductOnSale(boolean isHome, List<AllProduct> horizontalList, Activity context) {
         this.horizontalList = horizontalList;
         this.context=context;
         this.isHome=isHome;
@@ -143,11 +143,11 @@ private List<AllProduct> horizontalList;
                 @Override
                 public void onClick(View v) {
                     if(isHome){
-                        ((ActivityHome) context).addToCart(0, position, true);
+                        ((ActivityHome) context).addToCart(1, position, true);
 
                     }
                     else {
-                        ((ActivityContainer) context).addToCart(0, position, true);
+                        ((ActivityContainer) context).addToCart(1, position, true);
                     }
                 }
             });
@@ -179,10 +179,10 @@ private List<AllProduct> horizontalList;
                 @Override
                 public void onClick(View v) {
                     if (isHome) {
-                        ((ActivityHome) context).wishListUpdate(0, position, !horizontalList.get(position).getIsWishlisted());
+                        ((ActivityHome) context).wishListUpdate(1, position, !horizontalList.get(position).getIsWishlisted());
 
                     } else {
-                        ((ActivityContainer) context).wishListUpdate(0, position, !horizontalList.get(position).getIsWishlisted());
+                        ((ActivityContainer) context).wishListUpdate(1, position, !horizontalList.get(position).getIsWishlisted());
                     }
                 }
             });
@@ -207,12 +207,10 @@ private List<AllProduct> horizontalList;
                     Bundle bundle=new Bundle();
                     bundle.putString(C.CAT_ID,"");
                     bundle.putString(C.SUB_CAT_ID,"");
-                    bundle.putBoolean(C.IS_ON_SALE, false);
-
+                    bundle.putBoolean(C.IS_ON_SALE, true);
                     bundle.putInt(C.SOURCE,C.FRAGMENT_PRODUCTS_HOME);
                     intent.putExtra(C.BUNDLE,bundle);
                     intent.putExtra(C.FRAGMENT_ACTION,C.FRAGMENT_PRODUCT_LISTING);
-
                     context.startActivity(intent);
 
                 }

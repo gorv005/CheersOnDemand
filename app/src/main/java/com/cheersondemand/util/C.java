@@ -153,4 +153,5 @@ public interface C {
     int FRAGMENT_SEARCH_PRODUCT =35 ;
     String SELECTED_LOCATION ="selected_location" ;
     int FRAGMENT_STORE_LOCATION_LIST = 36;
+    String IS_ON_SALE = "is_on_sale";
 }

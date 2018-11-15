@@ -139,7 +139,7 @@ public class FragmentProductsListing extends Fragment implements View.OnClickLis
     private GridLayoutManager lLayout;
     private int productPos;
     private int secPos;
-    private boolean isAdd, isFilter = false, isSort = false,isloadMore=false,isApiWorking=false;
+    private boolean isAdd, isFilter = false, isSort = false,isloadMore=false,isApiWorking=false,isOnSale=false;
 
     public FragmentProductsListing() {
         // Required empty public constructor
@@ -154,7 +154,7 @@ public class FragmentProductsListing extends Fragment implements View.OnClickLis
         iOrderViewPresenterPresenter = new OrderViewPresenterImpl(this, getActivity());
         iHomeViewPresenterPresenter = new HomeViewPresenterImpl(this, getActivity());
         iProductDescViewPresenter = new ProductDescViewPresenterImpl(this, getActivity());
-
+        isOnSale = getArguments().getBoolean(C.IS_ON_SALE);
         catId = getArguments().getString(C.CAT_ID);
         source = getArguments().getInt(C.SOURCE);
         subCatId = getArguments().getString(C.SUB_CAT_ID);
@@ -242,10 +242,10 @@ public class FragmentProductsListing extends Fragment implements View.OnClickLis
                     sub_cat_id.add(Integer.parseInt(subCatId));
                 }
             }
-            getProductsList(page, perPage, catIdList, brandId, sub_cat_id, "" + from, "" + to, orderBy, orderField);
+            getProductsList(page, perPage, catIdList, brandId, sub_cat_id, "" + from, "" + to, orderBy, orderField,""+isOnSale);
         } else {
             if (source == C.FRAGMENT_CATEGORIES || source == C.FRAGMENT_CATEGORIES_HOME) {
-                getProductsList(page, perPage, catIdList, brandId, sub_cat_id, "" + from, "" + to, orderBy, orderField);
+                getProductsList(page, perPage, catIdList, brandId, sub_cat_id, "" + from, "" + to, orderBy, orderField,""+isOnSale);
             } else if (source == C.FRAGMENT_PRODUCTS_HOME) {
                 getAllProducts(page, perPage, "" + from, "" + to, orderBy, orderField);
 
@@ -343,14 +343,14 @@ public class FragmentProductsListing extends Fragment implements View.OnClickLis
         }
     }
 
-    void getProductsList(int page, int perPage, List<Integer> catId, List<Integer> brandId, List<Integer> sub_cat_id, String from, String to, String orderBy, String orderField) {
+    void getProductsList(int page, int perPage, List<Integer> catId, List<Integer> brandId, List<Integer> sub_cat_id, String from, String to, String orderBy, String orderField,String on_sale) {
 
         if (SharedPreference.getInstance(getActivity()).getBoolean(C.IS_LOGIN_GUEST)) {
-            iProductViewPresenter.getAllProductsFilter(false, "", catId, brandId, sub_cat_id, Util.id(getActivity()), "" + page, "" + perPage, from, to, orderBy, orderField);
+            iProductViewPresenter.getAllProductsFilter(false, "", catId, brandId, sub_cat_id, Util.id(getActivity()), "" + page, "" + perPage, from, to, orderBy, orderField,on_sale);
         } else {
             String id = "" + SharedPreference.getInstance(getActivity()).getUser(C.AUTH_USER).getData().getUser().getId();
             String token = C.bearer + SharedPreference.getInstance(getActivity()).getUser(C.AUTH_USER).getData().getToken().getAccessToken();
-            iProductViewPresenter.getAllProductsFilter(true, token, catId, brandId, sub_cat_id, Util.id(getActivity()), "" + page, "" + perPage, from, to, orderBy, orderField);
+            iProductViewPresenter.getAllProductsFilter(true, token, catId, brandId, sub_cat_id, Util.id(getActivity()), "" + page, "" + perPage, from, to, orderBy, orderField,on_sale);
         }
     }
 
@@ -849,7 +849,8 @@ public class FragmentProductsListing extends Fragment implements View.OnClickLis
                 getActivity().onBackPressed();
                 break;
             case R.id.llStoreSelect:
-                gotoStoreList();
+               // gotoStoreList();
+                gotoLocationAndStoreList();
                 break;
             case R.id.btnBrowseProduct:
                 if(source==C.FRAGMENT_CATEGORIES){
@@ -877,7 +878,15 @@ public class FragmentProductsListing extends Fragment implements View.OnClickLis
         intent.putExtra(C.BUNDLE, bundle);
         startActivity(intent);
     }
+    void gotoLocationAndStoreList() {
+        Intent intent = new Intent(getActivity(), ActivityContainer.class);
+        Bundle bundle = new Bundle();
+        intent.putExtra(C.FRAGMENT_ACTION, C.FRAGMENT_STORE_LOCATION_LIST);
+        bundle.putInt(C.FROM, C.FRAGMENT_PRODUCT_LISTING);
+        intent.putExtra(C.BUNDLE, bundle);
+        startActivity(intent);
 
+    }
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);

@@ -248,7 +248,14 @@ public class FragmentProductDescription extends Fragment implements View.OnClick
 
             }
             tvProductName.setText(product.getName());
-            tvProductPrice.setText("$" + product.getPrice());
+            if(product.getOnSale()){
+                tvProductPrice.setText("$" + product.getSalePrice());
+
+            }
+            else {
+                tvProductPrice.setText("$" + product.getPrice());
+
+            }
             tvType.setText(product.getSubCategory().getName());
             if (product.getAbv() == null) {
                 tvalcohalVol.setText("-");
@@ -833,6 +840,7 @@ public class FragmentProductDescription extends Fragment implements View.OnClick
                 Bundle bundle = new Bundle();
                 bundle.putString(C.CAT_ID, "" + product.getId());
                 bundle.putString(C.SUB_CAT_ID, "");
+                bundle.putBoolean(C.IS_ON_SALE, false);
 
                 bundle.putInt(C.SOURCE, C.FRAGMENT_PRODUCT_DESC);
                 ((ActivityContainer) getActivity()).fragmnetLoader(C.FRAGMENT_PRODUCT_LISTING, bundle);

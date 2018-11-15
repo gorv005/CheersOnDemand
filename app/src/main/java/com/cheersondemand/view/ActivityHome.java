@@ -20,15 +20,11 @@ import com.cheersondemand.model.order.CreateOrderResponse;
 import com.cheersondemand.model.order.addtocart.AddToCartResponse;
 import com.cheersondemand.model.order.updatecart.UpdateCartRequest;
 import com.cheersondemand.model.order.updatecart.UpdateCartResponse;
-import com.cheersondemand.model.search.SearchProductResponse;
-import com.cheersondemand.model.search.SearchResponse;
-import com.cheersondemand.model.search.SearchResultsResponse;
 import com.cheersondemand.model.wishlist.WishListDataResponse;
 import com.cheersondemand.model.wishlist.WishListResponse;
 import com.cheersondemand.presenter.home.order.IOrderViewPresenterPresenter;
 import com.cheersondemand.presenter.home.order.OrderViewPresenterImpl;
 import com.cheersondemand.presenter.search.ISearchViewPresenter;
-import com.cheersondemand.presenter.search.SearchViewPresenterImpl;
 import com.cheersondemand.util.C;
 import com.cheersondemand.util.SharedPreference;
 import com.cheersondemand.util.StoreProducts;
@@ -77,6 +73,10 @@ public class ActivityHome extends AppCompatActivity implements View.OnClickListe
     ImageView ivFav;
     @BindView(R.id.rlFav)
     RelativeLayout rlFav;
+    @BindView(R.id.ivExplore)
+    ImageView ivExplore;
+    @BindView(R.id.rlExplore)
+    RelativeLayout rlExplore;
     private Fragment fragment;
     boolean doubleBackToExitPressedOnce = false;
     ISearchViewPresenter iSearchViewPresenter;
@@ -97,15 +97,14 @@ public class ActivityHome extends AppCompatActivity implements View.OnClickListe
             if (action == C.FRAGMENT_PROFILE_HOME) {
                 setProfile();
             } else if (action == C.FRAGMENT_CART) {
-                setCart();
-            }
-            else if (action == C.FRAGMENT_WISHLIST) {
+              //  setCart();
+                setHome();
+                gotoCart();
+            } else if (action == C.FRAGMENT_WISHLIST) {
                 setWishlist();
-            }
-            else if (action == C.FRAGMENT_SEARCH_PRODUCT) {
+            } else if (action == C.FRAGMENT_SEARCH_PRODUCT) {
                 setSearchProducts();
-            }
-            else {
+            } else {
                 setHome();
             }
         } catch (Exception e) {
@@ -296,8 +295,7 @@ public class ActivityHome extends AppCompatActivity implements View.OnClickListe
         } else if (fragment != null && fragment instanceof FragmentProductDescription) {
             ((FragmentProductDescription) fragment).addToCart(secPos, pos, isAdd);
 
-        }
-        else if (fragment != null && fragment instanceof FragmentWishList) {
+        } else if (fragment != null && fragment instanceof FragmentWishList) {
             ((FragmentWishList) fragment).addToCart(secPos, pos, isAdd);
 
         }
@@ -310,8 +308,7 @@ public class ActivityHome extends AppCompatActivity implements View.OnClickListe
         } else if (fragment != null && fragment instanceof FragmentProductDescription) {
             ((FragmentProductDescription) fragment).addToCart(secPos, pos, isAdd);
 
-        }
-        else if (fragment != null && fragment instanceof FragmentWishList) {
+        } else if (fragment != null && fragment instanceof FragmentWishList) {
             ((FragmentWishList) fragment).addToCart(secPos, pos, isAdd);
 
         }
@@ -360,13 +357,20 @@ public class ActivityHome extends AppCompatActivity implements View.OnClickListe
         } else if (fragment != null && fragment instanceof FragmentProductDescription) {
             ((FragmentProductDescription) fragment).wishListUpdate(secPos, pos, isAdd);
 
-        }
-        else if (fragment != null && fragment instanceof FragmentWishList) {
+        } else if (fragment != null && fragment instanceof FragmentWishList) {
             ((FragmentWishList) fragment).wishListUpdate(secPos, pos, isAdd);
 
         }
     }
+    void gotoCart() {
+        Intent intent = new Intent(this, ActivityContainer.class);
+        Bundle bundle=new Bundle();
+        intent.putExtra(C.FRAGMENT_ACTION,C.FRAGMENT_CART);
+        bundle.putInt(C.SOURCE, C.FRAGMENT_PRODUCT_DESC);
+        intent.putExtra(C.BUNDLE,bundle);
+        startActivity(intent);
 
+    }
     public void setHome() {
         currentPage = getString(R.string.home);
         ivFav.setImageResource(R.drawable.heart);
@@ -391,6 +395,7 @@ public class ActivityHome extends AppCompatActivity implements View.OnClickListe
         fragmnetLoader(C.FRAGMENT_CART, bundle);
 
     }
+
     public void setWishlist() {
         setTheme(R.style.ActivityTheme);
 
@@ -406,6 +411,7 @@ public class ActivityHome extends AppCompatActivity implements View.OnClickListe
         fragmnetLoader(C.FRAGMENT_WISHLIST, bundle);
 
     }
+
     public void setSearchProducts() {
         currentPage = getString(R.string.search_result);
         ivFav.setImageResource(R.drawable.heart);
@@ -497,12 +503,14 @@ public class ActivityHome extends AppCompatActivity implements View.OnClickListe
             ((FragmentCart) fragment).disableProceedButton();
         }
     }
+
     public void getProductDesc(String query, String class_name, String class_id) {
         Fragment fragment = getVisibleFragment();
         if (fragment != null && fragment instanceof FragmentSearchProducts) {
-            ((FragmentSearchProducts) fragment).getProductDesc(query,class_name,class_id);
+            ((FragmentSearchProducts) fragment).getProductDesc(query, class_name, class_id);
         }
     }
+
     public void showMessage() {
         Fragment fragment = getVisibleFragment();
         if (fragment != null && fragment instanceof FragmentCart) {
@@ -538,7 +546,6 @@ public class ActivityHome extends AppCompatActivity implements View.OnClickListe
     public void getResponseError(String response) {
 
     }
-
 
 
     @Override

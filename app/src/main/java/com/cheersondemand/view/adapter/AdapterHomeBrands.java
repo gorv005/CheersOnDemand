@@ -78,6 +78,7 @@ public class AdapterHomeBrands extends RecyclerView.Adapter<RecyclerView.ViewHol
                     Bundle bundle = new Bundle();
                     bundle.putString(C.CAT_ID, "" + horizontalList.get(position).getId());
                     bundle.putString(C.SUB_CAT_ID, "");
+                    bundle.putBoolean(C.IS_ON_SALE, false);
 
                     bundle.putInt(C.SOURCE, C.FRAGMENT_CATEGORIES_HOME);
                     intent.putExtra(C.FRAGMENT_ACTION, C.FRAGMENT_PRODUCT_LISTING);
@@ -94,6 +95,7 @@ public class AdapterHomeBrands extends RecyclerView.Adapter<RecyclerView.ViewHol
                     Bundle bundle = new Bundle();
                     bundle.putString(C.CAT_ID, "" + horizontalList.get(position).getId());
                     bundle.putString(C.SUB_CAT_ID, "");
+                    bundle.putBoolean(C.IS_ON_SALE, false);
 
                     bundle.putInt(C.SOURCE, C.FRAGMENT_CATEGORIES_HOME);
                     intent.putExtra(C.FRAGMENT_ACTION, C.FRAGMENT_PRODUCT_LISTING);

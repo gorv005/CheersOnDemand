@@ -63,8 +63,21 @@
             android:layout_height="wrap_content" />
     </RelativeLayout>
     <RelativeLayout
+        android:id="@+id/rlExplore"
+        android:layout_weight="1"
+        android:layout_width="0dp"
+        android:layout_height="match_parent">
+        <ImageView
+            android:id="@+id/ivExplore"
+            android:src="@drawable/menu"
+            android:layout_width="wrap_content"
+            android:layout_centerInParent="true"
+            android:layout_height="wrap_content" />
+    </RelativeLayout>
+    <RelativeLayout
         android:id="@+id/rlCart"
         android:layout_weight="1"
+        android:visibility="gone"
         android:layout_width="0dp"
         android:layout_height="match_parent">
 
@@ -84,17 +97,18 @@
             android:layout_height="10dp" />
     </RelativeLayout>
     <RelativeLayout
-        android:id="@+id/rlFav"
-        android:layout_weight="1"
-        android:layout_width="0dp"
-        android:layout_height="match_parent">
-        <ImageView
-            android:id="@+id/ivFav"
-            android:src="@drawable/heart"
-            android:layout_width="wrap_content"
-            android:layout_centerInParent="true"
-            android:layout_height="wrap_content" />
-    </RelativeLayout>
+    android:id="@+id/rlFav"
+    android:layout_weight="1"
+    android:layout_width="0dp"
+    android:layout_height="match_parent">
+    <ImageView
+        android:id="@+id/ivFav"
+        android:src="@drawable/heart"
+        android:layout_width="wrap_content"
+        android:layout_centerInParent="true"
+        android:layout_height="wrap_content" />
+</RelativeLayout>
+
     <RelativeLayout
         android:id="@+id/rlProfile"
         android:layout_weight="1"

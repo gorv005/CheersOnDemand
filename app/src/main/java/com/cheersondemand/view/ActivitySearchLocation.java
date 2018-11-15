@@ -108,13 +108,13 @@ public class ActivitySearchLocation extends AppCompatActivity implements
         util = new Util();
         iLocationViewPresenter = new LocationViewPresenterImpl(this, this);
         init();
-        locationHelper = new LocationHelper(this);
+        /*locationHelper = new LocationHelper(this);
         if (locationHelper.checkPlayServices()) {
 
             // Building the GoogleApi client
             locationHelper.buildGoogleApiClient();
-        }
-        getRecentSearches();
+        }*/
+       // getRecentSearches();
       //  getAddressList();
     }
     void getAddressList() {
@@ -167,7 +167,7 @@ public class ActivitySearchLocation extends AppCompatActivity implements
             public void onTextChanged(CharSequence s, int start, int before,
                                       int count) {
                 if (autoCompleteTextView.getText().toString().length() == 0) {
-                    rlRecentSearch.setVisibility(View.VISIBLE);
+                    rlRecentSearch.setVisibility(View.GONE);
                     rlLocationSearch.setVisibility(View.GONE);
                 } else {
                     rlRecentSearch.setVisibility(View.GONE);
@@ -320,7 +320,7 @@ public class ActivitySearchLocation extends AppCompatActivity implements
     @Override
     public void onResume() {
         super.onResume();
-        locationHelper.checkPlayServices();
+      //  locationHelper.checkPlayServices();
 
         if (!mGoogleApiClient.isConnected() && !mGoogleApiClient.isConnecting()) {
             Log.v("Google API", "Connecting");

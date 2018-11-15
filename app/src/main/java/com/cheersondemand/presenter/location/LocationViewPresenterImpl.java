@@ -76,7 +76,7 @@ public class LocationViewPresenterImpl implements ILocationViewPresenter, ILocat
     @Override
     public void getRecentLocation(boolean isAuth, String token, String uuid, String user_id) {
         if (mView != null) {
-            //mView.showProgress();
+            mView.showProgress();
             iLocationViewIntractor.getRecentLocation(isAuth,token,uuid,user_id ,this);
         }
     }

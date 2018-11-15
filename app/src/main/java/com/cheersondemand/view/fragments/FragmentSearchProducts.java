@@ -109,7 +109,7 @@ public class FragmentSearchProducts extends Fragment implements ISearchViewPrese
         super.onResume();
         if (source == C.FRAGMENT_SEARCH_PRODUCT) {
             ((ActivityContainer)getActivity()).setTitle("");
-            ((ActivityContainer) getActivity()).showToolBar();
+            ((ActivityContainer) getActivity()).hideToolBar();
         }
     }
 
@@ -173,7 +173,7 @@ public class FragmentSearchProducts extends Fragment implements ISearchViewPrese
                         tvRecenetSearch.setVisibility(View.GONE);
 
                     }
-                    rlCategories.setVisibility(View.VISIBLE);
+                    rlCategories.setVisibility(View.GONE);
                 }
             }});
         etSearch.setOnFocusChangeListener(new View.OnFocusChangeListener() {
@@ -193,7 +193,7 @@ public class FragmentSearchProducts extends Fragment implements ISearchViewPrese
                         tvRecenetSearch.setVisibility(View.GONE);
 
                     }
-                    rlCategories.setVisibility(View.VISIBLE);
+                    rlCategories.setVisibility(View.GONE);
 
                 }
             }
@@ -272,8 +272,9 @@ public class FragmentSearchProducts extends Fragment implements ISearchViewPrese
                 } else {
                     categories.addAll(response.getData().getCategories());
                 }
-                adapterHomeBrands = new AdapterSearchCategories(source,isViewMore,categories, getActivity());
-                lvCategory.setAdapter(adapterHomeBrands);
+              //  adapterHomeBrands = new AdapterSearchCategories(source,isViewMore,categories, getActivity());
+               // lvCategory.setAdapter(adapterHomeBrands);
+
 
             }
 

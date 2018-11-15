@@ -45,7 +45,6 @@ import com.cheersondemand.model.order.addtocart.AddToCartResponse;
 import com.cheersondemand.model.order.updatecart.UpdateCartRequest;
 import com.cheersondemand.model.order.updatecart.UpdateCartResponse;
 import com.cheersondemand.model.products.Banner;
-import com.cheersondemand.model.products.OnSaleProduct;
 import com.cheersondemand.model.store.StoreList;
 import com.cheersondemand.model.store.StoreListResponse;
 import com.cheersondemand.model.store.UpdateStore;
@@ -67,7 +66,9 @@ import com.cheersondemand.view.ActivityContainer;
 import com.cheersondemand.view.ActivityHome;
 import com.cheersondemand.view.ActivitySearchLocation;
 import com.cheersondemand.view.adapter.AdapterHomeBrands;
+import com.cheersondemand.view.adapter.AdapterHomeCategories;
 import com.cheersondemand.view.adapter.AdapterHomeCategoriesSections;
+import com.cheersondemand.view.adapter.AdapterHomeProductOnSale;
 import com.cheersondemand.view.adapter.AdapterHomeProductsSections;
 import com.cooltechworks.views.shimmer.ShimmerRecyclerView;
 
@@ -92,7 +93,8 @@ public class FragmentHome extends Fragment implements SwipeRefreshLayout.OnRefre
     AdapterHomeCategoriesSections adapterHomeCategoriesSections;
     Util util;
 
-
+    AdapterHomeCategories adapterHomeCategories;
+    AdapterHomeProductOnSale adapterHomeProductOnSale;
     ArrayList<SectionDataModel> allSampleData;
     IHomeViewPresenterPresenter iHomeViewPresenterPresenter;
     IOrderViewPresenterPresenter iOrderViewPresenterPresenter;
@@ -127,7 +129,7 @@ public class FragmentHome extends Fragment implements SwipeRefreshLayout.OnRefre
     @BindView(R.id.rlBrands)
     RelativeLayout rlBrands;
     @BindView(R.id.rlProducts)
-    RelativeLayout rlProducts;
+    LinearLayout rlProducts;
     @BindView(R.id.swipe_refresh_layout)
     SwipeRefreshLayout swipeRefreshLayout;
     @BindView(R.id.rvBrands)
@@ -144,6 +146,14 @@ public class FragmentHome extends Fragment implements SwipeRefreshLayout.OnRefre
     LinearLayout rlBanner;
     @BindView(R.id.rlImage)
     RelativeLayout rlImage;
+    @BindView(R.id.ivCart)
+    ImageView ivCart;
+    @BindView(R.id.rvProductsOnSale)
+    RecyclerView rvProductsOnSale;
+    @BindView(R.id.tvRecommendedProducts)
+    TextView tvRecommendedProducts;
+    @BindView(R.id.tvProductsOnSale)
+    TextView tvProductsOnSale;
     private GridLayoutManager lLayout;
     int width;
     private int productPos;
@@ -255,6 +265,7 @@ public class FragmentHome extends Fragment implements SwipeRefreshLayout.OnRefre
         ivNotification.setOnClickListener(this);
         llLocationSelect.setOnClickListener(this);
         llStoreSelect.setOnClickListener(this);
+        ivCart.setOnClickListener(this);
         //  etSearchProduct.setOnClickListener(this);
         // rlSearchProduct.setOnClickListener(this);
         /*rlSearch.setOnClickListener(new View.OnClickListener() {
@@ -280,11 +291,26 @@ public class FragmentHome extends Fragment implements SwipeRefreshLayout.OnRefre
         rvBrands.setLayoutManager(lLayout);
         rvBrands.addItemDecoration(new GridSpacingItemDecoration(2, Util.dpToPx(1, getActivity()), true));
         rvBrands.setItemAnimator(new DefaultItemAnimator());
-        horizontalLayout1 = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
+        // horizontalLayout1 = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
+        rvProducts.setLayoutManager(new GridLayoutManager(getActivity(), 2));
+        rvProducts.addItemDecoration(new GridSpacingItemDecoration(2, Util.dpToPx(1, getActivity()), true));
+        rvProducts.setItemAnimator(new DefaultItemAnimator());
 
-        rvProducts.setLayoutManager(horizontalLayout1);
+        rvProductsOnSale.setLayoutManager(new GridLayoutManager(getActivity(), 2));
+        rvProductsOnSale.addItemDecoration(new GridSpacingItemDecoration(2, Util.dpToPx(1, getActivity()), true));
+        rvProductsOnSale.setItemAnimator(new DefaultItemAnimator());
 
-        rvProducts.setLayoutFrozen(true);
+        //rvProducts.setLayoutFrozen(true);
+
+        rvProducts.setHasFixedSize(true);
+        rvProducts.setNestedScrollingEnabled(true);
+
+        rvProductsOnSale.setHasFixedSize(true);
+        rvProductsOnSale.setNestedScrollingEnabled(false);
+
+        rvBrands.setHasFixedSize(true);
+        rvBrands.setNestedScrollingEnabled(false);
+
         swipeRefreshLayout.setDistanceToTriggerSync(20);
         swipeRefreshLayout.setOnRefreshListener(this);
         getProductsAndCategories();
@@ -349,6 +375,7 @@ public class FragmentHome extends Fragment implements SwipeRefreshLayout.OnRefre
             rvProductsShimmer.hideShimmerAdapter();
             rvBrands.setVisibility(View.VISIBLE);
             rvProducts.setVisibility(View.VISIBLE);
+
             if (swipeRefreshLayout != null && swipeRefreshLayout.isRefreshing()) {
                 swipeRefreshLayout.setRefreshing(false);
 
@@ -396,15 +423,26 @@ public class FragmentHome extends Fragment implements SwipeRefreshLayout.OnRefre
 
                 if (response.getData() != null && response.getData().getAllProducts() != null && response.getData().getAllProducts().size() > 0) {
                     rlProducts.setVisibility(View.VISIBLE);
-                    homeCategoriesSectionList = new ArrayList<>();
+                    tvRecommendedProducts.setVisibility(View.VISIBLE);
+                    //  homeCategoriesSectionList = new ArrayList<>();
                     allProductList = response.getData().getAllProducts();
                     StoreProducts.getInstance().saveProducts(allProductList);
-                    homeCategoriesSectionList.add(new HomeCategoriesSectionList("Recommended products", allProductList));
-                    if(onSaleProductList!=null && onSaleProductList.size()>0) {
+                   /* homeCategoriesSectionList.add(new HomeCategoriesSectionList("Recommended products", allProductList));
+                    if (onSaleProductList != null && onSaleProductList.size() > 0) {
                         homeCategoriesSectionList.add(new HomeCategoriesSectionList("Products On Sale", onSaleProductList));
                     }
                     adapterHomeCategoriesSections = new AdapterHomeCategoriesSections(getActivity(), homeCategoriesSectionList);
                     rvProducts.setAdapter(adapterHomeCategoriesSections);
+*/
+                    adapterHomeCategories = new AdapterHomeCategories(true, allProductList, getActivity());
+                    rvProducts.setAdapter(adapterHomeCategories);
+                    if (onSaleProductList != null && onSaleProductList.size() > 0) {
+                        rvProductsOnSale.setVisibility(View.VISIBLE);
+                        tvProductsOnSale.setVisibility(View.VISIBLE);
+
+                        adapterHomeProductOnSale = new AdapterHomeProductOnSale(true, onSaleProductList, getActivity());
+                        rvProductsOnSale.setAdapter(adapterHomeProductOnSale);
+                    }
 
                     SharedPreference.getInstance(getActivity()).setBoolean(C.CART_HAS_ITEM, response.getData().getHasCartProduct());
                     SharedPreference.getInstance(getActivity()).setString(C.ORDER_ID, response.getData().getUser().getOrderId());
@@ -569,9 +607,15 @@ public class FragmentHome extends Fragment implements SwipeRefreshLayout.OnRefre
             }
         }
         StoreProducts.getInstance().addProduct(product);
-
-        homeCategoriesSectionList.get(secPos).getAllProducts().set(productPos, product);
-        adapterHomeCategoriesSections.notified();
+        // homeCategoriesSectionList.get(secPos).getAllProducts().set(productPos, product);
+        // adapterHomeCategoriesSections.notified();
+        if (secPos == 0) {
+            allProductList.set(productPos, product);
+            adapterHomeCategories.notifyDataSetChanged();
+        } else if (secPos == 1) {
+            onSaleProductList.set(productPos, product);
+            adapterHomeProductOnSale.notifyDataSetChanged();
+        }
     }
 
     @Override
@@ -636,9 +680,17 @@ public class FragmentHome extends Fragment implements SwipeRefreshLayout.OnRefre
             if (response.getSuccess()) {
                 util.setSnackbarMessage(getActivity(), response.getMessage(), rlHomeView, false);
                 product.setIsWishlisted(true);
-                StoreProducts.getInstance().addProduct(product);
 
-                adapterHomeCategoriesSections.notified();
+                StoreProducts.getInstance().addProduct(product);
+                if (secPos == 0) {
+                    allProductList.set(productPos, product);
+                    adapterHomeCategories.notifyDataSetChanged();
+
+                } else if (secPos == 1) {
+                    onSaleProductList.set(productPos, product);
+                    adapterHomeProductOnSale.notifyDataSetChanged();
+
+                }
 
             } else {
                 util.setSnackbarMessage(getActivity(), response.getMessage(), rlHomeView, true);
@@ -658,8 +710,16 @@ public class FragmentHome extends Fragment implements SwipeRefreshLayout.OnRefre
                 product.setIsWishlisted(false);
                 StoreProducts.getInstance().addProduct(product);
 
-                adapterHomeCategoriesSections.notified();
+                //   adapterHomeCategoriesSections.notified();
+                if (secPos == 0) {
+                    allProductList.set(productPos, product);
+                    adapterHomeCategories.notifyDataSetChanged();
 
+                } else if (secPos == 1) {
+                    onSaleProductList.set(productPos, product);
+                    adapterHomeProductOnSale.notifyDataSetChanged();
+
+                }
             } else {
                 util.setSnackbarMessage(getActivity(), response.getMessage(), rlHomeView, true);
 
@@ -745,13 +805,23 @@ public class FragmentHome extends Fragment implements SwipeRefreshLayout.OnRefre
                 break;
 
             case R.id.llLocationSelect:
-                gotoLocation();
+                //gotoLocation();
+                gotoLocationAndStoreList();
                 break;
             case R.id.etSearchProduct:
-                gotoSearchProduct();
+                //gotoSearchProduct();
+                gotoLocationAndStoreList();
+
                 break;
             case R.id.rlSearchProduct:
-                gotoSearchProduct();
+                // gotoSearchProduct();
+                gotoLocationAndStoreList();
+
+                break;
+            case R.id.ivCart:
+                // gotoSearchProduct();
+                gotoCart();
+
                 break;
            /* case R.id.rlViewMoreCategory:
                 showViewMore();
@@ -791,21 +861,40 @@ public class FragmentHome extends Fragment implements SwipeRefreshLayout.OnRefre
         productPos = pos;
         this.secPos = secPos;
         this.isAdd = isAdd;
-        if (allProductList != null && allProductList.size() > 0) {
-            product = StoreProducts.getInstance().getProduct(allProductList.get(pos).getId());
-            if (product == null) {
-                product = allProductList.get(pos);
-            }
-            if (SharedPreference.getInstance(getActivity()).getString(C.ORDER_ID) == null) {
-                createOrder();
-            } else {
-                addToCart();
+        if(secPos==0) {
+            if (allProductList != null && allProductList.size() > 0) {
+                product = StoreProducts.getInstance().getProduct(allProductList.get(pos).getId());
+                if (product == null) {
+                    product = allProductList.get(pos);
+                }
+
             }
         }
+        else if(secPos==1) {
+            if (onSaleProductList != null && onSaleProductList.size() > 0) {
+                product = StoreProducts.getInstance().getProduct(onSaleProductList.get(pos).getId());
+                if (product == null) {
+                    product = onSaleProductList.get(pos);
+                }
 
-
+            }
+        }
+        if (SharedPreference.getInstance(getActivity()).getString(C.ORDER_ID) == null) {
+            createOrder();
+        } else {
+            addToCart();
+        }
     }
 
+    void gotoCart() {
+        Intent intent = new Intent(getActivity(), ActivityContainer.class);
+        Bundle bundle = new Bundle();
+        intent.putExtra(C.FRAGMENT_ACTION, C.FRAGMENT_CART);
+        bundle.putInt(C.SOURCE, C.FRAGMENT_PRODUCT_DESC);
+        intent.putExtra(C.BUNDLE, bundle);
+        startActivity(intent);
+
+    }
 
     public void wishListUpdate(int secPos, int pos, boolean isAdd) {
         if (!isApiWorking) {
@@ -813,18 +902,30 @@ public class FragmentHome extends Fragment implements SwipeRefreshLayout.OnRefre
             productPos = pos;
             this.secPos = secPos;
             this.isAdd = isAdd;
-            if (allProductList != null && allProductList.size() > 0) {
-                product = StoreProducts.getInstance().getProduct(allProductList.get(pos).getId());
-                if (product == null) {
-                    product = allProductList.get(pos);
-                }
-                WishListRequest wishListRequest = new WishListRequest();
-                wishListRequest.setProductId(product.getId());
-                wishListRequest.setUuid(Util.id(getActivity()));
+            if(secPos==0){
+                if (allProductList != null && allProductList.size() > 0) {
+                    product = StoreProducts.getInstance().getProduct(allProductList.get(pos).getId());
+                    if (product == null) {
+                        product = allProductList.get(pos);
+                    }
 
-                updateWishList(wishListRequest, isAdd);
+                }
+            }
+            else if(secPos==1){
+                if (onSaleProductList != null && onSaleProductList.size() > 0) {
+                    product = StoreProducts.getInstance().getProduct(onSaleProductList.get(pos).getId());
+                    if (product == null) {
+                        product = onSaleProductList.get(pos);
+                    }
+
+                }
             }
 
+            WishListRequest wishListRequest = new WishListRequest();
+            wishListRequest.setProductId(product.getId());
+            wishListRequest.setUuid(Util.id(getActivity()));
+
+            updateWishList(wishListRequest, isAdd);
         }
     }
 

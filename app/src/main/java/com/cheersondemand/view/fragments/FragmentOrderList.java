@@ -297,13 +297,22 @@ public class FragmentOrderList extends Fragment implements IOrderDetailViewPrese
                 break;
         }
     }
-    public void gotoCart(){
+   /* public void gotoCart(){
         Intent intent = new Intent(getActivity(), ActivityHome.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         Bundle bundle=new Bundle();
         bundle.putInt(C.FRAGMENT_ACTION,C.FRAGMENT_CART);
         intent.putExtra(C.BUNDLE,bundle);
         startActivity(intent);
+    }*/
+    void gotoCart() {
+        Intent intent = new Intent(getActivity(), ActivityContainer.class);
+        Bundle bundle=new Bundle();
+        intent.putExtra(C.FRAGMENT_ACTION,C.FRAGMENT_CART);
+        bundle.putInt(C.SOURCE, C.FRAGMENT_PRODUCT_DESC);
+        intent.putExtra(C.BUNDLE,bundle);
+        startActivity(intent);
+
     }
     public void gotoHome(){
         Intent intent = new Intent(getActivity(), ActivityHome.class);

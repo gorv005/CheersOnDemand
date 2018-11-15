@@ -35,8 +35,12 @@ import com.cheersondemand.model.authentication.LoginRequest;
 import com.cheersondemand.model.authentication.SignUpRequest;
 import com.cheersondemand.model.authentication.SocialLoginRequest;
 import com.cheersondemand.model.authentication.User;
+import com.cheersondemand.model.location.RecentLocationResponse;
+import com.cheersondemand.model.location.SaveLocationResponse;
 import com.cheersondemand.presenter.AuthenicationPresenterImpl;
 import com.cheersondemand.presenter.IAutheniticationPresenter;
+import com.cheersondemand.presenter.location.ILocationViewPresenter;
+import com.cheersondemand.presenter.location.LocationViewPresenterImpl;
 import com.cheersondemand.util.C;
 import com.cheersondemand.util.CustomEditText;
 import com.cheersondemand.util.DrawableClickListener;
@@ -93,7 +97,7 @@ import static com.facebook.FacebookSdk.getApplicationContext;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class FragmentAuthentication extends Fragment implements IAutheniticationPresenter.IAuthenticationView, View.OnClickListener {
+public class FragmentAuthentication extends Fragment implements IAutheniticationPresenter.IAuthenticationView, View.OnClickListener,ILocationViewPresenter.ILocationView {
 
 
     public static final int GOOGLE_LOGIN_REQUEST_CODE = 1;
@@ -156,13 +160,14 @@ public class FragmentAuthentication extends Fragment implements IAuthenitication
     FirebaseAuth mAuth;
     boolean isPasswordVisibleSignUP = false;
     String accessToken;
-    boolean isClicked = false;
+    boolean isClicked = false,isGuestUser=false;
     boolean isPasswordVisibleLogin = false;
     boolean isLoginScreen = false, isFromHome = false;
     IAutheniticationPresenter iAutheniticationPresenter;
     int source;
     private String mAccessToken;
     private Handler handler;
+    ILocationViewPresenter iLocationViewPresenter;
 
     public FragmentAuthentication() {
         // Required empty public constructor
@@ -188,6 +193,7 @@ public class FragmentAuthentication extends Fragment implements IAuthenitication
 
         util = new Util();
         iAutheniticationPresenter = new AuthenicationPresenterImpl(this, getActivity());
+        iLocationViewPresenter = new LocationViewPresenterImpl(this, getActivity());
 
         isLoginScreen = getArguments().getBoolean(C.IS_LOGIN_SCREEN);
         isFromHome = getArguments().getBoolean(C.IS_FROM_HOME);
@@ -952,6 +958,7 @@ public class FragmentAuthentication extends Fragment implements IAuthenitication
         try {
             // Log.e("DEBUG",""+response.toString());
             isClicked = false;
+            isGuestUser=false;
             btnLogin.revertAnimation();
             btnSignUp.revertAnimation();
 
@@ -972,7 +979,8 @@ public class FragmentAuthentication extends Fragment implements IAuthenitication
                         gotoHome();
                     }
                     else {
-                        gotoSearchLocationAuth();
+                       // gotoSearchLocationAuth();
+                        getRecentSearches();
                     }
                 }
             } else {
@@ -989,6 +997,7 @@ public class FragmentAuthentication extends Fragment implements IAuthenitication
     public void getResponseSuccessOfCreateGuestUser(GuestUserCreateResponse response) {
         try {
             isClicked = false;
+            isGuestUser=true;
             btnLogin.revertAnimation();
             btnSignUp.revertAnimation();
             if (response.getSuccess()) {
@@ -996,7 +1005,8 @@ public class FragmentAuthentication extends Fragment implements IAuthenitication
                     SharedPreference.getInstance(getActivity()).setBoolean(C.IS_LOGIN_GUEST, true);
 
                     SharedPreference.getInstance(getActivity()).seGuestUser(C.GUEST_USER, response.getData());
-                    gotoSearchLocation();
+                   // gotoSearchLocation();
+                    getRecentSearches();
                     //gotoHome();
                 }
             } else {
@@ -1007,7 +1017,8 @@ public class FragmentAuthentication extends Fragment implements IAuthenitication
                         gotoHome();
                     }
                     else {
-                        gotoSearchLocation();
+                       // gotoSearchLocation();
+                        getRecentSearches();
                     }
                 } else {
                     util.setSnackbarMessage(getActivity(), response.getMessage(), LLView, true);
@@ -1019,7 +1030,29 @@ public class FragmentAuthentication extends Fragment implements IAuthenitication
         }
     }
 
+    void getRecentSearches() {
+        if (SharedPreference.getInstance(getActivity()).getBoolean(C.IS_LOGIN_GUEST)) {
+            iLocationViewPresenter.getRecentLocation(false, "", Util.id(getActivity()), "" + SharedPreference.getInstance(getActivity()).geGuestUser(C.GUEST_USER).getId());
+        } else {
+            String token = C.bearer + SharedPreference.getInstance(getActivity()).getUser(C.AUTH_USER).getData().getToken().getAccessToken();
+            String id = "" + SharedPreference.getInstance(getActivity()).getUser(C.AUTH_USER).getData().getUser().getId();
 
+            iLocationViewPresenter.getRecentLocation(true, token, Util.id(getActivity()), "" + id);
+
+        }
+    }
+    void gotoLocationAndStoreList() {
+        Intent intent = new Intent(getActivity(), ActivityContainer.class);
+        if(!isGuestUser) {
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        }
+        Bundle bundle = new Bundle();
+        intent.putExtra(C.FRAGMENT_ACTION, C.FRAGMENT_STORE_LOCATION_LIST);
+        bundle.putInt(C.FROM, C.HOME);
+        intent.putExtra(C.BUNDLE, bundle);
+        startActivity(intent);
+
+    }
     void gotoSearchLocationAuth() {
         Intent intent = new Intent(getActivity(), ActivitySearchLocation.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
@@ -1032,6 +1065,11 @@ public class FragmentAuthentication extends Fragment implements IAuthenitication
         Intent intent = new Intent(getActivity(), ActivitySearchLocation.class);
         intent.putExtra(C.FROM, C.SEARCH);
         startActivityForResult(intent, C.REQUEST_ADDRESS);
+    }
+
+    @Override
+    public void getSaveLocationSuccess(SaveLocationResponse response) {
+
     }
 
     @Override
@@ -1055,6 +1093,29 @@ public class FragmentAuthentication extends Fragment implements IAuthenitication
         }
     }
 
+    @Override
+    public void onRecentLocationSuccess(RecentLocationResponse response) {
+        if (response.getSuccess()) {
+            if (response.getData() != null && response.getData().size() > 0) {
+                gotoLocationAndStoreList();
+            }
+            else {
+               gotoSearch();
+            }
+        }
+        else {
+            gotoSearch();
+        }
+    }
+
+    void gotoSearch(){
+        if(isGuestUser){
+            gotoSearchLocationAuth();
+        }
+        else {
+            gotoSearchLocation();
+        }
+    }
     @Override
     public void showProgress() {
         util.showDialog(C.MSG, getActivity());

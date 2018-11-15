@@ -146,6 +146,7 @@
     <string name="flat">Flat / House / Apartment No.</string>
     <string name="address_line_1">Address Line 1</string>
     <string name="address_line_2">Address Line 2</string>
+
     <string name="pincode">Pin Code</string>
     <string name="PhoneNumber">Phone Number</string>
     <string name="PhoneNumber_">Phone Number:</string>
@@ -301,6 +302,8 @@
     <string name="view_all_categories">View All Categories</string>
     <string name="view_all_products">View All</string>
     <string name="show_results">Show Result</string>
+    <string name="recommended_products">Recommended products</string>
+    <string name="products_on_sale">Products On Sale</string>
 
     <!--
         <string name="default_web_client_id">999387565226-hdnnhm6rhgik5ljvm06shotsi7j9883c.apps.googleusercontent.com</string>

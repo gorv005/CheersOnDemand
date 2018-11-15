@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:id="@+id/LLView"
-    android:background="@color/profile_back"
+    android:background="@color/white"
     android:layout_height="match_parent"
     android:orientation="vertical"
     >
@@ -12,16 +12,20 @@
 
 
     <LinearLayout
-        android:background="@color/white"
+        android:background="@drawable/top_banner"
         android:orientation="vertical"
+        android:paddingLeft="15dp"
+        android:paddingEnd="15dp"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="100dp">
 
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingLeft="15dp"
             android:focusable="true"
+            android:layout_marginTop="20dp"
+            android:gravity="center_vertical"
+            android:layout_gravity="center_vertical"
             android:focusableInTouchMode="true"
             android:orientation="horizontal">
 
@@ -32,16 +36,18 @@
                 android:layout_height="44dp"
                 android:maxLines="1"
                 android:lines="1"
+                android:drawableLeft="@drawable/ic_search"
+                android:background="@drawable/search_back"
                 android:singleLine="true"
                 android:layout_marginRight="10dp"
                 android:fontFamily="@font/sf_ui_display_regular"
-                android:textSize="21sp"
-                android:paddingLeft="5dp"
+                android:textSize="14.5sp"
+                android:drawablePadding="15dp"
+                android:paddingLeft="15dp"
                 android:imeOptions="actionSearch"
-                android:background="@color/white"
                 android:layout_centerHorizontal="true"
                 android:layout_centerVertical="true"
-                android:hint="@string/enter_search_name_brand"
+                android:hint="@string/search_hint"
                 android:textColor="@color/editext_text_color"
                 android:textColorHint="@color/hint_color" />
 
@@ -72,12 +78,18 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textSize="14.4sp"
+                    android:textSize="16sp"
                     android:layout_gravity="center_vertical"
                     android:paddingLeft="15dp"
-                    android:textColor="@color/profile_updated_text_color"
+                    android:textColor="@color/blue_dark"
                     android:text="@string/search_result"
                     />
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="0.5dp"
+                    android:layout_marginTop="5dp"
+                    android:layout_alignParentBottom="true"
+                    android:background="@color/spec_desc" />
                 <android.support.v7.widget.RecyclerView
                     android:layout_marginTop="5dp"
                     android:id="@+id/lvSearchResult"
@@ -100,13 +112,19 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textSize="14.4sp"
+                    android:textSize="16sp"
                     android:id="@+id/tvRecenetSearch"
                     android:layout_gravity="center_vertical"
                     android:paddingLeft="15dp"
-                    android:textColor="@color/profile_updated_text_color"
+                    android:textColor="@color/blue_dark"
                     android:text="@string/recent_searches"
                     />
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="0.5dp"
+                    android:layout_marginTop="5dp"
+                    android:layout_alignParentBottom="true"
+                    android:background="@color/spec_desc" />
                 <android.support.v7.widget.RecyclerView
                     android:layout_marginTop="5dp"
                     android:divider="@null"
@@ -122,7 +140,7 @@
 
 
             <LinearLayout
-                android:visibility="visible"
+                android:visibility="gone"
                 android:layout_marginTop="5dp"
                 android:id="@+id/rlCategories"
                 android:orientation="vertical"

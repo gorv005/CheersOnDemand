@@ -77,6 +77,7 @@ public class AdapterHomeCategoriesSections extends RecyclerView.Adapter<AdapterH
                 Bundle bundle=new Bundle();
                 bundle.putString(C.CAT_ID,"");
                 bundle.putString(C.SUB_CAT_ID,"");
+                bundle.putBoolean(C.IS_ON_SALE, false);
 
                 bundle.putInt(C.SOURCE,C.FRAGMENT_PRODUCTS_HOME);
                 intent.putExtra(C.BUNDLE,bundle);

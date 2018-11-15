@@ -33,16 +33,17 @@
                     <RelativeLayout
                         android:id="@+id/imgBack"
                         android:layout_width="25dp"
+                        android:layout_alignParentEnd="true"
                         android:layout_height="25dp"
                         android:layout_centerVertical="true"
-                        android:layout_marginLeft="20dp"
-                        android:background="@drawable/top_banner1">
+                        android:layout_marginEnd="10dp"
+                       >
 
                         <ImageView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_centerInParent="true"
-                            android:src="@drawable/left_arrow_1" />
+                            android:src="@drawable/cross_new" />
                     </RelativeLayout>
 
                     <TextView

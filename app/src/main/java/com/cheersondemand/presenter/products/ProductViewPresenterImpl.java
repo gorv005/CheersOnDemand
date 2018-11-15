@@ -93,11 +93,11 @@ public class ProductViewPresenterImpl implements IProductViewPresenter, IProduct
     }
 
     @Override
-    public void getAllProductsFilter(boolean isAuthUser, String token, List<Integer> category_id, List<Integer> brand_id, List<Integer> sub_cat_id,String uuid, String page, String per_page, String from, String to, String orderBy, String orderField) {
+    public void getAllProductsFilter(boolean isAuthUser, String token, List<Integer> category_id, List<Integer> brand_id, List<Integer> sub_cat_id,String uuid, String page, String per_page, String from, String to, String orderBy, String orderField,String on_sale) {
         if (mView != null) {
             mView.showProgress();
 
-            iProductsViewIntractor.getAllProductsFilter(isAuthUser,token,category_id,brand_id,sub_cat_id,uuid,page,per_page,from,to,orderBy,orderField,this);
+            iProductsViewIntractor.getAllProductsFilter(isAuthUser,token,category_id,brand_id,sub_cat_id,uuid,page,per_page,from,to,orderBy,orderField, on_sale,this);
         }
     }
 

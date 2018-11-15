@@ -78,8 +78,29 @@
                 android:textColorHint="@color/editext_hint_color"
                 android:textCursorDrawable="@drawable/edit_text_cursor_color"
                 android:textSize="16sp" />
-
             <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:fontFamily="@font/sf_ui_display_regular"
+                android:text="@string/address"
+                android:textColor="@color/profile_updated_text_color"
+                android:textSize="14sp" />
+
+            <EditText
+                android:id="@+id/etAddLine"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_centerHorizontal="true"
+                android:fontFamily="@font/sf_ui_display_regular"
+                android:maxLines="1"
+                android:singleLine="true"
+                android:textColor="@color/editext_text_color"
+                android:textColorHint="@color/editext_hint_color"
+                android:textCursorDrawable="@drawable/edit_text_cursor_color"
+                android:textSize="16sp" />
+            <TextView
+                android:visibility="gone"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
@@ -95,6 +116,7 @@
                 android:layout_centerHorizontal="true"
                 android:fontFamily="@font/sf_ui_display_regular"
                 android:maxLines="1"
+                android:visibility="gone"
                 android:singleLine="true"
                 android:textColor="@color/editext_text_color"
                 android:textColorHint="@color/editext_hint_color"
@@ -107,10 +129,12 @@
                 android:layout_marginTop="20dp"
                 android:fontFamily="@font/sf_ui_display_regular"
                 android:text="@string/address_line_2"
+                android:visibility="gone"
                 android:textColor="@color/profile_updated_text_color"
                 android:textSize="14sp" />
 
             <EditText
+                android:visibility="gone"
                 android:id="@+id/etAddLine2"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"

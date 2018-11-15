@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:id="@+id/LLView"
-    android:background="@color/profile_back"
+    android:background="@color/white"
     android:layout_height="match_parent"
     android:orientation="vertical"
     >
@@ -61,7 +61,7 @@
 
 
     <LinearLayout
-        android:visibility="gone"
+        android:visibility="visible"
         android:layout_marginTop="10dp"
         android:id="@+id/rlLocationSearch"
         android:orientation="vertical"
@@ -89,7 +89,7 @@
 
 
     <LinearLayout
-        android:visibility="visible"
+        android:visibility="gone"
         android:layout_marginTop="10dp"
         android:id="@+id/rlRecentSearch"
         android:orientation="vertical"

@@ -107,6 +107,7 @@ public class FragmentSelectAddressAndStore extends Fragment implements ILocation
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         btnSubmit.setOnClickListener(this);
+        imgBack.setOnClickListener(this);
         btnSubmit.setEnabled(false);
         llStoreList.setVisibility(View.GONE);
         getRecentSearches();
@@ -205,6 +206,9 @@ public class FragmentSelectAddressAndStore extends Fragment implements ILocation
         switch (v.getId()) {
             case R.id.btnSubmit:
                 updateStore();
+                break;
+            case R.id.imgBack:
+                getActivity().finish();
                 break;
         }
     }
