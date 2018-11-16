@@ -954,6 +954,7 @@ public class FragmentProductDescription extends Fragment implements View.OnClick
     void gotoCart() {
         Bundle bundle1 = new Bundle();
         bundle1.putInt(C.SOURCE, C.FRAGMENT_PRODUCT_DESC);
+        bundle1.putBoolean(C.IS_ADD_BACK, true);
         ((ActivityContainer) getActivity()).fragmnetLoader(C.FRAGMENT_CART, bundle1);
     }
 }

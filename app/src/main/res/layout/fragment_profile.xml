@@ -108,15 +108,39 @@
         </LinearLayout>
     </LinearLayout>
 
+    <ScrollView
+        android:layout_below="@id/profile"
+        android:fillViewport="true"
+        android:scrollbars="none"
+        android:layout_marginBottom="50dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/profile"
-        android:layout_marginTop="5dp"
         android:background="@color/white"
         android:orientation="vertical">
 
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_gravity="center_vertical"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:background="@color/profile_back"
+            android:paddingRight="20dp">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="14.4sp"
+                android:paddingLeft="20dp"
+                android:textStyle="bold"
 
+                android:fontFamily="@font/sf_ui_display_regular"
+                android:textColor="@color/profile_text_color"
+                android:text="@string/profile_setting"
+                />
+        </RelativeLayout>
         <RelativeLayout
             android:id="@+id/llWishList"
             android:layout_width="match_parent"
@@ -188,7 +212,7 @@
                 android:layout_centerVertical="true"
                 android:layout_marginLeft="35dp"
                 android:fontFamily="@font/sf_ui_display_regular"
-                android:text="@string/my_orders_"
+                android:text="@string/order_history"
                 android:textColor="@color/profile_item_text_color"
                 android:textSize="14.4sp" />
         </RelativeLayout>
@@ -200,40 +224,7 @@
             android:layout_marginRight="20dp"
             android:background="@color/profile_back" />
 
-        <RelativeLayout
-            android:id="@+id/llSavedAddress"
-            android:layout_width="match_parent"
-            android:layout_height="40dp"
-            android:layout_gravity="center_vertical"
-            android:gravity="center_vertical"
-            android:orientation="horizontal"
-            android:paddingLeft="20dp"
-            android:paddingRight="20dp">
 
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:src="@drawable/placeholder_8" />
-
-            <TextView
-
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:layout_marginLeft="35dp"
-                android:fontFamily="@font/sf_ui_display_regular"
-                android:text="@string/saved_add"
-                android:textColor="@color/profile_item_text_color"
-                android:textSize="14.4sp" />
-        </RelativeLayout>
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="2dp"
-            android:layout_marginLeft="20dp"
-            android:layout_marginRight="20dp"
-            android:background="@color/profile_back" />
 
         <RelativeLayout
             android:id="@+id/llPaymentInfo"
@@ -257,7 +248,7 @@
                 android:layout_centerVertical="true"
                 android:layout_marginLeft="35dp"
                 android:fontFamily="@font/sf_ui_display_regular"
-                android:text="@string/payment_info"
+                android:text="@string/billing"
                 android:textColor="@color/profile_item_text_color"
                 android:textSize="14.4sp" />
         </RelativeLayout>
@@ -269,7 +260,40 @@
             android:visibility="visible"
             android:layout_marginRight="20dp"
             android:background="@color/profile_back" />
+        <RelativeLayout
+            android:id="@+id/llSavedAddress"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_gravity="center_vertical"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:paddingLeft="20dp"
+            android:paddingRight="20dp">
 
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:src="@drawable/placeholder_8" />
+
+            <TextView
+
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="35dp"
+                android:fontFamily="@font/sf_ui_display_regular"
+                android:text="@string/addresses"
+                android:textColor="@color/profile_item_text_color"
+                android:textSize="14.4sp" />
+        </RelativeLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:background="@color/profile_back" />
         <RelativeLayout
             android:id="@+id/llConnectedAcc"
             android:layout_width="match_parent"
@@ -336,43 +360,8 @@
         <View
             android:id="@+id/viewChangePassword"
             android:layout_width="match_parent"
-            android:layout_height="5dp"
-            android:background="@color/profile_back" />
-
-        <RelativeLayout
-            android:id="@+id/llHelp"
-            android:layout_width="match_parent"
-            android:layout_height="40dp"
-            android:layout_gravity="center_vertical"
-            android:gravity="center_vertical"
-            android:orientation="horizontal"
-            android:paddingLeft="20dp"
-            android:paddingRight="20dp">
-
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:src="@drawable/box" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:layout_marginLeft="35dp"
-                android:fontFamily="@font/sf_ui_display_regular"
-                android:text="@string/help_center"
-                android:textColor="@color/profile_item_text_color"
-                android:textSize="14.4sp" />
-        </RelativeLayout>
-
-        <View
-            android:layout_width="match_parent"
             android:layout_height="2dp"
-            android:layout_marginLeft="20dp"
-            android:layout_marginRight="20dp"
             android:background="@color/profile_back" />
-
         <RelativeLayout
             android:id="@+id/llNotification"
             android:layout_width="match_parent"
@@ -416,39 +405,6 @@
             android:layout_marginRight="20dp"
             android:background="@color/profile_back" />
         <RelativeLayout
-            android:id="@+id/llBecomePartner"
-            android:layout_width="match_parent"
-            android:layout_height="40dp"
-            android:layout_gravity="center_vertical"
-            android:gravity="center_vertical"
-            android:orientation="horizontal"
-            android:paddingLeft="20dp"
-            android:paddingRight="20dp">
-
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:src="@drawable/become_partner" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:layout_marginLeft="35dp"
-                android:fontFamily="@font/sf_ui_display_regular"
-                android:text="@string/become_partner"
-                android:textColor="@color/profile_item_text_color"
-                android:textSize="14.4sp" />
-        </RelativeLayout>
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="2dp"
-            android:layout_marginLeft="20dp"
-            android:layout_marginRight="20dp"
-            android:background="@color/profile_back" />
-        <RelativeLayout
             android:id="@+id/llLogout"
             android:layout_width="match_parent"
             android:layout_height="40dp"
@@ -481,6 +437,95 @@
             android:layout_marginLeft="20dp"
             android:layout_marginRight="20dp"
             android:background="@color/profile_back" />
-    </LinearLayout>
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_gravity="center_vertical"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:background="@color/profile_back"
+            android:paddingRight="20dp">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="14.4sp"
+                android:paddingLeft="20dp"
+                android:textStyle="bold"
 
+                android:fontFamily="@font/sf_ui_display_regular"
+                android:textColor="@color/profile_text_color"
+                android:text="@string/more_actions"
+                />
+        </RelativeLayout>
+        <RelativeLayout
+            android:id="@+id/llHelp"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_gravity="center_vertical"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:paddingLeft="20dp"
+            android:paddingRight="20dp">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:src="@drawable/box" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="35dp"
+                android:fontFamily="@font/sf_ui_display_regular"
+                android:text="@string/help_center"
+                android:textColor="@color/profile_item_text_color"
+                android:textSize="14.4sp" />
+        </RelativeLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:background="@color/profile_back" />
+
+
+        <RelativeLayout
+            android:id="@+id/llBecomePartner"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_gravity="center_vertical"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:paddingLeft="20dp"
+            android:paddingRight="20dp">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:src="@drawable/become_partner" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="35dp"
+                android:fontFamily="@font/sf_ui_display_regular"
+                android:text="@string/become_partner"
+                android:textColor="@color/profile_item_text_color"
+                android:textSize="14.4sp" />
+        </RelativeLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:background="@color/profile_back" />
+
+    </LinearLayout>
+    </ScrollView>
 </RelativeLayout>

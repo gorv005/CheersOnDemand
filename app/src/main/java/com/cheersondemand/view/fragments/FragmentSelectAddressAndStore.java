@@ -12,7 +12,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.LinearLayout;
-import android.widget.ListView;
 import android.widget.RelativeLayout;
 
 import com.cheersondemand.R;
@@ -29,6 +28,7 @@ import com.cheersondemand.presenter.location.LocationViewPresenterImpl;
 import com.cheersondemand.presenter.store.IStoreViewPresenter;
 import com.cheersondemand.presenter.store.StoreViewPresenterImpl;
 import com.cheersondemand.util.C;
+import com.cheersondemand.util.NonScrollListView;
 import com.cheersondemand.util.SharedPreference;
 import com.cheersondemand.util.StoreProducts;
 import com.cheersondemand.util.Util;
@@ -52,11 +52,11 @@ public class FragmentSelectAddressAndStore extends Fragment implements ILocation
     @BindView(R.id.imgBack)
     RelativeLayout imgBack;
     @BindView(R.id.lvAddressList)
-    ListView lvAddressList;
+    NonScrollListView lvAddressList;
     @BindView(R.id.rlRecentSearch)
     LinearLayout rlRecentSearch;
     @BindView(R.id.lvStoreList)
-    ListView lvStoreList;
+    NonScrollListView lvStoreList;
     @BindView(R.id.rlStoreList)
     LinearLayout rlStoreList;
     @BindView(R.id.rlStoreView)
@@ -256,6 +256,7 @@ public class FragmentSelectAddressAndStore extends Fragment implements ILocation
                     lvStoreList.setAdapter(adapterStore);
                 }
             } else {
+                llStoreList.setVisibility(View.GONE);
                 util.setSnackbarMessage(getActivity(), response.getMessage(), LLView, true);
 
             }

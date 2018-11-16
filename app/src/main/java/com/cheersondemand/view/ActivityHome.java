@@ -313,7 +313,12 @@ public class ActivityHome extends AppCompatActivity implements View.OnClickListe
 
         }
     }
-
+    public void showAlert(){
+        Fragment fragment = getVisibleFragment();
+        if (fragment != null && fragment instanceof FragmentWishList) {
+            ((FragmentWishList) fragment).showAlert();
+        }
+    }
     @Override
     protected void onDestroy() {
         super.onDestroy();
@@ -367,6 +372,7 @@ public class ActivityHome extends AppCompatActivity implements View.OnClickListe
         Bundle bundle=new Bundle();
         intent.putExtra(C.FRAGMENT_ACTION,C.FRAGMENT_CART);
         bundle.putInt(C.SOURCE, C.FRAGMENT_PRODUCT_DESC);
+        bundle.putBoolean(C.IS_ADD_BACK, false);
         intent.putExtra(C.BUNDLE,bundle);
         startActivity(intent);
 

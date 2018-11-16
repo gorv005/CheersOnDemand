@@ -93,7 +93,13 @@ public class ItemViewHolder extends RecyclerView.ViewHolder {
 
             }
             else {
-                ((ActivityContainer) context).showAlert();
+                if(source==C.FRAGMENT_PROFILE_HOME) {
+                    ((ActivityContainer) context).showAlert();
+                }
+                else if(source==C.FRAGMENT_PRODUCTS_HOME) {
+                    ((ActivityHome) context).showAlert();
+
+                }
                 itemViewHolder.tvAddToCart.setTextColor(ContextCompat.getColor(context, R.color.green_disable));
                 if(allProduct.getPrice()==null) {
                     itemViewHolder.tvProductPrice.setText("");

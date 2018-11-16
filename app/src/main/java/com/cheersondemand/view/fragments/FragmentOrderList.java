@@ -309,6 +309,7 @@ public class FragmentOrderList extends Fragment implements IOrderDetailViewPrese
         Intent intent = new Intent(getActivity(), ActivityContainer.class);
         Bundle bundle=new Bundle();
         intent.putExtra(C.FRAGMENT_ACTION,C.FRAGMENT_CART);
+        bundle.putBoolean(C.IS_ADD_BACK, false);
         bundle.putInt(C.SOURCE, C.FRAGMENT_PRODUCT_DESC);
         intent.putExtra(C.BUNDLE,bundle);
         startActivity(intent);

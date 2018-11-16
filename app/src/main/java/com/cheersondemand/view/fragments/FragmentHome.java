@@ -896,6 +896,7 @@ public class FragmentHome extends Fragment implements SwipeRefreshLayout.OnRefre
         Bundle bundle = new Bundle();
         intent.putExtra(C.FRAGMENT_ACTION, C.FRAGMENT_CART);
         bundle.putInt(C.SOURCE, C.FRAGMENT_PRODUCT_DESC);
+        bundle.putBoolean(C.IS_ADD_BACK, false);
         intent.putExtra(C.BUNDLE, bundle);
         startActivity(intent);
 

@@ -253,8 +253,11 @@ public class ActivityContainer extends AppCompatActivity {
                 break;
             case C.FRAGMENT_CART:
                 fragment = new FragmentCart();
+
                 fragmentTransaction.replace(R.id.container, fragment);
-                fragmentTransaction.addToBackStack(C.TAG_FRAGMENT_CART);
+                if (bundle.getBoolean(C.IS_ADD_BACK)) {
+                    fragmentTransaction.addToBackStack(C.TAG_FRAGMENT_CART);
+                }
                 break;
             case C.FRAGMENT_PRODUCT_LISTING:
                 getSupportActionBar().hide();
