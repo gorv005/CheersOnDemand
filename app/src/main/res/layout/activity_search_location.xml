@@ -33,7 +33,7 @@
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:paddingLeft="15dp"
+                android:paddingLeft="10dp"
                 android:focusable="true"
                 android:focusableInTouchMode="true"
                 android:orientation="horizontal">
@@ -45,9 +45,11 @@
                     android:layout_height="44dp"
                     android:layout_marginRight="10dp"
                     android:fontFamily="@font/sf_ui_display_regular"
-                    android:textSize="21sp"
-                    android:paddingLeft="5dp"
-                    android:background="@color/white"
+                    android:textSize="14.5sp"
+                    android:focusable="true"
+
+                    android:paddingLeft="15dp"
+                    android:background="@drawable/edit_text_back_enable"
                     android:layout_centerHorizontal="true"
                     android:layout_centerVertical="true"
                     android:hint="@string/enter_your_location"
@@ -74,6 +76,7 @@
             android:layout_height="wrap_content"
             android:textSize="14.4sp"
             android:paddingLeft="15dp"
+            android:visibility="visible"
             android:textColor="@color/profile_updated_text_color"
             android:text="@string/search_result"
             />

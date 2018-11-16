@@ -162,6 +162,9 @@ public class ActivitySearchLocation extends AppCompatActivity implements
         } else {
             imgBack.setVisibility(View.GONE);
         }
+        autoCompleteTextView.requestFocus();
+        rlLocationSearch.setVisibility(View.GONE);
+
         autoCompleteTextView.addTextChangedListener(new TextWatcher() {
 
             public void onTextChanged(CharSequence s, int start, int before,
