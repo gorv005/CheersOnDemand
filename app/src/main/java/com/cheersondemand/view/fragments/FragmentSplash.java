@@ -25,6 +25,7 @@ import com.cheersondemand.R;
 import com.cheersondemand.util.C;
 import com.cheersondemand.util.SharedPreference;
 import com.cheersondemand.util.Util;
+import com.cheersondemand.view.ActivityContainer;
 import com.cheersondemand.view.ActivitySearchLocation;
 import com.cheersondemand.view.MainActivity;
 
@@ -103,11 +104,15 @@ public class FragmentSplash extends Fragment {
                                     SharedPreference.getInstance(getActivity()).setLocation(C.SELECTED_LOCATION, null);
 
                                     if (SharedPreference.getInstance(getActivity()).getBoolean(C.IS_LOGIN)) {
-
-                                        Intent intent = new Intent(getActivity(), ActivitySearchLocation.class);
-                                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                                        intent.putExtra(C.FROM, C.SEARCH);
-                                        startActivity(intent);
+                                         if(SharedPreference.getInstance(getActivity()).getBoolean(C.IS_ANY_ADDRESS_ADDED)){
+                                             gotoLocationAndStoreList();
+                                         }
+                                         else {
+                                             Intent intent = new Intent(getActivity(), ActivitySearchLocation.class);
+                                             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                                             intent.putExtra(C.FROM, C.SEARCH);
+                                             startActivity(intent);
+                                         }
                                    /* Intent intent = new Intent(getActivity(), ActivityHome.class);
                                     intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                                     getActivity().startActivity(intent);*/
@@ -137,7 +142,15 @@ public class FragmentSplash extends Fragment {
             e.printStackTrace();
         }
     }
+    void gotoLocationAndStoreList() {
+        Intent intent = new Intent(getActivity(), ActivityContainer.class);
+        Bundle bundle = new Bundle();
+        intent.putExtra(C.FRAGMENT_ACTION, C.FRAGMENT_STORE_LOCATION_LIST);
+        bundle.putInt(C.FROM, C.HOME);
+        intent.putExtra(C.BUNDLE, bundle);
+        startActivity(intent);
 
+    }
     public void startFadeInAnimation() {
 
         ivSplash.setVisibility(View.INVISIBLE);

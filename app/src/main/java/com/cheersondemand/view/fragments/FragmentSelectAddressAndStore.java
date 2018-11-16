@@ -340,7 +340,7 @@ public class FragmentSelectAddressAndStore extends Fragment implements ILocation
             rlRecentSearch.setVisibility(View.VISIBLE);
 
             if (response.getData() != null && response.getData().size() > 0) {
-
+                SharedPreference.getInstance(getActivity()).setBoolean(C.IS_ANY_ADDRESS_ADDED,true);
                 recentLocation = SharedPreference.getInstance(getActivity()).getString(C.LOCATION_SELECTED);
                 mRecentLocations = SharedPreference.getInstance(getActivity()).getLocation(C.SELECTED_LOCATION);
                 adapterSavedLocations = new AdapterSavedLocations(source, getActivity(), response.getData(), recentLocation, mRecentLocations);

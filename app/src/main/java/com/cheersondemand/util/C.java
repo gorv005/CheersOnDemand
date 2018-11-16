@@ -154,4 +154,5 @@ public interface C {
     String SELECTED_LOCATION ="selected_location" ;
     int FRAGMENT_STORE_LOCATION_LIST = 36;
     String IS_ON_SALE = "is_on_sale";
+    String IS_ANY_ADDRESS_ADDED = "is_any_address_added";
 }
