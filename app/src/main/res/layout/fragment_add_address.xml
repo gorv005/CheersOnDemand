@@ -87,7 +87,7 @@
                 android:textColor="@color/profile_updated_text_color"
                 android:textSize="14sp" />
 
-            <EditText
+            <AutoCompleteTextView
                 android:id="@+id/etAddLine"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"

@@ -78,6 +78,8 @@ public class FragmentSelectAddressAndStore extends Fragment implements ILocation
     Button btnSubmit;
     @BindView(R.id.llStoreList)
     LinearLayout llStoreList;
+    @BindView(R.id.rlAddNewAddress)
+    RelativeLayout rlAddNewAddress;
 
     public FragmentSelectAddressAndStore() {
         // Required empty public constructor
@@ -108,15 +110,17 @@ public class FragmentSelectAddressAndStore extends Fragment implements ILocation
         super.onViewCreated(view, savedInstanceState);
         btnSubmit.setOnClickListener(this);
         imgBack.setOnClickListener(this);
+        rlAddNewAddress.setOnClickListener(this);
         btnSubmit.setEnabled(false);
         llStoreList.setVisibility(View.GONE);
-        getRecentSearches();
+
     }
 
     @Override
     public void onResume() {
         super.onResume();
         ((ActivityContainer) getActivity()).hideToolBar();
+        getRecentSearches();
     }
 
     void getStoreList() {
@@ -210,6 +214,17 @@ public class FragmentSelectAddressAndStore extends Fragment implements ILocation
             case R.id.imgBack:
                 getActivity().finish();
                 break;
+            case R.id.rlAddNewAddress:
+                Intent intent=new Intent(getActivity(), ActivityContainer.class);
+                Bundle bundle=new Bundle();
+                bundle.putBoolean(C.IS_EDIT,false);
+                bundle.putBoolean(C.IS_FROM_CHECKOUT, false);
+                bundle.putBoolean(C.IS_RETRY_PAYEMNT, false);
+
+                intent.putExtra(C.BUNDLE,bundle);
+                intent.putExtra(C.FRAGMENT_ACTION,C.FRAGMENT_ADD_ADDRESS);
+                startActivity(intent);
+                break;
         }
     }
 
@@ -240,8 +255,7 @@ public class FragmentSelectAddressAndStore extends Fragment implements ILocation
                     adapterStore = new AdapterStoresListing(source, getActivity(), storeList, storeList1);
                     lvStoreList.setAdapter(adapterStore);
                 }
-            }
-            else {
+            } else {
                 util.setSnackbarMessage(getActivity(), response.getMessage(), LLView, true);
 
             }

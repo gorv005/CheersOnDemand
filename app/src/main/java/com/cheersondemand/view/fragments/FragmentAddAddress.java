@@ -10,10 +10,14 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.text.Editable;
+import android.text.Html;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RelativeLayout;
@@ -34,6 +38,16 @@ import com.cheersondemand.util.C;
 import com.cheersondemand.util.SharedPreference;
 import com.cheersondemand.util.Util;
 import com.cheersondemand.view.ActivityContainer;
+import com.cheersondemand.view.adapter.location.PlaceArrayAdapter;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.common.api.PendingResult;
+import com.google.android.gms.common.api.ResultCallback;
+import com.google.android.gms.location.places.Place;
+import com.google.android.gms.location.places.PlaceBuffer;
+import com.google.android.gms.location.places.Places;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.LatLngBounds;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -42,7 +56,9 @@ import butterknife.Unbinder;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class FragmentAddAddress extends Fragment implements View.OnClickListener, IAddressViewPresenter.IAddressView , ICardViewPresenter.ICardView{
+public class FragmentAddAddress extends Fragment implements View.OnClickListener, IAddressViewPresenter.IAddressView, ICardViewPresenter.ICardView,
+        GoogleApiClient.OnConnectionFailedListener,
+        GoogleApiClient.ConnectionCallbacks {
 
 
     @BindView(R.id.etName)
@@ -60,13 +76,21 @@ public class FragmentAddAddress extends Fragment implements View.OnClickListener
     @BindView(R.id.btnSaveAdd)
     Button btnSaveAdd;
     Unbinder unbinder;
-    boolean isEdit, isFromCheckOut,isRetryPayment=false;
+    boolean isEdit, isFromCheckOut, isRetryPayment = false;
     Address address1;
     IAddressViewPresenter iAddressViewPresenter;
     @BindView(R.id.rlView)
     RelativeLayout rlView;
     Util util;
     ICardViewPresenter iCardViewPresenter;
+    @BindView(R.id.etAddLine)
+    AutoCompleteTextView etAddLine;
+    private static final int GOOGLE_API_CLIENT_ID = 0;
+    private static final LatLngBounds BOUNDS_MOUNTAIN_VIEW = new LatLngBounds(
+            new LatLng(37.398160, -122.180831), new LatLng(37.430610, -121.972090));
+    private GoogleApiClient mGoogleApiClient;
+    private PlaceArrayAdapter mPlaceArrayAdapter;
+    private static final String LOG_TAG = "ADDRESS";
 
     public FragmentAddAddress() {
         // Required empty public constructor
@@ -88,6 +112,12 @@ public class FragmentAddAddress extends Fragment implements View.OnClickListener
         if (isEdit) {
             address1 = (Address) getArguments().getSerializable(C.ADDRESS);
         }
+
+        mGoogleApiClient = new GoogleApiClient.Builder(getActivity())
+                .addApi(Places.GEO_DATA_API)
+                .enableAutoManage(getActivity(), GOOGLE_API_CLIENT_ID, this)
+                .addConnectionCallbacks(this)
+                .build();
     }
 
     @Override
@@ -104,10 +134,10 @@ public class FragmentAddAddress extends Fragment implements View.OnClickListener
     public void onResume() {
         super.onResume();
         if (isEdit) {
-            ((ActivityContainer)getActivity()).setTitle(getString(R.string.edit_address));
+            ((ActivityContainer) getActivity()).setTitle(getString(R.string.edit_address));
 
         } else {
-            ((ActivityContainer)getActivity()).setTitle(getString(R.string.add_address));
+            ((ActivityContainer) getActivity()).setTitle(getString(R.string.add_address));
 
         }
     }
@@ -116,17 +146,36 @@ public class FragmentAddAddress extends Fragment implements View.OnClickListener
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         btnSaveAdd.setOnClickListener(this);
+        etAddLine.setThreshold(1);
+        etAddLine.setOnItemClickListener(mAutocompleteClickListener);
+        mPlaceArrayAdapter = new PlaceArrayAdapter(getActivity(), android.R.layout.simple_list_item_1,
+                BOUNDS_MOUNTAIN_VIEW, null);
+        etAddLine.setAdapter(mPlaceArrayAdapter);
         initFields();
         fillFields();
     }
 
+    private AdapterView.OnItemClickListener mAutocompleteClickListener
+            = new AdapterView.OnItemClickListener() {
+        @Override
+        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+            final PlaceArrayAdapter.PlaceAutocomplete item = mPlaceArrayAdapter.getItem(position);
+            final String placeId = String.valueOf(item.placeId);
+            Log.i(LOG_TAG, "Selected: " + item.description);
+            PendingResult<PlaceBuffer> placeResult = Places.GeoDataApi
+                    .getPlaceById(mGoogleApiClient, placeId);
+            placeResult.setResultCallback(mUpdatePlaceDetailsCallback);
+            Log.i(LOG_TAG, "Fetching details for ID: " + item.placeId);
+        }
+    };
 
     void fillFields() {
         if (isEdit) {
             etName.setText(address1.getName());
             etFlat.setText(address1.getFlatNo());
-            etAddLine1.setText(address1.getAddressFirst());
-            etAddLine2.setText(address1.getAddressSecond());
+            etAddLine.setText(address1.getAddress());
+           /* etAddLine1.setText(address1.getAddressFirst());
+            etAddLine2.setText(address1.getAddressSecond());*/
             etPincode.setText(address1.getZipCode());
             etPhoneNo.setText(address1.getPhoneNumber());
             btnSaveAdd.setBackground(ContextCompat.getDrawable(getActivity(), R.drawable.bg_button_enable));
@@ -134,6 +183,24 @@ public class FragmentAddAddress extends Fragment implements View.OnClickListener
             btnSaveAdd.setText(getString(R.string.update_address));
         }
     }
+
+    private ResultCallback<PlaceBuffer> mUpdatePlaceDetailsCallback
+            = new ResultCallback<PlaceBuffer>() {
+        @Override
+        public void onResult(PlaceBuffer places) {
+            if (!places.getStatus().isSuccess()) {
+                Log.e(LOG_TAG, "Place query did not complete. Error: " +
+                        places.getStatus().toString());
+                return;
+            }
+            // Selecting the first object buffer.
+            final Place place = places.get(0);
+            CharSequence attributions = places.getAttributions();
+
+            etAddLine.setText(place.getAddress() + "");
+
+        }
+    };
 
     @Override
     public void onDestroyView() {
@@ -247,7 +314,7 @@ public class FragmentAddAddress extends Fragment implements View.OnClickListener
         });
         etPhoneNo.addTextChangedListener(new AutoAddTextWatcher(etPhoneNo,
                 "-",
-                3,6));
+                3, 6));
 /*
         etPhoneNo.addTextChangedListener(new TextWatcher() {
 
@@ -288,31 +355,27 @@ public class FragmentAddAddress extends Fragment implements View.OnClickListener
         if (etName.getText().length() > 0 && etName.length() < 31) {
             if (etFlat.getText().length() > 0) {
 
-                if (etAddLine1.getText().length() > 0) {
-                    if (etAddLine2.getText().length() > 0) {
+                if (etAddLine.getText().length() > 0) {
 
-                        if (etPincode.getText().length() > 0) {
+                    if (etPincode.getText().length() > 0) {
 
-                            if (etPhoneNo.getText().length() > 0 && etPhoneNo.length() == 12) {
+                        if (etPhoneNo.getText().length() > 0 && etPhoneNo.length() == 12) {
 
 
-                                btnSaveAdd.setBackground(ContextCompat.getDrawable(getActivity(), R.drawable.bg_button_enable));
-                                btnSaveAdd.setEnabled(true);
+                            btnSaveAdd.setBackground(ContextCompat.getDrawable(getActivity(), R.drawable.bg_button_enable));
+                            btnSaveAdd.setEnabled(true);
 
-                            } else {
-
-                                btnSaveAdd.setBackground(ContextCompat.getDrawable(getActivity(), R.drawable.button_disable));
-                                btnSaveAdd.setEnabled(false);
-
-                            }
                         } else {
+
                             btnSaveAdd.setBackground(ContextCompat.getDrawable(getActivity(), R.drawable.button_disable));
                             btnSaveAdd.setEnabled(false);
+
                         }
                     } else {
                         btnSaveAdd.setBackground(ContextCompat.getDrawable(getActivity(), R.drawable.button_disable));
                         btnSaveAdd.setEnabled(false);
                     }
+
 
                 } else {
                     btnSaveAdd.setBackground(ContextCompat.getDrawable(getActivity(), R.drawable.button_disable));
@@ -356,8 +419,10 @@ public class FragmentAddAddress extends Fragment implements View.OnClickListener
         Address address = new Address();
         address.setName(etName.getText().toString());
         address.setFlatNo(etFlat.getText().toString());
-        address.setAddressFirst(etAddLine1.getText().toString());
-        address.setAddressSecond(etAddLine2.getText().toString());
+        address.setAddress(etAddLine.getText().toString());
+
+      /*  address.setAddressFirst(etAddLine1.getText().toString());
+        address.setAddressSecond(etAddLine2.getText().toString());*/
         address.setZipCode(etPincode.getText().toString());
         address.setPhoneNumber(etPhoneNo.getText().toString());
         addressRequest.setAddress(address);
@@ -374,8 +439,9 @@ public class FragmentAddAddress extends Fragment implements View.OnClickListener
         Address address = new Address();
         address.setName(etName.getText().toString());
         address.setFlatNo(etFlat.getText().toString());
-        address.setAddressFirst(etAddLine1.getText().toString());
-        address.setAddressSecond(etAddLine2.getText().toString());
+        address.setAddress(etAddLine.getText().toString());
+       /* address.setAddressFirst(etAddLine1.getText().toString());
+        address.setAddressSecond(etAddLine2.getText().toString());*/
         address.setZipCode(etPincode.getText().toString());
         address.setPhoneNumber(etPhoneNo.getText().toString());
         addressRequest.setAddress(address);
@@ -391,8 +457,9 @@ public class FragmentAddAddress extends Fragment implements View.OnClickListener
         Address address = new Address();
         address.setName(etName.getText().toString());
         address.setFlatNo(etFlat.getText().toString());
-        address.setAddressFirst(etAddLine1.getText().toString());
-        address.setAddressSecond(etAddLine2.getText().toString());
+        address.setAddress(etAddLine.getText().toString());
+       /* address.setAddressFirst(etAddLine1.getText().toString());
+        address.setAddressSecond(etAddLine2.getText().toString());*/
         address.setZipCode(etPincode.getText().toString());
         address.setPhoneNumber(etPhoneNo.getText().toString());
         addressRequest.setAddress(address);
@@ -402,12 +469,14 @@ public class FragmentAddAddress extends Fragment implements View.OnClickListener
         String token = C.bearer + SharedPreference.getInstance(getActivity()).getUser(C.AUTH_USER).getData().getToken().getAccessToken();
         iAddressViewPresenter.addDeliveryAddress(token, id, order_id, addressRequest);
     }
+
     void getCardList() {
         String id = "" + SharedPreference.getInstance(getActivity()).getUser(C.AUTH_USER).getData().getUser().getId();
 
         String token = C.bearer + SharedPreference.getInstance(getActivity()).getUser(C.AUTH_USER).getData().getToken().getAccessToken();
         iCardViewPresenter.getCardList(token, id);
     }
+
     @Override
     public void onRemoveAddressSuccess(AddressAddResponse response) {
         try {
@@ -472,12 +541,12 @@ public class FragmentAddAddress extends Fragment implements View.OnClickListener
     public void onAddDeliveryAddressSuccess(AddressAddResponse Response) {
         try {
 
-                if (Response.getSuccess()) {
-                  //  ((ActivityContainer) getActivity()).fragmnetLoader(C.FRAGMENT_PAYMENT_CONFIRMATION, null);
-                    getCardList();
-                } else {
-                    dialog(Response.getMessage());
-                }
+            if (Response.getSuccess()) {
+                //  ((ActivityContainer) getActivity()).fragmnetLoader(C.FRAGMENT_PAYMENT_CONFIRMATION, null);
+                getCardList();
+            } else {
+                dialog(Response.getMessage());
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -487,12 +556,11 @@ public class FragmentAddAddress extends Fragment implements View.OnClickListener
     public void onSuccessCardList(CardListResponse response) {
         if (response.getSuccess()) {
             if (response.getData() != null && response.getData().size() > 0) {
-                if(isRetryPayment){
-                 getActivity().onBackPressed();
-                }
-                else {
-                    Bundle bundle=new Bundle();
-                    bundle.putBoolean(C.IS_RETRY_PAYEMNT,false);
+                if (isRetryPayment) {
+                    getActivity().onBackPressed();
+                } else {
+                    Bundle bundle = new Bundle();
+                    bundle.putBoolean(C.IS_RETRY_PAYEMNT, false);
 
                     ((ActivityContainer) getActivity()).fragmnetLoader(C.FRAGMENT_PAYMENT_CONFIRMATION, bundle);
 
@@ -502,8 +570,7 @@ public class FragmentAddAddress extends Fragment implements View.OnClickListener
                 gotoCard();
 
             }
-        }
-        else {
+        } else {
             // tvNoCardAvailable.setVisibility(View.VISIBLE);
 
             gotoCard();
@@ -515,7 +582,8 @@ public class FragmentAddAddress extends Fragment implements View.OnClickListener
     public void onSuccessAddCard(CardAddResponse response) {
 
     }
-    void gotoCard(){
+
+    void gotoCard() {
         Bundle bundle3 = new Bundle();
 
         bundle3.putBoolean(C.IS_FROM_CHECKOUT, true);
@@ -523,6 +591,7 @@ public class FragmentAddAddress extends Fragment implements View.OnClickListener
 
         ((ActivityContainer) getActivity()).fragmnetLoader(C.FRAGMENT_ADD_CARD, bundle3);
     }
+
     @Override
     public void getResponseError(String response) {
         util.setSnackbarMessage(getActivity(), response, rlView, true);
@@ -566,6 +635,25 @@ public class FragmentAddAddress extends Fragment implements View.OnClickListener
 
         dialog.show();
     }
+
+    @Override
+    public void onConnected(@Nullable Bundle bundle) {
+        mPlaceArrayAdapter.setGoogleApiClient(mGoogleApiClient);
+        Log.i(LOG_TAG, "Google Places API connected.");
+
+    }
+
+    @Override
+    public void onConnectionSuspended(int i) {
+        mPlaceArrayAdapter.setGoogleApiClient(null);
+    }
+
+    @Override
+    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
+        Log.e(LOG_TAG, "Google Places API connection failed with error code: "
+                + connectionResult.getErrorCode());
+    }
+
     public class AutoAddTextWatcher implements TextWatcher {
         private CharSequence mBeforeTextChanged;
         private TextWatcher mTextWatcher;
@@ -573,12 +661,13 @@ public class FragmentAddAddress extends Fragment implements View.OnClickListener
         private EditText mEditText;
         private String mAppentText;
 
-        public AutoAddTextWatcher(EditText editText, String appendText, int... position){
+        public AutoAddTextWatcher(EditText editText, String appendText, int... position) {
             this.mEditText = editText;
             this.mAppentText = appendText;
             this.mArray_pos = position.clone();
         }
-        public AutoAddTextWatcher(EditText editText, String appendText, TextWatcher textWatcher, int... position){
+
+        public AutoAddTextWatcher(EditText editText, String appendText, TextWatcher textWatcher, int... position) {
             this(editText, appendText, position);
             this.mTextWatcher = textWatcher;
         }
@@ -587,7 +676,7 @@ public class FragmentAddAddress extends Fragment implements View.OnClickListener
         public void beforeTextChanged(CharSequence s, int start, int count, int after) {
             mBeforeTextChanged = s.toString();
 
-            if(mTextWatcher != null)
+            if (mTextWatcher != null)
                 mTextWatcher.beforeTextChanged(s, start, count, after);
 
         }
@@ -595,30 +684,30 @@ public class FragmentAddAddress extends Fragment implements View.OnClickListener
         @Override
         public void onTextChanged(CharSequence s, int start, int before, int count) {
             for (int i = 0; i < mArray_pos.length; i++) {
-                if(((mBeforeTextChanged.length() - mAppentText.length() * i) == (mArray_pos[i] - 1) &&
-                        (s.length() - mAppentText.length() * i) == mArray_pos[i])){
+                if (((mBeforeTextChanged.length() - mAppentText.length() * i) == (mArray_pos[i] - 1) &&
+                        (s.length() - mAppentText.length() * i) == mArray_pos[i])) {
                     mEditText.append(mAppentText);
 
                     break;
                 }
 
-                if(((mBeforeTextChanged.length() - mAppentText.length() * i) == mArray_pos[i] &&
-                        (s.length() - mAppentText.length() * i) == (mArray_pos[i] + 1))){
+                if (((mBeforeTextChanged.length() - mAppentText.length() * i) == mArray_pos[i] &&
+                        (s.length() - mAppentText.length() * i) == (mArray_pos[i] + 1))) {
                     int idx_start = mArray_pos[i] + mAppentText.length() * i;
                     int idx_end = Math.min(idx_start + mAppentText.length(), s.length());
 
-                    String sub = mEditText.getText().toString().substring(idx_start,  idx_end);
+                    String sub = mEditText.getText().toString().substring(idx_start, idx_end);
 
-                    if(!sub.equals(mAppentText)){
+                    if (!sub.equals(mAppentText)) {
                         mEditText.getText().insert(s.length() - 1, mAppentText);
                     }
 
                     break;
                 }
 
-                if(mAppentText.length() > 1 &&
+                if (mAppentText.length() > 1 &&
                         (mBeforeTextChanged.length() - mAppentText.length() * i) == (mArray_pos[i] + mAppentText.length()) &&
-                        (s.length() - mAppentText.length() * i) == (mArray_pos[i] + mAppentText.length() - 1)){
+                        (s.length() - mAppentText.length() * i) == (mArray_pos[i] + mAppentText.length() - 1)) {
                     int idx_start = mArray_pos[i] + mAppentText.length() * i;
                     int idx_end = Math.min(idx_start + mAppentText.length(), s.length());
 
@@ -629,14 +718,14 @@ public class FragmentAddAddress extends Fragment implements View.OnClickListener
 
             }
 
-            if(mTextWatcher != null)
+            if (mTextWatcher != null)
                 mTextWatcher.onTextChanged(s, start, before, count);
 
         }
 
         @Override
         public void afterTextChanged(Editable s) {
-            if(mTextWatcher != null) {
+            if (mTextWatcher != null) {
                 mTextWatcher.afterTextChanged(s);
             }
             validationFields();
