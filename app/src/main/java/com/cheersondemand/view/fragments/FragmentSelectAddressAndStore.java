@@ -15,6 +15,8 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
 import com.cheersondemand.R;
+import com.cheersondemand.model.address.AddressAddResponse;
+import com.cheersondemand.model.address.AddressResponse;
 import com.cheersondemand.model.location.RecentLocation;
 import com.cheersondemand.model.location.RecentLocationResponse;
 import com.cheersondemand.model.location.SaveLocation;
@@ -23,6 +25,8 @@ import com.cheersondemand.model.store.StoreList;
 import com.cheersondemand.model.store.StoreListResponse;
 import com.cheersondemand.model.store.UpdateStore;
 import com.cheersondemand.model.store.UpdateStoreResponse;
+import com.cheersondemand.presenter.address.AddressViewPresenterImpl;
+import com.cheersondemand.presenter.address.IAddressViewPresenter;
 import com.cheersondemand.presenter.location.ILocationViewPresenter;
 import com.cheersondemand.presenter.location.LocationViewPresenterImpl;
 import com.cheersondemand.presenter.store.IStoreViewPresenter;
@@ -46,7 +50,7 @@ import butterknife.Unbinder;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class FragmentSelectAddressAndStore extends Fragment implements ILocationViewPresenter.ILocationView, View.OnClickListener, IStoreViewPresenter.IStoreView {
+public class FragmentSelectAddressAndStore extends Fragment implements ILocationViewPresenter.ILocationView, View.OnClickListener, IStoreViewPresenter.IStoreView ,IAddressViewPresenter.IAddressView{
 
 
     @BindView(R.id.imgBack)
@@ -80,6 +84,7 @@ public class FragmentSelectAddressAndStore extends Fragment implements ILocation
     LinearLayout llStoreList;
     @BindView(R.id.rlAddNewAddress)
     RelativeLayout rlAddNewAddress;
+    IAddressViewPresenter iAddressViewPresenter;
 
     public FragmentSelectAddressAndStore() {
         // Required empty public constructor
@@ -91,6 +96,7 @@ public class FragmentSelectAddressAndStore extends Fragment implements ILocation
         super.onCreate(savedInstanceState);
         iLocationViewPresenter = new LocationViewPresenterImpl(this, getActivity());
         iStoreViewPresenter = new StoreViewPresenterImpl(this, getActivity());
+        iAddressViewPresenter = new AddressViewPresenterImpl(this, getActivity());
         source = getArguments().getInt(C.FROM);
 
         util = new Util();
@@ -134,7 +140,19 @@ public class FragmentSelectAddressAndStore extends Fragment implements ILocation
 
         }
     }
+    void getAddressList() {
+        if (SharedPreference.getInstance(getActivity()).getBoolean(C.IS_LOGIN_GUEST)) {
+            String id = "" + SharedPreference.getInstance(getActivity()).geGuestUser(C.GUEST_USER).getId();
 
+            iAddressViewPresenter.getAddresses(false, "",id,Util.id(getActivity()));
+
+        }else {
+            String id = "" + SharedPreference.getInstance(getActivity()).getUser(C.AUTH_USER).getData().getUser().getId();
+
+            String token = C.bearer + SharedPreference.getInstance(getActivity()).getUser(C.AUTH_USER).getData().getToken().getAccessToken();
+            iAddressViewPresenter.getAddresses(true, token, id, Util.id(getActivity()));
+        }
+    }
     public void saveLocation(RecentLocation selectedLocation) {
         SharedPreference.getInstance(getActivity()).setString(C.LOCATION_SELECTED, selectedLocation.getAddress());
         SharedPreference.getInstance(getActivity()).setLocation(C.SELECTED_LOCATION, selectedLocation);
@@ -215,15 +233,9 @@ public class FragmentSelectAddressAndStore extends Fragment implements ILocation
                 getActivity().finish();
                 break;
             case R.id.rlAddNewAddress:
-                Intent intent=new Intent(getActivity(), ActivityContainer.class);
-                Bundle bundle=new Bundle();
-                bundle.putBoolean(C.IS_EDIT,false);
-                bundle.putBoolean(C.IS_FROM_CHECKOUT, false);
-                bundle.putBoolean(C.IS_RETRY_PAYEMNT, false);
 
-                intent.putExtra(C.BUNDLE,bundle);
-                intent.putExtra(C.FRAGMENT_ACTION,C.FRAGMENT_ADD_ADDRESS);
-                startActivity(intent);
+                getAddressList();
+
                 break;
         }
     }
@@ -231,6 +243,12 @@ public class FragmentSelectAddressAndStore extends Fragment implements ILocation
     @Override
     public void getSaveLocationSuccess(SaveLocationResponse response) {
         if (response.getSuccess()) {
+            RecentLocation recentLocation=new RecentLocation();
+            recentLocation.setId(adapterSavedLocations.getSelectedItem().getId());
+            recentLocation.setAddress(adapterSavedLocations.getSelectedItem().getAddress());
+            SharedPreference.getInstance(getActivity()).setLocation(C.SELECTED_LOCATION,recentLocation);
+            SharedPreference.getInstance(getActivity()).setString(C.LOCATION_SELECTED, adapterSavedLocations.getSelectedItem().getAddress());
+
             getStoreList();
         } else {
             if (response.getErrors() != null) {
@@ -326,6 +344,81 @@ public class FragmentSelectAddressAndStore extends Fragment implements ILocation
         bundle.putInt(C.FRAGMENT_ACTION, source);
         intent.putExtra(C.BUNDLE, bundle);
         startActivity(intent);
+    }
+
+    @Override
+    public void onRemoveAddressSuccess(AddressAddResponse Response) {
+
+    }
+
+    @Override
+    public void onAddAddressSuccess(AddressAddResponse Response) {
+
+    }
+
+    @Override
+    public void onEditAddressSuccess(AddressAddResponse Response) {
+
+    }
+
+    @Override
+    public void onAddressListSuccess(AddressResponse Response) {
+        try {
+            if (Response.getSuccess()) {
+                if (Response.getData() != null && Response.getData().size() > 0) {
+                    gotoAddressList();
+                }
+                else {
+                    gotoAddAddress();
+                }
+            }
+            else {
+                gotoAddAddress();
+            }
+
+        }
+        catch (Exception e){
+            e.printStackTrace();
+        }
+    }
+
+    void gotoAddAddress(){
+        Intent intent=new Intent(getActivity(), ActivityContainer.class);
+        Bundle bundle=new Bundle();
+        bundle.putBoolean(C.IS_EDIT,false);
+        bundle.putBoolean(C.IS_FROM_CHECKOUT, false);
+        bundle.putBoolean(C.IS_RETRY_PAYEMNT, false);
+        bundle.putBoolean(C.IS_LOCATION_CHANGED, true);
+
+        intent.putExtra(C.BUNDLE,bundle);
+        intent.putExtra(C.FRAGMENT_ACTION,C.FRAGMENT_ADD_ADDRESS);
+        startActivity(intent);
+    }
+
+    void  gotoAddressList(){
+        Intent intent3 = new Intent(getActivity(), ActivityContainer.class);
+        intent3.putExtra(C.FRAGMENT_ACTION, C.FRAGMENT_ADDRESS_LIST);
+        Bundle bundle = new Bundle();
+        bundle.putBoolean(C.IS_FROM_LOCATION_AND_STORE_SCREEN, true);
+        if(adapterSavedLocations.getSelectedItem()!=null) {
+            bundle.putInt(C.ADDRESS_ID, adapterSavedLocations.getSelectedItem().getId());
+            bundle.putString(C.ADDRESS_NAME, adapterSavedLocations.getSelectedItem().getAddress());
+
+        }
+        else {
+            bundle.putInt(C.ADDRESS_ID, 0);
+            bundle.putString(C.ADDRESS_NAME, "");
+
+        }
+        bundle.putBoolean(C.IS_LOCATION_CHANGED, true);
+
+        intent3.putExtra(C.BUNDLE, bundle);
+        intent3.putExtra(C.FRAGMENT_ACTION, C.FRAGMENT_ADDRESS_LIST);
+        startActivity(intent3);
+    }
+    @Override
+    public void onAddDeliveryAddressSuccess(AddressAddResponse Response) {
+
     }
 
     @Override

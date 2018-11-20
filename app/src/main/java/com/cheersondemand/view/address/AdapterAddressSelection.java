@@ -130,7 +130,7 @@ public class ItemViewHolder extends RecyclerView.ViewHolder {
                     bundle.putBoolean(C.IS_EDIT,true);
                     bundle.putSerializable(C.ADDRESS,horizontalList.get(position));
                     bundle.putBoolean(C.IS_RETRY_PAYEMNT, false);
-                    bundle.putBoolean(C.IS_FROM_CHECKOUT, false);
+                    bundle.putBoolean(C.IS_FROM_CHECKOUT, true);
 
                     intent.putExtra(C.BUNDLE,bundle);
                     intent.putExtra(C.FRAGMENT_ACTION,C.FRAGMENT_ADD_ADDRESS);

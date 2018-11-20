@@ -144,6 +144,7 @@ public class FragmentSplash extends Fragment {
     }
     void gotoLocationAndStoreList() {
         Intent intent = new Intent(getActivity(), ActivityContainer.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         Bundle bundle = new Bundle();
         intent.putExtra(C.FRAGMENT_ACTION, C.FRAGMENT_STORE_LOCATION_LIST);
         bundle.putInt(C.FROM, C.HOME);

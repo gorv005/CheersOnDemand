@@ -21,7 +21,6 @@ import android.widget.Toast;
 
 import com.cheersondemand.R;
 import com.cheersondemand.model.address.AddressAddResponse;
-import com.cheersondemand.model.address.AddressRequest;
 import com.cheersondemand.model.address.AddressResponse;
 import com.cheersondemand.model.location.RecentLocation;
 import com.cheersondemand.model.location.RecentLocationResponse;
@@ -42,7 +41,6 @@ import com.cheersondemand.util.location.LocationHelper;
 import com.cheersondemand.view.adapter.location.AdapterLocation;
 import com.cheersondemand.view.adapter.location.AdapterRecentSearches;
 import com.cheersondemand.view.adapter.location.RecyclerItemClickListener;
-import com.cheersondemand.view.address.AdapterAddress;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.PendingResult;
@@ -108,12 +106,12 @@ public class ActivitySearchLocation extends AppCompatActivity implements
         util = new Util();
         iLocationViewPresenter = new LocationViewPresenterImpl(this, this);
         init();
-        /*locationHelper = new LocationHelper(this);
+        locationHelper = new LocationHelper(this);
         if (locationHelper.checkPlayServices()) {
 
             // Building the GoogleApi client
             locationHelper.buildGoogleApiClient();
-        }*/
+        }
        // getRecentSearches();
       //  getAddressList();
     }
@@ -273,25 +271,7 @@ public class ActivitySearchLocation extends AppCompatActivity implements
         }
     }
 
-    void addAddress(RecentLocation selectedLocation) {
 
-        AddressRequest addressRequest = new AddressRequest();
-        com.cheersondemand.model.address.Address address = new com.cheersondemand.model.address.Address();
-        // address.setName(selectedLocation.getAddress());
-
-        address.setAddress(selectedLocation.getAddress());
-      //  address.setFlatNo(etFlat.getText().toString());
-       // address.setAddressFirst(etAddLine1.getText().toString());
-       // address.setAddressSecond(etAddLine2.getText().toString());
-      //  address.setZipCode(etPincode.getText().toString());
-       // address.setPhoneNumber(etPhoneNo.getText().toString());
-        addressRequest.setAddress(address);
-
-        String id = "" + SharedPreference.getInstance(this).getUser(C.AUTH_USER).getData().getUser().getId();
-
-        String token = C.bearer + SharedPreference.getInstance(this).getUser(C.AUTH_USER).getData().getToken().getAccessToken();
-        iAddressViewPresenter.AddAddress(token, id, addressRequest);
-    }
 
 
     void buildAPIClient() {
@@ -323,7 +303,7 @@ public class ActivitySearchLocation extends AppCompatActivity implements
     @Override
     public void onResume() {
         super.onResume();
-      //  locationHelper.checkPlayServices();
+        locationHelper.checkPlayServices();
 
         if (!mGoogleApiClient.isConnected() && !mGoogleApiClient.isConnecting()) {
             Log.v("Google API", "Connecting");

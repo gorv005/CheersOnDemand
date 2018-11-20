@@ -59,6 +59,7 @@ import com.cheersondemand.presenter.home.order.OrderViewPresenterImpl;
 import com.cheersondemand.presenter.store.IStoreViewPresenter;
 import com.cheersondemand.presenter.store.StoreViewPresenterImpl;
 import com.cheersondemand.util.C;
+import com.cheersondemand.util.ImageLoader.ImageLoader;
 import com.cheersondemand.util.SharedPreference;
 import com.cheersondemand.util.StoreProducts;
 import com.cheersondemand.util.Util;
@@ -163,7 +164,7 @@ public class FragmentHome extends Fragment implements SwipeRefreshLayout.OnRefre
     Banner banner;
     List<AllProduct> onSaleProductList;
     List<AllProduct> allProductList;
-
+    ImageLoader imageLoader;
     public FragmentHome() {
         // Required empty public constructor
     }
@@ -176,6 +177,7 @@ public class FragmentHome extends Fragment implements SwipeRefreshLayout.OnRefre
         iOrderViewPresenterPresenter = new OrderViewPresenterImpl(this, getActivity());
         iStoreViewPresenter = new StoreViewPresenterImpl(this, getActivity());
         util = new Util();
+        imageLoader=new ImageLoader(getActivity());
         getDisplayCoordinate();
     }
 
@@ -389,8 +391,9 @@ public class FragmentHome extends Fragment implements SwipeRefreshLayout.OnRefre
                 banner = response.getData().getBanner();
                 onSaleProductList = response.getData().getOnSaleProducts();
                 if (banner != null) {
-                    rlImage.setLayoutParams(new LinearLayout.LayoutParams(width, 389 * width / 1242));
-                    Util.setImage(getActivity(), banner.getImage(), ivBanner);
+                   // rlImage.setLayoutParams(new LinearLayout.LayoutParams(width, 389 * width / 1242));
+                //    Util.setImage(getActivity(), banner.getImage(), ivBanner);
+                    imageLoader.DisplayImage(banner.getImage(),ivBanner);
                 }
                 rvBrands.setVisibility(View.VISIBLE);
                 rvProducts.setVisibility(View.VISIBLE);

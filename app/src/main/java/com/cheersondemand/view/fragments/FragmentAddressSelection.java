@@ -24,6 +24,7 @@ import com.cheersondemand.model.address.AddDeliveryAddressRequest;
 import com.cheersondemand.model.address.Address;
 import com.cheersondemand.model.address.AddressAddResponse;
 import com.cheersondemand.model.address.AddressResponse;
+import com.cheersondemand.model.address.RemoveAddressRequest;
 import com.cheersondemand.model.card.CardAddResponse;
 import com.cheersondemand.model.card.CardListResponse;
 import com.cheersondemand.presenter.address.AddressViewPresenterImpl;
@@ -126,19 +127,36 @@ public class FragmentAddressSelection extends Fragment implements View.OnClickLi
     }
     public void removeAddress(Address address, int pos) {
         position = pos;
-        String id = "" + SharedPreference.getInstance(getActivity()).getUser(C.AUTH_USER).getData().getUser().getId();
+        RemoveAddressRequest removeAddressRequest = new RemoveAddressRequest();
+        removeAddressRequest.setUuid(Util.id(getActivity()));
+        if (SharedPreference.getInstance(getActivity()).getBoolean(C.IS_LOGIN_GUEST)) {
+            int id = SharedPreference.getInstance(getActivity()).
+                    geGuestUser(C.GUEST_USER).getId();
+            iAddressViewPresenter.RemoveAddAddress(false, "", "" + id, "" + address.getId(), removeAddressRequest);
 
-        String token = C.bearer + SharedPreference.getInstance(getActivity()).getUser(C.AUTH_USER).getData().getToken().getAccessToken();
-        iAddressViewPresenter.RemoveAddAddress(token, id, "" + address.getId());
+        } else {
+            String id = "" + SharedPreference.getInstance(getActivity()).getUser(C.AUTH_USER).getData().getUser().getId();
+
+            String token = C.bearer + SharedPreference.getInstance(getActivity()).getUser(C.AUTH_USER).getData().getToken().getAccessToken();
+            iAddressViewPresenter.RemoveAddAddress(true, token, id, "" + address.getId(), null);
+        }
     }
     public void changeAddress(Address address) {
        Address_id=address.getId();
     }
     void getAddressList() {
-        String id = "" + SharedPreference.getInstance(getActivity()).getUser(C.AUTH_USER).getData().getUser().getId();
+        if (SharedPreference.getInstance(getActivity()).getBoolean(C.IS_LOGIN_GUEST)) {
+            String id = "" + SharedPreference.getInstance(getActivity()).geGuestUser(C.GUEST_USER).getId();
 
-        String token = C.bearer + SharedPreference.getInstance(getActivity()).getUser(C.AUTH_USER).getData().getToken().getAccessToken();
-        iAddressViewPresenter.getAddresses(true,token, id,Util.id(getActivity()));
+            iAddressViewPresenter.getAddresses(false, "",id,Util.id(getActivity()));
+
+        }
+        else {
+            String id = "" + SharedPreference.getInstance(getActivity()).getUser(C.AUTH_USER).getData().getUser().getId();
+
+            String token = C.bearer + SharedPreference.getInstance(getActivity()).getUser(C.AUTH_USER).getData().getToken().getAccessToken();
+            iAddressViewPresenter.getAddresses(true, token, id, Util.id(getActivity()));
+        }
     }
 
     @Override
@@ -155,6 +173,7 @@ public class FragmentAddressSelection extends Fragment implements View.OnClickLi
 
             addresses.remove(position);
             if (addresses.size() == 0) {
+                SharedPreference.getInstance(getActivity()).setBoolean(C.IS_ANY_ADDRESS_ADDED,false);
                 llNoProductInCount.setVisibility(View.VISIBLE);
                 rvAddressList.setVisibility(View.GONE);
                 llButton.setVisibility(View.GONE);

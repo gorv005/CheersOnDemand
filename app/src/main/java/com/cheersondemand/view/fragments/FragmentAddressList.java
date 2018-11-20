@@ -19,8 +19,15 @@ import com.cheersondemand.R;
 import com.cheersondemand.model.address.Address;
 import com.cheersondemand.model.address.AddressAddResponse;
 import com.cheersondemand.model.address.AddressResponse;
+import com.cheersondemand.model.address.RemoveAddressRequest;
+import com.cheersondemand.model.location.RecentLocation;
+import com.cheersondemand.model.location.RecentLocationResponse;
+import com.cheersondemand.model.location.SaveLocation;
+import com.cheersondemand.model.location.SaveLocationResponse;
 import com.cheersondemand.presenter.address.AddressViewPresenterImpl;
 import com.cheersondemand.presenter.address.IAddressViewPresenter;
+import com.cheersondemand.presenter.location.ILocationViewPresenter;
+import com.cheersondemand.presenter.location.LocationViewPresenterImpl;
 import com.cheersondemand.util.C;
 import com.cheersondemand.util.SharedPreference;
 import com.cheersondemand.util.Util;
@@ -36,7 +43,7 @@ import butterknife.Unbinder;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class FragmentAddressList extends Fragment implements View.OnClickListener, IAddressViewPresenter.IAddressView {
+public class FragmentAddressList extends Fragment implements View.OnClickListener, ILocationViewPresenter.ILocationView,IAddressViewPresenter.IAddressView {
 
 
     @BindView(R.id.rvAddressList)
@@ -47,6 +54,7 @@ public class FragmentAddressList extends Fragment implements View.OnClickListene
     Unbinder unbinder;
 
     IAddressViewPresenter iAddressViewPresenter;
+    ILocationViewPresenter iLocationViewPresenter;
     List<Address> addresses;
     Util util;
     AdapterAddress adapterAddress;
@@ -56,7 +64,10 @@ public class FragmentAddressList extends Fragment implements View.OnClickListene
     Button btnAddAnAddress;
     @BindView(R.id.llNoProductInCount)
     LinearLayout llNoProductInCount;
-
+    int Address_id;
+    boolean isLocationChanged=false;
+    String addressName;
+    boolean isFromLocationAndStoreScreen=false;
     public FragmentAddressList() {
         // Required empty public constructor
     }
@@ -66,6 +77,13 @@ public class FragmentAddressList extends Fragment implements View.OnClickListene
         super.onCreate(savedInstanceState);
         util = new Util();
         iAddressViewPresenter = new AddressViewPresenterImpl(this, getActivity());
+        iLocationViewPresenter=new LocationViewPresenterImpl(this,getActivity());
+        if(getArguments()!=null) {
+            Address_id = getArguments().getInt(C.ADDRESS_ID);
+            addressName = getArguments().getString(C.ADDRESS_NAME);
+            isLocationChanged=getArguments().getBoolean(C.IS_LOCATION_CHANGED);
+            isFromLocationAndStoreScreen=getArguments().getBoolean(C.IS_FROM_LOCATION_AND_STORE_SCREEN);
+        }
     }
 
     @Override
@@ -92,22 +110,59 @@ public class FragmentAddressList extends Fragment implements View.OnClickListene
         ((ActivityContainer)getActivity()).setTitle(getString(R.string.saved_addresses));
 
         getAddressList();
+
     }
 
+    public void saveLocation(RecentLocation selectedLocation) {
+        if(isLocationChanged) {
+            SharedPreference.getInstance(getActivity()).setString(C.LOCATION_SELECTED, selectedLocation.getAddress());
+            SharedPreference.getInstance(getActivity()).setLocation(C.SELECTED_LOCATION, selectedLocation);
 
+            SaveLocation saveLocation = new SaveLocation();
+            saveLocation.setLatitude("" + selectedLocation.getLatitude());
+            saveLocation.setLongitude("" + selectedLocation.getLongitude());
+            saveLocation.setUuid(Util.id(getActivity()));
+            if (SharedPreference.getInstance(getActivity()).getBoolean(C.IS_LOGIN_GUEST)) {
+                iLocationViewPresenter.saveLocation(saveLocation, "" + SharedPreference.getInstance(getActivity()).geGuestUser(C.GUEST_USER).getId());
+            } else {
+                String token = C.bearer + SharedPreference.getInstance(getActivity()).getUser(C.AUTH_USER).getData().getToken().getAccessToken();
+                String id = "" + SharedPreference.getInstance(getActivity()).getUser(C.AUTH_USER).getData().getUser().getId();
+
+                iLocationViewPresenter.saveLocation(token, saveLocation, id);
+
+            }
+        }
+    }
     public void removeAddress(Address address, int pos) {
         position = pos;
-        String id = "" + SharedPreference.getInstance(getActivity()).getUser(C.AUTH_USER).getData().getUser().getId();
+        RemoveAddressRequest removeAddressRequest=new RemoveAddressRequest();
+        removeAddressRequest.setUuid(Util.id(getActivity()));
+        if (SharedPreference.getInstance(getActivity()).getBoolean(C.IS_LOGIN_GUEST)) {
+            int id=SharedPreference.getInstance(getActivity()).
+                    geGuestUser(C.GUEST_USER).getId();
+            iAddressViewPresenter.RemoveAddAddress(false,"", ""+id, "" + address.getId(),removeAddressRequest);
 
-        String token = C.bearer + SharedPreference.getInstance(getActivity()).getUser(C.AUTH_USER).getData().getToken().getAccessToken();
-        iAddressViewPresenter.RemoveAddAddress(token, id, "" + address.getId());
+        }
+        else {
+            String id = "" + SharedPreference.getInstance(getActivity()).getUser(C.AUTH_USER).getData().getUser().getId();
+
+            String token = C.bearer + SharedPreference.getInstance(getActivity()).getUser(C.AUTH_USER).getData().getToken().getAccessToken();
+            iAddressViewPresenter.RemoveAddAddress(true,token, id, "" + address.getId(),null);
+        }
     }
 
     void getAddressList() {
-        String id = "" + SharedPreference.getInstance(getActivity()).getUser(C.AUTH_USER).getData().getUser().getId();
+        if (SharedPreference.getInstance(getActivity()).getBoolean(C.IS_LOGIN_GUEST)) {
+            String id = "" + SharedPreference.getInstance(getActivity()).geGuestUser(C.GUEST_USER).getId();
 
-        String token = C.bearer + SharedPreference.getInstance(getActivity()).getUser(C.AUTH_USER).getData().getToken().getAccessToken();
-        iAddressViewPresenter.getAddresses(true,token, id,Util.id(getActivity()));
+            iAddressViewPresenter.getAddresses(false, "",id,Util.id(getActivity()));
+
+        }else {
+            String id = "" + SharedPreference.getInstance(getActivity()).getUser(C.AUTH_USER).getData().getUser().getId();
+
+            String token = C.bearer + SharedPreference.getInstance(getActivity()).getUser(C.AUTH_USER).getData().getToken().getAccessToken();
+            iAddressViewPresenter.getAddresses(true, token, id, Util.id(getActivity()));
+        }
     }
 
     @Override
@@ -124,6 +179,7 @@ public class FragmentAddressList extends Fragment implements View.OnClickListene
 
                 addresses.remove(position);
                 if (addresses.size() == 0) {
+                    SharedPreference.getInstance(getActivity()).setBoolean(C.IS_ANY_ADDRESS_ADDED,false);
                     llNoProductInCount.setVisibility(View.VISIBLE);
                     rvAddressList.setVisibility(View.GONE);
                 }
@@ -157,12 +213,12 @@ public class FragmentAddressList extends Fragment implements View.OnClickListene
                     rvAddressList.setVisibility(View.VISIBLE);
 
                     addresses = Response.getData();
-                    adapterAddress = new AdapterAddress(addresses, getActivity());
+                    adapterAddress = new AdapterAddress(addresses, getActivity(),addressName);
                     rvAddressList.setAdapter(adapterAddress);
                 } else {
                     llNoProductInCount.setVisibility(View.VISIBLE);
                     rvAddressList.setVisibility(View.GONE);
-
+                    gotoAddAddress();
                 }
             } else {
                 util.setSnackbarMessage(getActivity(), Response.getMessage(), rlView, true);
@@ -174,14 +230,45 @@ public class FragmentAddressList extends Fragment implements View.OnClickListene
         }
     }
 
+    public void gotoAddAddress(){
+        getActivity().finish();
+        Intent intent=new Intent(getActivity(), ActivityContainer.class);
+        Bundle bundle=new Bundle();
+        bundle.putBoolean(C.IS_EDIT,false);
+        bundle.putBoolean(C.IS_FROM_CHECKOUT, false);
+        bundle.putBoolean(C.IS_RETRY_PAYEMNT, false);
+        bundle.putBoolean(C.IS_LOCATION_CHANGED, isLocationChanged);
+
+        bundle.putSerializable(C.ADDRESS,adapterAddress.getSelectedAddress());
+
+        intent.putExtra(C.BUNDLE,bundle);
+        intent.putExtra(C.FRAGMENT_ACTION,C.FRAGMENT_ADD_ADDRESS);
+        startActivity(intent);
+
+    }
     @Override
     public void onAddDeliveryAddressSuccess(AddressAddResponse Response) {
 
     }
 
     @Override
+    public void getSaveLocationSuccess(SaveLocationResponse response) {
+        if (response.getSuccess()) {
+            RecentLocation recentLocation=new RecentLocation();
+            recentLocation.setId(adapterAddress.getSelectedAddress().getId());
+            recentLocation.setAddress(adapterAddress.getSelectedAddress().getAddress());
+            SharedPreference.getInstance(getActivity()).setLocation(C.SELECTED_LOCATION,recentLocation);
+        }
+    }
+
+    @Override
     public void getResponseError(String response) {
         util.setSnackbarMessage(getActivity(), response, rlView, true);
+
+    }
+
+    @Override
+    public void onRecentLocationSuccess(RecentLocationResponse response) {
 
     }
 
@@ -201,17 +288,11 @@ public class FragmentAddressList extends Fragment implements View.OnClickListene
     public void onClick(View v) {
         switch (v.getId()){
             case R.id.btnAddAnAddress:
-                Intent intent=new Intent(getActivity(), ActivityContainer.class);
-                Bundle bundle=new Bundle();
-                bundle.putBoolean(C.IS_EDIT,false);
-                bundle.putBoolean(C.IS_FROM_CHECKOUT, false);
-                bundle.putBoolean(C.IS_RETRY_PAYEMNT, false);
-
-                intent.putExtra(C.BUNDLE,bundle);
-                intent.putExtra(C.FRAGMENT_ACTION,C.FRAGMENT_ADD_ADDRESS);
-                startActivity(intent);
+               gotoAddAddress();
 
                 break;
         }
     }
+
+
 }

@@ -338,10 +338,20 @@ public class ActivityContainer extends AppCompatActivity {
         }
 
     }
+    public void addNewAddress() {
+        Fragment fragment = getVisibleFragment();
+        if (fragment != null && fragment instanceof FragmentAddressList) {
+            ((FragmentAddressList) fragment).gotoAddAddress();
+        }
+
+    }
     public void saveLocation(RecentLocation recentLocation) {
         Fragment fragment = getVisibleFragment();
         if (fragment != null && fragment instanceof FragmentSelectAddressAndStore) {
             ((FragmentSelectAddressAndStore) fragment).saveLocation(recentLocation);
+        }
+       else if (fragment != null && fragment instanceof FragmentAddressList) {
+            ((FragmentAddressList) fragment).saveLocation(recentLocation);
         }
 
     }
@@ -498,6 +508,9 @@ public class ActivityContainer extends AppCompatActivity {
            }
            else if (fragment != null && fragment instanceof FragmentStoreSelection) {
                ((FragmentStoreSelection)fragment).back();
+           }
+           else if (fragment != null && fragment instanceof FragmentAddAddress) {
+               ((FragmentAddAddress)fragment).gotoSelectedPage();
            }
             else if (fragment != null && fragment instanceof FragmentResetPassword) {
                Intent intent = new Intent(this, MainActivity.class);

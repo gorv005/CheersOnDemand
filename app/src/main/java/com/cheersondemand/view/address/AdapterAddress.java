@@ -2,7 +2,6 @@ package com.cheersondemand.view.address;
 
 import android.app.Activity;
 import android.app.Dialog;
-import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
@@ -12,10 +11,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.CompoundButton;
+import android.widget.RadioButton;
 import android.widget.TextView;
 
 import com.cheersondemand.R;
 import com.cheersondemand.model.address.Address;
+import com.cheersondemand.model.location.RecentLocation;
 import com.cheersondemand.util.C;
 import com.cheersondemand.util.ImageLoader.ImageLoader;
 import com.cheersondemand.view.ActivityContainer;
@@ -30,17 +32,24 @@ public class AdapterAddress extends RecyclerView.Adapter<RecyclerView.ViewHolder
     private static final int TYPE_FOOTER = 1;
     private static final int TYPE_ITEM = 0;
 private List<Address> horizontalList;
-    Context context;
+    private String lastCheckedPosition = null;
+    int pos;
+    Activity context;
     ImageLoader imageLoader;
 public class ItemViewHolder extends RecyclerView.ViewHolder {
     public TextView tvName,tvSubAddress;
-    View llEdit,llDelete;
+    public RadioButton radioButton;
+
+    View llEdit,llDelete,llAddressItem,llModify;
     public ItemViewHolder(View view) {
         super(view);
         tvName = (TextView) view.findViewById(R.id.tvName);
         tvSubAddress = (TextView) view.findViewById(R.id.tvSubAddress);
         llEdit = (View) view.findViewById(R.id.llEdit);
         llDelete = (View) view.findViewById(R.id.llDelete);
+        radioButton = (RadioButton) view.findViewById(R.id.radio);
+        llAddressItem = (View) view.findViewById(R.id.llAddressItem);
+        llModify = (View) view.findViewById(R.id.llModify);
 
     }
 }
@@ -52,14 +61,23 @@ public class ItemViewHolder extends RecyclerView.ViewHolder {
             rlAddNew = (View) view.findViewById(R.id.rlAddNew);
         }
     }
-    public AdapterAddress(List<Address> horizontalList, Activity context) {
+    public AdapterAddress(List<Address> horizontalList, Activity context,String address) {
         this.horizontalList = horizontalList;
 
         this.context=context;
         imageLoader=new ImageLoader(context);
+        if(address!=null){
+            lastCheckedPosition=address;
+        }
 
     }
 
+    public Address getSelectedAddress() {
+        if(pos!=-1) {
+            return horizontalList.get(pos);
+        }
+        return null;
+    }
     @Override
     public RecyclerView.ViewHolder  onCreateViewHolder(ViewGroup parent, int viewType) {
     if(viewType==TYPE_ITEM) {
@@ -84,13 +102,36 @@ public class ItemViewHolder extends RecyclerView.ViewHolder {
         if (holder instanceof ItemViewHolder) {
             final ItemViewHolder itemViewHolder = (ItemViewHolder) holder;
 
-            itemViewHolder.tvName.setText(horizontalList.get(position).getName());
-            itemViewHolder.tvSubAddress.setText(horizontalList.get(position).getFlatNo()+" "+horizontalList.get(position).getAddressFirst()
-            +" "+horizontalList.get(position).getAddressSecond()+ " "+horizontalList.get(position).getZipCode());
+            if (horizontalList.get(position).getAddress() .equals( lastCheckedPosition)){
+                pos=position;
+                itemViewHolder.radioButton.setChecked(true);
+                itemViewHolder.llModify.setVisibility(View.VISIBLE);
+            }else{
+                ((ItemViewHolder)holder).radioButton.setChecked(false);
+                itemViewHolder.llModify.setVisibility(View.GONE);
 
+            }
+
+            itemViewHolder.tvName.setText(horizontalList.get(position).getName());
+            itemViewHolder.tvSubAddress.setText(horizontalList.get(position).getFlatNo()+" "+horizontalList.get(position).getAddress()
+            + " "+horizontalList.get(position).getZipCode());
+
+            itemViewHolder.radioButton.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                    if(isChecked){
+                        RecentLocation recentLocation=new RecentLocation();
+                        recentLocation.setLatitude(horizontalList.get(position).getLatitude());
+                        recentLocation.setLatitude(horizontalList.get(position).getLongitude());
+
+                        ((ActivityContainer)context).saveLocation(recentLocation);
+                    }
+                }
+            });
             itemViewHolder.llEdit.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    context.finish();
                     Intent intent=new Intent(context, ActivityContainer.class);
                     Bundle bundle=new Bundle();
                     bundle.putBoolean(C.IS_EDIT,true);
@@ -112,13 +153,39 @@ public class ItemViewHolder extends RecyclerView.ViewHolder {
                     dialog(position);
                 }
             });
+            itemViewHolder.radioButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+                    lastCheckedPosition = horizontalList.get(position).getAddress();
+                    pos=position;
+                    notifyDataSetChanged();
+
+                }
+            });
+            itemViewHolder.llAddressItem.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    RecentLocation recentLocation=new RecentLocation();
+                    recentLocation.setLatitude(horizontalList.get(position).getLatitude());
+                    recentLocation.setLatitude(horizontalList.get(position).getLongitude());
+
+                    ((ActivityContainer)context).saveLocation(recentLocation);
+                    lastCheckedPosition = horizontalList.get(position).getAddress();
+                    pos=position;
+                    notifyDataSetChanged();
+                }
+            });
         }
         else if (holder instanceof FooterViewHolder) {
             final FooterViewHolder footerViewHolder = (FooterViewHolder) holder;
             footerViewHolder.rlAddNew.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Intent intent=new Intent(context, ActivityContainer.class);
+                    ((ActivityContainer)context).addNewAddress();
+
+
+                   /* Intent intent=new Intent(context, ActivityContainer.class);
                     Bundle bundle=new Bundle();
                     bundle.putBoolean(C.IS_EDIT,false);
                     bundle.putBoolean(C.IS_RETRY_PAYEMNT, false);
@@ -127,6 +194,8 @@ public class ItemViewHolder extends RecyclerView.ViewHolder {
                     intent.putExtra(C.BUNDLE,bundle);
                     intent.putExtra(C.FRAGMENT_ACTION,C.FRAGMENT_ADD_ADDRESS);
                     context.startActivity(intent);
+                    */
+
                  //   Toast.makeText(context, "More", Toast.LENGTH_SHORT).show();
 
                 }

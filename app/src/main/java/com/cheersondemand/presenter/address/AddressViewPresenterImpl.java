@@ -8,6 +8,7 @@ import com.cheersondemand.model.address.AddDeliveryAddressRequest;
 import com.cheersondemand.model.address.AddressAddResponse;
 import com.cheersondemand.model.address.AddressRequest;
 import com.cheersondemand.model.address.AddressResponse;
+import com.cheersondemand.model.address.RemoveAddressRequest;
 
 
 public class AddressViewPresenterImpl implements IAddressViewPresenter, IAddressViewIntractor.OnFinishedListener {
@@ -78,18 +79,18 @@ public class AddressViewPresenterImpl implements IAddressViewPresenter, IAddress
 
 
     @Override
-    public void AddAddress(String token, String userId, AddressRequest addressRequest) {
+    public void AddAddress(boolean isAuth,String token, String userId, AddressRequest addressRequest) {
         if (mView != null) {
             mView.showProgress();
-            iAddressViewIntractor.AddAddress(token,userId,addressRequest, this);
+            iAddressViewIntractor.AddAddress(isAuth,token,userId,addressRequest, this);
         }
     }
 
     @Override
-    public void EditAddAddress(String token, String userId, String id, AddressRequest addressRequest) {
+    public void EditAddAddress(boolean isAuth,String token, String userId, String id, AddressRequest addressRequest) {
         if (mView != null) {
             mView.showProgress();
-            iAddressViewIntractor.EditAddAddress(token,userId,id,addressRequest, this);
+            iAddressViewIntractor.EditAddAddress(isAuth,token,userId,id,addressRequest, this);
         }
     }
 
@@ -103,10 +104,10 @@ public class AddressViewPresenterImpl implements IAddressViewPresenter, IAddress
     }
 
     @Override
-    public void RemoveAddAddress(String token, String userId, String id) {
+    public void RemoveAddAddress(boolean isAuth,String token, String userId, String id,RemoveAddressRequest removeAddressRequest) {
         if (mView != null) {
             mView.showProgress();
-            iAddressViewIntractor.RemoveAddAddress(token,userId,id, this);
+            iAddressViewIntractor.RemoveAddAddress(isAuth,token,userId,id,removeAddressRequest,this);
         }
     }
 

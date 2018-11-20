@@ -35,6 +35,12 @@ public class Address implements Serializable{
     @Expose
     private String phoneNumber;
 
+    @SerializedName("latitude")
+    @Expose
+    private String latitude;
+    @SerializedName("longitude")
+    @Expose
+    private String longitude;
     public String getName() {
         return name;
     }
@@ -97,5 +103,21 @@ public class Address implements Serializable{
 
     public void setAddress(String address) {
         this.address = address;
+    }
+
+    public String getLatitude() {
+        return latitude;
+    }
+
+    public void setLatitude(String latitude) {
+        this.latitude = latitude;
+    }
+
+    public String getLongitude() {
+        return longitude;
+    }
+
+    public void setLongitude(String longitude) {
+        this.longitude = longitude;
     }
 }

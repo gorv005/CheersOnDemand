@@ -296,6 +296,11 @@ public class FragmentProfile extends Fragment implements View.OnClickListener, I
             case R.id.llSavedAddress:
                 if (isLogin) {
                     Intent intent3 = new Intent(getActivity(), ActivityContainer.class);
+                    Bundle bundle5 = new Bundle();
+                    bundle5.putInt(C.ADDRESS_ID, 0);
+                    bundle5.putString(C.ADDRESS_NAME, "");
+                    intent3.putExtra(C.BUNDLE, bundle5);
+                    bundle.putBoolean(C.IS_LOCATION_CHANGED, false);
 
                     intent3.putExtra(C.FRAGMENT_ACTION, C.FRAGMENT_ADDRESS_LIST);
                     startActivity(intent3);

@@ -7,6 +7,7 @@ import com.cheersondemand.model.address.AddDeliveryAddressRequest;
 import com.cheersondemand.model.address.AddressAddResponse;
 import com.cheersondemand.model.address.AddressRequest;
 import com.cheersondemand.model.address.AddressResponse;
+import com.cheersondemand.model.address.RemoveAddressRequest;
 import com.google.gson.Gson;
 
 import retrofit2.Response;
@@ -19,7 +20,7 @@ public class AddressViewIntractorImpl implements IAddressViewIntractor {
 
 
     @Override
-    public void AddAddress(String token, String userId, AddressRequest addressRequest, final OnFinishedListener listener) {
+    public void AddAddress(boolean isAuth,String token, String userId, AddressRequest addressRequest, final OnFinishedListener listener) {
         try {
 
             WebServicesWrapper.getInstance().AddAddress(new ResponseResolver<AddressAddResponse>() {
@@ -42,14 +43,14 @@ public class AddressViewIntractorImpl implements IAddressViewIntractor {
                         listener.onError(error.getError());
                     }
                 }
-            }, token, userId, addressRequest);
+            },isAuth ,token, userId, addressRequest);
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
     @Override
-    public void EditAddAddress(String token, String userId, String id, AddressRequest addressRequest, final OnFinishedListener listener) {
+    public void EditAddAddress(boolean isAuth,String token, String userId, String id, AddressRequest addressRequest, final OnFinishedListener listener) {
         try {
 
             WebServicesWrapper.getInstance().EditAddress(new ResponseResolver<AddressAddResponse>() {
@@ -72,7 +73,7 @@ public class AddressViewIntractorImpl implements IAddressViewIntractor {
                         listener.onError(error.getError());
                     }
                 }
-            }, token, userId, id, addressRequest);
+            },isAuth, token, userId, id, addressRequest);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -109,7 +110,7 @@ public class AddressViewIntractorImpl implements IAddressViewIntractor {
     }
 
     @Override
-    public void RemoveAddAddress(String token, String userId, String id, final OnFinishedListener listener) {
+    public void RemoveAddAddress(boolean isAuth, String token, String userId, String id, RemoveAddressRequest removeAddressRequest,final OnFinishedListener listener) {
         try {
 
             WebServicesWrapper.getInstance().removeAddress(new ResponseResolver<AddressAddResponse>() {
@@ -132,7 +133,7 @@ public class AddressViewIntractorImpl implements IAddressViewIntractor {
                         listener.onError(error.getError());
                     }
                 }
-            }, token, userId, id);
+            },isAuth, token, userId, id,removeAddressRequest);
         } catch (Exception e) {
             e.printStackTrace();
         }

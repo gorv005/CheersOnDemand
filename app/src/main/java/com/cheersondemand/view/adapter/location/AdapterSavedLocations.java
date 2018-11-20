@@ -14,7 +14,6 @@ import android.widget.TextView;
 
 import com.cheersondemand.R;
 import com.cheersondemand.model.location.RecentLocation;
-import com.cheersondemand.model.store.StoreList;
 import com.cheersondemand.util.C;
 import com.cheersondemand.util.SharedPreference;
 import com.cheersondemand.view.ActivityContainer;
@@ -31,7 +30,7 @@ public class AdapterSavedLocations extends BaseAdapter implements Filterable{
     private List<RecentLocation> Items;
     int pos=-1;
 
-    private int lastCheckedPosition = -1;
+    private String lastCheckedPosition ;
 List<RecentLocation> filterList;
     StoreListFilter filter;
     String selectedLocation;
@@ -46,10 +45,10 @@ List<RecentLocation> filterList;
         this.recentSelectedLocation=recentLocation;
         if(source== C.HOME ||source== C.FRAGMENT_PRODUCT_LISTING ) {
             if (loc != null) {
-                lastCheckedPosition = sideMenuItems.get(0).getId();
+                lastCheckedPosition = sideMenuItems.get(0).getAddress();
             }
             else if(recentLocation!=null){
-                lastCheckedPosition = recentLocation.getId();
+                lastCheckedPosition = recentLocation.getAddress();
 
             }
         }
@@ -117,7 +116,7 @@ List<RecentLocation> filterList;
 
     private void initializeViews(final RecentLocation model, final ItemViewHolder holder, final int position) {
         ((ItemViewHolder)holder).name.setText(model.getAddress());
-        if (model.getId() == lastCheckedPosition){
+        if (model.getAddress()!=null &&model.getAddress() .equals( lastCheckedPosition)){
             pos=position;
             ((ItemViewHolder)holder).radioButton.setChecked(true);
             ((ItemViewHolder)holder).name.setTextColor(ContextCompat.getColor(activity, R.color.profile_text_color));
@@ -131,7 +130,7 @@ List<RecentLocation> filterList;
             @Override
             public void onClick(View v) {
                 ((ActivityContainer)activity).saveLocation(getItem(position));
-                lastCheckedPosition = model.getId();
+                lastCheckedPosition = model.getAddress();
                 pos=position;
                 notifyDataSetChanged();
             }
@@ -140,7 +139,7 @@ List<RecentLocation> filterList;
             @Override
             public void onClick(View v) {
                 ((ActivityContainer)activity).saveLocation(getItem(position));
-                lastCheckedPosition = model.getId();
+                lastCheckedPosition = model.getAddress();
                 pos=position;
                 notifyDataSetChanged();
 

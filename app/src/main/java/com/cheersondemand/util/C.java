@@ -157,4 +157,6 @@ public interface C {
     String IS_ANY_ADDRESS_ADDED = "is_any_address_added";
     int FRAGMENT_PRODUCT_CART_HOME =37 ;
     String IS_ADD_BACK ="is_add_back" ;
+    String IS_FROM_LOCATION_AND_STORE_SCREEN = "is_from_location_and_home_screen";
+    String ADDRESS_NAME = "address_name";
 }
