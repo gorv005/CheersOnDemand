@@ -264,11 +264,11 @@ public class FragmentProductsListing extends Fragment implements View.OnClickLis
         if (SharedPreference.getInstance(getActivity()).getBoolean(C.IS_LOGIN_GUEST)) {
             String id = "" + SharedPreference.getInstance(getActivity()).geGuestUser(C.GUEST_USER).getId();
 
-            iHomeViewPresenterPresenter.getCategories(false, "", Util.id(getActivity()));
+            iHomeViewPresenterPresenter.getCategories(false, "", Util.id(getActivity()),""+false);
         } else {
             String id = "" + SharedPreference.getInstance(getActivity()).getUser(C.AUTH_USER).getData().getUser().getId();
             String token = C.bearer + SharedPreference.getInstance(getActivity()).getUser(C.AUTH_USER).getData().getToken().getAccessToken();
-            iHomeViewPresenterPresenter.getCategories(true, token, Util.id(getActivity()));
+            iHomeViewPresenterPresenter.getCategories(true, token, Util.id(getActivity()),""+false);
         }
     }
 

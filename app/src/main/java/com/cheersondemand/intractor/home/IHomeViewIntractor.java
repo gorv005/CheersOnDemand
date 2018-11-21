@@ -26,7 +26,7 @@ public interface IHomeViewIntractor {
     }
     public void getCategories(String uuid, OnLoginFinishedListener listener);
 
-    public void getCategories(boolean isAuth ,String token,String uuid, OnLoginFinishedListener listener);
+    public void getCategories(boolean isAuth ,String token,String uuid, String with_subcategory,OnLoginFinishedListener listener);
     public void getSubCategories(boolean isAuth , String token, List<Integer> id,String uuid, OnLoginFinishedListener listener);
 
     public void getBrands(boolean isAuth,String auth, String uuid, OnLoginFinishedListener listener);

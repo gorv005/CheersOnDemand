@@ -14,7 +14,7 @@ import java.util.List;
 public interface IHomeViewPresenterPresenter {
 
     public void getCategories(String uuid);
-    public void getCategories(boolean isAuth,String token,String uuid);
+    public void getCategories(boolean isAuth,String token,String uuid,String with_subcategory);
 
     public void getSubCategories(boolean isAuth , String token, List<Integer> id, String uuid);
 
