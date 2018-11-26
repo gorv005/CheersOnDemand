@@ -57,17 +57,17 @@ public class FragmentExplore extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         tabs.setupWithViewPager(viewpager);
-
+        setupViewPager(viewpager);
+        setupTabIcons();
     }
 
     private void setupViewPager(ViewPager viewPager) {
         ViewPagerAdapter adapter = new ViewPagerAdapter(getActivity().getSupportFragmentManager());
-        for(int i=0;i<tabsText.length;i++) {
-            FragmentCategorySubCategory fragmentCategorySubCategory =new FragmentCategorySubCategory();
-            adapter.addFrag(fragmentCategorySubCategory,"");
-         /*   adapter.addFrag(new FragmentSubjectList(), "TWO");
-            adapter.addFrag(new FragmentSubjectList(), "THREE");*/
-        }
+       /* for(int i=0;i<tabsText.length;i++) {*/
+            adapter.addFrag(new FragmentCategorySubCategory(),"");
+           adapter.addFrag(new FragmentDeals(), "");
+          //  adapter.addFrag(new FragmentSubjectList(), "THREE");
+        //}
         viewPager.setAdapter(adapter);
     }
     private void setupTabIcons() {

@@ -39,6 +39,7 @@ import com.cheersondemand.model.ProductsWithCategoryResponse;
 import com.cheersondemand.model.SubCategory;
 import com.cheersondemand.model.SubCategoryResponse;
 import com.cheersondemand.model.authentication.GenRequest;
+import com.cheersondemand.model.deals.DealsResponse;
 import com.cheersondemand.model.order.CreateOrderResponse;
 import com.cheersondemand.model.order.addtocart.AddToCartRequest;
 import com.cheersondemand.model.order.addtocart.AddToCartResponse;
@@ -757,6 +758,11 @@ public class FragmentProductsListing extends Fragment implements View.OnClickLis
 
     @Override
     public void getResponseSuccessSubCat(SubCategoryResponse response) {
+
+    }
+
+    @Override
+    public void getDealsResponse(DealsResponse response) {
 
     }
 

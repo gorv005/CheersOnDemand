@@ -20,6 +20,7 @@ import com.cheersondemand.model.CategoriesResponse;
 import com.cheersondemand.model.ProductsWithCategoryResponse;
 import com.cheersondemand.model.SubCategory;
 import com.cheersondemand.model.SubCategoryResponse;
+import com.cheersondemand.model.deals.DealsResponse;
 import com.cheersondemand.presenter.home.HomeViewPresenterImpl;
 import com.cheersondemand.presenter.home.IHomeViewPresenterPresenter;
 import com.cheersondemand.util.C;
@@ -164,6 +165,11 @@ public class FragmentSubcategoryFilter extends Fragment implements IHomeViewPres
         catch (Exception e){
             e.printStackTrace();
         }
+    }
+
+    @Override
+    public void getDealsResponse(DealsResponse response) {
+
     }
 
     @Override

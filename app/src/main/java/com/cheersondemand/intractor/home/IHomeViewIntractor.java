@@ -6,6 +6,7 @@ import com.cheersondemand.model.BrandResponse;
 import com.cheersondemand.model.CategoriesResponse;
 import com.cheersondemand.model.ProductsWithCategoryResponse;
 import com.cheersondemand.model.SubCategoryResponse;
+import com.cheersondemand.model.deals.DealsResponse;
 
 import java.util.List;
 
@@ -18,6 +19,7 @@ public interface IHomeViewIntractor {
         void onSuccess(CategoriesResponse categoriesResponse);
         void onSuccessBrand(BrandResponse categoriesResponse);
         void onSuccessSubCat(SubCategoryResponse categoriesResponse);
+        public void onSuccessDealsResponse(DealsResponse response);
 
         void onProductWithCategorySuccess(ProductsWithCategoryResponse response);
 
@@ -25,6 +27,7 @@ public interface IHomeViewIntractor {
         Context getAPPContext();
     }
     public void getCategories(String uuid, OnLoginFinishedListener listener);
+    public void getDeals(boolean isAuth,String token,String uuid, OnLoginFinishedListener listener);
 
     public void getCategories(boolean isAuth ,String token,String uuid, String with_subcategory,OnLoginFinishedListener listener);
     public void getSubCategories(boolean isAuth , String token, List<Integer> id,String uuid, OnLoginFinishedListener listener);

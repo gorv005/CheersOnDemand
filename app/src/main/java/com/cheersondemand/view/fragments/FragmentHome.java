@@ -39,6 +39,7 @@ import com.cheersondemand.model.SectionDataModel;
 import com.cheersondemand.model.SingleItemModel;
 import com.cheersondemand.model.SubCategoryResponse;
 import com.cheersondemand.model.authentication.GenRequest;
+import com.cheersondemand.model.deals.DealsResponse;
 import com.cheersondemand.model.order.CreateOrderResponse;
 import com.cheersondemand.model.order.addtocart.AddToCartRequest;
 import com.cheersondemand.model.order.addtocart.AddToCartResponse;
@@ -487,6 +488,11 @@ public class FragmentHome extends Fragment implements SwipeRefreshLayout.OnRefre
 
     @Override
     public void getResponseSuccessSubCat(SubCategoryResponse response) {
+
+    }
+
+    @Override
+    public void getDealsResponse(DealsResponse response) {
 
     }
 

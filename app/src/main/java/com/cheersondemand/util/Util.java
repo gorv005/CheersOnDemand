@@ -218,7 +218,7 @@ public class Util {
     public void hideDialog(){
         try {
 
-            if (progressDialog.isShowing()) {
+            if (progressDialog!=null &&progressDialog.isShowing()) {
                 progressDialog.dismiss();
             }
         }

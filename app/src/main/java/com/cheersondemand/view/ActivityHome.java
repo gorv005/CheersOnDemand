@@ -32,6 +32,7 @@ import com.cheersondemand.util.Util;
 import com.cheersondemand.view.fragments.FragmentCart;
 import com.cheersondemand.view.fragments.FragmentCategoryList;
 import com.cheersondemand.view.fragments.FragmentCoupons;
+import com.cheersondemand.view.fragments.FragmentExplore;
 import com.cheersondemand.view.fragments.FragmentHome;
 import com.cheersondemand.view.fragments.FragmentProductDescription;
 import com.cheersondemand.view.fragments.FragmentProfile;
@@ -117,7 +118,7 @@ public class ActivityHome extends AppCompatActivity implements View.OnClickListe
         rlHome.setOnClickListener(this);
         rlFav.setOnClickListener(this);
         rlSearch.setOnClickListener(this);
-
+        rlExplore.setOnClickListener(this);
         iOrderViewPresenterPresenter = new OrderViewPresenterImpl(this, this);
 
     }
@@ -171,6 +172,12 @@ public class ActivityHome extends AppCompatActivity implements View.OnClickListe
                 fragmentTransaction.replace(R.id.container, fragment);
                 fragmentTransaction.addToBackStack(C.TAG_FRAGMENT_COUPONS);
                 break;
+            case C.FRAGMENT_EXPLORE:
+                currentPage = getString(R.string.explore);
+                fragment = new FragmentExplore();
+                fragmentTransaction.replace(R.id.container, fragment);
+              //  fragmentTransaction.addToBackStack(C.TAG_FRAGMENT_COUPONS);
+                break;
         }
         fragment.setArguments(bundle);
         fragmentTransaction.commit();
@@ -210,6 +217,11 @@ public class ActivityHome extends AppCompatActivity implements View.OnClickListe
                 if (!currentPage.equals(getString(R.string.search_result))) {
 
                     setSearchProducts();
+                }
+            case R.id.rlExplore:
+                if (!currentPage.equals(getString(R.string.explore))) {
+
+                    setExplore();
                 }
                 break;
         }
@@ -384,12 +396,14 @@ public class ActivityHome extends AppCompatActivity implements View.OnClickListe
         ivCart.setImageResource(R.drawable.ic_bar_cart);
         ivSearch.setImageResource(R.drawable.search);
         ivProfile.setImageResource(R.drawable.ic_bar_profile);
+        ivExplore.setImageResource(R.drawable.menu);
         fragmnetLoader(C.FRAGMENT_PRODUCTS_HOME, null);
     }
 
     public void setCart() {
         setTheme(R.style.ActivityTheme);
         ivSearch.setImageResource(R.drawable.search);
+        ivExplore.setImageResource(R.drawable.menu);
 
         currentPage = getString(R.string.my_cart);
         ivFav.setImageResource(R.drawable.heart);
@@ -408,6 +422,7 @@ public class ActivityHome extends AppCompatActivity implements View.OnClickListe
         currentPage = getString(R.string.wishList);
         ivFav.setImageResource(R.drawable.heart_hover);
         ivSearch.setImageResource(R.drawable.search);
+        ivExplore.setImageResource(R.drawable.menu);
 
         ivCart.setImageResource(R.drawable.ic_bar_cart);
         ivProfile.setImageResource(R.drawable.ic_bar_profile);
@@ -421,6 +436,8 @@ public class ActivityHome extends AppCompatActivity implements View.OnClickListe
     public void setSearchProducts() {
         currentPage = getString(R.string.search_result);
         ivFav.setImageResource(R.drawable.heart);
+        ivExplore.setImageResource(R.drawable.menu);
+
         ivSearch.setImageResource(R.drawable.search_hover);
         ivCart.setImageResource(R.drawable.ic_bar_cart);
         ivProfile.setImageResource(R.drawable.ic_bar_profile);
@@ -430,11 +447,26 @@ public class ActivityHome extends AppCompatActivity implements View.OnClickListe
         fragmnetLoader(C.FRAGMENT_SEARCH_PRODUCT, bundle);
 
     }
+    public void setExplore() {
+        currentPage = getString(R.string.explore);
+        ivFav.setImageResource(R.drawable.heart);
+        ivExplore.setImageResource(R.drawable.menu_hover);
+
+        ivSearch.setImageResource(R.drawable.search);
+        ivCart.setImageResource(R.drawable.ic_bar_cart);
+        ivProfile.setImageResource(R.drawable.ic_bar_profile);
+        ivHome.setImageResource(R.drawable.home_disable);
+        Bundle bundle = new Bundle();
+        bundle.putInt(C.SOURCE, C.FRAGMENT_PRODUCTS_HOME);
+        fragmnetLoader(C.FRAGMENT_EXPLORE, bundle);
+
+    }
 
     public void setProfile() {
         currentPage = getString(R.string.profile);
         ivFav.setImageResource(R.drawable.heart);
         ivSearch.setImageResource(R.drawable.search);
+        ivExplore.setImageResource(R.drawable.menu);
 
         ivProfile.setImageResource(R.drawable.profile_enabled);
         ivCart.setImageResource(R.drawable.ic_bar_cart);

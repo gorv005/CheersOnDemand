@@ -8,6 +8,7 @@ import com.cheersondemand.model.BrandResponse;
 import com.cheersondemand.model.CategoriesResponse;
 import com.cheersondemand.model.ProductsWithCategoryResponse;
 import com.cheersondemand.model.SubCategoryResponse;
+import com.cheersondemand.model.deals.DealsResponse;
 
 import java.util.List;
 
@@ -51,6 +52,14 @@ public class HomeViewPresenterImpl implements IHomeViewPresenterPresenter, IHome
     }
 
     @Override
+    public void onSuccessDealsResponse(DealsResponse response) {
+        if (mView != null) {
+            mView.hideProgress();
+            mView.getDealsResponse(response);
+        }
+    }
+
+    @Override
     public void onProductWithCategorySuccess(ProductsWithCategoryResponse response) {
         if (mView != null) {
             mView.hideProgress();
@@ -85,6 +94,14 @@ public class HomeViewPresenterImpl implements IHomeViewPresenterPresenter, IHome
         if (mView != null) {
 
             iHomeViewIntractor.getCategories(isAuth,token,uuid,with_subcategory, this);
+        }
+    }
+
+    @Override
+    public void getDeals(boolean isAuth, String token, String uuid) {
+        if (mView != null) {
+            mView.showProgress();
+            iHomeViewIntractor.getDeals(isAuth,token,uuid, this);
         }
     }
 

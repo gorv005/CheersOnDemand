@@ -9,6 +9,7 @@ import com.cheersondemand.model.BrandResponse;
 import com.cheersondemand.model.CategoriesResponse;
 import com.cheersondemand.model.ProductsWithCategoryResponse;
 import com.cheersondemand.model.SubCategoryResponse;
+import com.cheersondemand.model.deals.DealsResponse;
 import com.google.gson.Gson;
 
 import java.util.List;
@@ -47,6 +48,36 @@ public class HomeViewIntractorImpl implements IHomeViewIntractor {
                     }
                 }
             }, uuid);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void getDeals(boolean isAuth, String token, String uuid, final OnLoginFinishedListener listener) {
+        try {
+
+            WebServicesWrapper.getInstance().getDeals(new ResponseResolver<DealsResponse>() {
+                @Override
+                public void onSuccess(DealsResponse signUpResponse, Response response) {
+                    listener.onSuccessDealsResponse(signUpResponse);
+                }
+
+                @Override
+                public void onFailure(RestError error, String msg) {
+                    if (error == null || error.getError() == null) {
+                        try {
+                            Gson gson = new Gson();
+                            DealsResponse response = gson.fromJson(msg, DealsResponse.class);
+                            listener.onSuccessDealsResponse(response);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    } else {
+                        listener.onError(error.getError());
+                    }
+                }
+            }, isAuth, token, uuid);
         } catch (Exception e) {
             e.printStackTrace();
         }

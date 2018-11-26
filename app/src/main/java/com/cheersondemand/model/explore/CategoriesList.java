@@ -1,20 +1,12 @@
-package com.cheersondemand.model;
+package com.cheersondemand.model.explore;
 
-import com.cheersondemand.model.explore.SubCategoryExplore;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 import java.io.Serializable;
 import java.util.List;
 
-/**
- * Created by AB on 6/11/2018.
- */
-
-public class Categories implements Serializable {
-    @SerializedName("pos")
-    @Expose
-    private Integer pos;
+public class CategoriesList implements Serializable{
     @SerializedName("id")
     @Expose
     private Integer id;
@@ -27,24 +19,9 @@ public class Categories implements Serializable {
     @SerializedName("products_count")
     @Expose
     private Integer productsCount;
-    @SerializedName("is_selected")
-    @Expose
-    private boolean isSelected=false;
     @SerializedName("sub_categories")
     @Expose
     private List<SubCategoryExplore> subCategories = null;
-    public Categories() {
-    }
-
-
-    public Categories(Integer pos, Integer id, String name, String image, Integer productsCount, boolean isSelected) {
-        this.pos = pos;
-        this.id = id;
-        this.name = name;
-        this.image = image;
-        this.productsCount = productsCount;
-        this.isSelected = isSelected;
-    }
 
     public Integer getId() {
         return id;
@@ -78,22 +55,6 @@ public class Categories implements Serializable {
         this.productsCount = productsCount;
     }
 
-    public boolean isSelected() {
-        return isSelected;
-    }
-
-    public void setSelected(boolean selected) {
-        isSelected = selected;
-    }
-
-    public Integer getPos() {
-        return pos;
-    }
-
-    public void setPos(Integer pos) {
-        this.pos = pos;
-    }
-
     public List<SubCategoryExplore> getSubCategories() {
         return subCategories;
     }
@@ -101,4 +62,5 @@ public class Categories implements Serializable {
     public void setSubCategories(List<SubCategoryExplore> subCategories) {
         this.subCategories = subCategories;
     }
+
 }
