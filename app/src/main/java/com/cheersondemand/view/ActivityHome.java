@@ -176,7 +176,7 @@ public class ActivityHome extends AppCompatActivity implements View.OnClickListe
                 currentPage = getString(R.string.explore);
                 fragment = new FragmentExplore();
                 fragmentTransaction.replace(R.id.container, fragment);
-              //  fragmentTransaction.addToBackStack(C.TAG_FRAGMENT_COUPONS);
+               // fragmentTransaction.addToBackStack(C.TAG_FRAGMENT_COUPONS);
                 break;
         }
         fragment.setArguments(bundle);
@@ -218,6 +218,7 @@ public class ActivityHome extends AppCompatActivity implements View.OnClickListe
 
                     setSearchProducts();
                 }
+                break;
             case R.id.rlExplore:
                 if (!currentPage.equals(getString(R.string.explore))) {
 

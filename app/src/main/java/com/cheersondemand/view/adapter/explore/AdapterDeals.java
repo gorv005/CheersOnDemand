@@ -8,11 +8,14 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Filter;
+import android.widget.Filterable;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.cheersondemand.R;
 import com.cheersondemand.model.AllProduct;
+import com.cheersondemand.model.Categories;
 import com.cheersondemand.model.deals.Deals;
 import com.cheersondemand.util.C;
 import com.cheersondemand.util.ImageLoader.ImageLoader;
@@ -21,20 +24,27 @@ import com.cheersondemand.util.Util;
 import com.cheersondemand.view.ActivityContainer;
 import com.cheersondemand.view.ActivityHome;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Created by AB on 6/7/2018.
  */
 
-public class AdapterDeals extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+public class AdapterDeals extends RecyclerView.Adapter<RecyclerView.ViewHolder>  implements Filterable{
     private static final int TYPE_FOOTER = 1;
     private static final int TYPE_ITEM = 0;
     private List<AllProduct> horizontalList;
+    private List<AllProduct> originalData = null;
+    private ItemFilter mFilter = new ItemFilter();
     Activity context;
     ImageLoader imageLoader;
     boolean isHome;
-    private AllProduct allProduct;
+
+    @Override
+    public Filter getFilter() {
+        return mFilter;
+    }
 
     public class ItemViewHolder extends RecyclerView.ViewHolder {
         public TextView tvProductName, tvBottleSize, tvProductPrice, tvAddToCart;
@@ -65,6 +75,7 @@ public class AdapterDeals extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         this.context = context;
         this.isHome = isHome;
         imageLoader = new ImageLoader(context);
+        this.originalData=horizontalList;
     }
 
     public void modifyList() {
@@ -212,5 +223,40 @@ public class AdapterDeals extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
 
         }
     }
+    private class ItemFilter extends Filter {
+        @Override
+        protected FilterResults performFiltering(CharSequence constraint) {
 
+            String filterString = constraint.toString().toLowerCase();
+
+            FilterResults results = new FilterResults();
+
+            final List<AllProduct> list = originalData;
+
+            int count = list.size();
+            final ArrayList<AllProduct> nlist = new ArrayList<AllProduct>(count);
+
+            int filterableString ;
+
+            for (int i = 0; i < count; i++) {
+                filterableString = list.get(i).getCategory().getId();
+                if (filterableString==Integer.parseInt(filterString)) {
+                    nlist.add(list.get(i));
+                }
+            }
+
+            results.values = nlist;
+            results.count = nlist.size();
+
+            return results;
+        }
+
+        @SuppressWarnings("unchecked")
+        @Override
+        protected void publishResults(CharSequence constraint, FilterResults results) {
+            horizontalList = (ArrayList<AllProduct>) results.values;
+            notifyDataSetChanged();
+        }
+
+    }
 }

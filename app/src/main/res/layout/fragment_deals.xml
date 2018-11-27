@@ -6,6 +6,64 @@
     android:layout_height="match_parent">
 
 
+    <LinearLayout
+        android:id="@+id/llCategory"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/v"
+        android:layout_centerVertical="true"
+        android:background="@drawable/shadow_white"
+        android:orientation="vertical"
+        android:layout_marginTop="30dp"
+        android:layout_marginLeft="8dp"
+        android:paddingLeft="15dp"
+        android:paddingRight="15dp"
+        android:layout_marginRight="8dp"
+        android:paddingTop="5dp"
+        android:paddingBottom="5dp"
+        android:visibility="visible">
+
+
+
+        <LinearLayout
+
+            android:padding="5dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/tvCategoryName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:fontFamily="@font/sf_ui_display_regular"
+                android:maxLines="1"
+                android:singleLine="true"
+                android:text="@string/select_a_location"
+                android:textColor="@color/blue_dark"
+                android:textSize="14sp" />
+
+            <RelativeLayout
+                android:layout_gravity="center_vertical"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_gravity="right"
+                    android:layout_marginLeft="10dp"
+                    android:src="@drawable/down_arrow_new" />
+            </RelativeLayout>
+        </LinearLayout>
+        <Spinner
+            android:id="@+id/spinnerCategory"
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:visibility="invisible" />
+
+    </LinearLayout>
 
     <RelativeLayout
         android:layout_marginTop="10dp"

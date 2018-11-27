@@ -77,7 +77,13 @@ public class FragmentCategorySubCategory extends Fragment implements IHomeViewPr
         rvSubCategory.setLayoutManager(new GridLayoutManager(getActivity(), 2));
         rvSubCategory.addItemDecoration(new GridSpacingItemDecoration(2, Util.dpToPx(1, getActivity()), true));
         rvSubCategory.setItemAnimator(new DefaultItemAnimator());
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
         getCategories();
+
     }
 
     void getCategories() {

@@ -11,7 +11,10 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.LinearLayout;
+import android.widget.Spinner;
+import android.widget.TextView;
 
 import com.cheersondemand.R;
 import com.cheersondemand.model.BrandResponse;
@@ -21,6 +24,7 @@ import com.cheersondemand.model.ProductsWithCategoryResponse;
 import com.cheersondemand.model.SubCategoryResponse;
 import com.cheersondemand.model.deals.Deals;
 import com.cheersondemand.model.deals.DealsResponse;
+import com.cheersondemand.model.explore.SpinnerCategoryAdapter;
 import com.cheersondemand.presenter.home.HomeViewPresenterImpl;
 import com.cheersondemand.presenter.home.IHomeViewPresenterPresenter;
 import com.cheersondemand.util.C;
@@ -28,7 +32,6 @@ import com.cheersondemand.util.SharedPreference;
 import com.cheersondemand.util.Util;
 import com.cheersondemand.util.itemdecoration.GridSpacingItemDecoration;
 import com.cheersondemand.view.adapter.explore.AdapterDeals;
-import com.cheersondemand.view.adapter.explore.AdapterSubCategories;
 
 import java.util.List;
 
@@ -39,7 +42,7 @@ import butterknife.Unbinder;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class FragmentDeals extends Fragment implements IHomeViewPresenterPresenter.IHomeView{
+public class FragmentDeals extends Fragment implements IHomeViewPresenterPresenter.IHomeView {
 
 
     @BindView(R.id.rvDeals)
@@ -50,6 +53,17 @@ public class FragmentDeals extends Fragment implements IHomeViewPresenterPresent
     Util util;
     IHomeViewPresenterPresenter iHomeViewPresenterPresenter;
     AdapterDeals adapterDeals;
+    @BindView(R.id.tvCategoryName)
+    TextView tvCategoryName;
+    @BindView(R.id.spinnerCategory)
+    Spinner spinnerCategory;
+    SpinnerCategoryAdapter spinnerCategoryAdapter;
+    List<Categories> categoriesList;
+    Deals deals;
+    int currentPos = -1;
+    @BindView(R.id.llCategory)
+    LinearLayout llCategory;
+
     public FragmentDeals() {
         // Required empty public constructor
     }
@@ -58,7 +72,7 @@ public class FragmentDeals extends Fragment implements IHomeViewPresenterPresent
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        util=new Util();
+        util = new Util();
         iHomeViewPresenterPresenter = new HomeViewPresenterImpl(this, getActivity());
 
     }
@@ -78,8 +92,10 @@ public class FragmentDeals extends Fragment implements IHomeViewPresenterPresent
         rvDeals.setLayoutManager(new GridLayoutManager(getActivity(), 2));
         rvDeals.addItemDecoration(new GridSpacingItemDecoration(2, Util.dpToPx(1, getActivity()), true));
         rvDeals.setItemAnimator(new DefaultItemAnimator());
+        init();
         getDeals();
     }
+
     void getDeals() {
 
         if (SharedPreference.getInstance(getActivity()).getBoolean(C.IS_LOGIN_GUEST)) {
@@ -92,6 +108,34 @@ public class FragmentDeals extends Fragment implements IHomeViewPresenterPresent
             iHomeViewPresenterPresenter.getDeals(true, token, Util.id(getActivity()));
         }
     }
+
+
+    void init() {
+
+        llCategory.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                spinnerCategory.performClick();
+            }
+        });
+        spinnerCategory.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                if (currentPos != position) {
+                    currentPos = position;
+                    tvCategoryName.setText(categoriesList.get(position).getName());
+                    adapterDeals.getFilter().filter("" + categoriesList.get(position).getId());
+
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+    }
+
     @Override
     public void onDestroyView() {
         super.onDestroyView();
@@ -118,15 +162,25 @@ public class FragmentDeals extends Fragment implements IHomeViewPresenterPresent
         try {
 
             if (response.getSuccess()) {
-                Deals deals= response.getData();
-                adapterDeals=new AdapterDeals(true,deals.getProducts(),getActivity());
+                deals = response.getData();
+                categoriesList = response.getData().getCategories();
+                if (categoriesList != null && categoriesList.size() > 0) {
+                    spinnerCategoryAdapter = new SpinnerCategoryAdapter(getActivity(), R.layout.spinner_item_new, categoriesList);
+                    spinnerCategory.setAdapter(spinnerCategoryAdapter);
+                    tvCategoryName.setText(categoriesList.get(0).getName());
+                    currentPos = 0;
+
+                }
+                adapterDeals = new AdapterDeals(true, deals.getProducts(), getActivity());
                 rvDeals.setAdapter(adapterDeals);
+                if (categoriesList != null && categoriesList.size() > 0) {
+                    adapterDeals.getFilter().filter("" + categoriesList.get(0).getId());
+                }
             } else {
                 util.setSnackbarMessage(getActivity(), response.getMessage(), llView, true);
 
             }
-        }
-        catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
