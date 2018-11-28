@@ -96,7 +96,7 @@ public class FragmentDeals extends Fragment implements IHomeViewPresenterPresent
         getDeals();
     }
 
-    void getDeals() {
+   public void getDeals() {
 
         if (SharedPreference.getInstance(getActivity()).getBoolean(C.IS_LOGIN_GUEST)) {
             String id = "" + SharedPreference.getInstance(getActivity()).geGuestUser(C.GUEST_USER).getId();

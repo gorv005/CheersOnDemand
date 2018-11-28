@@ -86,7 +86,7 @@ public class FragmentCategorySubCategory extends Fragment implements IHomeViewPr
 
     }
 
-    void getCategories() {
+   public void getCategories() {
 
         if (SharedPreference.getInstance(getActivity()).getBoolean(C.IS_LOGIN_GUEST)) {
             String id = "" + SharedPreference.getInstance(getActivity()).geGuestUser(C.GUEST_USER).getId();

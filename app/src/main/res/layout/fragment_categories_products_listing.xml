@@ -18,18 +18,43 @@
             android:id="@+id/imgBack"
             android:layout_width="25dp"
             android:layout_height="25dp"
-            android:layout_alignParentBottom="true"
             android:layout_marginLeft="25dp"
 
-            android:layout_marginTop="21dp">
+            android:layout_marginTop="17dp">
 
             <ImageView
                 android:layout_width="15dp"
                 android:layout_height="15dp"
                 android:src="@drawable/back_white" />
         </RelativeLayout>
+        <LinearLayout
+            android:id="@+id/llStoreSelect"
+            android:layout_centerInParent="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+            <TextView
+                android:id="@+id/tvStoreName"
+                android:layout_width="wrap_content"
+                android:maxWidth="150dp"
+                android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:fontFamily="@font/sf_ui_display_regular"
+                android:maxLines="1"
+                android:singleLine="true"
+                android:text="@string/select_a_location"
+                android:textColor="@color/white"
+                android:textSize="16sp" />
 
-        <TextView
+            <ImageView
+                android:layout_alignParentRight="true"
+                android:layout_width="15dp"
+                android:layout_height="15dp"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="5dp"
+                android:src="@drawable/edit" />
+        </LinearLayout>
+
+       <!-- <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
@@ -39,7 +64,8 @@
             android:gravity="center_horizontal"
             android:text="@string/product_listing"
             android:textColor="@color/white"
-            android:textSize="16sp" />
+            android:textSize="16sp" />-->
+
 
     </RelativeLayout>
 
@@ -57,7 +83,7 @@
             android:paddingEnd="10dp"
             android:paddingStart="10dp">
 
-            <TextView
+            <!--<TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
@@ -65,7 +91,7 @@
                 android:fontFamily="@font/sf_ui_display_regular"
                 android:text="@string/categories"
                 android:textColor="@color/profile_text_color"
-                android:textSize="16sp" />
+                android:textSize="16sp" />-->
 
             <LinearLayout
                 android:layout_width="wrap_content"
@@ -181,6 +207,7 @@
 
             android:background="@color/edit_text_border" />
 
+<!--
         <LinearLayout
             android:id="@+id/llStoreSelect"
             android:layout_width="match_parent"
@@ -253,11 +280,12 @@
                 android:visibility="gone"
                 android:background="@color/edit_text_border" />
         </LinearLayout>
+-->
 
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_below="@id/llStoreSelect">
+            android:layout_below="@id/llSortView">
 
             <android.support.v7.widget.RecyclerView
 
