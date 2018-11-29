@@ -257,6 +257,7 @@ public class FragmentAddressList extends Fragment implements View.OnClickListene
             RecentLocation recentLocation=new RecentLocation();
             recentLocation.setId(adapterAddress.getSelectedAddress().getId());
             recentLocation.setAddress(adapterAddress.getSelectedAddress().getAddress());
+            SharedPreference.getInstance(getActivity()).setString(C.LOCATION_SELECTED,adapterAddress.getSelectedAddress().getAddress());
             SharedPreference.getInstance(getActivity()).setLocation(C.SELECTED_LOCATION,recentLocation);
         }
     }
