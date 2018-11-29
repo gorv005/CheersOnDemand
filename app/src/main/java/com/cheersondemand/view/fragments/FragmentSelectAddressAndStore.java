@@ -8,6 +8,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
+import android.view.SurfaceHolder;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -85,7 +86,7 @@ public class FragmentSelectAddressAndStore extends Fragment implements ILocation
     @BindView(R.id.rlAddNewAddress)
     RelativeLayout rlAddNewAddress;
     IAddressViewPresenter iAddressViewPresenter;
-
+    boolean isCrossShow=false;
     public FragmentSelectAddressAndStore() {
         // Required empty public constructor
     }
@@ -98,6 +99,7 @@ public class FragmentSelectAddressAndStore extends Fragment implements ILocation
         iStoreViewPresenter = new StoreViewPresenterImpl(this, getActivity());
         iAddressViewPresenter = new AddressViewPresenterImpl(this, getActivity());
         source = getArguments().getInt(C.FROM);
+        isCrossShow = getArguments().getBoolean(C.IS_CROSS_SHOW);
 
         util = new Util();
     }
@@ -119,6 +121,13 @@ public class FragmentSelectAddressAndStore extends Fragment implements ILocation
         rlAddNewAddress.setOnClickListener(this);
         btnSubmit.setEnabled(false);
         llStoreList.setVisibility(View.GONE);
+        if(isCrossShow){
+            imgBack.setVisibility(View.VISIBLE);
+        }
+        else {
+            imgBack.setVisibility(View.GONE);
+
+        }
 
     }
 

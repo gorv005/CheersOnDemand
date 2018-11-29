@@ -78,47 +78,7 @@
                     android:background="@color/white"
                     android:orientation="vertical">
 
-                    <RelativeLayout
-                        android:id="@+id/rlAddNewAddress"
-                        android:layout_width="match_parent"
-                        android:layout_height="50dp"
-                        android:background="@color/white">
 
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_centerVertical="true"
-                            android:focusable="true"
-                            android:focusableInTouchMode="true"
-                            android:orientation="horizontal"
-                            android:paddingLeft="15dp">
-
-                            <ImageView
-                                android:layout_width="20dp"
-                                android:layout_height="20dp"
-                                android:layout_centerInParent="true"
-                                android:src="@drawable/plus" />
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_alignParentBottom="true"
-                                android:layout_centerHorizontal="true"
-                                android:layout_marginLeft="10dp"
-                                android:fontFamily="@font/sf_ui_display_regular"
-                                android:gravity="center_horizontal"
-                                android:text="@string/add_new_address"
-                                android:textColor="@color/profile_text_color"
-                                android:textSize="16sp" />
-
-                        </LinearLayout>
-
-                    </RelativeLayout>
-                    <View
-
-                        android:background="@color/hint_color"
-                        android:layout_width="match_parent"
-                        android:layout_height="1dp"/>
                     <LinearLayout
                         android:id="@+id/rlRecentSearch"
                         android:layout_width="match_parent"
@@ -138,6 +98,44 @@
                         </com.cheersondemand.util.NonScrollListView>
 
                     </LinearLayout>
+                    <RelativeLayout
+                        android:id="@+id/rlAddNewAddress"
+                        android:layout_width="match_parent"
+                        android:layout_height="40dp"
+                        android:background="@color/add_change_back">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_centerVertical="true"
+                            android:focusable="true"
+                            android:focusableInTouchMode="true"
+                            android:orientation="horizontal"
+                            android:paddingLeft="15dp">
+
+
+                            <TextView
+
+                                android:layout_gravity="center_horizontal"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_alignParentBottom="true"
+                                android:layout_centerHorizontal="true"
+                                android:layout_marginLeft="10dp"
+                                android:fontFamily="@font/sf_ui_display_regular"
+                                android:gravity="center_horizontal"
+                                android:text="@string/change_add_new_address"
+                                android:textColor="@color/profile_text_color"
+                                android:textSize="16sp" />
+
+                        </LinearLayout>
+
+                    </RelativeLayout>
+                    <View
+
+                        android:background="@color/hint_color"
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"/>
                 </LinearLayout>
 
                 <LinearLayout
@@ -152,7 +150,7 @@
                         android:id="@+id/rlShopFromStore"
                         android:layout_width="match_parent"
                         android:layout_height="50dp"
-                        android:background="@color/light_grey">
+                        android:background="@color/add_change_back">
 
                         <LinearLayout
                             android:layout_width="match_parent"

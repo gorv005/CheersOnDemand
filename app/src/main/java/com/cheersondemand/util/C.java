@@ -160,4 +160,6 @@ public interface C {
     String IS_FROM_LOCATION_AND_STORE_SCREEN = "is_from_location_and_home_screen";
     String ADDRESS_NAME = "address_name";
     int FRAGMENT_EXPLORE = 38;
+    String IS_CROSS_SHOW = "is_cross_show";
+    String TAG_FRAGMENT_EXPLORE = "TAG_FRAGMENT_EXPLORE";
 }

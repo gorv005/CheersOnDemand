@@ -59,6 +59,9 @@ public class AllProduct implements Serializable {
     @SerializedName("sale_price")
     @Expose
     private String salePrice;
+    @SerializedName("discount")
+    @Expose
+    private String discount;
     @SerializedName("sub_category")
     @Expose
     private SubCategory subCategory;
@@ -242,6 +245,14 @@ public class AllProduct implements Serializable {
 
     public void setSalePrice(String salePrice) {
         this.salePrice = salePrice;
+    }
+
+    public String getDiscount() {
+        return discount;
+    }
+
+    public void setDiscount(String discount) {
+        this.discount = discount;
     }
 
     public void setDeliverable(Boolean deliverable) {

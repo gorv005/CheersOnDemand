@@ -311,6 +311,8 @@
     <string name="profile_setting">Profile Settings</string>
     <string name="explore">Explore</string>
     <string name="bottle">Bottle</string>
+    <string name="off">OFF</string>
+    <string name="change_add_new_address">Change / Add Address</string>
 
     <!--
         <string name="default_web_client_id">999387565226-hdnnhm6rhgik5ljvm06shotsi7j9883c.apps.googleusercontent.com</string>

@@ -58,5 +58,8 @@
     <color name="blue_dark">#017A98</color>
     <color name="light_grey">#F2F2F2</color>
     <color name="divider_color_fav">#f8f8f8</color>
+    <color name="red_offer">#ce0000</color>
+    <color name="add_change_back">#F3F7FA</color>
+
 
 </resources>

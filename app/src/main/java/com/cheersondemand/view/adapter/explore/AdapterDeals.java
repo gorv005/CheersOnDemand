@@ -47,9 +47,9 @@ public class AdapterDeals extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
     }
 
     public class ItemViewHolder extends RecyclerView.ViewHolder {
-        public TextView tvProductName, tvBottleSize, tvProductPrice, tvAddToCart;
+        public TextView tvProductName, tvBottleSize, tvProductPrice, tvAddToCart,tvOffer;
         public ImageView ivProductImage, ivLike;
-        View rlProduct, btnAddToCart, btnAddedToCart;
+        View rlProduct, btnAddToCart, btnAddedToCart,rlOffer;
 
         public ItemViewHolder(View view) {
             super(view);
@@ -63,6 +63,8 @@ public class AdapterDeals extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
             ivProductImage = (ImageView) view.findViewById(R.id.ivProductImage);
             rlProduct = (View) view.findViewById(R.id.rlProduct);
             btnAddToCart = (View) view.findViewById(R.id.btnAddToCart);
+            rlOffer = (View) view.findViewById(R.id.rlOffer);
+            tvOffer = (TextView) view.findViewById(R.id.tvOffer);
 
 
             ivLike = (ImageView) view.findViewById(R.id.ivLike);
@@ -78,10 +80,14 @@ public class AdapterDeals extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         this.originalData=horizontalList;
     }
 
-    public void modifyList() {
+    public void modifyList(int pos,AllProduct allProduct) {
+        horizontalList.set(pos,allProduct);
         notifyDataSetChanged();
     }
+    public void notifyData() {
 
+        notifyDataSetChanged();
+    }
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         if (viewType == TYPE_ITEM) {
@@ -96,6 +102,7 @@ public class AdapterDeals extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         } else
             return null;
     }
+
 
     @Override
     public void onBindViewHolder(final RecyclerView.ViewHolder holder, final int position) {
@@ -119,6 +126,14 @@ public class AdapterDeals extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
             }
             else {
                 itemViewHolder.tvBottleSize.setText("");
+            }
+            if(allProduct.getDiscount()!=null){
+                itemViewHolder.rlOffer.setVisibility(View.VISIBLE);
+                itemViewHolder.tvOffer.setText(allProduct.getDiscount()+"%");
+            }
+            else {
+                itemViewHolder.rlOffer.setVisibility(View.GONE);
+
             }
             //  imageLoader.DisplayImage(horizontalList.get(position).getImage(),itemViewHolder.ivProductImage);
             Util.setImage(context, allProduct.getImage(), itemViewHolder.ivProductImage);
@@ -154,10 +169,10 @@ public class AdapterDeals extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
                 @Override
                 public void onClick(View v) {
                     if (isHome) {
-                        ((ActivityHome) context).addToCart(1, position, true);
+                        ((ActivityHome) context).addToCart(0, position, true);
 
                     } else {
-                        ((ActivityContainer) context).addToCart(1, position, true);
+                        ((ActivityContainer) context).addToCart(0, position, true);
                     }
                 }
             });
@@ -166,10 +181,10 @@ public class AdapterDeals extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
                 @Override
                 public void onClick(View v) {
                     if (isHome) {
-                        ((ActivityHome) context).wishListUpdate(1, position, !horizontalList.get(position).getIsWishlisted());
+                        ((ActivityHome) context).wishListUpdate(0, position, !horizontalList.get(position).getIsWishlisted());
 
                     } else {
-                        ((ActivityContainer) context).wishListUpdate(1, position, !horizontalList.get(position).getIsWishlisted());
+                        ((ActivityContainer) context).wishListUpdate(0, position, !horizontalList.get(position).getIsWishlisted());
                     }
                 }
             });

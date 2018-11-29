@@ -8,6 +8,7 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
@@ -33,7 +34,7 @@ import butterknife.Unbinder;
  */
 public class FragmentExplore extends Fragment implements View.OnClickListener {
 
-    int pos = 0;
+    int pos;
     @BindView(R.id.tabs)
     TabLayout tabs;
     @BindView(R.id.tabsLayout)
@@ -53,7 +54,7 @@ public class FragmentExplore extends Fragment implements View.OnClickListener {
     @BindView(R.id.rlbar)
     RelativeLayout rlbar;
     ViewPagerAdapter adapter;
-
+    FragmentManager fragmentManager;
     public FragmentExplore() {
         // Required empty public constructor
     }
@@ -74,8 +75,10 @@ public class FragmentExplore extends Fragment implements View.OnClickListener {
         tabs.setupWithViewPager(viewpager);
         llLocationName.setOnClickListener(this);
         ivCart.setOnClickListener(this);
+
         setupViewPager(viewpager);
         setupTabIcons();
+
     }
 
     @Override
@@ -96,20 +99,68 @@ public class FragmentExplore extends Fragment implements View.OnClickListener {
         }
     }
 
+    public  void addToCart(int secPos, int pos, boolean isAdd){
+
+        if (adapter.getItem(1) != null) {
+            ((FragmentDeals) adapter.getItem(1)).addToCart(secPos,pos,isAdd);
+        }
+
+    }
+    public  void wishListUpdate(int secPos, int pos, boolean isAdd){
+
+        if (adapter.getItem(1) != null) {
+            ((FragmentDeals) adapter.getItem(1)).wishListUpdate(secPos,pos,isAdd);
+        }
+
+    }
     private void setupViewPager(ViewPager viewPager) {
         if(adapter==null) {
-            adapter = new ViewPagerAdapter(getActivity().getSupportFragmentManager());
+            fragmentManager=getActivity().getSupportFragmentManager();
+            adapter = new ViewPagerAdapter(fragmentManager);
             /* for(int i=0;i<tabsText.length;i++) {*/
-            adapter.addFrag(new FragmentCategorySubCategory(), "");
-            adapter.addFrag(new FragmentDeals(), "");
+           // adapter.addFrag(new FragmentCategorySubCategory(), "");
+          //  adapter.addFrag(new FragmentDeals(), "");
             //  adapter.addFrag(new FragmentSubjectList(), "THREE");
             //}
             viewPager.setAdapter(adapter);
+           // tabs.setupWithViewPager(viewpager);
+
         }
     }
 
+    /*@Override
+    public void onDestroy() {
+        super.onDestroy();
+        try {
+            fragmentManager.beginTransaction().remove(adapter.getItem(0)).commitAllowingStateLoss();
+            fragmentManager.beginTransaction().remove(adapter.getItem(1)).commitAllowingStateLoss();
+        }
+        catch (Exception e){
+            e.printStackTrace();
+        }
+    }*/
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        try {
+            fragmentManager.beginTransaction().remove(adapter.getItem(0)).commitAllowingStateLoss();
+            fragmentManager.beginTransaction().remove(adapter.getItem(1)).commitAllowingStateLoss();
+        }
+        catch (Exception e){
+            e.printStackTrace();
+        }
+
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+
+    }
+
     private void setupTabIcons() {
-        tabs.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+       /* tabs.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
                 pos = tab.getPosition();
@@ -124,7 +175,7 @@ public class FragmentExplore extends Fragment implements View.OnClickListener {
             public void onTabReselected(TabLayout.Tab tab) {
 
             }
-        });
+        });*/
         tabs.setSelectedTabIndicatorColor(ContextCompat.getColor(getActivity(), R.color.blue_dark));
         tabs.setSelectedTabIndicatorHeight((int) (4 * getResources().getDisplayMetrics().density));
 
@@ -174,6 +225,8 @@ public class FragmentExplore extends Fragment implements View.OnClickListener {
         Bundle bundle = new Bundle();
         intent.putExtra(C.FRAGMENT_ACTION, C.FRAGMENT_STORE_LOCATION_LIST);
         bundle.putInt(C.FROM, C.FRAGMENT_PRODUCT_LISTING);
+        bundle.putBoolean(C.IS_CROSS_SHOW, true);
+
         intent.putExtra(C.BUNDLE, bundle);
         startActivity(intent);
 

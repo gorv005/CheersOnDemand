@@ -148,6 +148,7 @@ public class FragmentSplash extends Fragment {
         Bundle bundle = new Bundle();
         intent.putExtra(C.FRAGMENT_ACTION, C.FRAGMENT_STORE_LOCATION_LIST);
         bundle.putInt(C.FROM, C.HOME);
+        bundle.putBoolean(C.IS_CROSS_SHOW, false);
         intent.putExtra(C.BUNDLE, bundle);
         startActivity(intent);
 

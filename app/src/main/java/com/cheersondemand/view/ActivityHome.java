@@ -129,17 +129,19 @@ public class ActivityHome extends AppCompatActivity implements View.OnClickListe
 
         switch (fragmentType) {
             case C.FRAGMENT_PRODUCTS_HOME:
+
                 currentPage = getString(R.string.home);
                 fragment = new FragmentHome();
                 fragmentTransaction.replace(R.id.container, fragment);
                 //fragmentTransaction.addToBackStack(C.TAG_FRAGMENT_PRODUCTS_HOME);
                 break;
             case C.FRAGMENT_PROFILE_HOME:
+
                 currentPage = getString(R.string.profile);
 
                 fragment = new FragmentProfile();
                 fragmentTransaction.replace(R.id.container, fragment);
-                //fragmentTransaction.addToBackStack(C.TAG_FRAGMENT_PRODUCTS_HOME);
+             //   fragmentTransaction.addToBackStack(C.TAG_FRAGMENT_PRODUCTS_HOME);
                 break;
             case C.FRAGMENT_CART:
                 currentPage = getString(R.string.my_cart);
@@ -152,31 +154,37 @@ public class ActivityHome extends AppCompatActivity implements View.OnClickListe
                 currentPage = "Categories";
                 fragment = new FragmentCategoryList();
                 fragmentTransaction.replace(R.id.container, fragment);
-                fragmentTransaction.addToBackStack(C.TAG_FRAGMENT_CATEGORY);
+                //fragmentTransaction.addToBackStack(C.TAG_FRAGMENT_CATEGORY);
                 break;
             case C.FRAGMENT_WISHLIST:
+
                 currentPage = getString(R.string.wishList);
                 fragment = new FragmentWishList();
                 fragmentTransaction.replace(R.id.container, fragment);
-                fragmentTransaction.addToBackStack(C.TAG_FRAGMENT_WISHLIST);
+             //   fragmentTransaction.addToBackStack(C.TAG_FRAGMENT_WISHLIST);
                 break;
             case C.FRAGMENT_SEARCH_PRODUCT:
+
                 currentPage = getString(R.string.search_result);
                 fragment = new FragmentSearchProducts();
                 fragmentTransaction.replace(R.id.container, fragment);
-                fragmentTransaction.addToBackStack(C.TAG_FRAGMENT_SEARCH_PRODUCTS);
+              //  fragmentTransaction.addToBackStack(C.TAG_FRAGMENT_SEARCH_PRODUCTS);
                 break;
             case C.FRAGMENT_COUPON_LIST:
                 currentPage = "coupon";
                 fragment = new FragmentCoupons();
                 fragmentTransaction.replace(R.id.container, fragment);
-                fragmentTransaction.addToBackStack(C.TAG_FRAGMENT_COUPONS);
+               // fragmentTransaction.addToBackStack(C.TAG_FRAGMENT_COUPONS);
                 break;
             case C.FRAGMENT_EXPLORE:
+               // getSupportFragmentManager().popBackStack();
+
                 currentPage = getString(R.string.explore);
-                fragment = new FragmentExplore();
+
+                   fragment = new FragmentExplore();
+
                 fragmentTransaction.replace(R.id.container, fragment);
-               // fragmentTransaction.addToBackStack(C.TAG_FRAGMENT_COUPONS);
+                //fragmentTransaction.addToBackStack(C.TAG_FRAGMENT_EXPLORE);
                 break;
         }
         fragment.setArguments(bundle);
@@ -185,7 +193,23 @@ public class ActivityHome extends AppCompatActivity implements View.OnClickListe
 
 
     }
-
+    private Fragment getCurrentFragment(){
+        try {
+            FragmentManager fragmentManager = getSupportFragmentManager();
+            FragmentManager.BackStackEntry backStackEntry = fragmentManager.getBackStackEntryAt(fragmentManager.getBackStackEntryCount() - 2);
+            if (backStackEntry != null) {
+                String fragmentTag = backStackEntry.getName();
+                if (fragmentTag != null && fragmentTag.equals(C.TAG_FRAGMENT_EXPLORE)) {
+                    Fragment currentFragment = fragmentManager.findFragmentByTag(fragmentTag);
+                    return currentFragment;
+                }
+            }
+        }
+        catch (Exception e){
+            e.printStackTrace();
+        }
+        return null;
+    }
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
@@ -312,6 +336,10 @@ public class ActivityHome extends AppCompatActivity implements View.OnClickListe
             ((FragmentWishList) fragment).addToCart(secPos, pos, isAdd);
 
         }
+        else if (fragment != null && fragment instanceof FragmentExplore) {
+            ((FragmentExplore) fragment).addToCart(secPos, pos, isAdd);
+
+        }
     }
 
     public void addToCart(int secPos, int pos, boolean isAdd, View v1, View v2) {
@@ -377,6 +405,10 @@ public class ActivityHome extends AppCompatActivity implements View.OnClickListe
 
         } else if (fragment != null && fragment instanceof FragmentWishList) {
             ((FragmentWishList) fragment).wishListUpdate(secPos, pos, isAdd);
+
+        }
+        else if (fragment != null && fragment instanceof FragmentExplore) {
+            ((FragmentExplore) fragment).wishListUpdate(secPos, pos, isAdd);
 
         }
     }
@@ -459,7 +491,9 @@ public class ActivityHome extends AppCompatActivity implements View.OnClickListe
         ivHome.setImageResource(R.drawable.home_disable);
         Bundle bundle = new Bundle();
         bundle.putInt(C.SOURCE, C.FRAGMENT_PRODUCTS_HOME);
-        fragmnetLoader(C.FRAGMENT_EXPLORE, bundle);
+
+
+            fragmnetLoader(C.FRAGMENT_EXPLORE, bundle);
 
     }
 

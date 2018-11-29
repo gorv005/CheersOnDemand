@@ -889,6 +889,8 @@ public class FragmentProductsListing extends Fragment implements View.OnClickLis
         Bundle bundle = new Bundle();
         intent.putExtra(C.FRAGMENT_ACTION, C.FRAGMENT_STORE_LOCATION_LIST);
         bundle.putInt(C.FROM, C.FRAGMENT_PRODUCT_LISTING);
+        bundle.putBoolean(C.IS_CROSS_SHOW, true);
+
         intent.putExtra(C.BUNDLE, bundle);
         startActivity(intent);
 

@@ -1,6 +1,7 @@
 package com.cheersondemand.view.fragments;
 
 
+import android.content.Intent;
 import android.graphics.Rect;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -12,6 +13,8 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AbsListView;
+import android.widget.ExpandableListView;
 import android.widget.LinearLayout;
 
 import com.cheersondemand.R;
@@ -21,13 +24,12 @@ import com.cheersondemand.model.CategoriesResponse;
 import com.cheersondemand.model.ProductsWithCategoryResponse;
 import com.cheersondemand.model.SubCategoryResponse;
 import com.cheersondemand.model.deals.DealsResponse;
-import com.cheersondemand.model.explore.CategoriesList;
 import com.cheersondemand.presenter.home.HomeViewPresenterImpl;
 import com.cheersondemand.presenter.home.IHomeViewPresenterPresenter;
 import com.cheersondemand.util.C;
 import com.cheersondemand.util.SharedPreference;
 import com.cheersondemand.util.Util;
-import com.cheersondemand.view.adapter.AdapterCategories;
+import com.cheersondemand.view.adapter.explore.AdapterCategoriesSubcategories;
 import com.cheersondemand.view.adapter.explore.AdapterSubCategories;
 
 import java.util.List;
@@ -39,25 +41,28 @@ import butterknife.Unbinder;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class FragmentCategorySubCategory extends Fragment implements IHomeViewPresenterPresenter.IHomeView{
+public class FragmentCategorySubCategory extends Fragment implements IHomeViewPresenterPresenter.IHomeView {
 
-
-    @BindView(R.id.rvSubCategory)
-    RecyclerView rvSubCategory;
     @BindView(R.id.llView)
     LinearLayout llView;
     Unbinder unbinder;
     Util util;
     IHomeViewPresenterPresenter iHomeViewPresenterPresenter;
     AdapterSubCategories adapterSubCategories;
+    @BindView(R.id.lvExpCategory)
+    ExpandableListView lvExpCategory;
+    AdapterCategoriesSubcategories adapterCategoriesSubcategories;
     public FragmentCategorySubCategory() {
         // Required empty public constructor
     }
-
+    public static FragmentCategorySubCategory newInstance() {
+        FragmentCategorySubCategory fragmentFirst = new FragmentCategorySubCategory();
+        return fragmentFirst;
+    }
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        util=new Util();
+        util = new Util();
         iHomeViewPresenterPresenter = new HomeViewPresenterImpl(this, getActivity());
 
     }
@@ -74,28 +79,40 @@ public class FragmentCategorySubCategory extends Fragment implements IHomeViewPr
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        rvSubCategory.setLayoutManager(new GridLayoutManager(getActivity(), 2));
-        rvSubCategory.addItemDecoration(new GridSpacingItemDecoration(2, Util.dpToPx(1, getActivity()), true));
-        rvSubCategory.setItemAnimator(new DefaultItemAnimator());
+        lvExpCategory.setTranscriptMode(AbsListView.TRANSCRIPT_MODE_DISABLED);
+        lvExpCategory.setOnGroupExpandListener(new ExpandableListView.OnGroupExpandListener() {
+            int previousGroup = -1;
+            @Override
+            public void onGroupExpand(int groupPosition) {
+
+                if(groupPosition != previousGroup)
+                    lvExpCategory.collapseGroup(previousGroup);
+                previousGroup = groupPosition;
+
+
+            }
+        });
+
+        getCategories();
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        getCategories();
+
 
     }
 
-   public void getCategories() {
+    public void getCategories() {
 
         if (SharedPreference.getInstance(getActivity()).getBoolean(C.IS_LOGIN_GUEST)) {
             String id = "" + SharedPreference.getInstance(getActivity()).geGuestUser(C.GUEST_USER).getId();
 
-            iHomeViewPresenterPresenter.getCategories(false, "", Util.id(getActivity()),""+true);
+            iHomeViewPresenterPresenter.getCategories(false, "", Util.id(getActivity()), "" + true);
         } else {
             String id = "" + SharedPreference.getInstance(getActivity()).getUser(C.AUTH_USER).getData().getUser().getId();
             String token = C.bearer + SharedPreference.getInstance(getActivity()).getUser(C.AUTH_USER).getData().getToken().getAccessToken();
-            iHomeViewPresenterPresenter.getCategories(true, token, Util.id(getActivity()),""+true);
+            iHomeViewPresenterPresenter.getCategories(true, token, Util.id(getActivity()), "" + true);
         }
     }
 
@@ -130,15 +147,16 @@ public class FragmentCategorySubCategory extends Fragment implements IHomeViewPr
         try {
 
             if (response.getSuccess()) {
-              List<Categories> categories= response.getData();
-            adapterSubCategories=new AdapterSubCategories(true,categories.get(0).getSubCategories(),getActivity());
-            rvSubCategory.setAdapter(adapterSubCategories);
+                List<Categories> categories = response.getData();
+                adapterCategoriesSubcategories=new AdapterCategoriesSubcategories(getActivity(),categories);
+                lvExpCategory.setAdapter(adapterCategoriesSubcategories);
+              /*  adapterSubCategories = new AdapterSubCategories(true, categories.get(0).getSubCategories(), getActivity());
+                rvSubCategory.setAdapter(adapterSubCategories);*/
             } else {
                 util.setSnackbarMessage(getActivity(), response.getMessage(), llView, true);
 
             }
-        }
-        catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
