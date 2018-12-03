@@ -215,10 +215,18 @@ public class FragmentAddressList extends Fragment implements View.OnClickListene
                     addresses = Response.getData();
                     adapterAddress = new AdapterAddress(addresses, getActivity(),addressName);
                     rvAddressList.setAdapter(adapterAddress);
+                    /*if(isLocationChanged) {
+                        RecentLocation recentLocation = new RecentLocation();
+                        recentLocation.setLatitude(horizontalList.get(position).getLatitude());
+                        recentLocation.setLongitude(horizontalList.get(position).getLongitude());
+                        saveLocation();
+                    }*/
                 } else {
                     llNoProductInCount.setVisibility(View.VISIBLE);
                     rvAddressList.setVisibility(View.GONE);
-                    gotoAddAddress();
+                    if(isLocationChanged) {
+                        gotoAddAddress();
+                    }
                 }
             } else {
                 util.setSnackbarMessage(getActivity(), Response.getMessage(), rlView, true);

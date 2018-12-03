@@ -101,6 +101,18 @@ public class ItemViewHolder extends RecyclerView.ViewHolder {
     public void onBindViewHolder(final RecyclerView.ViewHolder  holder, final int position) {
         if (holder instanceof ItemViewHolder) {
             final ItemViewHolder itemViewHolder = (ItemViewHolder) holder;
+            itemViewHolder.radioButton.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                    if(isChecked){
+                        RecentLocation recentLocation=new RecentLocation();
+                        recentLocation.setLatitude(horizontalList.get(position).getLatitude());
+                        recentLocation.setLongitude(horizontalList.get(position).getLongitude());
+
+                        ((ActivityContainer)context).saveLocation(recentLocation);
+                    }
+                }
+            });
 
             if (horizontalList.get(position).getAddress() .equals( lastCheckedPosition)){
                 pos=position;
@@ -116,18 +128,6 @@ public class ItemViewHolder extends RecyclerView.ViewHolder {
             itemViewHolder.tvSubAddress.setText(horizontalList.get(position).getFlatNo()+" "+horizontalList.get(position).getAddress()
             + " "+horizontalList.get(position).getZipCode());
 
-            itemViewHolder.radioButton.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-                @Override
-                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                    if(isChecked){
-                        RecentLocation recentLocation=new RecentLocation();
-                        recentLocation.setLatitude(horizontalList.get(position).getLatitude());
-                        recentLocation.setLatitude(horizontalList.get(position).getLongitude());
-
-                        ((ActivityContainer)context).saveLocation(recentLocation);
-                    }
-                }
-            });
             itemViewHolder.llEdit.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -168,7 +168,7 @@ public class ItemViewHolder extends RecyclerView.ViewHolder {
                 public void onClick(View v) {
                     RecentLocation recentLocation=new RecentLocation();
                     recentLocation.setLatitude(horizontalList.get(position).getLatitude());
-                    recentLocation.setLatitude(horizontalList.get(position).getLongitude());
+                    recentLocation.setLongitude(horizontalList.get(position).getLongitude());
 
                     ((ActivityContainer)context).saveLocation(recentLocation);
                     lastCheckedPosition = horizontalList.get(position).getAddress();

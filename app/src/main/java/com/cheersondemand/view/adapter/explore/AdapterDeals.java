@@ -40,7 +40,7 @@ public class AdapterDeals extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
     Activity context;
     ImageLoader imageLoader;
     boolean isHome;
-
+    int clickablePos=-1;
     @Override
     public Filter getFilter() {
         return mFilter;
@@ -71,6 +71,9 @@ public class AdapterDeals extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         }
     }
 
+    public  List<AllProduct> getRendererList(){
+        return horizontalList;
+    }
 
     public AdapterDeals(boolean isHome, List<AllProduct> horizontalList, Activity context) {
         this.horizontalList = horizontalList;

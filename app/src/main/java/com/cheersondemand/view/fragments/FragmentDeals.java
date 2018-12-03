@@ -44,7 +44,6 @@ import com.cheersondemand.util.SharedPreference;
 import com.cheersondemand.util.StoreProducts;
 import com.cheersondemand.util.Util;
 import com.cheersondemand.util.itemdecoration.GridSpacingItemDecoration;
-import com.cheersondemand.view.ActivityHome;
 import com.cheersondemand.view.adapter.explore.AdapterDeals;
 
 import java.util.List;
@@ -56,7 +55,7 @@ import butterknife.Unbinder;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class FragmentDeals extends Fragment implements IHomeViewPresenterPresenter.IHomeView,IOrderViewPresenterPresenter.IOrderView {
+public class FragmentDeals extends Fragment implements IHomeViewPresenterPresenter.IHomeView, IOrderViewPresenterPresenter.IOrderView {
 
 
     @BindView(R.id.rvDeals)
@@ -77,6 +76,8 @@ public class FragmentDeals extends Fragment implements IHomeViewPresenterPresent
     int currentPos = -1;
     @BindView(R.id.llCategory)
     LinearLayout llCategory;
+    @BindView(R.id.tvNoProduct)
+    TextView tvNoProduct;
     private int productPos;
     private int secPos;
     private boolean isAdd;
@@ -92,6 +93,7 @@ public class FragmentDeals extends Fragment implements IHomeViewPresenterPresent
         FragmentDeals fragmentFirst = new FragmentDeals();
         return fragmentFirst;
     }
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -104,7 +106,7 @@ public class FragmentDeals extends Fragment implements IHomeViewPresenterPresent
     @Override
     public void onResume() {
         super.onResume();
-        if(adapterDeals!=null){
+        if (adapterDeals != null) {
             adapterDeals.notifyData();
         }
     }
@@ -128,7 +130,7 @@ public class FragmentDeals extends Fragment implements IHomeViewPresenterPresent
         getDeals();
     }
 
-   public void getDeals() {
+    public void getDeals() {
 
         if (SharedPreference.getInstance(getActivity()).getBoolean(C.IS_LOGIN_GUEST)) {
             String id = "" + SharedPreference.getInstance(getActivity()).geGuestUser(C.GUEST_USER).getId();
@@ -196,7 +198,7 @@ public class FragmentDeals extends Fragment implements IHomeViewPresenterPresent
         this.isAdd = isAdd;
         if (allProductList != null && allProductList.size() > 0) {
 
-            product = allProductList.get(pos);
+            product = adapterDeals.getRendererList().get(pos);
             if (SharedPreference.getInstance(getActivity()).getString(C.ORDER_ID) == null) {
                 createOrder();
             } else {
@@ -206,6 +208,7 @@ public class FragmentDeals extends Fragment implements IHomeViewPresenterPresent
 
 
     }
+
     void createOrder() {
         StoreList store = SharedPreference.getInstance(getActivity()).getStore(C.SELECTED_STORE);
         if (store != null) {
@@ -225,6 +228,7 @@ public class FragmentDeals extends Fragment implements IHomeViewPresenterPresent
             }
         }
     }
+
     void addToCart() {
         AddToCartRequest addToCartRequest = new AddToCartRequest();
         addToCartRequest.setUuid(Util.id(getActivity()));
@@ -248,13 +252,14 @@ public class FragmentDeals extends Fragment implements IHomeViewPresenterPresent
 
         }
     }
+
     public void wishListUpdate(int secPos, int pos, boolean isAdd) {
         productPos = pos;
         this.secPos = secPos;
         this.isAdd = isAdd;
         if (allProductList != null && allProductList.size() > 0) {
 
-            product = allProductList.get(pos);
+            product = adapterDeals.getRendererList().get(pos);
             WishListRequest wishListRequest = new WishListRequest();
             wishListRequest.setProductId(product.getId());
             wishListRequest.setUuid(Util.id(getActivity()));
@@ -286,29 +291,47 @@ public class FragmentDeals extends Fragment implements IHomeViewPresenterPresent
             }
         }
     }
+
     @Override
     public void getDealsResponse(DealsResponse response) {
         try {
 
             if (response.getSuccess()) {
                 deals = response.getData();
-                categoriesList = response.getData().getCategories();
-                if (categoriesList != null && categoriesList.size() > 0) {
-                    spinnerCategoryAdapter = new SpinnerCategoryAdapter(getActivity(), R.layout.spinner_item_new, categoriesList);
-                    spinnerCategory.setAdapter(spinnerCategoryAdapter);
-                    tvCategoryName.setText(categoriesList.get(0).getName());
-                    currentPos = 0;
+                if (deals != null) {
+                    categoriesList = deals.getCategories();
+                    if (categoriesList != null && categoriesList.size() > 0) {
+                        spinnerCategoryAdapter = new SpinnerCategoryAdapter(getActivity(), R.layout.spinner_item_new, categoriesList);
+                        spinnerCategory.setAdapter(spinnerCategoryAdapter);
+                        tvCategoryName.setText(categoriesList.get(0).getName());
+                        currentPos = 0;
 
+
+                        allProductList = deals.getProducts();
+                        if(allProductList!=null && allProductList.size()>0) {
+                            adapterDeals = new AdapterDeals(true, allProductList, getActivity());
+                            rvDeals.setAdapter(adapterDeals);
+                            if (categoriesList != null && categoriesList.size() > 0) {
+                                adapterDeals.getFilter().filter("" + categoriesList.get(0).getId());
+                            }
+                        }
+                    }
+                    else {
+                        tvNoProduct.setVisibility(View.VISIBLE);
+                        llCategory.setVisibility(View.GONE);
+                        rvDeals.setVisibility(View.GONE);
+                    }
+                } else {
+                    tvNoProduct.setVisibility(View.VISIBLE);
+                    llCategory.setVisibility(View.GONE);
+                    rvDeals.setVisibility(View.GONE);
                 }
-                allProductList=deals.getProducts();
-                adapterDeals = new AdapterDeals(true, allProductList, getActivity());
-                rvDeals.setAdapter(adapterDeals);
-                if (categoriesList != null && categoriesList.size() > 0) {
-                    adapterDeals.getFilter().filter("" + categoriesList.get(0).getId());
-                }
-            } else {
+            }
+            else {
                 util.setSnackbarMessage(getActivity(), response.getMessage(), llView, true);
-
+                tvNoProduct.setVisibility(View.VISIBLE);
+                llCategory.setVisibility(View.GONE);
+                rvDeals.setVisibility(View.GONE);
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -366,6 +389,7 @@ public class FragmentDeals extends Fragment implements IHomeViewPresenterPresent
             e.printStackTrace();
         }
     }
+
     void updateCart() {
         int q;
         if (product.getCartQunatity() == null || product.getCartQunatity().equalsIgnoreCase("0")) {
@@ -392,9 +416,9 @@ public class FragmentDeals extends Fragment implements IHomeViewPresenterPresent
         // homeCategoriesSectionList.get(secPos).getAllProducts().set(productPos, product);
         // adapterHomeCategoriesSections.notified();
         if (secPos == 0) {
-           // allProductList.set(productPos, product);
-            adapterDeals.modifyList(productPos,product);
-           // adapterDeals.notifyDataSetChanged();
+            // allProductList.set(productPos, product);
+            adapterDeals.modifyList(productPos, product);
+            // adapterDeals.notifyDataSetChanged();
 
         }
     }
@@ -423,9 +447,9 @@ public class FragmentDeals extends Fragment implements IHomeViewPresenterPresent
 
                 StoreProducts.getInstance().addProduct(product);
                 if (secPos == 0) {
-                   // allProductList.set(productPos, product);
-                    adapterDeals.modifyList(productPos,product);
-                   // adapterDeals.notifyDataSetChanged();
+                    // allProductList.set(productPos, product);
+                    adapterDeals.modifyList(productPos, product);
+                    // adapterDeals.notifyDataSetChanged();
                 }
 
             } else {
@@ -447,9 +471,9 @@ public class FragmentDeals extends Fragment implements IHomeViewPresenterPresent
 
                 //   adapterHomeCategoriesSections.notified();
                 if (secPos == 0) {
-                   // allProductList.set(productPos, product);
-                    adapterDeals.modifyList(productPos,product);
-                   // adapterDeals.notifyDataSetChanged();
+                    // allProductList.set(productPos, product);
+                    adapterDeals.modifyList(productPos, product);
+                    // adapterDeals.notifyDataSetChanged();
 
                 }
             } else {

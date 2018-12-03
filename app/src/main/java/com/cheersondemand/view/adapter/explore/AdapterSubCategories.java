@@ -34,6 +34,7 @@ private List<SubCategoryExplore> horizontalList;
     Activity context;
     ImageLoader imageLoader;
     boolean isHome;
+    String catId;
     public class ItemViewHolder extends RecyclerView.ViewHolder {
     public TextView tvProductName,tvProductPrice,tvQuantity,tvAddToCart;
     public ImageView ivProductImage,ivLike;
@@ -59,10 +60,11 @@ private List<SubCategoryExplore> horizontalList;
 
 
 
-    public AdapterSubCategories(boolean isHome, List<SubCategoryExplore> horizontalList, Activity context) {
+    public AdapterSubCategories(boolean isHome, String catId,List<SubCategoryExplore> horizontalList, Activity context) {
         this.horizontalList = horizontalList;
         this.context=context;
         this.isHome=isHome;
+        this.catId=catId;
         imageLoader=new ImageLoader(context);
     }
     public void modifyList(){
@@ -99,7 +101,7 @@ private List<SubCategoryExplore> horizontalList;
                 public void onClick(View v) {
                     Intent intent = new Intent(context, ActivityContainer.class);
                     Bundle bundle = new Bundle();
-                    bundle.putString(C.CAT_ID, "" + horizontalList.get(position).getId());
+                    bundle.putString(C.CAT_ID, catId);
                     bundle.putString(C.SUB_CAT_ID, ""+horizontalList.get(position).getId());
                     bundle.putBoolean(C.IS_ON_SALE, false);
                     bundle.putInt(C.SOURCE, C.FRAGMENT_CATEGORIES);
@@ -110,6 +112,7 @@ private List<SubCategoryExplore> horizontalList;
             });
 
         }
+/*
         else if (holder instanceof FooterViewHolder) {
             final FooterViewHolder footerViewHolder = (FooterViewHolder) holder;
             footerViewHolder.rlViewAlProduct.setOnClickListener(new View.OnClickListener() {
@@ -131,6 +134,7 @@ private List<SubCategoryExplore> horizontalList;
                 }
             });
         }
+*/
     }
     @Override
     public int getItemViewType(int position) {

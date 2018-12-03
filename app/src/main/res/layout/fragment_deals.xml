@@ -5,7 +5,18 @@
     android:orientation="vertical"
     android:layout_height="match_parent">
 
-
+    <TextView
+        android:fontFamily="@font/sf_ui_display_regular"
+        android:id="@+id/tvNoProduct"
+        android:textSize="18sp"
+        android:visibility="gone"
+        android:gravity="center"
+        android:layout_gravity="center"
+        android:layout_centerInParent="true"
+        android:text="@string/no_product_available"
+        android:textColor="@color/profile_text_color"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent" />
     <LinearLayout
         android:id="@+id/llCategory"
         android:layout_width="match_parent"
@@ -39,7 +50,7 @@
                 android:fontFamily="@font/sf_ui_display_regular"
                 android:maxLines="1"
                 android:singleLine="true"
-                android:text="@string/select_a_location"
+                android:text=""
                 android:textColor="@color/blue_dark"
                 android:textSize="14sp" />
 

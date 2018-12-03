@@ -29,6 +29,7 @@ import com.cheersondemand.presenter.home.IHomeViewPresenterPresenter;
 import com.cheersondemand.util.C;
 import com.cheersondemand.util.SharedPreference;
 import com.cheersondemand.util.Util;
+import com.cheersondemand.view.ActivityContainer;
 import com.cheersondemand.view.adapter.explore.AdapterCategoriesSubcategories;
 import com.cheersondemand.view.adapter.explore.AdapterSubCategories;
 
@@ -52,6 +53,7 @@ public class FragmentCategorySubCategory extends Fragment implements IHomeViewPr
     @BindView(R.id.lvExpCategory)
     ExpandableListView lvExpCategory;
     AdapterCategoriesSubcategories adapterCategoriesSubcategories;
+    List<Categories> categories;
     public FragmentCategorySubCategory() {
         // Required empty public constructor
     }
@@ -79,7 +81,7 @@ public class FragmentCategorySubCategory extends Fragment implements IHomeViewPr
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        lvExpCategory.setTranscriptMode(AbsListView.TRANSCRIPT_MODE_DISABLED);
+     //   lvExpCategory.setTranscriptMode(AbsListView.TRANSCRIPT_MODE_DISABLED);
         lvExpCategory.setOnGroupExpandListener(new ExpandableListView.OnGroupExpandListener() {
             int previousGroup = -1;
             @Override
@@ -92,6 +94,25 @@ public class FragmentCategorySubCategory extends Fragment implements IHomeViewPr
 
             }
         });
+/*
+        lvExpCategory.setOnChildClickListener(new ExpandableListView.OnChildClickListener() {
+            @Override
+            public boolean onChildClick(ExpandableListView parent, View v, int groupPosition, int childPosition, long id) {
+
+
+                Intent intent = new Intent(getActivity(), ActivityContainer.class);
+                Bundle bundle = new Bundle();
+                bundle.putString(C.CAT_ID, "" + categories.get(groupPosition).getId());
+                bundle.putString(C.SUB_CAT_ID, ""+categories.get(groupPosition).getSubCategories().get(childPosition).getId());
+                bundle.putBoolean(C.IS_ON_SALE, false);
+                bundle.putInt(C.SOURCE, C.FRAGMENT_CATEGORIES);
+                intent.putExtra(C.FRAGMENT_ACTION, C.FRAGMENT_PRODUCT_LISTING);
+                intent.putExtra(C.BUNDLE, bundle);
+                startActivity(intent);
+                return true;
+            }
+        });
+*/
 
         getCategories();
     }
@@ -147,7 +168,7 @@ public class FragmentCategorySubCategory extends Fragment implements IHomeViewPr
         try {
 
             if (response.getSuccess()) {
-                List<Categories> categories = response.getData();
+                 categories = response.getData();
                 adapterCategoriesSubcategories=new AdapterCategoriesSubcategories(getActivity(),categories);
                 lvExpCategory.setAdapter(adapterCategoriesSubcategories);
               /*  adapterSubCategories = new AdapterSubCategories(true, categories.get(0).getSubCategories(), getActivity());

@@ -2,6 +2,8 @@ package com.cheersondemand.view.adapter.explore;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
+import android.os.Bundle;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -16,8 +18,10 @@ import android.widget.TextView;
 import com.cheersondemand.R;
 import com.cheersondemand.model.Categories;
 import com.cheersondemand.model.explore.SubCategoryExplore;
+import com.cheersondemand.util.C;
 import com.cheersondemand.util.Util;
 import com.cheersondemand.util.itemdecoration.GridSpacingItemDecoration;
+import com.cheersondemand.view.ActivityContainer;
 import com.cheersondemand.view.fragments.FragmentCategorySubCategory;
 
 import java.util.List;
@@ -100,17 +104,15 @@ public class AdapterCategoriesSubcategories extends BaseExpandableListAdapter {
     }
 
     @Override
-    public View getChildView(int groupPosition, int childPosition, boolean isLastChild, View convertView, ViewGroup parent) {
+    public View getChildView(final int groupPosition, final int childPosition, boolean isLastChild, View convertView, ViewGroup parent) {
         convertView = inflater.inflate(R.layout.child_layout, parent, false);
         RecyclerView rvSubCategory = (RecyclerView) convertView.findViewById(R.id.rvSubCategory);
         rvSubCategory.setLayoutManager(new GridLayoutManager(activity, 2));
         rvSubCategory.addItemDecoration(new GridSpacingItemDecoration(2, Util.dpToPx(1, activity), true));
         rvSubCategory.setItemAnimator(new DefaultItemAnimator());
        // List<SubCategoryExplore> subCategoryExplores=(List<SubCategoryExplore>)getChild(groupPosition,childPosition);
-        AdapterSubCategories  adapterSubCategories = new AdapterSubCategories(true, (List<SubCategoryExplore>)getChild(groupPosition,childPosition), activity);
+        AdapterSubCategories  adapterSubCategories = new AdapterSubCategories(true, ""+categories.get(groupPosition).getId(),(List<SubCategoryExplore>)getChild(groupPosition,childPosition), activity);
         rvSubCategory.setAdapter(adapterSubCategories);
-
-
         return convertView;
     }
 
