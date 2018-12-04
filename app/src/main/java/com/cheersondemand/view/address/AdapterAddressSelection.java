@@ -119,8 +119,8 @@ public class ItemViewHolder extends RecyclerView.ViewHolder {
             }
 
             itemViewHolder.tvName.setText(horizontalList.get(position).getName());
-            itemViewHolder.tvSubAddress.setText(horizontalList.get(position).getFlatNo()+" "+horizontalList.get(position).getAddressFirst()
-            +" "+horizontalList.get(position).getAddressSecond()+ " "+horizontalList.get(position).getZipCode());
+            itemViewHolder.tvSubAddress.setText(horizontalList.get(position).getFlatNo()+
+            " "+horizontalList.get(position).getAddress()+ " "+horizontalList.get(position).getZipCode());
             itemViewHolder.tvPhone.setText(horizontalList.get(position).getPhoneNumber());
             itemViewHolder.llEdit.setOnClickListener(new View.OnClickListener() {
                 @Override

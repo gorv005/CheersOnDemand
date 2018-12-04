@@ -17,7 +17,9 @@ public class SaveLocation {
     @SerializedName("uuid")
     @Expose
     private String uuid;
-
+    @SerializedName("address")
+    @Expose
+    private String address;
     public String getLatitude() {
         return latitude;
     }
@@ -40,5 +42,13 @@ public class SaveLocation {
 
     public void setUuid(String uuid) {
         this.uuid = uuid;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
     }
 }

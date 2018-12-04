@@ -121,6 +121,8 @@ public class FragmentAddressList extends Fragment implements View.OnClickListene
             SaveLocation saveLocation = new SaveLocation();
             saveLocation.setLatitude("" + selectedLocation.getLatitude());
             saveLocation.setLongitude("" + selectedLocation.getLongitude());
+            saveLocation.setAddress(selectedLocation.getAddress());
+
             saveLocation.setUuid(Util.id(getActivity()));
             if (SharedPreference.getInstance(getActivity()).getBoolean(C.IS_LOGIN_GUEST)) {
                 iLocationViewPresenter.saveLocation(saveLocation, "" + SharedPreference.getInstance(getActivity()).geGuestUser(C.GUEST_USER).getId());

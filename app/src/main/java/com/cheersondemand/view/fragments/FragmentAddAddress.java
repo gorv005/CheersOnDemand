@@ -166,10 +166,12 @@ public class FragmentAddAddress extends Fragment implements View.OnClickListener
             final PlaceArrayAdapter.PlaceAutocomplete item = mPlaceArrayAdapter.getItem(position);
             final String placeId = String.valueOf(item.placeId);
             Log.i(LOG_TAG, "Selected: " + item.description);
-            PendingResult<PlaceBuffer> placeResult = Places.GeoDataApi
+            etAddLine.setText(item.description + "");
+
+            /*PendingResult<PlaceBuffer> placeResult = Places.GeoDataApi
                     .getPlaceById(mGoogleApiClient, placeId);
             placeResult.setResultCallback(mUpdatePlaceDetailsCallback);
-            Log.i(LOG_TAG, "Fetching details for ID: " + item.placeId);
+            Log.i(LOG_TAG, "Fetching details for ID: " + item.placeId);*/
         }
     };
 
