@@ -259,6 +259,8 @@ public class ActivitySearchLocation extends AppCompatActivity implements
         SaveLocation saveLocation = new SaveLocation();
         saveLocation.setLatitude("" + selectedLocation.getLatitude());
         saveLocation.setLongitude("" + selectedLocation.getLongitude());
+        saveLocation.setAddress("" + selectedLocation.getAddress());
+
         saveLocation.setUuid(Util.id(ActivitySearchLocation.this));
         if (SharedPreference.getInstance(ActivitySearchLocation.this).getBoolean(C.IS_LOGIN_GUEST)) {
             iLocationViewPresenter.saveLocation(saveLocation, "" + SharedPreference.getInstance(ActivitySearchLocation.this).geGuestUser(C.GUEST_USER).getId());
