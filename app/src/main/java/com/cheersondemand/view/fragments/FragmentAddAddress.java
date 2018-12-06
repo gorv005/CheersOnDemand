@@ -77,7 +77,7 @@ public class FragmentAddAddress extends Fragment implements View.OnClickListener
     @BindView(R.id.btnSaveAdd)
     Button btnSaveAdd;
     Unbinder unbinder;
-    boolean isEdit, isFromCheckOut, isRetryPayment = false;
+    boolean isEdit, isFromCheckOut, isRetryPayment = false,isAddedFirstTime;
     Address address1;
     IAddressViewPresenter iAddressViewPresenter;
     @BindView(R.id.rlView)
@@ -113,6 +113,8 @@ public class FragmentAddAddress extends Fragment implements View.OnClickListener
             try {
                 address1 = (Address) getArguments().getSerializable(C.ADDRESS);
                 isLocationChanged=getArguments().getBoolean(C.IS_LOCATION_CHANGED);
+                isAddedFirstTime =getArguments().getBoolean(C.IS_ADDED_FIRST_TIME);
+
             }
             catch (Exception e){
                 e.printStackTrace();
@@ -590,7 +592,12 @@ public class FragmentAddAddress extends Fragment implements View.OnClickListener
             getActivity().finish();
         }
         else {
-            gotoAddressList(address1);
+            if(isAddedFirstTime){
+                getActivity().finish();
+            }
+            else {
+                gotoAddressList(address1);
+            }
         }
     }
     @Override

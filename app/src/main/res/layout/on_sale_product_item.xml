@@ -22,14 +22,55 @@
         android:orientation="vertical"
 
         >
+        <RelativeLayout
+            android:id="@+id/rlOffer"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="10dp"
+            android:layout_width="40dp"
+            android:background="@drawable/discount_border"
+            android:layout_height="40dp">
+            <LinearLayout
+                android:rotation="-20"
+                android:layout_marginTop="8dp"
+                android:layout_marginLeft="7dp"
+                android:layout_centerInParent="true"
+                android:layout_width="wrap_content"
+                android:orientation="vertical"
+                android:layout_height="wrap_content">
+                <TextView
+                    android:id="@+id/tvOffer"
+                    android:layout_width="wrap_content"
+                    android:textSize="8sp"
+                    android:text="25%"
+                    android:layout_marginTop="2dp"
+                    android:maxLines="1"
+                    android:gravity="center_horizontal"
+                    android:layout_gravity="center_horizontal"
+                    android:fontFamily="@font/sf_ui_display_semibold"
+                    android:textColor="@color/red_offer"
+                    android:layout_height="wrap_content" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:textSize="8sp"
+                    android:text="@string/off"
+                    android:maxLines="1"
+                    android:gravity="center_horizontal"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginTop="-3dp"
+                    android:fontFamily="@font/sf_ui_display_semibold"
+                    android:layout_centerInParent="true"
+                    android:textColor="@color/red_offer"
+                    android:layout_height="wrap_content" />
+            </LinearLayout>
+        </RelativeLayout>
 
         <RelativeLayout
             android:id="@+id/rlImage"
 
-            android:layout_width="90dp"
+            android:layout_width="70dp"
             android:layout_height="90dp"
             android:layout_centerHorizontal="true"
-            android:layout_marginTop="20dp">
+            android:layout_marginTop="10dp">
 
             <ImageView
                 android:transitionName="@string/shared_image"

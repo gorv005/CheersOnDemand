@@ -400,7 +400,7 @@ public class FragmentSelectAddressAndStore extends Fragment implements ILocation
         bundle.putBoolean(C.IS_FROM_CHECKOUT, false);
         bundle.putBoolean(C.IS_RETRY_PAYEMNT, false);
         bundle.putBoolean(C.IS_LOCATION_CHANGED, true);
-
+        bundle.putBoolean(C.IS_ADDED_FIRST_TIME, true);
         intent.putExtra(C.BUNDLE,bundle);
         intent.putExtra(C.FRAGMENT_ACTION,C.FRAGMENT_ADD_ADDRESS);
         startActivity(intent);

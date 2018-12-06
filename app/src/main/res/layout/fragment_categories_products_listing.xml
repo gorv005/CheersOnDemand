@@ -67,22 +67,6 @@
             android:textSize="16sp" />-->
 
 
-    </RelativeLayout>
-
-    <RelativeLayout
-        android:id="@+id/rlMainView"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/rlbar">
-
-        <RelativeLayout
-            android:id="@+id/llSortView"
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:background="@color/white"
-            android:paddingEnd="10dp"
-            android:paddingStart="10dp">
-
             <!--<TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -107,6 +91,7 @@
                     android:gravity="center">
 
                     <ImageView
+                        android:tint="@color/white"
                         android:layout_width="20dp"
                         android:layout_height="20dp"
                         android:layout_gravity="center_vertical"
@@ -120,9 +105,11 @@
 
                     android:layout_gravity="center"
                     android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
                     android:gravity="center">
 
                     <ImageView
+                        android:tint="@color/white"
                         android:layout_width="20dp"
                         android:layout_height="20dp"
                         android:src="@drawable/filter_new" />
@@ -130,7 +117,16 @@
 
 
             </LinearLayout>
-        </RelativeLayout>
+
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/rlMainView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/rlbar">
+
 <!--
             <LinearLayout
                 android:weightSum="10"
@@ -203,7 +199,6 @@
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:visibility="gone"
-            android:layout_below="@id/llSortView"
 
             android:background="@color/edit_text_border" />
 
@@ -285,7 +280,7 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_below="@id/llSortView">
+            >
 
             <android.support.v7.widget.RecyclerView
 

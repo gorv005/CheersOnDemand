@@ -152,9 +152,18 @@ public class    MainActivity extends AppCompatActivity {
         startActivity(intent);
     }
     void  gotoSplash(){
-        SharedPreference.getInstance(this).setString(C.ORDER_ID,null);
 
         bundle = getIntent().getBundleExtra(C.BUNDLE);
+        try {
+            if (bundle != null && bundle.getInt(C.SOURCE) == C.FRAGMENT_CART) {
+            } else {
+                SharedPreference.getInstance(this).setString(C.ORDER_ID, null);
+            }
+        }
+        catch (Exception e){
+            SharedPreference.getInstance(this).setString(C.ORDER_ID, null);
+
+        }
         fragmentAction = getIntent().getIntExtra(C.FRAGMENT_ACTION, C.FRAGMENT_SPLASH);
         getToken();
         fragmnetLoader(fragmentAction, bundle);

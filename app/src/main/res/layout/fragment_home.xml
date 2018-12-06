@@ -102,7 +102,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/sf_ui_display_regular"
-                        android:text="@string/location"
+                        android:text="@string/select_address"
                         android:textColor="@color/white"
                         android:textSize="14sp" />
 
@@ -192,30 +192,9 @@
 
 
 
-    <LinearLayout
-        android:id="@+id/rlBanner"
-        android:layout_below="@id/rl"
-        android:layout_height="wrap_content"
-        android:layout_width="match_parent"
-        >
-
-        <RelativeLayout
-            android:id="@+id/rlImage"
-            android:layout_height="150dp"
-            android:layout_width="match_parent"
-            >
-        <ImageView
-            android:id="@+id/ivBanner"
-            android:adjustViewBounds="true"
-            android:scaleType="fitXY"
-            android:layout_centerInParent="true"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
-        </RelativeLayout>
-    </LinearLayout>
 
     <TextView
-        android:layout_below="@id/rlBanner"
+        android:layout_below="@id/rl"
 
         android:id="@+id/tvNoStoreAvailable"
         android:layout_width="match_parent"
@@ -231,7 +210,7 @@
         android:id="@+id/swipe_refresh_layout"
         android:layout_width="match_parent"
         android:layout_marginTop="10dp"
-        android:layout_below="@id/rlBanner"
+        android:layout_below="@id/rl"
         android:layout_height="wrap_content">
     <ScrollView
         android:scrollbars="none"
@@ -243,6 +222,27 @@
             android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
+            <LinearLayout
+                android:id="@+id/rlBanner"
+                android:layout_below="@id/rl"
+                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                >
+
+                <RelativeLayout
+                    android:id="@+id/rlImage"
+                    android:layout_height="150dp"
+                    android:layout_width="match_parent"
+                    >
+                    <ImageView
+                        android:id="@+id/ivBanner"
+                        android:adjustViewBounds="true"
+                        android:scaleType="fitXY"
+                        android:layout_centerInParent="true"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent" />
+                </RelativeLayout>
+            </LinearLayout>
 
     <RelativeLayout
         android:id="@+id/rlBrands"

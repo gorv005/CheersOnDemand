@@ -36,9 +36,9 @@ private List<AllProduct> horizontalList;
     private AllProduct allProduct;
 
     public class ItemViewHolder extends RecyclerView.ViewHolder {
-    public TextView tvProductName,tvProductPrice,tvQuantity,tvAddToCart;
+    public TextView tvProductName,tvProductPrice,tvQuantity,tvAddToCart,tvOffer;
     public ImageView ivProductImage,ivLike;
-    View rlProduct,btnAddToCart,rlMinus,rlPlus,llQuantity,btnAddedToCart;
+    View rlProduct,btnAddToCart,rlMinus,rlPlus,llQuantity,btnAddedToCart,rlOffer;
     public ItemViewHolder(View view) {
         super(view);
         tvProductName = (TextView) view.findViewById(R.id.tvProductName);
@@ -53,7 +53,8 @@ private List<AllProduct> horizontalList;
         rlMinus = (View) view.findViewById(R.id.rlMinus);
         rlPlus = (View) view.findViewById(R.id.rlPlus);
         llQuantity = (View) view.findViewById(R.id.llQuantity);
-
+        rlOffer = (View) view.findViewById(R.id.rlOffer);
+        tvOffer = (TextView) view.findViewById(R.id.tvOffer);
         ivLike= (ImageView) view.findViewById(R.id.ivLike);
     }
 }
@@ -73,7 +74,7 @@ private List<AllProduct> horizontalList;
     public RecyclerView.ViewHolder  onCreateViewHolder(ViewGroup parent, int viewType) {
     if(viewType==TYPE_ITEM) {
         View itemView = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.product_item, parent, false);
+                .inflate(R.layout.on_sale_product_item, parent, false);
 
         return new ItemViewHolder(itemView);
     }
@@ -104,6 +105,14 @@ private List<AllProduct> horizontalList;
             }
             else {
                 itemViewHolder.tvProductPrice.setText("$" + allProduct.getPrice());
+            }
+            if(allProduct.getDiscount()!=null){
+                itemViewHolder.rlOffer.setVisibility(View.VISIBLE);
+                itemViewHolder.tvOffer.setText(allProduct.getDiscount()+"%");
+            }
+            else {
+                itemViewHolder.rlOffer.setVisibility(View.GONE);
+
             }
           //  imageLoader.DisplayImage(horizontalList.get(position).getImage(),itemViewHolder.ivProductImage);
             Util.setImage(context,allProduct.getImage(),itemViewHolder.ivProductImage);

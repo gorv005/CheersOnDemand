@@ -256,6 +256,24 @@ public class FragmentAddressList extends Fragment implements View.OnClickListene
         startActivity(intent);
 
     }
+    public void gotoAddAddressFirstTime(){
+        getActivity().finish();
+        Intent intent=new Intent(getActivity(), ActivityContainer.class);
+        Bundle bundle=new Bundle();
+        bundle.putBoolean(C.IS_EDIT,false);
+        bundle.putBoolean(C.IS_FROM_CHECKOUT, false);
+        bundle.putBoolean(C.IS_RETRY_PAYEMNT, false);
+        bundle.putBoolean(C.IS_LOCATION_CHANGED, isLocationChanged);
+        bundle.putBoolean(C.IS_ADDED_FIRST_TIME, true);
+
+        bundle.putSerializable(C.ADDRESS,new Address());
+
+        intent.putExtra(C.BUNDLE,bundle);
+        intent.putExtra(C.FRAGMENT_ACTION,C.FRAGMENT_ADD_ADDRESS);
+        startActivity(intent);
+
+    }
+
     @Override
     public void onAddDeliveryAddressSuccess(AddressAddResponse Response) {
 

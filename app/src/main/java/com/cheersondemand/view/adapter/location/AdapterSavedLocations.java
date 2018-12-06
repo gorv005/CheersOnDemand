@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.CompoundButton;
 import android.widget.Filter;
 import android.widget.Filterable;
 import android.widget.RadioButton;
@@ -45,12 +46,13 @@ List<RecentLocation> filterList;
         this.recentSelectedLocation=recentLocation;
         if(source== C.HOME ||source== C.FRAGMENT_PRODUCT_LISTING ) {
             if (loc != null) {
-                lastCheckedPosition = sideMenuItems.get(0).getAddress();
+                lastCheckedPosition =loc;
             }
             else if(recentLocation!=null){
                 lastCheckedPosition = recentLocation.getAddress();
 
             }
+
         }
        /* else {
             if(sideMenuItems!=null && sideMenuItems.size()>0) {
@@ -126,6 +128,19 @@ List<RecentLocation> filterList;
             ((ItemViewHolder)holder).name.setTextColor(ContextCompat.getColor(activity, R.color.profile_text_color));
 
         }
+       /* ((ItemViewHolder)holder).radioButton.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                    if(isChecked){
+                        RecentLocation recentLocation=new RecentLocation();
+                        recentLocation.setLatitude(horizontalList.get(position).getLatitude());
+                        recentLocation.setLongitude(horizontalList.get(position).getLongitude());
+                        recentLocation.setAddress(horizontalList.get(position).getAddress());
+
+                        ((ActivityContainer)context).saveLocation(recentLocation);
+                    }
+                }
+            });*/
         ((ItemViewHolder)holder).radioButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
