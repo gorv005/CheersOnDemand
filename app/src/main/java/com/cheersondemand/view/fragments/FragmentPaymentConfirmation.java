@@ -460,8 +460,8 @@ public class FragmentPaymentConfirmation extends Fragment implements ICardViewPr
         if (cartProduct.getOrder().getDeliveryAddress() != null) {
             Order order = cartProduct.getOrder();
             tvName.setText(order.getDeliveryAddress().getName());
-            tvSubAddress1.setText(order.getDeliveryAddress().getFlatNo() + " " + order.getDeliveryAddress().getAddressFirst());
-            tvSubAddress2.setText(order.getDeliveryAddress().getAddressSecond() + " " + order.getDeliveryAddress().getZipCode());
+            tvSubAddress1.setText(order.getDeliveryAddress().getFlatNo());
+            tvSubAddress2.setText(order.getDeliveryAddress().getAddress() + " " + order.getDeliveryAddress().getZipCode());
             tvPhone.setText(" " + order.getDeliveryAddress().getPhoneNumber());
         }
     }

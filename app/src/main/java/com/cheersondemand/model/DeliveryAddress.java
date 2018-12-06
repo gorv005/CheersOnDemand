@@ -22,6 +22,9 @@ public class DeliveryAddress implements Serializable{
     @SerializedName("address_first")
     @Expose
     private String addressFirst;
+    @SerializedName("address")
+    @Expose
+    private String address;
     @SerializedName("address_second")
     @Expose
     private String addressSecond;
@@ -82,6 +85,14 @@ public class DeliveryAddress implements Serializable{
 
     public String getPhoneNumber() {
         return phoneNumber;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
     }
 
     public void setPhoneNumber(String phoneNumber) {

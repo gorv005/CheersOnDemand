@@ -30,6 +30,7 @@ import com.cheersondemand.model.address.AddressRequest;
 import com.cheersondemand.model.address.AddressResponse;
 import com.cheersondemand.model.card.CardAddResponse;
 import com.cheersondemand.model.card.CardListResponse;
+import com.cheersondemand.model.location.RecentLocation;
 import com.cheersondemand.presenter.address.AddressViewPresenterImpl;
 import com.cheersondemand.presenter.address.IAddressViewPresenter;
 import com.cheersondemand.presenter.card.CardViewPresenterImpl;
@@ -536,14 +537,26 @@ public class FragmentAddAddress extends Fragment implements View.OnClickListener
     }
 
     void  gotoAddressList(Address address){
+
+        if(isLocationChanged){
+            if(address!=null && address.getAddress()!=null) {
+                RecentLocation recentLocation = new RecentLocation();
+                recentLocation.setId(address.getId());
+                recentLocation.setAddress(address.getAddress());
+                SharedPreference.getInstance(getActivity()).setString(C.LOCATION_SELECTED, address.getAddress());
+                SharedPreference.getInstance(getActivity()).setLocation(C.SELECTED_LOCATION, recentLocation);
+            }
+        }
         getActivity().finish();
 
         Intent intent3 = new Intent(getActivity(), ActivityContainer.class);
         intent3.putExtra(C.FRAGMENT_ACTION, C.FRAGMENT_ADDRESS_LIST);
         Bundle bundle = new Bundle();
         bundle.putBoolean(C.IS_FROM_LOCATION_AND_STORE_SCREEN, true);
-        bundle.putInt(C.ADDRESS_ID, address.getId());
-        bundle.putString(C.ADDRESS_NAME, address.getAddress());
+        if(address!=null && address.getAddress()!=null) {
+            bundle.putInt(C.ADDRESS_ID, address.getId());
+            bundle.putString(C.ADDRESS_NAME, address.getAddress());
+        }
         bundle.putBoolean(C.IS_LOCATION_CHANGED, isLocationChanged);
 
         intent3.putExtra(C.BUNDLE, bundle);
@@ -574,7 +587,7 @@ public class FragmentAddAddress extends Fragment implements View.OnClickListener
 
    public void gotoSelectedPage(){
         if(isFromCheckOut){
-            getActivity().onBackPressed();
+            getActivity().finish();
         }
         else {
             gotoAddressList(address1);

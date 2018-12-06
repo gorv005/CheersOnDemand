@@ -249,7 +249,7 @@ public class FragmentAddressList extends Fragment implements View.OnClickListene
         bundle.putBoolean(C.IS_RETRY_PAYEMNT, false);
         bundle.putBoolean(C.IS_LOCATION_CHANGED, isLocationChanged);
 
-        bundle.putSerializable(C.ADDRESS,adapterAddress.getSelectedAddress());
+        bundle.putSerializable(C.ADDRESS,new Address());
 
         intent.putExtra(C.BUNDLE,bundle);
         intent.putExtra(C.FRAGMENT_ACTION,C.FRAGMENT_ADD_ADDRESS);

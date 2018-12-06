@@ -162,4 +162,5 @@ public interface C {
     int FRAGMENT_EXPLORE = 38;
     String IS_CROSS_SHOW = "is_cross_show";
     String TAG_FRAGMENT_EXPLORE = "TAG_FRAGMENT_EXPLORE";
+    int FRAGMENT_ADD_ADDRESS_CHECK_OUT = 39;
 }

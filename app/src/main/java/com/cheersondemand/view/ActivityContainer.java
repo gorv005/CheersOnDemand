@@ -182,6 +182,14 @@ public class ActivityContainer extends AppCompatActivity {
                     fragmentTransaction.addToBackStack(C.TAG_FRAGMENT_ADD_ADDRESS);
                 }*/
                 break;
+            case C.FRAGMENT_ADD_ADDRESS_CHECK_OUT:
+                fragment = new FragmentAddAddress();
+                fragmentTransaction.replace(R.id.container, fragment);
+               /* if (!bundle.getBoolean(C.IS_FROM_CHECKOUT)) {
+                    fragmentTransaction.addToBackStack(C.TAG_FRAGMENT_ADD_ADDRESS);
+                }*/
+                fragmentTransaction.addToBackStack(C.TAG_FRAGMENT_ADD_ADDRESS);
+                break;
             case C.FRAGMENT_SEARCH_PRODUCT:
                 fragment = new FragmentSearchProducts();
                 fragmentTransaction.replace(R.id.container, fragment);
