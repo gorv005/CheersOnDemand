@@ -276,6 +276,9 @@
     <string name="shopping_from">Shopping from</string>
     <string name="no_order_placed">No order placed !</string>
     <string name="server_client_id">318594772761-fqijvbpoobcral5f0mpecidfj24ol9on.apps.googleusercontent.com</string>
+    <!--<string name="server_client_id">318594772761-7h37v5h3mubfhhl5uvn5crocdmvqj9rd.apps.googleusercontent.com</string>-->
+
+
     <string name="sorry_no_product">Sorry, No store is open currently or delivery is not available for your location.</string>
     <string name="No">NO</string>
     <string name="yes">YES</string>
