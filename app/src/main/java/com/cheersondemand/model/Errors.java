@@ -14,7 +14,9 @@ public class Errors {
     @SerializedName("field")
     @Expose
     private String field;
-
+    @SerializedName("detail")
+    @Expose
+    private String detail;
     public String getResource() {
         return resource;
     }
@@ -25,6 +27,14 @@ public class Errors {
 
     public String getField() {
         return field;
+    }
+
+    public String getDetail() {
+        return detail;
+    }
+
+    public void setDetail(String detail) {
+        this.detail = detail;
     }
 
     public void setField(String field) {

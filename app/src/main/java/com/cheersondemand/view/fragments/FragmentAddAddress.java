@@ -622,7 +622,21 @@ public class FragmentAddAddress extends Fragment implements View.OnClickListener
                 //  ((ActivityContainer) getActivity()).fragmnetLoader(C.FRAGMENT_PAYMENT_CONFIRMATION, null);
                 getCardList();
             } else {
-                dialog(Response.getMessage());
+                if (Response.getErrors() != null) {
+                    if(Response.getErrors().get(0).getField()!=null){
+                        dialog(Response.getErrors().get(0).getField());
+                    }
+                    else if(Response.getErrors().get(0).getDetail()!=null){
+                        dialog(Response.getErrors().get(0).getDetail());
+                    }
+                    else {
+                        dialog(Response.getMessage());
+                    }
+               //     util.setSnackbarMessage(getActivity(), Response.getErrors().get(0).getField(), LLView, true);
+                } else {
+                    dialog(Response.getMessage());
+                }
+
             }
         } catch (Exception e) {
             e.printStackTrace();
