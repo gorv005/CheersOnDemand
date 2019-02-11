@@ -32,7 +32,7 @@ import butterknife.Unbinder;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class FragmentBecomePartner extends Fragment implements View.OnClickListener,IAddStoreViewPresenter.IAddStoreView{
+public class FragmentBecomePartner extends Fragment implements View.OnClickListener, IAddStoreViewPresenter.IAddStoreView {
 
 
     @BindView(R.id.etStoreName)
@@ -52,6 +52,9 @@ public class FragmentBecomePartner extends Fragment implements View.OnClickListe
     Unbinder unbinder;
     Util util;
     IAddStoreViewPresenter iAddStoreViewPresenter;
+    @BindView(R.id.etPartnerName)
+    EditText etPartnerName;
+
     public FragmentBecomePartner() {
         // Required empty public constructor
     }
@@ -59,14 +62,15 @@ public class FragmentBecomePartner extends Fragment implements View.OnClickListe
     @Override
     public void onResume() {
         super.onResume();
-        ((ActivityContainer)getActivity()).setTitle(getString(R.string.become_partner));
+        ((ActivityContainer) getActivity()).setTitle(getString(R.string.become_partner));
 
     }
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        util=new Util();
-        iAddStoreViewPresenter=new AddStoreViewPresenterImpl(this,getActivity());
+        util = new Util();
+        iAddStoreViewPresenter = new AddStoreViewPresenterImpl(this, getActivity());
     }
 
     @Override
@@ -200,6 +204,26 @@ public class FragmentBecomePartner extends Fragment implements View.OnClickListe
 
             }
         });
+        etPartnerName.addTextChangedListener(new TextWatcher() {
+
+            public void afterTextChanged(Editable s) {
+
+            }
+
+            public void beforeTextChanged(CharSequence s, int start, int count,
+                                          int after) {
+
+            }
+
+            public void onTextChanged(CharSequence s, int start, int before,
+                                      int count) {
+
+
+                validationFields();
+
+
+            }
+        });
 
     }
 
@@ -210,8 +234,8 @@ public class FragmentBecomePartner extends Fragment implements View.OnClickListe
 
                 if (etAddLine1.getText().length() > 0) {
 
-
-                        if (etEmail.getText().length() > 0) {
+                    if (etEmail.getText().length() > 0) {
+                        if (etPartnerName.getText().length() > 0) {
 
                             btnSubmitRequest.setBackground(ContextCompat.getDrawable(getActivity(), R.drawable.bg_button_enable));
                             btnSubmitRequest.setEnabled(true);
@@ -219,6 +243,11 @@ public class FragmentBecomePartner extends Fragment implements View.OnClickListe
                             btnSubmitRequest.setBackground(ContextCompat.getDrawable(getActivity(), R.drawable.button_disable));
                             btnSubmitRequest.setEnabled(false);
                         }
+                    }
+                    else {
+                        btnSubmitRequest.setBackground(ContextCompat.getDrawable(getActivity(), R.drawable.button_disable));
+                        btnSubmitRequest.setEnabled(false);
+                    }
 
                 } else {
                     btnSubmitRequest.setBackground(ContextCompat.getDrawable(getActivity(), R.drawable.button_disable));
@@ -241,7 +270,7 @@ public class FragmentBecomePartner extends Fragment implements View.OnClickListe
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()){
+        switch (v.getId()) {
             case R.id.btnSubmitRequest:
                 addStore();
                 break;
@@ -249,41 +278,44 @@ public class FragmentBecomePartner extends Fragment implements View.OnClickListe
     }
 
 
-    void addStore(){
-        AddStore addStore=new AddStore();
-        Warehouse warehouse=new Warehouse();
+    void addStore() {
+        AddStore addStore = new AddStore();
+        Warehouse warehouse = new Warehouse();
         warehouse.setName(etStoreName.getText().toString());
         warehouse.setAddress(etAddLine1.getText().toString());
         warehouse.setContactNumber(etContactNo.getText().toString());
         warehouse.setEmail(etEmail.getText().toString());
+        warehouse.setPartnerName(etPartnerName.getText().toString());
         addStore.setWarehouse(warehouse);
         iAddStoreViewPresenter.addStore(addStore);
 
     }
+
     @Override
     public void onAddStoreSuccess(UpdateStoreResponse Response) {
         try {
-        if(Response.getSuccess()){
-            etStoreName.setText("");
-            etAddLine1.setText("");
-            etAddLine2.setText("");
-            etEmail.setText("");
-            etContactNo.setText("");
-            etStoreName.clearFocus();
-            etAddLine1.clearFocus();
-            etAddLine2.clearFocus();
-            etEmail.clearFocus();
-            etContactNo.clearFocus();
-            util.setSnackbarMessage(getActivity(), Response.getMessage(), rlView, true);
+            if (Response.getSuccess()) {
+                etStoreName.setText("");
+                etAddLine1.setText("");
+                etAddLine2.setText("");
+                etEmail.setText("");
+                etContactNo.setText("");
+                etPartnerName.setText("");
 
-        }
-        else {
-            if(Response.getErrors()!=null && Response.getErrors().size()>0)
-            util.setSnackbarMessage(getActivity(), Response.getErrors().get(0).getField(), rlView, true);
+                etStoreName.clearFocus();
+                etAddLine1.clearFocus();
+                etAddLine2.clearFocus();
+                etEmail.clearFocus();
+                etContactNo.clearFocus();
+                etPartnerName.clearFocus();
+                util.setSnackbarMessage(getActivity(), Response.getMessage(), rlView, true);
 
-        }
-        }
-        catch (Exception e){
+            } else {
+                if (Response.getErrors() != null && Response.getErrors().size() > 0)
+                    util.setSnackbarMessage(getActivity(), Response.getErrors().get(0).getField(), rlView, true);
+
+            }
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
@@ -296,7 +328,7 @@ public class FragmentBecomePartner extends Fragment implements View.OnClickListe
 
     @Override
     public void showProgress() {
-        util.showDialog(C.MSG,getActivity());
+        util.showDialog(C.MSG, getActivity());
 
     }
 

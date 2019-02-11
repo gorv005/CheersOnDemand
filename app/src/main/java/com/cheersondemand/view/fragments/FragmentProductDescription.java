@@ -778,6 +778,11 @@ public class FragmentProductDescription extends Fragment implements View.OnClick
     }
 
     @Override
+    public void getMinimumAmountResponse(WishListResponse response) {
+
+    }
+
+    @Override
     public void onSuccessCouponInfo(CouponInfoResponse response) {
 
     }

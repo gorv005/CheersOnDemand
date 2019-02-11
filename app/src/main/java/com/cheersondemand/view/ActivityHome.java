@@ -616,6 +616,11 @@ public class ActivityHome extends AppCompatActivity implements View.OnClickListe
     }
 
     @Override
+    public void getMinimumAmountResponse(WishListResponse response) {
+
+    }
+
+    @Override
     public void getResponseError(String response) {
 
     }

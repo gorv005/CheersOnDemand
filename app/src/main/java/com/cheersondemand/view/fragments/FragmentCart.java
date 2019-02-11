@@ -227,12 +227,9 @@ public class FragmentCart extends Fragment implements View.OnClickListener, IOrd
                 startActivity(intent);*/
                 if (adapterCartList.getIsProceed()) {
 
-                    if (SharedPreference.getInstance(getActivity()).getBoolean(C.IS_LOGIN)) {
-                        SharedPreference.getInstance(getActivity()).setCard(C.CARD_DATA, null);
-                        getAddressList();
-                    } else {
-                        gotoLogin();
-                    }
+                    getMinimumOrderAmount();
+
+
                 } else {
                     dialogError();
                 }
@@ -240,6 +237,20 @@ public class FragmentCart extends Fragment implements View.OnClickListener, IOrd
         }
     }
 
+
+    void getMinimumOrderAmount(){
+        String order_id = SharedPreference.getInstance(getActivity()).getString(C.ORDER_ID);
+
+        if (SharedPreference.getInstance(getActivity()).getBoolean(C.IS_LOGIN_GUEST)) {
+            String id = "" + SharedPreference.getInstance(getActivity()).geGuestUser(C.GUEST_USER).getId();
+
+            iOrderViewPresenterPresenter.getCartMinimumValueForProceed(false,"", id,order_id, Util.id(getActivity()));
+        } else {
+            String id = "" + SharedPreference.getInstance(getActivity()).getUser(C.AUTH_USER).getData().getUser().getId();
+            String token = C.bearer + SharedPreference.getInstance(getActivity()).getUser(C.AUTH_USER).getData().getToken().getAccessToken();
+            iOrderViewPresenterPresenter.getCartMinimumValueForProceed(true,token, id, order_id, Util.id(getActivity()));
+        }
+    }
     public void gotoHome() {
         Intent intent = new Intent(getActivity(), ActivityHome.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
@@ -633,6 +644,25 @@ public class FragmentCart extends Fragment implements View.OnClickListener, IOrd
 
     @Override
     public void getWishListSuccess(WishListDataResponse response) {
+
+    }
+
+    @Override
+    public void getMinimumAmountResponse(WishListResponse response) {
+        try {
+            if (response.getSuccess()) {
+                if (SharedPreference.getInstance(getActivity()).getBoolean(C.IS_LOGIN)) {
+                    SharedPreference.getInstance(getActivity()).setCard(C.CARD_DATA, null);
+                    getAddressList();
+                } else {
+                    gotoLogin();
+                }
+            } else {
+                dialog(response.getMessage());
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
     }
 

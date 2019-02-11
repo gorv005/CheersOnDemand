@@ -93,6 +93,14 @@ public class OrderViewPresenterImpl implements IOrderViewPresenterPresenter, IOr
     }
 
     @Override
+    public void onSuccessMinimumOrderAmount(WishListResponse response) {
+        if (mView != null) {
+            mView.hideProgress();
+            mView.getMinimumAmountResponse(response);
+        }
+    }
+
+    @Override
     public void onSuccess(CartHasItemResponse response) {
         if (hasItemView != null) {
             hasItemView.hideProgress();
@@ -208,6 +216,14 @@ public class OrderViewPresenterImpl implements IOrderViewPresenterPresenter, IOr
         if (mView != null) {
             mView.showProgress();
             iOrderViewIntractor.getCartList(token,user_id,order_id,uuid, isFromPayment,this);
+        }
+    }
+
+    @Override
+    public void getCartMinimumValueForProceed(boolean isAuth,String token, String user_id, String order_id, String uuid) {
+        if (mView != null) {
+            mView.showProgress();
+            iOrderViewIntractor.getMinimumOrderAmount(isAuth,token,user_id,order_id,uuid,this);
         }
     }
 

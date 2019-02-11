@@ -59,13 +59,22 @@ public class FragmentCategoryList extends Fragment implements IHomeViewPresenter
     public FragmentCategoryList() {
         // Required empty public constructor
     }
-
+    public static FragmentCategoryList newInstance() {
+        FragmentCategoryList fragmentFirst = new FragmentCategoryList();
+        Bundle bundle=new Bundle();
+        bundle.putInt(C.SOURCE, C.FRAGMENT_EXPLORE);
+        fragmentFirst.setArguments(bundle);
+        return fragmentFirst;
+    }
     @Override
     public void onResume() {
         super.onResume();
         /*((ActivityContainer)getActivity()).showToolBar();
         ActivityContainer.tvTitle.setText(R.string.Explore);*/
-        if(source!=C.FRAGMENT_PRODUCTS_HOME) {
+        if(source==C.FRAGMENT_EXPLORE){
+            rlBar.setVisibility(View.GONE);
+        }
+        else if(source!=C.FRAGMENT_PRODUCTS_HOME) {
             ((ActivityContainer) getActivity()).hideToolBar();
         }
         getCategories();

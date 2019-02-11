@@ -20,7 +20,9 @@ public class Warehouse {
     @SerializedName("email")
     @Expose
     private String email;
-
+    @SerializedName("partner_name")
+    @Expose
+    private String partnerName;
     public String getName() {
         return name;
     }
@@ -51,5 +53,13 @@ public class Warehouse {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public String getPartnerName() {
+        return partnerName;
+    }
+
+    public void setPartnerName(String partnerName) {
+        this.partnerName = partnerName;
     }
 }

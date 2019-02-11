@@ -749,6 +749,11 @@ public class FragmentHome extends Fragment implements SwipeRefreshLayout.OnRefre
     }
 
     @Override
+    public void getMinimumAmountResponse(WishListResponse response) {
+
+    }
+
+    @Override
     public void getStoreListSuccess(StoreListResponse response) {
 
     }

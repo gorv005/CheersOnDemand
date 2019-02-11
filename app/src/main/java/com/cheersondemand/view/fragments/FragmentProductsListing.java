@@ -745,6 +745,11 @@ public class FragmentProductsListing extends Fragment implements View.OnClickLis
     }
 
     @Override
+    public void getMinimumAmountResponse(WishListResponse response) {
+
+    }
+
+    @Override
     public void getProductWithCategoriesSuccess(ProductsWithCategoryResponse response) {
 
     }

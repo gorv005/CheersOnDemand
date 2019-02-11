@@ -491,6 +491,11 @@ public class FragmentDeals extends Fragment implements IHomeViewPresenterPresent
     }
 
     @Override
+    public void getMinimumAmountResponse(WishListResponse response) {
+
+    }
+
+    @Override
     public void getResponseError(String response) {
 
     }

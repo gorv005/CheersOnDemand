@@ -26,6 +26,7 @@ public interface IOrderViewIntractor {
         void onSuccessCartList(UpdateCartResponse response);
         void onSuccessAddToWishList(WishListResponse response);
         void onSuccessRemoveFromWishList(WishListResponse response);
+        void onSuccessMinimumOrderAmount(WishListResponse response);
 
         void onError(String response);
         Context getAPPContext();
@@ -69,5 +70,7 @@ public interface IOrderViewIntractor {
 
 
     public void getCartHasItem(boolean isAuthUser,String token, String UserId ,GenRequest genRequest, onCartResponseFinishListner listener);
+
+    public void getMinimumOrderAmount(boolean isAuthUser,String token, String user_id, String order_id, String uuid, OnLoginFinishedListener listener);
 
 }

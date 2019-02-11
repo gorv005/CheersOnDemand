@@ -475,6 +475,11 @@ public class FragmentProfile extends Fragment implements View.OnClickListener, I
     }
 
     @Override
+    public void getMinimumAmountResponse(WishListResponse response) {
+
+    }
+
+    @Override
     public void getResponseError(String response) {
 
     }

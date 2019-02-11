@@ -140,84 +140,89 @@ public class FragmentSearchProducts extends Fragment implements ISearchViewPrese
         init();
     }
     void init() {
-
-        etSearch.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-            @Override
-            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                if (actionId == EditorInfo.IME_ACTION_SEARCH) {
-                    if (searchProducts!=null && searchProducts.size()==0 && etSearch.getText().toString().length() > 2) {
-                        Intent intent = new Intent(getActivity(), ActivityContainer.class);
-                        Bundle bundle=new Bundle();
-                        bundle.putString(C.PRODUCT,etSearch.getText().toString());
-                        intent.putExtra(C.FRAGMENT_ACTION,C.FRAGMENT_SEARCH_PRODUCT_RESULTS);
-                        intent.putExtra(C.BUNDLE,bundle);
-                        startActivity(intent);
+        try {
+            etSearch.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+                @Override
+                public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                    if (actionId == EditorInfo.IME_ACTION_SEARCH) {
+                        if (searchProducts != null && searchProducts.size() == 0 && etSearch.getText().toString().length() > 2) {
+                            Intent intent = new Intent(getActivity(), ActivityContainer.class);
+                            Bundle bundle = new Bundle();
+                            bundle.putString(C.PRODUCT, etSearch.getText().toString());
+                            intent.putExtra(C.FRAGMENT_ACTION, C.FRAGMENT_SEARCH_PRODUCT_RESULTS);
+                            intent.putExtra(C.BUNDLE, bundle);
+                            startActivity(intent);
+                        }
+                        return true;
                     }
-                    return true;
+                    return false;
                 }
-                return false;
-            }
-        });
-        etSearch.setKeyImeChangeListener(new ChatEditText.KeyImeChange(){
-            @Override
-            public void onKeyIme(int keyCode, KeyEvent event)
-            {
-                if (KeyEvent.KEYCODE_BACK == event.getKeyCode())
-                {
-                    etSearch.clearFocus();
-                    rlRecentSearch.setVisibility(View.VISIBLE);
-                    if(isRecentSearch) {
-                        tvRecenetSearch.setVisibility(View.VISIBLE);
+            });
+            etSearch.setKeyImeChangeListener(new ChatEditText.KeyImeChange() {
+                @Override
+                public void onKeyIme(int keyCode, KeyEvent event) {
+                    if (KeyEvent.KEYCODE_BACK == event.getKeyCode()) {
+                        etSearch.clearFocus();
+                        rlRecentSearch.setVisibility(View.VISIBLE);
+                        if (isRecentSearch) {
+                            tvRecenetSearch.setVisibility(View.VISIBLE);
+                        } else {
+                            tvRecenetSearch.setVisibility(View.GONE);
+
+                        }
+                        rlCategories.setVisibility(View.GONE);
                     }
-                    else {
-                        tvRecenetSearch.setVisibility(View.GONE);
+                }
+            });
+            etSearch.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+                @Override
+                public void onFocusChange(View v, boolean hasFocus) {
+                    try {
 
+                        if (hasFocus) {
+                            rlRecentSearch.setVisibility(View.GONE);
+                            rlCategories.setVisibility(View.GONE);
+                            tvRecenetSearch.setVisibility(View.GONE);
+                        } else {
+                            rlRecentSearch.setVisibility(View.VISIBLE);
+                            if (isRecentSearch) {
+                                tvRecenetSearch.setVisibility(View.VISIBLE);
+                            } else {
+                                tvRecenetSearch.setVisibility(View.GONE);
+
+                            }
+                            rlCategories.setVisibility(View.GONE);
+
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
                     }
-                    rlCategories.setVisibility(View.GONE);
                 }
-            }});
-        etSearch.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View v, boolean hasFocus) {
-                if(hasFocus){
-                    rlRecentSearch.setVisibility(View.GONE);
-                    rlCategories.setVisibility(View.GONE);
-                    tvRecenetSearch.setVisibility(View.GONE);
+            });
+            etSearch.addTextChangedListener(new TextWatcher() {
+                @Override
+                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
                 }
-                else {
-                    rlRecentSearch.setVisibility(View.VISIBLE);
-                    if(isRecentSearch) {
-                        tvRecenetSearch.setVisibility(View.VISIBLE);
+
+                @Override
+                public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+                }
+
+                @Override
+                public void afterTextChanged(Editable s) {
+                    if (etSearch.getText().toString().length() > 2) {
+                        getSearchResult(etSearch.getText().toString());
+                    } else {
+                        llSearchResult.setVisibility(View.GONE);
                     }
-                    else {
-                        tvRecenetSearch.setVisibility(View.GONE);
-
-                    }
-                    rlCategories.setVisibility(View.GONE);
-
                 }
-            }
-        });
-        etSearch.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-                if (etSearch.getText().toString().length() > 2) {
-                    getSearchResult(etSearch.getText().toString());
-                } else {
-                    llSearchResult.setVisibility(View.GONE);
-                }
-            }
-        });
+            });
+        }
+        catch (Exception e){
+            e.printStackTrace();
+        }
 
     }
     void getSearchResult(String query) {

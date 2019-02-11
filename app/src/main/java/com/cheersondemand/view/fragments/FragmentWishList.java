@@ -492,6 +492,11 @@ public class FragmentWishList extends Fragment implements IOrderViewPresenterPre
     }
 
     @Override
+    public void getMinimumAmountResponse(WishListResponse response) {
+
+    }
+
+    @Override
     public void getResponseError(String response) {
         util.setSnackbarMessage(getActivity(), response, rlView, true);
 

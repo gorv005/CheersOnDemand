@@ -520,6 +520,11 @@ public class FragmentPaymentConfirmation extends Fragment implements ICardViewPr
     }
 
     @Override
+    public void getMinimumAmountResponse(WishListResponse response) {
+
+    }
+
+    @Override
     public void onPaymentSuccess(PaymentResponse response) {
         try {
             if (response.getSuccess()) {

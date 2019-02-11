@@ -5,6 +5,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.view.ViewGroup;
 
+import com.cheersondemand.view.fragments.FragmentCategoryList;
 import com.cheersondemand.view.fragments.FragmentCategorySubCategory;
 import com.cheersondemand.view.fragments.FragmentDeals;
 
@@ -14,7 +15,9 @@ import java.util.List;
 public class ViewPagerAdapter extends FragmentPagerAdapter {
     private final List<Fragment> mFragmentList = new ArrayList<>();
     //private final List<String> mFragmentTitleList = new ArrayList<>();
-    private final FragmentCategorySubCategory lf1 = FragmentCategorySubCategory .newInstance();
+    //private final FragmentCategorySubCategory lf1 = FragmentCategorySubCategory .newInstance();
+    private final FragmentCategoryList lf1 = FragmentCategoryList .newInstance();
+
     private final FragmentDeals lf2 = FragmentDeals .newInstance();
     public ViewPagerAdapter(FragmentManager manager) {
         super(manager);

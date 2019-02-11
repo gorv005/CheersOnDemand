@@ -523,5 +523,36 @@ public class OrderViewIntractorImpl implements IOrderViewIntractor {
         }
     }
 
+    @Override
+    public void getMinimumOrderAmount(boolean isAuthUser, String token, String user_id, String order_id, String uuid, final OnLoginFinishedListener listener) {
+        try {
+
+            WebServicesWrapper.getInstance().getMinimumOrderAmount(new ResponseResolver<WishListResponse>() {
+                @Override
+                public void onSuccess(WishListResponse updateProductQuantityResponse, Response response) {
+                    listener.onSuccessMinimumOrderAmount(updateProductQuantityResponse);
+                }
+
+                @Override
+                public void onFailure(RestError error, String msg) {
+                    if (error == null || error.getError() == null) {
+                        try {
+                            Gson gson = new Gson();
+                            WishListResponse response = gson.fromJson(msg, WishListResponse.class);
+
+                            listener.onSuccessMinimumOrderAmount(response);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    } else {
+                        listener.onError(error.getError());
+                    }
+                }
+            },isAuthUser, token, user_id, order_id, uuid);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
 
 }
