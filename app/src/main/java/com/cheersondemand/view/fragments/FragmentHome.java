@@ -166,6 +166,7 @@ public class FragmentHome extends Fragment implements SwipeRefreshLayout.OnRefre
     List<AllProduct> onSaleProductList;
     List<AllProduct> allProductList;
     ImageLoader imageLoader;
+
     public FragmentHome() {
         // Required empty public constructor
     }
@@ -178,7 +179,7 @@ public class FragmentHome extends Fragment implements SwipeRefreshLayout.OnRefre
         iOrderViewPresenterPresenter = new OrderViewPresenterImpl(this, getActivity());
         iStoreViewPresenter = new StoreViewPresenterImpl(this, getActivity());
         util = new Util();
-        imageLoader=new ImageLoader(getActivity());
+        imageLoader = new ImageLoader(getActivity());
         getDisplayCoordinate();
     }
 
@@ -275,6 +276,7 @@ public class FragmentHome extends Fragment implements SwipeRefreshLayout.OnRefre
         llLocationSelect.setOnClickListener(this);
         llStoreSelect.setOnClickListener(this);
         ivCart.setOnClickListener(this);
+        ivBanner.setOnClickListener(this);
         //  etSearchProduct.setOnClickListener(this);
         // rlSearchProduct.setOnClickListener(this);
         /*rlSearch.setOnClickListener(new View.OnClickListener() {
@@ -392,9 +394,9 @@ public class FragmentHome extends Fragment implements SwipeRefreshLayout.OnRefre
                 banner = response.getData().getBanner();
                 onSaleProductList = response.getData().getOnSaleProducts();
                 if (banner != null) {
-                   // rlImage.setLayoutParams(new LinearLayout.LayoutParams(width, 389 * width / 1242));
-                //    Util.setImage(getActivity(), banner.getImage(), ivBanner);
-                    imageLoader.DisplayImage(banner.getImage(),ivBanner);
+                    // rlImage.setLayoutParams(new LinearLayout.LayoutParams(width, 389 * width / 1242));
+                    //    Util.setImage(getActivity(), banner.getImage(), ivBanner);
+                    imageLoader.DisplayImage(banner.getImage(), ivBanner);
                 }
                 rvBrands.setVisibility(View.VISIBLE);
                 rvProducts.setVisibility(View.VISIBLE);
@@ -840,15 +842,42 @@ public class FragmentHome extends Fragment implements SwipeRefreshLayout.OnRefre
             case R.id.ivCart:
                 // gotoSearchProduct();
                 gotoCart();
-
                 break;
-           /* case R.id.rlViewMoreCategory:
-                showViewMore();
-                break;*/
+            case R.id.ivBanner:
+                gotoProductListingPage();
+                break;
         }
     }
 
 
+    void gotoProductListingPage(){
+        Intent intent = new Intent(getActivity(), ActivityContainer.class);
+        Bundle bundle = new Bundle();
+        if(banner.getCategoryId()!=null && !banner.getCategoryId().equals("0") && !banner.getCategoryId().equals(""))
+        {
+            bundle.putString(C.CAT_ID, "" + banner.getCategoryId());
+
+        }
+        else {
+            bundle.putString(C.CAT_ID, "");
+
+        }
+        if(banner.getSubCategoryId()!=null && !banner.getSubCategoryId().equals("0") && !banner.getSubCategoryId().equals(""))
+        {
+            bundle.putString(C.SUB_CAT_ID, "" + banner.getSubCategoryId());
+
+        }
+        else {
+            bundle.putString(C.SUB_CAT_ID, "");
+
+        }
+        bundle.putBoolean(C.IS_ON_SALE, false);
+
+        bundle.putInt(C.SOURCE, C.FRAGMENT_CATEGORIES_HOME);
+        intent.putExtra(C.FRAGMENT_ACTION, C.FRAGMENT_PRODUCT_LISTING);
+        intent.putExtra(C.BUNDLE, bundle);
+        startActivity(intent);
+    }
     void showViewMore() {
         Bundle bundle = new Bundle();
         bundle.putInt(C.SOURCE, C.FRAGMENT_PRODUCTS_HOME);
@@ -880,7 +909,7 @@ public class FragmentHome extends Fragment implements SwipeRefreshLayout.OnRefre
         productPos = pos;
         this.secPos = secPos;
         this.isAdd = isAdd;
-        if(secPos==0) {
+        if (secPos == 0) {
             if (allProductList != null && allProductList.size() > 0) {
                 product = StoreProducts.getInstance().getProduct(allProductList.get(pos).getId());
                 if (product == null) {
@@ -888,8 +917,7 @@ public class FragmentHome extends Fragment implements SwipeRefreshLayout.OnRefre
                 }
 
             }
-        }
-        else if(secPos==1) {
+        } else if (secPos == 1) {
             if (onSaleProductList != null && onSaleProductList.size() > 0) {
                 product = StoreProducts.getInstance().getProduct(onSaleProductList.get(pos).getId());
                 if (product == null) {
@@ -922,7 +950,7 @@ public class FragmentHome extends Fragment implements SwipeRefreshLayout.OnRefre
             productPos = pos;
             this.secPos = secPos;
             this.isAdd = isAdd;
-            if(secPos==0){
+            if (secPos == 0) {
                 if (allProductList != null && allProductList.size() > 0) {
                     product = StoreProducts.getInstance().getProduct(allProductList.get(pos).getId());
                     if (product == null) {
@@ -930,8 +958,7 @@ public class FragmentHome extends Fragment implements SwipeRefreshLayout.OnRefre
                     }
 
                 }
-            }
-            else if(secPos==1){
+            } else if (secPos == 1) {
                 if (onSaleProductList != null && onSaleProductList.size() > 0) {
                     product = StoreProducts.getInstance().getProduct(onSaleProductList.get(pos).getId());
                     if (product == null) {

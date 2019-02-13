@@ -11,10 +11,10 @@ public class Banner implements Serializable{
     private Integer id;
     @SerializedName("category_id")
     @Expose
-    private Integer categoryId;
+    private String categoryId;
     @SerializedName("sub_category_id")
     @Expose
-    private Object subCategoryId;
+    private String subCategoryId;
     @SerializedName("image")
     @Expose
     private String image;
@@ -33,7 +33,7 @@ public class Banner implements Serializable{
      * @param categoryId
      * @param image
      */
-    public Banner(Integer id, Integer categoryId, Object subCategoryId, String image) {
+    public Banner(Integer id, String categoryId, String subCategoryId, String image) {
         super();
         this.id = id;
         this.categoryId = categoryId;
@@ -49,19 +49,19 @@ public class Banner implements Serializable{
         this.id = id;
     }
 
-    public Integer getCategoryId() {
+    public String getCategoryId() {
         return categoryId;
     }
 
-    public void setCategoryId(Integer categoryId) {
+    public void setCategoryId(String categoryId) {
         this.categoryId = categoryId;
     }
 
-    public Object getSubCategoryId() {
+    public String getSubCategoryId() {
         return subCategoryId;
     }
 
-    public void setSubCategoryId(Object subCategoryId) {
+    public void setSubCategoryId(String subCategoryId) {
         this.subCategoryId = subCategoryId;
     }
 
