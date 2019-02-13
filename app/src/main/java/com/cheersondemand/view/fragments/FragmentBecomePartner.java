@@ -1,6 +1,9 @@
 package com.cheersondemand.view.fragments;
 
 
+import android.app.Dialog;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -14,6 +17,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import com.cheersondemand.R;
 import com.cheersondemand.model.store.AddStore;
@@ -308,14 +312,46 @@ public class FragmentBecomePartner extends Fragment implements View.OnClickListe
                 etEmail.clearFocus();
                 etContactNo.clearFocus();
                 etPartnerName.clearFocus();
-                util.setSnackbarMessage(getActivity(), Response.getMessage(), rlView, true);
+               // util.setSnackbarMessage(getActivity(), Response.getMessage(), rlView, true);
+                dialog(Response.getMessage());
 
             } else {
                 if (Response.getErrors() != null && Response.getErrors().size() > 0)
-                    util.setSnackbarMessage(getActivity(), Response.getErrors().get(0).getField(), rlView, true);
-
+                   // util.setSnackbarMessage(getActivity(), Response.getErrors().get(0).getField(), rlView, true);
+                    dialog(Response.getErrors().get(0).getField());
             }
         } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+    void dialog(String msg) {
+        try {
+            final Dialog dialog = new Dialog(getActivity(), R.style.FullHeightDialog); //this is a reference to the style above
+            dialog.setContentView(R.layout.dialog_ok); //I saved the xml file above as yesnomessage.xml
+            dialog.setCancelable(true);
+            dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+
+//to set the message
+            TextView title = (TextView) dialog.findViewById(R.id.tvmessagedialogtitle);
+
+            TextView message = (TextView) dialog.findViewById(R.id.tvmessagedialogtext);
+            title.setText(getString(R.string.app_name));
+            message.setText(msg);
+//add some action to the buttons
+            Button yes = (Button) dialog.findViewById(R.id.bmessageDialogOK);
+            yes.setText(getString(R.string.ok));
+            yes.setOnClickListener(new View.OnClickListener() {
+
+                public void onClick(View v) {
+                    dialog.dismiss();
+
+
+                }
+            });
+
+            dialog.show();
+        }
+        catch (Exception e){
             e.printStackTrace();
         }
     }
