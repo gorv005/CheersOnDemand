@@ -314,6 +314,9 @@ public class FragmentDeals extends Fragment implements IHomeViewPresenterPresent
                             if (categoriesList != null && categoriesList.size() > 0) {
                                 adapterDeals.getFilter().filter("" + categoriesList.get(0).getId());
                             }
+                            tvNoProduct.setVisibility(View.GONE);
+                            llCategory.setVisibility(View.VISIBLE);
+                            rvDeals.setVisibility(View.VISIBLE);
                         }
                     }
                     else {

@@ -93,7 +93,9 @@ public class FragmentExplore extends Fragment implements View.OnClickListener {
                 }
 
                 if (adapter.getItem(0) != null) {
-                    ((FragmentCategorySubCategory) adapter.getItem(0)).getCategories();
+                   // ((FragmentCategorySubCategory) adapter.getItem(0)).getCategories();
+                    ((FragmentCategoryList) adapter.getItem(0)).getCategories();
+
                 }
 
         }
