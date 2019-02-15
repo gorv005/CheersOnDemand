@@ -232,14 +232,22 @@ public class FragmentAddressSelection extends Fragment implements View.OnClickLi
     }
 
     @Override
-    public void onAddDeliveryAddressSuccess(AddressAddResponse Response) {
+    public void onAddDeliveryAddressSuccess(AddressAddResponse response) {
         try {
-        if(Response.getSuccess()){
+        if(response.getSuccess()){
            // ((ActivityContainer)getActivity()).fragmnetLoader(C.FRAGMENT_PAYMENT_CONFIRMATION,null);
             getCardList();
         }
         else {
-            dialog(Response.getMessage());
+            if(response.getErrors()!=null && response.getErrors().size()>=0){
+
+                dialog(response.getErrors().get(0).getDetail());
+
+            }
+            else {
+
+                dialog(response.getMessage());
+            }
         }
         }
         catch (Exception e){
