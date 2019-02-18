@@ -87,6 +87,7 @@ public class FragmentExplore extends Fragment implements View.OnClickListener {
         setLocationName();
         if (SharedPreference.getInstance(getActivity()).getBoolean(C.IS_STORE_UPDATED)) {
             SharedPreference.getInstance(getActivity()).setBoolean(C.IS_STORE_UPDATED, false);
+            SharedPreference.getInstance(getActivity()).setBoolean(C.IS_STORE_UPDATED_HOME, true);
 
                 if (adapter.getItem(1) != null) {
                     ((FragmentDeals) adapter.getItem(1)).getDeals();

@@ -212,15 +212,21 @@ public class FragmentHome extends Fragment implements SwipeRefreshLayout.OnRefre
             dialog();
         }
         setStoreLocation();
-        if (allProductList != null && allProductList.size() > 0) {
-            //allProductList=StoreProducts.getInstance().getListOfProducts();
-            //adapterHomeCategoriesSections.modifyList();
-            adapterHomeCategories.notifyDataSetChanged();
+        if(SharedPreference.getInstance(getActivity()).getBoolean(C.IS_STORE_UPDATED_HOME)){
+            SharedPreference.getInstance(getActivity()).setBoolean(C.IS_STORE_UPDATED_HOME, false);
+            getProductsAndCategories();
         }
-        if (onSaleProductList != null && onSaleProductList.size() > 0) {
-            //allProductList=StoreProducts.getInstance().getListOfProducts();
-            //adapterHomeCategoriesSections.modifyList();
-            adapterHomeProductOnSale.notifyDataSetChanged();
+        else {
+            if (allProductList != null && allProductList.size() > 0) {
+                //allProductList=StoreProducts.getInstance().getListOfProducts();
+                //adapterHomeCategoriesSections.modifyList();
+                adapterHomeCategories.notifyDataSetChanged();
+            }
+            if (onSaleProductList != null && onSaleProductList.size() > 0) {
+                //allProductList=StoreProducts.getInstance().getListOfProducts();
+                //adapterHomeCategoriesSections.modifyList();
+                adapterHomeProductOnSale.notifyDataSetChanged();
+            }
         }
        /* CategoryRequest categoryRequest = new CategoryRequest();
         categoryRequest.setUuid(Util.id(getActivity()));*/

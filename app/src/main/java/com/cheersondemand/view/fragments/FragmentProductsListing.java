@@ -293,6 +293,7 @@ public class FragmentProductsListing extends Fragment implements View.OnClickLis
         ((ActivityContainer)getActivity()).setTitle(getString(R.string.product_listing));
         if(SharedPreference.getInstance(getActivity()).getBoolean(C.IS_STORE_UPDATED)){
             SharedPreference.getInstance(getActivity()).setBoolean(C.IS_STORE_UPDATED, false);
+            SharedPreference.getInstance(getActivity()).setBoolean(C.IS_STORE_UPDATED_HOME, true);
             page = 1;
             getProducts(page);
         }
