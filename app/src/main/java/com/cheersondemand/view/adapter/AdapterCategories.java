@@ -17,6 +17,7 @@ import com.cheersondemand.util.ImageLoader.ImageLoader;
 import com.cheersondemand.util.ImageLoader.SquareImageView;
 import com.cheersondemand.util.Util;
 import com.cheersondemand.view.ActivityContainer;
+import com.cheersondemand.view.ActivityHome;
 
 import java.util.List;
 
@@ -88,16 +89,18 @@ public class ItemViewHolder extends RecyclerView.ViewHolder {
 
                     ((ActivityContainer)context).fragmnetLoader(C.FRAGMENT_PRODUCT_LISTING,bundle);*/
 
-                    Intent intent = new Intent(context, ActivityContainer.class);
+                  //  Intent intent = new Intent(context, ActivityContainer.class);
                     Bundle bundle = new Bundle();
                     bundle.putString(C.CAT_ID, "" + horizontalList.get(position).getId());
                     bundle.putString(C.SUB_CAT_ID, "");
                     bundle.putBoolean(C.IS_ON_SALE, false);
 
                     bundle.putInt(C.SOURCE, C.FRAGMENT_CATEGORIES);
-                    intent.putExtra(C.FRAGMENT_ACTION, C.FRAGMENT_PRODUCT_LISTING);
+                   /* intent.putExtra(C.FRAGMENT_ACTION, C.FRAGMENT_PRODUCT_LISTING);
                     intent.putExtra(C.BUNDLE, bundle);
-                    context.startActivity(intent);
+                    context.startActivity(intent);*/
+                    ((ActivityHome) context).fragmnetLoader(C.FRAGMENT_PRODUCT_LISTING, bundle);
+
                 }
             });
         }

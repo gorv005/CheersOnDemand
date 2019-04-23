@@ -221,15 +221,19 @@ public class FragmentSplash extends Fragment {
     }
 
     private void RequestPermission() {
+        try {
+            // Creating String Array with Permissions.
+            ActivityCompat.requestPermissions(getActivity(), new String[]
+                    {
+                            WRITE_EXTERNAL_STORAGE,
+                            ACCESS_FINE_LOCATION,
+                            ACCESS_COARSE_LOCATION
 
-        // Creating String Array with Permissions.
-        ActivityCompat.requestPermissions(getActivity(), new String[]
-                {
-                        WRITE_EXTERNAL_STORAGE,
-                        ACCESS_FINE_LOCATION,
-                        ACCESS_COARSE_LOCATION
-
-                }, RequestPermissionCode);
+                    }, RequestPermissionCode);
+        }
+        catch (Exception e){
+            e.printStackTrace();
+        }
 
     }
 

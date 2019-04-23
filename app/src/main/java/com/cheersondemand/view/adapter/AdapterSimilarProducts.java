@@ -26,7 +26,7 @@ import java.util.List;
  * Created by AB on 6/7/2018.
  */
 
-public class AdapterHomeProductOnSale extends RecyclerView.Adapter<RecyclerView.ViewHolder > {
+public class AdapterSimilarProducts extends RecyclerView.Adapter<RecyclerView.ViewHolder > {
     private static final int TYPE_FOOTER = 1;
     private static final int TYPE_ITEM = 0;
 private List<AllProduct> horizontalList;
@@ -36,9 +36,9 @@ private List<AllProduct> horizontalList;
     private AllProduct allProduct;
 
     public class ItemViewHolder extends RecyclerView.ViewHolder {
-    public TextView tvProductName,tvProductPrice,tvQuantity,tvAddToCart,tvOffer;
+    public TextView tvProductName,tvProductPrice,tvQuantity,tvAddToCart;
     public ImageView ivProductImage,ivLike;
-    View rlProduct,btnAddToCart,rlMinus,rlPlus,llQuantity,btnAddedToCart,rlOffer;
+    View rlProduct,btnAddToCart,rlMinus,rlPlus,llQuantity,btnAddedToCart;
     public ItemViewHolder(View view) {
         super(view);
         tvProductName = (TextView) view.findViewById(R.id.tvProductName);
@@ -53,15 +53,14 @@ private List<AllProduct> horizontalList;
         rlMinus = (View) view.findViewById(R.id.rlMinus);
         rlPlus = (View) view.findViewById(R.id.rlPlus);
         llQuantity = (View) view.findViewById(R.id.llQuantity);
-        rlOffer = (View) view.findViewById(R.id.rlOffer);
-        tvOffer = (TextView) view.findViewById(R.id.tvOffer);
+
         ivLike= (ImageView) view.findViewById(R.id.ivLike);
     }
 }
 
 
 
-    public AdapterHomeProductOnSale(boolean isHome, List<AllProduct> horizontalList, Activity context) {
+    public AdapterSimilarProducts(boolean isHome, List<AllProduct> horizontalList, Activity context) {
         this.horizontalList = horizontalList;
         this.context=context;
         this.isHome=isHome;
@@ -74,13 +73,13 @@ private List<AllProduct> horizontalList;
     public RecyclerView.ViewHolder  onCreateViewHolder(ViewGroup parent, int viewType) {
     if(viewType==TYPE_ITEM) {
         View itemView = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.on_sale_product_item, parent, false);
+                .inflate(R.layout.similar_product_item, parent, false);
 
         return new ItemViewHolder(itemView);
     }
     else if (viewType == TYPE_FOOTER) {
         //Inflating footer view
-        View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.product_card_item_home_footer, parent, false);
+        View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.product_card_similar_footer, parent, false);
         return new FooterViewHolder(itemView);
     }
     else
@@ -105,14 +104,6 @@ private List<AllProduct> horizontalList;
             }
             else {
                 itemViewHolder.tvProductPrice.setText("$" + allProduct.getPrice());
-            }
-            if(allProduct.getDiscount()!=null){
-                itemViewHolder.rlOffer.setVisibility(View.VISIBLE);
-                itemViewHolder.tvOffer.setText(allProduct.getDiscount()+"%");
-            }
-            else {
-                itemViewHolder.rlOffer.setVisibility(View.GONE);
-
             }
           //  imageLoader.DisplayImage(horizontalList.get(position).getImage(),itemViewHolder.ivProductImage);
             Util.setImage(context,allProduct.getImage(),itemViewHolder.ivProductImage);
@@ -152,11 +143,11 @@ private List<AllProduct> horizontalList;
                 @Override
                 public void onClick(View v) {
                     if(isHome){
-                        ((ActivityHome) context).addToCart(1, position, true);
+                        ((ActivityHome) context).addToCart(0, position, true);
 
                     }
                     else {
-                        ((ActivityContainer) context).addToCart(1, position, true);
+                        ((ActivityContainer) context).addToCart(0, position, true);
                     }
                 }
             });
@@ -188,10 +179,10 @@ private List<AllProduct> horizontalList;
                 @Override
                 public void onClick(View v) {
                     if (isHome) {
-                        ((ActivityHome) context).wishListUpdate(1, position, !horizontalList.get(position).getIsWishlisted());
+                        ((ActivityHome) context).wishListUpdate(0, position, !horizontalList.get(position).getIsWishlisted());
 
                     } else {
-                        ((ActivityContainer) context).wishListUpdate(1, position, !horizontalList.get(position).getIsWishlisted());
+                        ((ActivityContainer) context).wishListUpdate(0, position, !horizontalList.get(position).getIsWishlisted());
                     }
                 }
             });
@@ -216,12 +207,22 @@ private List<AllProduct> horizontalList;
                     Bundle bundle=new Bundle();
                     bundle.putString(C.CAT_ID,"");
                     bundle.putString(C.SUB_CAT_ID,"");
-                    bundle.putBoolean(C.IS_ON_SALE, true);
+                    bundle.putBoolean(C.IS_ON_SALE, false);
+
                     bundle.putInt(C.SOURCE,C.FRAGMENT_PRODUCTS_HOME);
-                //    intent.putExtra(C.BUNDLE,bundle);
+                  //  intent.putExtra(C.BUNDLE,bundle);
                    // intent.putExtra(C.FRAGMENT_ACTION,C.FRAGMENT_PRODUCT_LISTING);
+
                    // context.startActivity(intent);
-                    ((ActivityHome) context).fragmnetLoader(C.FRAGMENT_PRODUCT_LISTING, bundle);
+                    if(isHome) {
+                        ((ActivityHome) context).fragmnetLoader(C.FRAGMENT_PRODUCT_LISTING, bundle);
+                    }
+                    else {
+                            Intent intent=new Intent(context,ActivityContainer.class);
+                          intent.putExtra(C.BUNDLE,bundle);
+                         intent.putExtra(C.FRAGMENT_ACTION,C.FRAGMENT_PRODUCT_LISTING);
+                         context.startActivity(intent);
+                    }
 
                 }
             });

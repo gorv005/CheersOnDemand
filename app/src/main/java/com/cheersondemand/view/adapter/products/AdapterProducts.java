@@ -18,6 +18,7 @@ import com.cheersondemand.util.ImageLoader.ImageLoader;
 import com.cheersondemand.util.StoreProducts;
 import com.cheersondemand.util.Util;
 import com.cheersondemand.view.ActivityContainer;
+import com.cheersondemand.view.ActivityHome;
 
 import java.util.List;
 
@@ -31,7 +32,7 @@ public class AdapterProducts extends RecyclerView.Adapter<RecyclerView.ViewHolde
 private List<AllProduct> horizontalList;
     Activity context;
     ImageLoader imageLoader;
-
+    int source;
     public class ItemViewHolder extends RecyclerView.ViewHolder {
     public TextView tvProductName,tvProductPrice,tvQuantity,tvAddToCart;
     public ImageView ivProductImage,ivLike;
@@ -57,8 +58,9 @@ private List<AllProduct> horizontalList;
    public void modifyList(){
         notifyDataSetChanged();
     }
-    public AdapterProducts( List<AllProduct> horizontalList, Activity context) {
+    public AdapterProducts(int source, List<AllProduct> horizontalList, Activity context) {
         this.horizontalList = horizontalList;
+        this.source=source;
         this.context=context;
         imageLoader=new ImageLoader(context);
     }
@@ -131,8 +133,12 @@ private List<AllProduct> horizontalList;
             itemViewHolder.btnAddToCart.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-
-                        ((ActivityContainer) context).addToCart(0, position, true);
+                         if(source==C.FRAGMENT_PRODUCT_DESC) {
+                             ((ActivityContainer) context).addToCart(0, position, true);
+                         }
+                         else {
+                             ((ActivityHome) context).addToCart(0, position, true);
+                         }
 
                 }
             });
@@ -141,25 +147,37 @@ private List<AllProduct> horizontalList;
                 public void onClick(View v) {
 
 
-
+                    if(source==C.FRAGMENT_PRODUCT_DESC) {
                         ((ActivityContainer) context).updateCart(0, position, true);
+                    }
+                    else {
+                        ((ActivityHome) context).updateCart(0, position, true);
+                    }
 
                 }
             });
             itemViewHolder.rlMinus.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-
+                    if(source==C.FRAGMENT_PRODUCT_DESC) {
                         ((ActivityContainer) context).updateCart(0, position, false);
+                    }
+                    else {
+                        ((ActivityHome) context).updateCart(0, position, false);
+                    }
 
                 }
             });
             itemViewHolder.ivLike.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-
+                    if(source==C.FRAGMENT_PRODUCT_DESC) {
                         ((ActivityContainer) context).wishListUpdate(0, position, !horizontalList.get(position).getIsWishlisted());
+                    }
+                    else {
+                        ((ActivityHome) context).wishListUpdate(0, position, !horizontalList.get(position).getIsWishlisted());
 
+                    }
                 }
             });
           /*  itemViewHolder.tvBrandName.setText(horizontalList.get(position));

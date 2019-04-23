@@ -202,7 +202,7 @@ private List<AllProduct> horizontalList;
                 public void onClick(View v) {
                     Util.hideKeyboard(context);
 
-                    Intent intent=new Intent(context,ActivityContainer.class);
+                //    Intent intent=new Intent(context,ActivityContainer.class);
 
                     Bundle bundle=new Bundle();
                     bundle.putString(C.CAT_ID,"");
@@ -210,10 +210,19 @@ private List<AllProduct> horizontalList;
                     bundle.putBoolean(C.IS_ON_SALE, false);
 
                     bundle.putInt(C.SOURCE,C.FRAGMENT_PRODUCTS_HOME);
-                    intent.putExtra(C.BUNDLE,bundle);
-                    intent.putExtra(C.FRAGMENT_ACTION,C.FRAGMENT_PRODUCT_LISTING);
+                  //  intent.putExtra(C.BUNDLE,bundle);
+                   // intent.putExtra(C.FRAGMENT_ACTION,C.FRAGMENT_PRODUCT_LISTING);
 
-                    context.startActivity(intent);
+                   // context.startActivity(intent);
+                    if(isHome) {
+                        ((ActivityHome) context).fragmnetLoader(C.FRAGMENT_PRODUCT_LISTING, bundle);
+                    }
+                    else {
+                            Intent intent=new Intent(context,ActivityContainer.class);
+                          intent.putExtra(C.BUNDLE,bundle);
+                         intent.putExtra(C.FRAGMENT_ACTION,C.FRAGMENT_PRODUCT_LISTING);
+                         context.startActivity(intent);
+                    }
 
                 }
             });

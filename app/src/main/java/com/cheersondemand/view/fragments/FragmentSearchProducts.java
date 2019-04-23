@@ -253,36 +253,41 @@ public class FragmentSearchProducts extends Fragment implements ISearchViewPrese
 
     @Override
     public void onRecentSearchSuccess(SearchResponse response) {
-        if (response.getSuccess()) {
+        try {
+            if (response.getSuccess()) {
 
-            if (response.getData() != null && response.getData().getRecentSearch() != null && response.getData().getRecentSearch().size() > 0) {
-                rlRecentSearch.setVisibility(View.VISIBLE);
-                tvRecenetSearch.setVisibility(View.VISIBLE);
-                isRecentSearch=true;
-                adapterRecentProductSearch = new AdapterRecentProductSearches(source,response.getData().getRecentSearch(), getActivity());
-                lvRecentSearches.setAdapter(adapterRecentProductSearch);
-            } else {
-                isRecentSearch=false;
-                rlRecentSearch.setVisibility(View.GONE);
-                tvRecenetSearch.setVisibility(View.GONE);
-            }
-            if (response.getData() != null && response.getData().getCategories() != null && response.getData().getCategories().size() > 0) {
-                boolean isViewMore=false;
-                List<Categories> categories = new ArrayList<>();
-                if (response.getData().getCategories().size() > 5) {
-                    isViewMore=true;
-                    for (int i = 0; i < 5; i++) {
-                        categories.add(response.getData().getCategories().get(i));
-                    }
+                if (response.getData() != null && response.getData().getRecentSearch() != null && response.getData().getRecentSearch().size() > 0) {
+                    rlRecentSearch.setVisibility(View.VISIBLE);
+                    tvRecenetSearch.setVisibility(View.VISIBLE);
+                    isRecentSearch = true;
+                    adapterRecentProductSearch = new AdapterRecentProductSearches(source, response.getData().getRecentSearch(), getActivity());
+                    lvRecentSearches.setAdapter(adapterRecentProductSearch);
                 } else {
-                    categories.addAll(response.getData().getCategories());
+                    isRecentSearch = false;
+                    rlRecentSearch.setVisibility(View.GONE);
+                    tvRecenetSearch.setVisibility(View.GONE);
                 }
-              //  adapterHomeBrands = new AdapterSearchCategories(source,isViewMore,categories, getActivity());
-               // lvCategory.setAdapter(adapterHomeBrands);
+                if (response.getData() != null && response.getData().getCategories() != null && response.getData().getCategories().size() > 0) {
+                    boolean isViewMore = false;
+                    List<Categories> categories = new ArrayList<>();
+                    if (response.getData().getCategories().size() > 5) {
+                        isViewMore = true;
+                        for (int i = 0; i < 5; i++) {
+                            categories.add(response.getData().getCategories().get(i));
+                        }
+                    } else {
+                        categories.addAll(response.getData().getCategories());
+                    }
+                    //  adapterHomeBrands = new AdapterSearchCategories(source,isViewMore,categories, getActivity());
+                    // lvCategory.setAdapter(adapterHomeBrands);
 
+
+                }
 
             }
-
+        }
+        catch (Exception e){
+            e.printStackTrace();
         }
     }
 

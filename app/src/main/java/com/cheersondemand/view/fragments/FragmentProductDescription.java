@@ -58,6 +58,7 @@ import com.cheersondemand.util.StoreProducts;
 import com.cheersondemand.util.Util;
 import com.cheersondemand.view.ActivityContainer;
 import com.cheersondemand.view.adapter.AdapterHomeCategories;
+import com.cheersondemand.view.adapter.AdapterSimilarProducts;
 import com.cheersondemand.view.adapter.productdescription.AdapterOffers;
 
 import java.util.ArrayList;
@@ -104,7 +105,7 @@ public class FragmentProductDescription extends Fragment implements View.OnClick
     LinearLayoutManager horizontalLayout;
     IProductDescViewPresenter iProductDescViewPresenter;
     IOrderViewPresenterPresenter iOrderViewPresenterPresenter;
-    AdapterHomeCategories adapterSimilarProducts;
+    AdapterSimilarProducts adapterSimilarProducts;
     @BindView(R.id.btnAddToCart)
     Button btnAddToCart;
     @BindView(R.id.btnBuyNow)
@@ -557,7 +558,7 @@ public class FragmentProductDescription extends Fragment implements View.OnClick
                     allProductList = response.getData().getSimilarProducts();
                     StoreProducts.getInstance().saveProducts(allProductList);
                     if (allProductList.size() > 0) {
-                        adapterSimilarProducts = new AdapterHomeCategories(false, allProductList, getActivity());
+                        adapterSimilarProducts = new AdapterSimilarProducts(false, allProductList, getActivity());
                         rvSimilarDrinks.setAdapter(adapterSimilarProducts);
                     }
                 } else {

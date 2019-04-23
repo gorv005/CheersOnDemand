@@ -222,16 +222,21 @@ public class FragmentCart extends Fragment implements View.OnClickListener, IOrd
                 gotoHome();
                 break;
             case R.id.btnProceed:
+                try {
                /* Intent intent = new Intent(getActivity(), ActivityContainer.class);
                 intent.putExtra(C.FRAGMENT_ACTION, C.FRAGMENT_PAYMENT_CONFIRMATION);
                 startActivity(intent);*/
-                if (adapterCartList.getIsProceed()) {
+                    if (adapterCartList.getIsProceed()) {
 
-                    getMinimumOrderAmount();
+                        getMinimumOrderAmount();
 
 
-                } else {
-                    dialogError();
+                    } else {
+                        dialogError();
+                    }
+                }
+                catch (Exception e){
+                    e.printStackTrace();
                 }
                 break;
         }
@@ -261,28 +266,34 @@ public class FragmentCart extends Fragment implements View.OnClickListener, IOrd
     }
 
     void dialogError() {
-        final Dialog dialog = new Dialog(getActivity(), R.style.FullHeightDialog); //this is a reference to the style above
-        dialog.setContentView(R.layout.dialog_ok); //I saved the xml file above as yesnomessage.xml
-        dialog.setCancelable(true);
-        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+
+        try {
+            final Dialog dialog = new Dialog(getActivity(), R.style.FullHeightDialog); //this is a reference to the style above
+            dialog.setContentView(R.layout.dialog_ok); //I saved the xml file above as yesnomessage.xml
+            dialog.setCancelable(true);
+            dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
 
 //to set the message
-        TextView title = (TextView) dialog.findViewById(R.id.tvmessagedialogtitle);
+            TextView title = (TextView) dialog.findViewById(R.id.tvmessagedialogtitle);
 
-        TextView message = (TextView) dialog.findViewById(R.id.tvmessagedialogtext);
-        title.setText(getString(R.string.app_name));
-        message.setText(getString(R.string.sorry_delivery_not_available));
+            TextView message = (TextView) dialog.findViewById(R.id.tvmessagedialogtext);
+            title.setText(getString(R.string.app_name));
+            message.setText(getString(R.string.sorry_delivery_not_available));
 //add some action to the buttons
-        Button yes = (Button) dialog.findViewById(R.id.bmessageDialogOK);
-        yes.setText(getString(R.string.ok));
-        yes.setOnClickListener(new View.OnClickListener() {
+            Button yes = (Button) dialog.findViewById(R.id.bmessageDialogOK);
+            yes.setText(getString(R.string.ok));
+            yes.setOnClickListener(new View.OnClickListener() {
 
-            public void onClick(View v) {
-                dialog.dismiss();
-            }
-        });
+                public void onClick(View v) {
+                    dialog.dismiss();
+                }
+            });
 
-        dialog.show();
+            dialog.show();
+        }
+        catch (Exception e){
+            e.printStackTrace();
+        }
     }
 
     void gotoLogin() {

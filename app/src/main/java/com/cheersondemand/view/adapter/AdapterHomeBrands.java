@@ -74,16 +74,18 @@ public class AdapterHomeBrands extends RecyclerView.Adapter<RecyclerView.ViewHol
                 public void onClick(View v) {
                     Util.hideKeyboard(context);
 
-                    Intent intent = new Intent(context, ActivityContainer.class);
+                  //  Intent intent = new Intent(context, ActivityContainer.class);
                     Bundle bundle = new Bundle();
                     bundle.putString(C.CAT_ID, "" + horizontalList.get(position).getId());
                     bundle.putString(C.SUB_CAT_ID, "");
                     bundle.putBoolean(C.IS_ON_SALE, false);
 
                     bundle.putInt(C.SOURCE, C.FRAGMENT_CATEGORIES_HOME);
-                    intent.putExtra(C.FRAGMENT_ACTION, C.FRAGMENT_PRODUCT_LISTING);
+                   /* intent.putExtra(C.FRAGMENT_ACTION, C.FRAGMENT_PRODUCT_LISTING);
                     intent.putExtra(C.BUNDLE, bundle);
-                    context.startActivity(intent);
+                    context.startActivity(intent);*/
+
+                    ((ActivityHome) context).fragmnetLoader(C.FRAGMENT_PRODUCT_LISTING, bundle);
                 }
             });
             itemViewHolder.ivProductImage.setOnClickListener(new View.OnClickListener() {
@@ -91,16 +93,18 @@ public class AdapterHomeBrands extends RecyclerView.Adapter<RecyclerView.ViewHol
                 public void onClick(View v) {
                     Util.hideKeyboard(context);
 
-                    Intent intent = new Intent(context, ActivityContainer.class);
+                  //  Intent intent = new Intent(context, ActivityContainer.class);
                     Bundle bundle = new Bundle();
                     bundle.putString(C.CAT_ID, "" + horizontalList.get(position).getId());
                     bundle.putString(C.SUB_CAT_ID, "");
                     bundle.putBoolean(C.IS_ON_SALE, false);
 
                     bundle.putInt(C.SOURCE, C.FRAGMENT_CATEGORIES_HOME);
-                    intent.putExtra(C.FRAGMENT_ACTION, C.FRAGMENT_PRODUCT_LISTING);
+                    /*intent.putExtra(C.FRAGMENT_ACTION, C.FRAGMENT_PRODUCT_LISTING);
                     intent.putExtra(C.BUNDLE, bundle);
-                    context.startActivity(intent);
+                    context.startActivity(intent);*/
+                    ((ActivityHome) context).fragmnetLoader(C.FRAGMENT_PRODUCT_LISTING, bundle);
+
                 }
             });
         } else if (holder instanceof FooterViewHolder) {

@@ -35,6 +35,7 @@ import com.cheersondemand.view.fragments.FragmentCoupons;
 import com.cheersondemand.view.fragments.FragmentExplore;
 import com.cheersondemand.view.fragments.FragmentHome;
 import com.cheersondemand.view.fragments.FragmentProductDescription;
+import com.cheersondemand.view.fragments.FragmentProductsListing;
 import com.cheersondemand.view.fragments.FragmentProfile;
 import com.cheersondemand.view.fragments.FragmentSearchProducts;
 import com.cheersondemand.view.fragments.FragmentWishList;
@@ -185,6 +186,20 @@ public class ActivityHome extends AppCompatActivity implements View.OnClickListe
 
                 fragmentTransaction.replace(R.id.container, fragment);
                 //fragmentTransaction.addToBackStack(C.TAG_FRAGMENT_EXPLORE);
+                break;
+
+            case C.FRAGMENT_PRODUCT_LISTING:
+                currentPage = getString(R.string.product_listing);
+
+                fragment = new FragmentProductsListing();
+                fragmentTransaction.replace(R.id.container, fragment);
+               /* if (bundle.getInt(C.SOURCE) != C.FRAGMENT_PRODUCTS_HOME &&
+                        bundle.getInt(C.SOURCE) != C.FRAGMENT_CATEGORIES_HOME &&
+                        bundle.getInt(C.SOURCE) != C.FRAGMENT_CATEGORIES ) {
+                    fragmentTransaction.addToBackStack(C.TAG_FRAGMENT_PRODUCT_LISTING);
+
+                }*/
+                fragmentTransaction.addToBackStack(C.TAG_FRAGMENT_PRODUCT_LISTING);
                 break;
         }
         fragment.setArguments(bundle);
@@ -340,6 +355,10 @@ public class ActivityHome extends AppCompatActivity implements View.OnClickListe
             ((FragmentExplore) fragment).addToCart(secPos, pos, isAdd);
 
         }
+        else if (fragment != null && fragment instanceof FragmentProductsListing) {
+            ((FragmentProductsListing) fragment).addToCart(secPos, pos, isAdd);
+
+        }
     }
 
     public void addToCart(int secPos, int pos, boolean isAdd, View v1, View v2) {
@@ -409,6 +428,10 @@ public class ActivityHome extends AppCompatActivity implements View.OnClickListe
         }
         else if (fragment != null && fragment instanceof FragmentExplore) {
             ((FragmentExplore) fragment).wishListUpdate(secPos, pos, isAdd);
+
+        }
+        else if (fragment != null && fragment instanceof FragmentProductsListing) {
+            ((FragmentProductsListing) fragment).wishListUpdate(secPos, pos, isAdd);
 
         }
     }
@@ -552,7 +575,14 @@ public class ActivityHome extends AppCompatActivity implements View.OnClickListe
         Fragment fragment = getVisibleFragment();
         if (fragment != null && fragment instanceof FragmentCoupons) {
             setCart();
-        } else {
+        }
+        else if (fragment != null && fragment instanceof FragmentProductsListing) {
+           super.onBackPressed();
+        }
+       /* else if (fragment != null && fragment instanceof FragmentCategoryList) {
+            super.onBackPressed();
+        }*/
+        else {
             if (doubleBackToExitPressedOnce) {
                 finish();
             }

@@ -289,8 +289,14 @@ public class FragmentProductsListing extends Fragment implements View.OnClickLis
     public void onResume() {
         super.onResume();
         setStoreName();
-
-        ((ActivityContainer)getActivity()).setTitle(getString(R.string.product_listing));
+        try {
+            if (source == C.FRAGMENT_PRODUCT_DESC) {
+                ((ActivityContainer) getActivity()).setTitle(getString(R.string.product_listing));
+            }
+        }
+        catch (Exception e){
+            e.printStackTrace();
+        }
         if(SharedPreference.getInstance(getActivity()).getBoolean(C.IS_STORE_UPDATED)){
             SharedPreference.getInstance(getActivity()).setBoolean(C.IS_STORE_UPDATED, false);
             SharedPreference.getInstance(getActivity()).setBoolean(C.IS_STORE_UPDATED_HOME, true);
@@ -407,7 +413,7 @@ public class FragmentProductsListing extends Fragment implements View.OnClickLis
                             totalPages = response.getMeta().getPagination().getTotalPages();
                         }
                         allProductList = response.getData();
-                        adapterProducts = new AdapterProducts(allProductList, getActivity());
+                        adapterProducts = new AdapterProducts(source,allProductList, getActivity());
                         rvProductsList.setAdapter(adapterProducts);
                     } else {
                         llNoProductInCount.setVisibility(View.VISIBLE);
@@ -809,7 +815,7 @@ public class FragmentProductsListing extends Fragment implements View.OnClickLis
                             totalPages = response.getMeta().getPagination().getTotalPages();
                         }
                         allProductList = response.getData().getSimilarProducts();
-                        adapterProducts = new AdapterProducts(allProductList, getActivity());
+                        adapterProducts = new AdapterProducts(source,allProductList, getActivity());
                         rvProductsList.setAdapter(adapterProducts);
                     } else {
                         llNoProductInCount.setVisibility(View.VISIBLE);
