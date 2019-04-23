@@ -15,22 +15,6 @@
       },
       "oauth_client": [
         {
-          "client_id": "318594772761-fqijvbpoobcral5f0mpecidfj24ol9on.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.cheersondemand",
-            "certificate_hash": "4816885739882fba9d64d75a210fcdc77acbdf61"
-          }
-        },
-        {
-          "client_id": "318594772761-7h37v5h3mubfhhl5uvn5crocdmvqj9rd.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.cheersondemand",
-            "certificate_hash": "68f0656b1f50b8d3c7110e8a3af38493712372dc"
-          }
-        },
-        {
           "client_id": "318594772761-5tjtlcpgbstrbg3gopc3p67f1uugu6dk.apps.googleusercontent.com",
           "client_type": 3
         }
@@ -45,20 +29,8 @@
           "status": 1
         },
         "appinvite_service": {
-          "status": 2,
-          "other_platform_oauth_client": [
-            {
-              "client_id": "318594772761-5tjtlcpgbstrbg3gopc3p67f1uugu6dk.apps.googleusercontent.com",
-              "client_type": 3
-            },
-            {
-              "client_id": "318594772761-s7msop2224l8m4a3lbjdhejbds277ri5.apps.googleusercontent.com",
-              "client_type": 2,
-              "ios_info": {
-                "bundle_id": "com.tatva.cod"
-              }
-            }
-          ]
+          "status": 1,
+          "other_platform_oauth_client": []
         },
         "ads_service": {
           "status": 2
