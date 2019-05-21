@@ -108,8 +108,8 @@ public class ItemViewHolder extends RecyclerView.ViewHolder {
         if (holder instanceof ItemViewHolder) {
             final ItemViewHolder itemViewHolder = (ItemViewHolder) holder;
 
-            if (horizontalList.get(position).getId() == lastCheckedPosition){
-                pos=position;
+            if (horizontalList.get(position-1).getId() == lastCheckedPosition){
+                pos=position-1;
                 itemViewHolder.radioButton.setChecked(true);
                 itemViewHolder.llModify.setVisibility(View.VISIBLE);
             }else{
@@ -118,17 +118,16 @@ public class ItemViewHolder extends RecyclerView.ViewHolder {
 
             }
 
-            itemViewHolder.tvName.setText(horizontalList.get(position).getName());
-            itemViewHolder.tvSubAddress.setText(horizontalList.get(position).getFlatNo()+
-            " "+horizontalList.get(position).getAddress()+ " "+horizontalList.get(position).getZipCode());
-            itemViewHolder.tvPhone.setText(horizontalList.get(position).getPhoneNumber());
+            itemViewHolder.tvName.setText(horizontalList.get(position-1).getFirstName()+" "+horizontalList.get(position-1).getLastName());
+            itemViewHolder.tvSubAddress.setText(horizontalList.get(position-1).getAddress()+ " "+horizontalList.get(position-1).getZipCode());
+            itemViewHolder.tvPhone.setText(horizontalList.get(position-1).getPhoneNumber());
             itemViewHolder.llEdit.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     Intent intent=new Intent(context, ActivityContainer.class);
                     Bundle bundle=new Bundle();
                     bundle.putBoolean(C.IS_EDIT,true);
-                    bundle.putSerializable(C.ADDRESS,horizontalList.get(position));
+                    bundle.putSerializable(C.ADDRESS,horizontalList.get(position-1));
                     bundle.putBoolean(C.IS_RETRY_PAYEMNT, false);
                     bundle.putBoolean(C.IS_FROM_CHECKOUT, true);
 
@@ -142,16 +141,16 @@ public class ItemViewHolder extends RecyclerView.ViewHolder {
                 public void onClick(View v) {
                 //    Toast.makeText(context, itemViewHolder.tvBrandName.getText().toString(), Toast.LENGTH_SHORT).show();
                   //  ((ActivityContainer)context).removeAddress(horizontalList.get(position),position);
-                    dialog(position);
+                    dialog(position-1);
                 }
             });
             itemViewHolder.radioButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    ((ActivityContainer)context).changeAddress(horizontalList.get(position));
+                    ((ActivityContainer)context).changeAddress(horizontalList.get(position-1));
 
-                    lastCheckedPosition = horizontalList.get(position).getId();
-                    pos=position;
+                    lastCheckedPosition = horizontalList.get(position-1).getId();
+                    pos=position-1;
                     notifyDataSetChanged();
 
                 }
@@ -159,9 +158,9 @@ public class ItemViewHolder extends RecyclerView.ViewHolder {
             itemViewHolder.llAddressItem.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    ((ActivityContainer)context).changeAddress(horizontalList.get(position));
-                    lastCheckedPosition = horizontalList.get(position).getId();
-                    pos=position;
+                    ((ActivityContainer)context).changeAddress(horizontalList.get(position-1));
+                    lastCheckedPosition = horizontalList.get(position-1).getId();
+                    pos=position-1;
                     notifyDataSetChanged();
                 }
             });
@@ -188,7 +187,7 @@ public class ItemViewHolder extends RecyclerView.ViewHolder {
     }
     @Override
     public int getItemViewType(int position) {
-        if (position == horizontalList.size() ) {
+        if (position ==0 ) {
             return TYPE_FOOTER;
         }
         return TYPE_ITEM;

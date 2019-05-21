@@ -108,19 +108,21 @@ public class FragmentSplash extends Fragment {
                                              gotoLocationAndStoreList();
                                          }
                                          else {
-                                             Intent intent = new Intent(getActivity(), ActivitySearchLocation.class);
+                                             /*Intent intent = new Intent(getActivity(), ActivitySearchLocation.class);
                                              intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                                              intent.putExtra(C.FROM, C.SEARCH);
-                                             startActivity(intent);
+                                             startActivity(intent)*/;
+
+                                             ((MainActivity) getActivity()).fragmnetLoader(C.FRAGMENT_ADDRESS_PICKUP_DELIVERY_SELECTION, null);
+
                                          }
                                    /* Intent intent = new Intent(getActivity(), ActivityHome.class);
                                     intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                                     getActivity().startActivity(intent);*/
                                     } else {
-                                        Bundle bundle = new Bundle();
-                                        bundle.putBoolean(C.IS_LOGIN_SCREEN, false);
-                                        bundle.putBoolean(C.IS_FROM_HOME, false);
-                                        ((MainActivity) getActivity()).fragmnetLoader(C.FRAGMENT_AUTHNITICATION, bundle);
+                                      // gotoAuthniticationScreen();
+                                        ((MainActivity) getActivity()).fragmnetLoader(C.FRAGMENT_ADDRESS_PICKUP_DELIVERY_SELECTION, null);
+
                                     }
                                 } catch (Exception e) {
                                     e.printStackTrace();
@@ -141,6 +143,14 @@ public class FragmentSplash extends Fragment {
         catch (Exception e){
             e.printStackTrace();
         }
+    }
+
+
+    void gotoAuthniticationScreen(){
+        Bundle bundle = new Bundle();
+        bundle.putBoolean(C.IS_LOGIN_SCREEN, false);
+        bundle.putBoolean(C.IS_FROM_HOME, false);
+        ((MainActivity) getActivity()).fragmnetLoader(C.FRAGMENT_AUTHNITICATION, bundle);
     }
     void gotoLocationAndStoreList() {
         Intent intent = new Intent(getActivity(), ActivityContainer.class);

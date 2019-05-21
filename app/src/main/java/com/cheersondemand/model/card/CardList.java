@@ -24,6 +24,9 @@ public class CardList {
     @SerializedName("brand")
     @Expose
     private String brand;
+    @SerializedName("zipcode")
+    @Expose
+    private String zipCode;
     @SerializedName("is_default_source")
     @Expose
     private Boolean isDefaultSource;
@@ -79,6 +82,14 @@ public class CardList {
 
     public void setIsDefaultSource(Boolean isDefaultSource) {
         this.isDefaultSource = isDefaultSource;
+    }
+
+    public String getZipCode() {
+        return zipCode;
+    }
+
+    public void setZipCode(String zipCode) {
+        this.zipCode = zipCode;
     }
 
     public String getCardNumber() {

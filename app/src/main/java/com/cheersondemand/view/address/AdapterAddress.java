@@ -29,7 +29,7 @@ import java.util.List;
  */
 
 public class AdapterAddress extends RecyclerView.Adapter<RecyclerView.ViewHolder > {
-    private static final int TYPE_FOOTER = 1;
+    private static final int TYPE_HEADER = 1;
     private static final int TYPE_ITEM = 0;
 private List<Address> horizontalList;
     private String lastCheckedPosition = null;
@@ -86,7 +86,7 @@ public class ItemViewHolder extends RecyclerView.ViewHolder {
 
         return new ItemViewHolder(itemView);
     }
-    else if (viewType == TYPE_FOOTER) {
+    else if (viewType == TYPE_HEADER) {
         //Inflating footer view
         View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_add_new_address, parent, false);
         return new FooterViewHolder(itemView);
@@ -100,23 +100,24 @@ public class ItemViewHolder extends RecyclerView.ViewHolder {
     @Override
     public void onBindViewHolder(final RecyclerView.ViewHolder  holder, final int position) {
         if (holder instanceof ItemViewHolder) {
+
             final ItemViewHolder itemViewHolder = (ItemViewHolder) holder;
             itemViewHolder.radioButton.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 @Override
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                     if(isChecked){
                         RecentLocation recentLocation=new RecentLocation();
-                        recentLocation.setLatitude(horizontalList.get(position).getLatitude());
-                        recentLocation.setLongitude(horizontalList.get(position).getLongitude());
-                        recentLocation.setAddress(horizontalList.get(position).getAddress());
+                        recentLocation.setLatitude(horizontalList.get(position-1).getLatitude());
+                        recentLocation.setLongitude(horizontalList.get(position-1).getLongitude());
+                        recentLocation.setAddress(horizontalList.get(position-1).getAddress());
 
                         ((ActivityContainer)context).saveLocation(recentLocation);
                     }
                 }
             });
 
-            if (horizontalList.get(position).getAddress() .equals( lastCheckedPosition)){
-                pos=position;
+            if (horizontalList.get(position-1).getAddress() .equals( lastCheckedPosition)){
+                pos=position-1;
                 itemViewHolder.radioButton.setChecked(true);
                 itemViewHolder.llModify.setVisibility(View.VISIBLE);
             }else{
@@ -125,9 +126,9 @@ public class ItemViewHolder extends RecyclerView.ViewHolder {
 
             }
 
-            itemViewHolder.tvName.setText(horizontalList.get(position).getName());
-            itemViewHolder.tvSubAddress.setText(horizontalList.get(position).getFlatNo()+" "+horizontalList.get(position).getAddress()
-            + " "+horizontalList.get(position).getZipCode());
+            itemViewHolder.tvName.setText(horizontalList.get(position-1).getFirstName() + " "+horizontalList.get(position-1).getLastName());
+            itemViewHolder.tvSubAddress.setText(horizontalList.get(position-1).getAddress()
+            + " "+horizontalList.get(position-1).getZipCode());
 
             itemViewHolder.llEdit.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -139,7 +140,7 @@ public class ItemViewHolder extends RecyclerView.ViewHolder {
                     bundle.putBoolean(C.IS_FROM_CHECKOUT, false);
                     bundle.putBoolean(C.IS_RETRY_PAYEMNT, false);
 
-                    bundle.putSerializable(C.ADDRESS,horizontalList.get(position));
+                    bundle.putSerializable(C.ADDRESS,horizontalList.get(position-1));
 
                     intent.putExtra(C.BUNDLE,bundle);
                     intent.putExtra(C.FRAGMENT_ACTION,C.FRAGMENT_ADD_ADDRESS);
@@ -151,7 +152,7 @@ public class ItemViewHolder extends RecyclerView.ViewHolder {
                 public void onClick(View v) {
                 //    Toast.makeText(context, itemViewHolder.tvBrandName.getText().toString(), Toast.LENGTH_SHORT).show();
                     //((ActivityContainer)context).removeAddress(horizontalList.get(position),position);
-                    dialog(position);
+                    dialog(position-1);
                 }
             });
             itemViewHolder.radioButton.setOnClickListener(new View.OnClickListener() {
@@ -162,8 +163,8 @@ public class ItemViewHolder extends RecyclerView.ViewHolder {
                     recentLocation.setLongitude(horizontalList.get(position).getLongitude());
                     recentLocation.setAddress(horizontalList.get(position).getAddress());
                     ((ActivityContainer)context).saveLocation(recentLocation);*/
-                    lastCheckedPosition = horizontalList.get(position).getAddress();
-                    pos=position;
+                    lastCheckedPosition = horizontalList.get(position-1).getAddress();
+                    pos=position-1;
                     notifyDataSetChanged();
 
                 }
@@ -176,8 +177,8 @@ public class ItemViewHolder extends RecyclerView.ViewHolder {
                     recentLocation.setLongitude(horizontalList.get(position).getLongitude());
                     recentLocation.setAddress(horizontalList.get(position).getAddress());
                     ((ActivityContainer)context).saveLocation(recentLocation);*/
-                    lastCheckedPosition = horizontalList.get(position).getAddress();
-                    pos=position;
+                    lastCheckedPosition = horizontalList.get(position-1).getAddress();
+                    pos=position-1;
                     notifyDataSetChanged();
                 }
             });
@@ -209,8 +210,8 @@ public class ItemViewHolder extends RecyclerView.ViewHolder {
     }
     @Override
     public int getItemViewType(int position) {
-         if (position == horizontalList.size() ) {
-            return TYPE_FOOTER;
+         if (position ==0 ) {
+            return TYPE_HEADER;
         }
         return TYPE_ITEM;
     }

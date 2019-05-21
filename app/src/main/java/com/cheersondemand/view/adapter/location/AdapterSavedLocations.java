@@ -117,6 +117,26 @@ List<RecentLocation> filterList;
 
 
     private void initializeViews(final RecentLocation model, final ItemViewHolder holder, final int position) {
+
+        ((ItemViewHolder)holder).radioButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ((ActivityContainer)activity).saveLocation(getItem(position));
+                lastCheckedPosition = model.getAddress();
+                pos=position;
+                notifyDataSetChanged();
+            }
+        });
+        ((ItemViewHolder)holder).rlStoreItem.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ((ActivityContainer)activity).saveLocation(getItem(position));
+                lastCheckedPosition = model.getAddress();
+                pos=position;
+                notifyDataSetChanged();
+
+            }
+        });
         ((ItemViewHolder)holder).name.setText(model.getAddress());
         if (model.getAddress()!=null &&model.getAddress() .equals( lastCheckedPosition)){
             pos=position;
@@ -141,25 +161,7 @@ List<RecentLocation> filterList;
                     }
                 }
             });*/
-        ((ItemViewHolder)holder).radioButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                ((ActivityContainer)activity).saveLocation(getItem(position));
-                lastCheckedPosition = model.getAddress();
-                pos=position;
-                notifyDataSetChanged();
-            }
-        });
-        ((ItemViewHolder)holder).rlStoreItem.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                ((ActivityContainer)activity).saveLocation(getItem(position));
-                lastCheckedPosition = model.getAddress();
-                pos=position;
-                notifyDataSetChanged();
 
-            }
-        });
         if(pos!=-1) {
             SharedPreference.getInstance(activity).setLocation(C.SELECTED_LOCATION, filterList.get(pos));
         }

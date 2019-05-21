@@ -363,6 +363,14 @@ public class ActivityContainer extends AppCompatActivity {
         }
 
     }
+    public void getStoresList() {
+        Fragment fragment = getVisibleFragment();
+        if (fragment != null && fragment instanceof FragmentSelectAddressAndStore) {
+            ((FragmentSelectAddressAndStore) fragment).getStoreList();
+        }
+
+
+    }
     public void enableButton() {
         Fragment fragment = getVisibleFragment();
         if (fragment != null && fragment instanceof FragmentSelectAddressAndStore) {

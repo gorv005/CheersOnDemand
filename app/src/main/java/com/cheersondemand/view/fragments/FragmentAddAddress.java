@@ -62,8 +62,10 @@ public class FragmentAddAddress extends Fragment implements View.OnClickListener
         GoogleApiClient.ConnectionCallbacks {
 
 
-    @BindView(R.id.etName)
-    EditText etName;
+    @BindView(R.id.etFirstName)
+    EditText etFirstName;
+    @BindView(R.id.etLastName)
+    EditText etLastName;
     @BindView(R.id.etFlat)
     EditText etFlat;
     @BindView(R.id.etAddLine1)
@@ -77,7 +79,7 @@ public class FragmentAddAddress extends Fragment implements View.OnClickListener
     @BindView(R.id.btnSaveAdd)
     Button btnSaveAdd;
     Unbinder unbinder;
-    boolean isEdit, isFromCheckOut, isRetryPayment = false,isAddedFirstTime;
+    boolean isEdit, isFromCheckOut, isRetryPayment = false, isAddedFirstTime;
     Address address1;
     IAddressViewPresenter iAddressViewPresenter;
     @BindView(R.id.rlView)
@@ -92,7 +94,8 @@ public class FragmentAddAddress extends Fragment implements View.OnClickListener
     private GoogleApiClient mGoogleApiClient;
     private PlaceArrayAdapter mPlaceArrayAdapter;
     private static final String LOG_TAG = "ADDRESS";
-    boolean isLocationChanged=false;
+    boolean isLocationChanged = false;
+
     public FragmentAddAddress() {
         // Required empty public constructor
     }
@@ -110,15 +113,14 @@ public class FragmentAddAddress extends Fragment implements View.OnClickListener
 
         isFromCheckOut = getArguments().getBoolean(C.IS_FROM_CHECKOUT);
 
-            try {
-                address1 = (Address) getArguments().getSerializable(C.ADDRESS);
-                isLocationChanged=getArguments().getBoolean(C.IS_LOCATION_CHANGED);
-                isAddedFirstTime =getArguments().getBoolean(C.IS_ADDED_FIRST_TIME);
+        try {
+            address1 = (Address) getArguments().getSerializable(C.ADDRESS);
+            isLocationChanged = getArguments().getBoolean(C.IS_LOCATION_CHANGED);
+            isAddedFirstTime = getArguments().getBoolean(C.IS_ADDED_FIRST_TIME);
 
-            }
-            catch (Exception e){
-                e.printStackTrace();
-            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
         mGoogleApiClient = new GoogleApiClient.Builder(getActivity())
                 .addApi(Places.GEO_DATA_API)
@@ -180,8 +182,9 @@ public class FragmentAddAddress extends Fragment implements View.OnClickListener
 
     void fillFields() {
         if (isEdit) {
-            etName.setText(address1.getName());
-            etFlat.setText(address1.getFlatNo());
+            etFirstName.setText(address1.getFirstName());
+            etLastName.setText(address1.getLastName());
+        //    etFlat.setText(address1.getFlatNo());
             etAddLine.setText(address1.getAddress());
            /* etAddLine1.setText(address1.getAddressFirst());
             etAddLine2.setText(address1.getAddressSecond());*/
@@ -221,7 +224,7 @@ public class FragmentAddAddress extends Fragment implements View.OnClickListener
 
     void initFields() {
         btnSaveAdd.setEnabled(false);
-        etName.addTextChangedListener(new TextWatcher() {
+        etFirstName.addTextChangedListener(new TextWatcher() {
 
             public void afterTextChanged(Editable s) {
 
@@ -241,6 +244,28 @@ public class FragmentAddAddress extends Fragment implements View.OnClickListener
 
             }
         });
+
+        etLastName.addTextChangedListener(new TextWatcher() {
+
+            public void afterTextChanged(Editable s) {
+
+            }
+
+            public void beforeTextChanged(CharSequence s, int start, int count,
+                                          int after) {
+
+            }
+
+            public void onTextChanged(CharSequence s, int start, int before,
+                                      int count) {
+
+
+                validationFields();
+
+
+            }
+        });
+
         etFlat.addTextChangedListener(new TextWatcher() {
 
             public void afterTextChanged(Editable s) {
@@ -361,9 +386,8 @@ public class FragmentAddAddress extends Fragment implements View.OnClickListener
 
 
     void validationFields() {
-        if (etName.getText().length() > 0 && etName.length() < 31) {
-            if (etFlat.getText().length() > 0) {
-
+        if (etFirstName.getText().length() > 0 && etFirstName.length() < 31) {
+            if (etLastName.getText().length() > 0 && etLastName.length() < 31) {
                 if (etAddLine.getText().length() > 0) {
 
                     if (etPincode.getText().length() > 0) {
@@ -376,35 +400,36 @@ public class FragmentAddAddress extends Fragment implements View.OnClickListener
 
                         } else {
 
-                            btnSaveAdd.setBackground(ContextCompat.getDrawable(getActivity(), R.drawable.button_disable));
-                            btnSaveAdd.setEnabled(false);
+                            disableButton();
 
                         }
                     } else {
-                        btnSaveAdd.setBackground(ContextCompat.getDrawable(getActivity(), R.drawable.button_disable));
-                        btnSaveAdd.setEnabled(false);
+                        disableButton();
                     }
 
 
                 } else {
-                    btnSaveAdd.setBackground(ContextCompat.getDrawable(getActivity(), R.drawable.button_disable));
-                    btnSaveAdd.setEnabled(false);
+                    disableButton();
                 }
             } else {
-                btnSaveAdd.setBackground(ContextCompat.getDrawable(getActivity(), R.drawable.button_disable));
-                btnSaveAdd.setEnabled(false);
+                disableButton();
             }
 
         } else {
 
-            btnSaveAdd.setBackground(ContextCompat.getDrawable(getActivity(), R.drawable.button_disable));
-            btnSaveAdd.setEnabled(false);
+            disableButton();
 
         }
 
 
     }
 
+
+    void disableButton() {
+        btnSaveAdd.setBackground(ContextCompat.getDrawable(getActivity(), R.drawable.button_disable));
+        btnSaveAdd.setEnabled(false);
+
+    }
 
     @Override
     public void onClick(View v) {
@@ -427,8 +452,9 @@ public class FragmentAddAddress extends Fragment implements View.OnClickListener
         AddressRequest addressRequest = new AddressRequest();
         addressRequest.setUuid(Util.id(getActivity()));
         Address address = new Address();
-        address.setName(etName.getText().toString());
-        address.setFlatNo(etFlat.getText().toString());
+        address.setFirstName(etFirstName.getText().toString());
+        address.setLastName(etLastName.getText().toString());
+       // address.setFlatNo(etFlat.getText().toString());
         address.setAddress(etAddLine.getText().toString());
 
       /*  address.setAddressFirst(etAddLine1.getText().toString());
@@ -437,25 +463,26 @@ public class FragmentAddAddress extends Fragment implements View.OnClickListener
         address.setPhoneNumber(etPhoneNo.getText().toString());
         addressRequest.setAddress(address);
         if (SharedPreference.getInstance(getActivity()).getBoolean(C.IS_LOGIN_GUEST)) {
-            int id=SharedPreference.getInstance(getActivity()).
+            int id = SharedPreference.getInstance(getActivity()).
                     geGuestUser(C.GUEST_USER).getId();
-            iAddressViewPresenter.EditAddAddress(false,"", ""+id, "" + address1.getId(), addressRequest);
+            iAddressViewPresenter.EditAddAddress(false, "", "" + id, "" + address1.getId(), addressRequest);
 
         } else {
             String id = "" + SharedPreference.getInstance(getActivity()).getUser(C.AUTH_USER).getData().getUser().getId();
 
             String token = C.bearer + SharedPreference.getInstance(getActivity()).getUser(C.AUTH_USER).getData().getToken().getAccessToken();
-            iAddressViewPresenter.EditAddAddress(true,token, id, "" + address1.getId(), addressRequest);
+            iAddressViewPresenter.EditAddAddress(true, token, id, "" + address1.getId(), addressRequest);
         }
     }
 
- public    void addAddress() {
+    public void addAddress() {
 
         AddressRequest addressRequest = new AddressRequest();
         addressRequest.setUuid(Util.id(getActivity()));
         Address address = new Address();
-        address.setName(etName.getText().toString());
-        address.setFlatNo(etFlat.getText().toString());
+        address.setFirstName(etFirstName.getText().toString());
+        address.setLastName(etLastName.getText().toString());
+       // address.setFlatNo("904");
         address.setAddress(etAddLine.getText().toString());
        /* address.setAddressFirst(etAddLine1.getText().toString());
         address.setAddressSecond(etAddLine2.getText().toString());*/
@@ -464,24 +491,24 @@ public class FragmentAddAddress extends Fragment implements View.OnClickListener
         addressRequest.setAddress(address);
         if (SharedPreference.getInstance(getActivity()).getBoolean(C.IS_LOGIN_GUEST)) {
 
-            int id=SharedPreference.getInstance(getActivity()).
+            int id = SharedPreference.getInstance(getActivity()).
                     geGuestUser(C.GUEST_USER).getId();
-            iAddressViewPresenter.AddAddress(false,"",""+id, addressRequest);
+            iAddressViewPresenter.AddAddress(false, "", "" + id, addressRequest);
 
-        }
-        else {
+        } else {
             String id = "" + SharedPreference.getInstance(getActivity()).getUser(C.AUTH_USER).getData().getUser().getId();
 
             String token = C.bearer + SharedPreference.getInstance(getActivity()).getUser(C.AUTH_USER).getData().getToken().getAccessToken();
-            iAddressViewPresenter.AddAddress(true,token, id, addressRequest);
+            iAddressViewPresenter.AddAddress(true, token, id, addressRequest);
         }
     }
 
     public void addDeliveryAddress() {
         AddressRequest addressRequest = new AddressRequest();
         Address address = new Address();
-        address.setName(etName.getText().toString());
-        address.setFlatNo(etFlat.getText().toString());
+        address.setFirstName(etFirstName.getText().toString());
+        address.setLastName(etLastName.getText().toString());
+       // address.setFlatNo(etFlat.getText().toString());
         address.setAddress(etAddLine.getText().toString());
        /* address.setAddressFirst(etAddLine1.getText().toString());
         address.setAddressSecond(etAddLine2.getText().toString());*/
@@ -525,10 +552,9 @@ public class FragmentAddAddress extends Fragment implements View.OnClickListener
                 gotoAddressList(response.getData());
 
             } else {
-                if(response.getErrors()!=null && response.getErrors().size()>=0){
+                if (response.getErrors() != null && response.getErrors().size() >= 0) {
                     util.setSnackbarMessage(getActivity(), response.getErrors().get(0).getField(), rlView, true);
-                }
-                else {
+                } else {
                     util.setSnackbarMessage(getActivity(), response.getMessage(), rlView, true);
                 }
 
@@ -538,10 +564,10 @@ public class FragmentAddAddress extends Fragment implements View.OnClickListener
         }
     }
 
-    void  gotoAddressList(Address address){
+    void gotoAddressList(Address address) {
 
-        if(isLocationChanged){
-            if(address!=null && address.getAddress()!=null) {
+        if (isLocationChanged) {
+            if (address != null && address.getAddress() != null) {
                 RecentLocation recentLocation = new RecentLocation();
                 recentLocation.setId(address.getId());
                 recentLocation.setAddress(address.getAddress());
@@ -555,7 +581,7 @@ public class FragmentAddAddress extends Fragment implements View.OnClickListener
         intent3.putExtra(C.FRAGMENT_ACTION, C.FRAGMENT_ADDRESS_LIST);
         Bundle bundle = new Bundle();
         bundle.putBoolean(C.IS_FROM_LOCATION_AND_STORE_SCREEN, true);
-        if(address!=null && address.getAddress()!=null) {
+        if (address != null && address.getAddress() != null) {
             bundle.putInt(C.ADDRESS_ID, address.getId());
             bundle.putString(C.ADDRESS_NAME, address.getAddress());
         }
@@ -565,16 +591,16 @@ public class FragmentAddAddress extends Fragment implements View.OnClickListener
         intent3.putExtra(C.FRAGMENT_ACTION, C.FRAGMENT_ADDRESS_LIST);
         startActivity(intent3);
     }
+
     @Override
     public void onEditAddressSuccess(AddressAddResponse response) {
         try {
             if (response.getSuccess()) {
                 util.setSnackbarMessage(getActivity(), response.getMessage(), rlView, false);
-               // getActivity().finish();
-                if(isFromCheckOut){
+                // getActivity().finish();
+                if (isFromCheckOut) {
                     getActivity().finish();
-                }
-                else {
+                } else {
                     gotoAddressList(response.getData());
                 }
             } else {
@@ -587,19 +613,18 @@ public class FragmentAddAddress extends Fragment implements View.OnClickListener
         }
     }
 
-   public void gotoSelectedPage(){
-        if(isFromCheckOut){
+    public void gotoSelectedPage() {
+        if (isFromCheckOut) {
             getActivity().finish();
-        }
-        else {
-            if(isAddedFirstTime){
+        } else {
+            if (isAddedFirstTime) {
                 getActivity().finish();
-            }
-            else {
+            } else {
                 gotoAddressList(address1);
             }
         }
     }
+
     @Override
     public void onAddressListSuccess(AddressResponse response) {
         try {
@@ -623,16 +648,14 @@ public class FragmentAddAddress extends Fragment implements View.OnClickListener
                 getCardList();
             } else {
                 if (Response.getErrors() != null) {
-                    if(Response.getErrors().get(0).getField()!=null){
+                    if (Response.getErrors().get(0).getField() != null) {
                         dialog(Response.getErrors().get(0).getField());
-                    }
-                    else if(Response.getErrors().get(0).getDetail()!=null){
+                    } else if (Response.getErrors().get(0).getDetail() != null) {
                         dialog(Response.getErrors().get(0).getDetail());
-                    }
-                    else {
+                    } else {
                         dialog(Response.getMessage());
                     }
-               //     util.setSnackbarMessage(getActivity(), Response.getErrors().get(0).getField(), LLView, true);
+                    //     util.setSnackbarMessage(getActivity(), Response.getErrors().get(0).getField(), LLView, true);
                 } else {
                     dialog(Response.getMessage());
                 }

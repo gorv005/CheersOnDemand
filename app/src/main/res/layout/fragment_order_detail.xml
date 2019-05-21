@@ -324,6 +324,7 @@
                 android:textColor="@color/item_color"
                 android:fontFamily="@font/sf_ui_display_regular"
                 android:text="Name"
+                android:visibility="gone"
                 android:textSize="14sp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />

@@ -82,6 +82,8 @@ public class FragmentAddCard extends Fragment implements ICardViewPresenter.ICar
     EditText etCvv;
     @BindView(R.id.btnSaveAdd)
     Button btnSaveAdd;
+    @BindView(R.id.etPincode)
+    EditText etPincode;
     Unbinder unbinder;
     @BindView(R.id.llBack)
     LinearLayout llBack;
@@ -94,7 +96,7 @@ public class FragmentAddCard extends Fragment implements ICardViewPresenter.ICar
     RelativeLayout rlISDetailSave;
     ICardViewPresenter iCardViewPresenter;
     Util util;
-    boolean isCheckout,isRetryPayment=false;
+    boolean isCheckout, isRetryPayment = false;
     private boolean isDelete;
     private InputFilter filter = new InputFilter() {
 
@@ -136,8 +138,7 @@ public class FragmentAddCard extends Fragment implements ICardViewPresenter.ICar
         isCheckout = getArguments().getBoolean(C.IS_FROM_CHECKOUT);
         try {
             isRetryPayment = getArguments().getBoolean(C.IS_RETRY_PAYEMNT);
-        }
-        catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
@@ -146,7 +147,7 @@ public class FragmentAddCard extends Fragment implements ICardViewPresenter.ICar
     @Override
     public void onResume() {
         super.onResume();
-        ((ActivityContainer)getActivity()).setTitle(getString(R.string.new_card));
+        ((ActivityContainer) getActivity()).setTitle(getString(R.string.new_card));
 
     }
 
@@ -184,6 +185,7 @@ public class FragmentAddCard extends Fragment implements ICardViewPresenter.ICar
 
         AddCardRequest addCardRequest = new AddCardRequest();
         addCardRequest.setStripeToken(stripe_token);
+        addCardRequest.setZipcode(etPincode.getText().toString());
         iCardViewPresenter.addCard(token, id, addCardRequest);
     }
 
@@ -358,6 +360,26 @@ public class FragmentAddCard extends Fragment implements ICardViewPresenter.ICar
                 validationFields();
             }
         });
+        etPincode.addTextChangedListener(new TextWatcher() {
+
+            public void afterTextChanged(Editable s) {
+
+            }
+
+            public void beforeTextChanged(CharSequence s, int start, int count,
+                                          int after) {
+
+            }
+
+            public void onTextChanged(CharSequence s, int start, int before,
+                                      int count) {
+
+
+                validationFields();
+
+
+            }
+        });
 
     }
 
@@ -380,43 +402,45 @@ public class FragmentAddCard extends Fragment implements ICardViewPresenter.ICar
         if (etCardNumber.getText().length() >= 14 && etCardNumber.length() <= 16) {
 
             if (etExpire.getText().length() == 5) {
-
                 if (etCardHolderName.getText().length() >= 1) {
-                    if (etCvv.getText().length() == 3) {
-                        btnSaveAdd.setBackground(ContextCompat.getDrawable(getActivity(), R.drawable.bg_button_enable));
-                        btnSaveAdd.setEnabled(true);
+                    if (etPincode.getText().length() >= 1) {
+                        if (etCvv.getText().length() == 3) {
+                            btnSaveAdd.setBackground(ContextCompat.getDrawable(getActivity(), R.drawable.bg_button_enable));
+                            btnSaveAdd.setEnabled(true);
+                        } else {
+                            disableButton();
+                        }
+
                     } else {
-                        btnSaveAdd.setBackground(ContextCompat.getDrawable(getActivity(), R.drawable.button_disable));
-                        btnSaveAdd.setEnabled(false);
+                        disableButton();
                     }
-
                 } else {
-                    btnSaveAdd.setBackground(ContextCompat.getDrawable(getActivity(), R.drawable.button_disable));
-                    btnSaveAdd.setEnabled(false);
+                    disableButton();
                 }
-
-
             } else {
 
-                btnSaveAdd.setBackground(ContextCompat.getDrawable(getActivity(), R.drawable.button_disable));
-                btnSaveAdd.setEnabled(false);
+                disableButton();
 
             }
         } else {
 
-            btnSaveAdd.setBackground(ContextCompat.getDrawable(getActivity(), R.drawable.button_disable));
-            btnSaveAdd.setEnabled(false);
+            disableButton();
 
         }
 
 
     }
 
+    void disableButton() {
+        btnSaveAdd.setBackground(ContextCompat.getDrawable(getActivity(), R.drawable.button_disable));
+        btnSaveAdd.setEnabled(false);
+    }
 
     private void addCardToStripe(String cardNumber, String month, String year, String cvv) {
         showProgress();
         Card stripeCard = new Card(cardNumber, Integer.parseInt(month), Integer.parseInt(year), null);
         stripeCard.setName(etCardHolderName.getText().toString());
+        stripeCard.setAddressZip(etPincode.getText().toString());
         Stripe stripe = new Stripe(getActivity(), C.STRIPE_APP_KEY);
         stripe.createToken(stripeCard, new TokenCallback() {
             @Override
@@ -438,6 +462,7 @@ public class FragmentAddCard extends Fragment implements ICardViewPresenter.ICar
                         CardList cardList = new CardList();
                         cardList.setCardId(null);
                         cardList.setCardHolderName(etCardHolderName.getText().toString());
+                        cardList.setZipCode(etPincode.getText().toString());
                         cardList.setExpMonth(Integer.parseInt(etExpire.getText().toString().split("/")[0]));
                         cardList.setExpYear(Integer.parseInt(etExpire.getText().toString().split("/")[1]));
                         cardList.setLast4(etCardNumber.getText().toString().substring(etCardNumber.getText().toString().length() - 4));
@@ -486,16 +511,16 @@ public class FragmentAddCard extends Fragment implements ICardViewPresenter.ICar
         }
     }
 
-    void gotoPaymentScreen(){
-        if(isCheckout){
-            Bundle bundle=new Bundle();
-            bundle.putBoolean(C.IS_RETRY_PAYEMNT,isRetryPayment);
-            ((ActivityContainer)getActivity()).fragmnetLoader(C.FRAGMENT_PAYMENT_CONFIRMATION,bundle);
-        }
-        else {
+    void gotoPaymentScreen() {
+        if (isCheckout) {
+            Bundle bundle = new Bundle();
+            bundle.putBoolean(C.IS_RETRY_PAYEMNT, isRetryPayment);
+            ((ActivityContainer) getActivity()).fragmnetLoader(C.FRAGMENT_PAYMENT_CONFIRMATION, bundle);
+        } else {
             getActivity().onBackPressed();
         }
     }
+
     @Override
     public void getResponseError(String response) {
         util.setSnackbarMessage(getActivity(), response, llBack, true);
@@ -519,8 +544,7 @@ public class FragmentAddCard extends Fragment implements ICardViewPresenter.ICar
             case R.id.btnSaveAdd:
                 try {
                     Util.hideKeyboard(getActivity());
-                }
-                catch (Exception e){
+                } catch (Exception e) {
                     e.printStackTrace();
                 }
                 String a[] = etExpire.getText().toString().split("/");

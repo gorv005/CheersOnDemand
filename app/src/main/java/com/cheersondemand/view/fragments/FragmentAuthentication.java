@@ -49,6 +49,7 @@ import com.cheersondemand.util.Util;
 import com.cheersondemand.view.ActivityContainer;
 import com.cheersondemand.view.ActivityHome;
 import com.cheersondemand.view.ActivitySearchLocation;
+import com.cheersondemand.view.MainActivity;
 import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
@@ -1111,12 +1112,19 @@ public class FragmentAuthentication extends Fragment implements IAuthenitication
     }
 
     void gotoSearch(){
-        if(isGuestUser){
+
+        Intent intent = new Intent(getActivity(), MainActivity.class);
+        Bundle bundle = new Bundle();
+        intent.putExtra(C.FRAGMENT_ACTION, C.FRAGMENT_ADDRESS_PICKUP_DELIVERY_SELECTION);
+        intent.putExtra(C.BUNDLE, bundle);
+        startActivity(intent);
+
+       /* if(isGuestUser){
             gotoSearchLocationAuth();
         }
         else {
             gotoSearchLocation();
-        }
+        }*/
     }
     @Override
     public void showProgress() {

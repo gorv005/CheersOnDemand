@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="@dimen/activity_horizontal_margin"
+    android:id="@+id/rlView"
+    tools:context=".view.fragments.FragmentDelivery">
+
+
+    <RelativeLayout
+
+        android:background="@drawable/tab_bg_white"
+        android:layout_width="match_parent"
+        android:layout_height="50dp">
+    <AutoCompleteTextView
+        android:layout_marginTop="10dp"
+        android:id="@+id/etAddLine"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_centerHorizontal="true"
+        android:fontFamily="@font/poppins_light"
+        android:maxLines="1"
+        android:layout_centerVertical="true"
+        android:background="@null"
+        android:layout_marginRight="60dp"
+        android:singleLine="true"
+        android:hint="@string/enter_your_address"
+        android:textColor="@color/editext_text_color"
+        android:textColorHint="@color/editext_hint_color"
+        android:textCursorDrawable="@drawable/edit_text_cursor_color"
+        android:textSize="14sp" />
+
+        <ImageView
+            android:paddingRight="10dp"
+            android:id="@+id/ivCross"
+            android:layout_centerVertical="true"
+            android:layout_alignParentRight="true"
+            android:src="@drawable/cross_red"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+    </RelativeLayout>
+    <Button
+        android:layout_marginBottom="20dp"
+        android:layout_alignParentBottom="true"
+        android:id="@+id/btnContinue"
+        android:layout_marginTop="40dp"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginEnd="20dp"
+        android:layout_marginStart="20dp"
+        android:background="@drawable/bg_button_noborder_disable"
+        android:fontFamily="@font/poppins_bold"
+        android:text="@string/continue_"
+        android:textAllCaps="true"
+        android:textColor="@color/white"
+        android:textSize="13.4sp" />
+</RelativeLayout>

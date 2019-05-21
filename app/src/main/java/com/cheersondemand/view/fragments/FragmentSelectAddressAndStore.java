@@ -2,18 +2,25 @@ package com.cheersondemand.view.fragments;
 
 
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
-import android.view.SurfaceHolder;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import com.cheersondemand.R;
 import com.cheersondemand.model.address.AddressAddResponse;
@@ -37,11 +44,14 @@ import com.cheersondemand.util.NonScrollListView;
 import com.cheersondemand.util.SharedPreference;
 import com.cheersondemand.util.StoreProducts;
 import com.cheersondemand.util.Util;
+import com.cheersondemand.util.viewpager.HeightWrappingViewPager;
 import com.cheersondemand.view.ActivityContainer;
 import com.cheersondemand.view.ActivityHome;
+import com.cheersondemand.view.MainActivity;
 import com.cheersondemand.view.adapter.location.AdapterSavedLocations;
 import com.cheersondemand.view.adapter.store.AdapterStoresListing;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
@@ -51,15 +61,15 @@ import butterknife.Unbinder;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class FragmentSelectAddressAndStore extends Fragment implements ILocationViewPresenter.ILocationView, View.OnClickListener, IStoreViewPresenter.IStoreView ,IAddressViewPresenter.IAddressView{
+public class FragmentSelectAddressAndStore extends Fragment implements ILocationViewPresenter.ILocationView, View.OnClickListener, IStoreViewPresenter.IStoreView, IAddressViewPresenter.IAddressView {
 
 
     @BindView(R.id.imgBack)
     RelativeLayout imgBack;
-    @BindView(R.id.lvAddressList)
-    NonScrollListView lvAddressList;
-    @BindView(R.id.rlRecentSearch)
-    LinearLayout rlRecentSearch;
+    /*@BindView(R.id.lvAddressList)
+    NonScrollListView lvAddressList;*/
+    /*@BindView(R.id.rlRecentSearch)
+    LinearLayout rlRecentSearch;*/
     @BindView(R.id.lvStoreList)
     NonScrollListView lvStoreList;
     @BindView(R.id.rlStoreList)
@@ -86,7 +96,21 @@ public class FragmentSelectAddressAndStore extends Fragment implements ILocation
     @BindView(R.id.rlAddNewAddress)
     RelativeLayout rlAddNewAddress;
     IAddressViewPresenter iAddressViewPresenter;
-    boolean isCrossShow=false;
+    boolean isCrossShow = false;
+    @BindView(R.id.indicator)
+    View indicator;
+    @BindView(R.id.tab)
+    TabLayout tab;
+    @BindView(R.id.fl)
+    RelativeLayout fl;
+    @BindView(R.id.rlShopFromStore)
+    RelativeLayout rlShopFromStore;
+    @BindView(R.id.viewPager)
+    HeightWrappingViewPager viewPager;
+    @BindView(R.id.rl_address_view)
+    RelativeLayout rlAddressView;
+    TabFragmentAdapter adapter;
+    private int indicatorWidth;
     public FragmentSelectAddressAndStore() {
         // Required empty public constructor
     }
@@ -121,24 +145,94 @@ public class FragmentSelectAddressAndStore extends Fragment implements ILocation
         rlAddNewAddress.setOnClickListener(this);
         btnSubmit.setEnabled(false);
         llStoreList.setVisibility(View.GONE);
-        if(isCrossShow){
+        if (isCrossShow) {
             imgBack.setVisibility(View.VISIBLE);
-        }
-        else {
+        } else {
             imgBack.setVisibility(View.GONE);
 
         }
+        initTabs();
+    }
 
+
+    void initTabs() {
+        adapter = new TabFragmentAdapter(getActivity().getSupportFragmentManager());
+        adapter.addFragment(new FragmentSavedAddresses().newInstance(0,source), getString(R.string.delivery));
+        adapter.addFragment(new FragmentSavedAddresses().newInstance(1,source), getString(R.string.pick_up));
+        viewPager.setAdapter(adapter);
+        viewPager.measure(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+        tab.setupWithViewPager(viewPager);
+
+        //Determine indicator width at runtime
+        tab.post(new Runnable() {
+            @Override
+            public void run() {
+                indicatorWidth = tab.getWidth() / tab.getTabCount();
+
+                //Assign new width
+                FrameLayout.LayoutParams indicatorParams = (FrameLayout.LayoutParams) indicator.getLayoutParams();
+                indicatorParams.width = indicatorWidth;
+                indicator.setLayoutParams(indicatorParams);
+                //tab.setTabTextColors(Color.parseColor("#727272"), Color.parseColor("#ffffff"));
+
+            }
+        });
+
+        viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+
+            //To move the indicator as the user scroll, we will need the scroll offset values
+            //positionOffset is a value from [0..1] which represents how far the page has been scrolled
+            //see https://developer.android.com/reference/android/support/v4/view/ViewPager.OnPageChangeListener
+            @Override
+            public void onPageScrolled(int i, float positionOffset, int positionOffsetPx) {
+                FrameLayout.LayoutParams params = (FrameLayout.LayoutParams) indicator.getLayoutParams();
+
+                //Multiply positionOffset with indicatorWidth to get translation
+                float translationOffset = (positionOffset + i) * indicatorWidth;
+                params.leftMargin = (int) translationOffset;
+                indicator.setLayoutParams(params);
+                //  setCustomFont(0);
+                /*for(int j=0; j < tab.1getChildCount(); j++){
+                    View tv = (View) tab.getChildAt(j);
+
+                    if(tv instanceof TextView) {
+                        if (i == 0) {
+                            ((TextView) tv).setTextColor(Color.WHITE);
+                        } else {
+                            ((TextView) tv).setTextColor(Color.WHITE);
+                        }
+                    }
+                }*/
+            }
+
+            @Override
+            public void onPageSelected(int i) {
+                if (i == 1) {
+                    indicator.setBackgroundResource(R.drawable.gradient_bg_right);
+                } else {
+                    indicator.setBackgroundResource(R.drawable.gradient_bg);
+                }
+                // setCustomFont(i);
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int i) {
+                tab.setTabTextColors(Color.parseColor("#c9282f"), Color.WHITE);
+                //   setCustomFont(i);
+            }
+        });
+        tab.setTabTextColors(Color.parseColor("#c9282f"), Color.WHITE);
+        setCustomFont(0);
     }
 
     @Override
     public void onResume() {
         super.onResume();
         ((ActivityContainer) getActivity()).hideToolBar();
-        getRecentSearches();
+      //  getRecentSearches();
     }
 
-    void getStoreList() {
+    public void getStoreList() {
         if (SharedPreference.getInstance(getActivity()).getBoolean(C.IS_LOGIN_GUEST)) {
             iStoreViewPresenter.getStoreList(Util.id(getActivity()));
         } else {
@@ -149,27 +243,31 @@ public class FragmentSelectAddressAndStore extends Fragment implements ILocation
 
         }
     }
+
     void getAddressList() {
         if (SharedPreference.getInstance(getActivity()).getBoolean(C.IS_LOGIN_GUEST)) {
             String id = "" + SharedPreference.getInstance(getActivity()).geGuestUser(C.GUEST_USER).getId();
 
-            iAddressViewPresenter.getAddresses(false, "",id,Util.id(getActivity()));
+            iAddressViewPresenter.getAddresses(false, "", id, Util.id(getActivity()));
 
-        }else {
+        } else {
             String id = "" + SharedPreference.getInstance(getActivity()).getUser(C.AUTH_USER).getData().getUser().getId();
 
             String token = C.bearer + SharedPreference.getInstance(getActivity()).getUser(C.AUTH_USER).getData().getToken().getAccessToken();
             iAddressViewPresenter.getAddresses(true, token, id, Util.id(getActivity()));
         }
     }
+
     public void saveLocation(RecentLocation selectedLocation) {
-        SharedPreference.getInstance(getActivity()).setString(C.LOCATION_SELECTED, selectedLocation.getAddress());
+
+        ((FragmentSavedAddresses)adapter.getItem(viewPager.getCurrentItem())).saveLocation(selectedLocation);
+       /* SharedPreference.getInstance(getActivity()).setString(C.LOCATION_SELECTED, selectedLocation.getAddress());
         SharedPreference.getInstance(getActivity()).setLocation(C.SELECTED_LOCATION, selectedLocation);
 
         SaveLocation saveLocation = new SaveLocation();
         saveLocation.setLatitude("" + selectedLocation.getLatitude());
         saveLocation.setLongitude("" + selectedLocation.getLongitude());
-        saveLocation.setAddress( selectedLocation.getAddress());
+        saveLocation.setAddress(selectedLocation.getAddress());
 
         saveLocation.setUuid(Util.id(getActivity()));
         if (SharedPreference.getInstance(getActivity()).getBoolean(C.IS_LOGIN_GUEST)) {
@@ -180,7 +278,7 @@ public class FragmentSelectAddressAndStore extends Fragment implements ILocation
 
             iLocationViewPresenter.saveLocation(token, saveLocation, id);
 
-        }
+        }*/
     }
 
     void getRecentSearches() {
@@ -254,10 +352,10 @@ public class FragmentSelectAddressAndStore extends Fragment implements ILocation
     @Override
     public void getSaveLocationSuccess(SaveLocationResponse response) {
         if (response.getSuccess()) {
-            RecentLocation recentLocation=new RecentLocation();
+            RecentLocation recentLocation = new RecentLocation();
             recentLocation.setId(adapterSavedLocations.getSelectedItem().getId());
             recentLocation.setAddress(adapterSavedLocations.getSelectedItem().getAddress());
-            SharedPreference.getInstance(getActivity()).setLocation(C.SELECTED_LOCATION,recentLocation);
+            SharedPreference.getInstance(getActivity()).setLocation(C.SELECTED_LOCATION, recentLocation);
             SharedPreference.getInstance(getActivity()).setString(C.LOCATION_SELECTED, adapterSavedLocations.getSelectedItem().getAddress());
 
             getStoreList();
@@ -378,45 +476,41 @@ public class FragmentSelectAddressAndStore extends Fragment implements ILocation
             if (Response.getSuccess()) {
                 if (Response.getData() != null && Response.getData().size() > 0) {
                     gotoAddressList();
-                }
-                else {
+                } else {
                     gotoAddAddress();
                 }
-            }
-            else {
+            } else {
                 gotoAddAddress();
             }
 
-        }
-        catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
-    void gotoAddAddress(){
-        Intent intent=new Intent(getActivity(), ActivityContainer.class);
-        Bundle bundle=new Bundle();
-        bundle.putBoolean(C.IS_EDIT,false);
+    void gotoAddAddress() {
+        Intent intent = new Intent(getActivity(), ActivityContainer.class);
+        Bundle bundle = new Bundle();
+        bundle.putBoolean(C.IS_EDIT, false);
         bundle.putBoolean(C.IS_FROM_CHECKOUT, false);
         bundle.putBoolean(C.IS_RETRY_PAYEMNT, false);
         bundle.putBoolean(C.IS_LOCATION_CHANGED, true);
         bundle.putBoolean(C.IS_ADDED_FIRST_TIME, true);
-        intent.putExtra(C.BUNDLE,bundle);
-        intent.putExtra(C.FRAGMENT_ACTION,C.FRAGMENT_ADD_ADDRESS);
+        intent.putExtra(C.BUNDLE, bundle);
+        intent.putExtra(C.FRAGMENT_ACTION, C.FRAGMENT_ADD_ADDRESS);
         startActivity(intent);
     }
 
-    void  gotoAddressList(){
+    void gotoAddressList() {
         Intent intent3 = new Intent(getActivity(), ActivityContainer.class);
         intent3.putExtra(C.FRAGMENT_ACTION, C.FRAGMENT_ADDRESS_LIST);
         Bundle bundle = new Bundle();
         bundle.putBoolean(C.IS_FROM_LOCATION_AND_STORE_SCREEN, true);
-        if(adapterSavedLocations.getSelectedItem()!=null) {
+        if (adapterSavedLocations.getSelectedItem() != null) {
             bundle.putInt(C.ADDRESS_ID, adapterSavedLocations.getSelectedItem().getId());
             bundle.putString(C.ADDRESS_NAME, adapterSavedLocations.getSelectedItem().getAddress());
 
-        }
-        else {
+        } else {
             bundle.putInt(C.ADDRESS_ID, 0);
             bundle.putString(C.ADDRESS_NAME, "");
 
@@ -427,6 +521,7 @@ public class FragmentSelectAddressAndStore extends Fragment implements ILocation
         intent3.putExtra(C.FRAGMENT_ACTION, C.FRAGMENT_ADDRESS_LIST);
         startActivity(intent3);
     }
+
     @Override
     public void onAddDeliveryAddressSuccess(AddressAddResponse Response) {
 
@@ -442,17 +537,19 @@ public class FragmentSelectAddressAndStore extends Fragment implements ILocation
     @Override
     public void onRecentLocationSuccess(RecentLocationResponse response) {
         if (response.getSuccess()) {
-            rlRecentSearch.setVisibility(View.VISIBLE);
+         //   rlRecentSearch.setVisibility(View.VISIBLE);
 
             if (response.getData() != null && response.getData().size() > 0) {
-                SharedPreference.getInstance(getActivity()).setBoolean(C.IS_ANY_ADDRESS_ADDED,true);
+                SharedPreference.getInstance(getActivity()).setBoolean(C.IS_ANY_ADDRESS_ADDED, true);
                 recentLocation = SharedPreference.getInstance(getActivity()).getString(C.LOCATION_SELECTED);
                 mRecentLocations = SharedPreference.getInstance(getActivity()).getLocation(C.SELECTED_LOCATION);
                 adapterSavedLocations = new AdapterSavedLocations(source, getActivity(), response.getData(), recentLocation, mRecentLocations);
-                lvAddressList.setAdapter(adapterSavedLocations);
+              //  lvAddressList.setAdapter(adapterSavedLocations);
                 if (recentLocation != null || mRecentLocations != null) {
                     getStoreList();
                 }
+            } else {
+                gotoSearch();
             }
         }
     }
@@ -468,4 +565,83 @@ public class FragmentSelectAddressAndStore extends Fragment implements ILocation
         util.hideDialog();
 
     }
+
+    void gotoSearch() {
+
+        Intent intent = new Intent(getActivity(), MainActivity.class);
+        Bundle bundle = new Bundle();
+        intent.putExtra(C.FRAGMENT_ACTION, C.FRAGMENT_ADDRESS_PICKUP_DELIVERY_SELECTION);
+        intent.putExtra(C.BUNDLE, bundle);
+        startActivity(intent);
+
+    }
+
+
+    static class TabFragmentAdapter extends FragmentPagerAdapter {
+        private final List<Fragment> fragmentList = new ArrayList<>();
+        private final List<String> fragmentTitleList = new ArrayList<>();
+
+        public TabFragmentAdapter(FragmentManager fm) {
+            super(fm);
+        }
+
+        @Override
+        public Fragment getItem(int i) {
+            return fragmentList.get(i);
+        }
+
+        @Override
+        public int getCount() {
+            return fragmentList.size();
+        }
+
+        @Override
+        public CharSequence getPageTitle(int position) {
+            return fragmentTitleList.get(position);
+        }
+
+        public void addFragment(Fragment fragment, String title) {
+            fragmentList.add(fragment);
+            fragmentTitleList.add(title);
+        }
+    }
+    public void setCustomFont(int pos) {
+
+        ViewGroup vg = (ViewGroup) tab.getChildAt(0);
+        int tabsCount = vg.getChildCount();
+
+        for (int j = 0; j < tabsCount; j++) {
+            ViewGroup vgTab = (ViewGroup) vg.getChildAt(j);
+
+            int tabChildsCount = vgTab.getChildCount();
+
+            for (int i = 0; i < tabChildsCount; i++) {
+                View tabViewChild = vgTab.getChildAt(i);
+                if (tabViewChild instanceof TextView) {
+                    //Put your font in assests folder
+                    //assign name of the font here (Must be case sensitive)
+                    ((TextView) tabViewChild).setTypeface(Typeface.createFromAsset(getActivity().getAssets(), "poppins_medium.ttf"));
+                    ((TextView) tabViewChild).setTextSize(16);
+          /*      if(pos==0) {
+                    if (j == 0) {
+                        ((TextView) tabViewChild).setTextColor(Color.parseColor("#ffffff"));
+                    } else {
+                        ((TextView) tabViewChild).setTextColor(Color.parseColor("#ffffff"));
+
+                    }
+                }
+                else if(pos==1) {
+                    if (j == 0) {
+                        ((TextView) tabViewChild).setTextColor(Color.parseColor("#ffffff"));
+
+                    } else {
+                        ((TextView) tabViewChild).setTextColor(Color.parseColor("#ffffff"));
+
+                    }
+                }*/
+                }
+            }
+        }
+    }
+
 }

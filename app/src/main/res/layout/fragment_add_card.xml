@@ -316,6 +316,30 @@
 
 
             </LinearLayout>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:fontFamily="@font/sf_ui_display_regular"
+                android:text="@string/zipcode"
+                android:textColor="@color/thumb_ripple_color"
+                android:textSize="14sp" />
+
+            <EditText
+                android:id="@+id/etPincode"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_centerHorizontal="true"
+                android:fontFamily="@font/sf_ui_display_regular"
+                android:maxLines="1"
+                android:singleLine="true"
+                android:textColor="@color/editext_text_color"
+                android:textColorHint="@color/editext_hint_color"
+                android:textCursorDrawable="@drawable/edit_text_cursor_color"
+                android:textSize="16sp" />
+
+
             <RelativeLayout
                 android:id="@+id/rlISDetailSave"
                 android:paddingTop="10dp"

@@ -119,6 +119,8 @@ public class FragmentProductsListing extends Fragment implements View.OnClickLis
     TextView tvStoreName;
     @BindView(R.id.llStoreSelect)
     LinearLayout llStoreSelect;
+    @BindView(R.id.ivCart)
+    ImageView ivCart;
     String catId, subCatId;
     String from = "0", to = "5000";
     String from_ = "0", to_ = "5000";
@@ -195,6 +197,7 @@ public class FragmentProductsListing extends Fragment implements View.OnClickLis
         llStoreSelect.setOnClickListener(this);
         rvProductsList.setLayoutManager(lLayout);
         btnBrowseProduct.setOnClickListener(this);
+        ivCart.setOnClickListener(this);
         rvProductsList.addItemDecoration(new GridSpacingItemDecoration(2, dpToPx(10), true));
         rvProductsList.setItemAnimator(new DefaultItemAnimator());
 
@@ -870,6 +873,9 @@ public class FragmentProductsListing extends Fragment implements View.OnClickLis
                // gotoStoreList();
                 gotoLocationAndStoreList();
                 break;
+            case R.id.ivCart:
+                gotoCart();
+                break;
             case R.id.btnBrowseProduct:
                 if(source==C.FRAGMENT_CATEGORIES){
                     getActivity().onBackPressed();
@@ -895,6 +901,17 @@ public class FragmentProductsListing extends Fragment implements View.OnClickLis
 
         intent.putExtra(C.BUNDLE, bundle);
         startActivity(intent);
+    }
+
+    void gotoCart() {
+        Intent intent = new Intent(getActivity(), ActivityContainer.class);
+        Bundle bundle = new Bundle();
+        intent.putExtra(C.FRAGMENT_ACTION, C.FRAGMENT_CART);
+        bundle.putInt(C.SOURCE, C.FRAGMENT_PRODUCT_DESC);
+        bundle.putBoolean(C.IS_ADD_BACK, false);
+        intent.putExtra(C.BUNDLE, bundle);
+        startActivity(intent);
+
     }
     void gotoLocationAndStoreList() {
         Intent intent = new Intent(getActivity(), ActivityContainer.class);

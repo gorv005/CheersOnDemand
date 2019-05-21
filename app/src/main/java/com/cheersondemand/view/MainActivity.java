@@ -16,6 +16,7 @@ import com.cheersondemand.util.C;
 import com.cheersondemand.util.SharedPreference;
 import com.cheersondemand.util.StoreProducts;
 import com.cheersondemand.view.fragments.FragmentAuthentication;
+import com.cheersondemand.view.fragments.FragmentDeliverPickUpAddress;
 import com.cheersondemand.view.fragments.FragmentSplash;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.iid.FirebaseInstanceId;
@@ -246,9 +247,13 @@ public class    MainActivity extends AppCompatActivity {
                 case C.FRAGMENT_AUTHNITICATION:
                     fragment = new FragmentAuthentication();
                     fragmentTransaction.replace(R.id.container, fragment);
+                    fragmentTransaction.addToBackStack(C.TAG_FRAGMENT_LOGIN);
+                    break;
+                case C.FRAGMENT_ADDRESS_PICKUP_DELIVERY_SELECTION:
+                    fragment = new FragmentDeliverPickUpAddress();
+                    fragmentTransaction.replace(R.id.container, fragment);
                     //fragmentTransaction.addToBackStack(C.TAG_FRAGMENT_LOGIN);
                     break;
-
 
             }
             fragment.setArguments(bundle);

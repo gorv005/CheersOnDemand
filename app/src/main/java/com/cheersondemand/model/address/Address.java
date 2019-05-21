@@ -16,6 +16,12 @@ public class Address implements Serializable{
     @SerializedName("name")
     @Expose
     private String name;
+    @SerializedName("first_name")
+    @Expose
+    private String firstName;
+    @SerializedName("last_name")
+    @Expose
+    private String lastName;
     @SerializedName("flat_no")
     @Expose
     private String flatNo;
@@ -119,5 +125,21 @@ public class Address implements Serializable{
 
     public void setLongitude(String longitude) {
         this.longitude = longitude;
+    }
+
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
     }
 }

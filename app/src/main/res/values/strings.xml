@@ -275,7 +275,7 @@
     <string name="sorry_delivery_not_available">Sorry delivery to this location is not available. Please use some other location.</string>
     <string name="shopping_from">Shopping from</string>
     <string name="no_order_placed">No order placed !</string>
-<!--
+    <!--
     <string name="server_client_id">318594772761-fqijvbpoobcral5f0mpecidfj24ol9on.apps.googleusercontent.com</string>
 -->
     <string name="server_client_id">318594772761-7h37v5h3mubfhhl5uvn5crocdmvqj9rd.apps.googleusercontent.com</string>
@@ -321,6 +321,13 @@
     <string name="off">OFF</string>
     <string name="change_add_new_address">Change / Add Address</string>
     <string name="partner_name">Contact Name</string>
+    <string name="zipcode">Zipcode</string>
+    <string name="first_name">First Name</string>
+    <string name="last_name">Last Name</string>
+    <string name="enter_your_address">Enter your address</string>
+    <string name="delivery">Delivery</string>
+    <string name="pick_up">Pickup</string>
+    <string name="continue_">Continue</string>
 
     <!--
         <string name="default_web_client_id">999387565226-hdnnhm6rhgik5ljvm06shotsi7j9883c.apps.googleusercontent.com</string>

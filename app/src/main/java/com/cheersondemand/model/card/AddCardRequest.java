@@ -9,6 +9,9 @@ public class AddCardRequest {
     @SerializedName("stripe_token")
     @Expose
     private String stripeToken;
+    @SerializedName("zipcode")
+    @Expose
+    private String zipcode;
 
     public String getStripeToken() {
         return stripeToken;
@@ -18,4 +21,11 @@ public class AddCardRequest {
         this.stripeToken = stripeToken;
     }
 
+    public String getZipcode() {
+        return zipcode;
+    }
+
+    public void setZipcode(String zipcode) {
+        this.zipcode = zipcode;
+    }
 }

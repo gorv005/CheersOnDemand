@@ -195,8 +195,8 @@ public class FragmentOrderDetail extends Fragment implements View.OnClickListene
 
                 }
                 if (order.getDeliveryAddress() != null) {
-                    tvName.setText(order.getDeliveryAddress().getName());
-                    tvSubAddress1.setText(order.getDeliveryAddress().getFlatNo());
+                    tvName.setText(order.getDeliveryAddress().getFirstName()+" "+order.getDeliveryAddress().getLastName());
+                  //  tvSubAddress1.setText(order.getDeliveryAddress().getFlatNo());
                     tvSubAddress2.setText(order.getDeliveryAddress().getAddress() + " " + order.getDeliveryAddress().getZipCode());
                     tvPhone.setText(" " + order.getDeliveryAddress().getPhoneNumber());
                 }

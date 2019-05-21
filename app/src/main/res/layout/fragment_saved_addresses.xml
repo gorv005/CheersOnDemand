@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="@dimen/activity_horizontal_margin"
+    android:id="@+id/rlView"
+    tools:context=".view.fragments.FragmentDelivery">
+
+
+    <LinearLayout
+        android:id="@+id/rlRecentSearch"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/white"
+        android:orientation="vertical"
+        android:visibility="visible">
+
+
+        <com.cheersondemand.util.NonScrollListView
+            android:id="@+id/lvAddressList"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/white"
+            android:divider="@null">
+
+        </com.cheersondemand.util.NonScrollListView>
+
+    </LinearLayout>
+</RelativeLayout>
