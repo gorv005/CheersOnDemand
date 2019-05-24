@@ -247,7 +247,12 @@ public class FragmentDelivery extends Fragment implements GoogleApiClient.OnConn
                 break;
             case R.id.btnContinue:
                 if (etAddLine.getText().toString().length() > 0) {
-                    createGuestUser();
+                    if(!SharedPreference.getInstance(getActivity()).getBoolean(C.IS_LOGIN)) {
+                        createGuestUser();
+                    }
+                    else{
+                        saveLocation(selectedLocation);
+                    }
                 }
 
                 break;
