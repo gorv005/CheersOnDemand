@@ -253,7 +253,7 @@ public class FragmentDeliverPickUpAddress extends Fragment {
         Intent intent = new Intent(getActivity(), MainActivity.class);
         Bundle bundle = new Bundle();
         bundle.putBoolean(C.IS_LOGIN_SCREEN, isLogin);
-        bundle.putBoolean(C.IS_FROM_HOME, true);
+        bundle.putBoolean(C.IS_FROM_HOME, false);
         bundle.putInt(C.SOURCE, C.FRAGMENT_PRODUCTS_HOME);
         intent.putExtra(C.FRAGMENT_ACTION, C.FRAGMENT_AUTHNITICATION);
         // intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
