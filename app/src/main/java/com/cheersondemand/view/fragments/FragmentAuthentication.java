@@ -35,8 +35,11 @@ import com.cheersondemand.model.authentication.LoginRequest;
 import com.cheersondemand.model.authentication.SignUpRequest;
 import com.cheersondemand.model.authentication.SocialLoginRequest;
 import com.cheersondemand.model.authentication.User;
+import com.cheersondemand.model.location.RecentLocation;
 import com.cheersondemand.model.location.RecentLocationResponse;
+import com.cheersondemand.model.location.SaveLocation;
 import com.cheersondemand.model.location.SaveLocationResponse;
+import com.cheersondemand.model.store.StoreList;
 import com.cheersondemand.presenter.AuthenicationPresenterImpl;
 import com.cheersondemand.presenter.IAutheniticationPresenter;
 import com.cheersondemand.presenter.location.ILocationViewPresenter;
@@ -575,6 +578,25 @@ public class FragmentAuthentication extends Fragment implements IAuthenitication
         }
     }
 
+    public void saveLocation(RecentLocation selectedLocation) {
+        SharedPreference.getInstance(getActivity()).setString(C.LOCATION_SELECTED, selectedLocation.getAddress());
+
+        SaveLocation saveLocation = new SaveLocation();
+        saveLocation.setLatitude("" + selectedLocation.getLatitude());
+        saveLocation.setLongitude("" + selectedLocation.getLongitude());
+        saveLocation.setAddress("" + selectedLocation.getAddress());
+
+        saveLocation.setUuid(Util.id(getActivity()));
+        if (SharedPreference.getInstance(getActivity()).getBoolean(C.IS_LOGIN_GUEST)) {
+            iLocationViewPresenter.saveLocation(saveLocation, "" + SharedPreference.getInstance(getActivity()).geGuestUser(C.GUEST_USER).getId());
+        } else {
+            String token = C.bearer + SharedPreference.getInstance(getActivity()).getUser(C.AUTH_USER).getData().getToken().getAccessToken();
+            String id = "" + SharedPreference.getInstance(getActivity()).getUser(C.AUTH_USER).getData().getUser().getId();
+
+            iLocationViewPresenter.saveLocation(token, saveLocation, id);
+
+        }
+    }
 
     void login() {
         SharedPreference.getInstance(getActivity()).setBoolean(C.IS_SOCAIL, false);
@@ -977,11 +999,27 @@ public class FragmentAuthentication extends Fragment implements IAuthenitication
                     SharedPreference.getInstance(getActivity()).setUser(C.AUTH_USER, response);
                     SharedPreference.getInstance(getActivity()).setString(C.ORDER_ID, response.getData().getUser().getOrderId());
                     if(isFromHome){
-                        gotoHome();
+
+                        RecentLocation mRecentLocations=  SharedPreference.getInstance(getActivity()).getLocation(C.SELECTED_LOCATION);
+                        saveLocation(mRecentLocations);
+
                     }
                     else {
                        // gotoSearchLocationAuth();
-                        getRecentSearches();
+                        if(response.getData().getStoreAvailable() && response.getData().getStore()!=null && response.getData().getCurrentLocation()!=null){
+                            StoreList store=new StoreList(response.getData().getStore().getId(),response.getData().getStore().getName());
+                            SharedPreference.getInstance(getActivity()).setStore(C.SELECTED_STORE, store);
+
+                            RecentLocation recentLocation = new RecentLocation();
+                            recentLocation.setId(response.getData().getCurrentLocation().getId());
+                            recentLocation.setAddress(response.getData().getCurrentLocation().getAddress());
+                            SharedPreference.getInstance(getActivity()).setLocation(C.SELECTED_LOCATION, recentLocation);
+                            SharedPreference.getInstance(getActivity()).setString(C.LOCATION_SELECTED, response.getData().getCurrentLocation().getAddress());
+                            showHome();
+                        }
+                        else {
+                            getRecentSearches();
+                        }
                     }
                 }
             } else {
@@ -1072,7 +1110,22 @@ public class FragmentAuthentication extends Fragment implements IAuthenitication
 
     @Override
     public void getSaveLocationSuccess(SaveLocationResponse response) {
+        if (response.getSuccess()) {
 
+           /* if (from == C.SEARCH) {
+                gotoStoreList();
+            } else if (from == C.HOME) {
+                getStoreList();
+            }*/
+           gotoHome();
+        } else {
+            if (response.getErrors() != null) {
+                util.setSnackbarMessage(getActivity(), response.getErrors().get(0).getField(), LLView, true);
+
+            } else {
+                util.setSnackbarMessage(getActivity(), response.getMessage(), LLView, true);
+            }
+        }
     }
 
     @Override
@@ -1137,7 +1190,36 @@ public class FragmentAuthentication extends Fragment implements IAuthenitication
 
     }
 
-
+    void showHome() {
+        if (SharedPreference.getInstance(getActivity()).getBoolean(C.IS_SHOW_FROM_MAIL)) {
+            String s = SharedPreference.getInstance(getActivity()).getString(C.SOURCE);
+            if (s != null) {
+                gotoSource(Integer.parseInt(s));
+            } else {
+                gotoLandingScreen();
+            }
+        } else {
+            gotoLandingScreen();
+        }
+    }
+    public void gotoSource(int source) {
+        SharedPreference.getInstance(getActivity()).setBoolean(C.IS_SHOW_FROM_MAIL, false);
+        Intent intent = new Intent(getActivity(), ActivityHome.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        Bundle bundle = new Bundle();
+        bundle.putInt(C.FRAGMENT_ACTION, source);
+        intent.putExtra(C.BUNDLE, bundle);
+        startActivity(intent);
+    }
+    public void gotoLandingScreen() {
+        try {
+            Intent intent = new Intent(getActivity(), ActivityHome.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            getActivity().startActivity(intent);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
     public void gotoHome(){
         Intent intent = new Intent(getActivity(), ActivityHome.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);

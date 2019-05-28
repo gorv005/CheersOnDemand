@@ -26,6 +26,7 @@ import com.cheersondemand.util.C;
 import com.cheersondemand.util.SharedPreference;
 import com.cheersondemand.util.Util;
 import com.cheersondemand.view.ActivityContainer;
+import com.cheersondemand.view.ActivityHome;
 import com.cheersondemand.view.ActivitySearchLocation;
 import com.cheersondemand.view.MainActivity;
 
@@ -78,7 +79,7 @@ public class FragmentSplash extends Fragment {
         Thread timer = new Thread() {
             public void run() {
                 try {
-              startFadeInAnimation();
+                    startFadeInAnimation();
 
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -97,41 +98,47 @@ public class FragmentSplash extends Fragment {
                     @Override
                     public void run() {
                         if (CheckingPermissionIsEnabledOrNot()) {
-                            if (SharedPreference.getNoti(getActivity(),C.IS_NOTIFICATION_PERMISSION_ASK)) {
+                            if (SharedPreference.getNoti(getActivity(), C.IS_NOTIFICATION_PERMISSION_ASK)) {
                                 try {
-                                    SharedPreference.getInstance(getActivity()).setStore(C.SELECTED_STORE,null);
-                                    SharedPreference.getInstance(getActivity()).setString(C.LOCATION_SELECTED,null);
-                                    SharedPreference.getInstance(getActivity()).setLocation(C.SELECTED_LOCATION, null);
+
 
                                     if (SharedPreference.getInstance(getActivity()).getBoolean(C.IS_LOGIN)) {
-                                         if(SharedPreference.getInstance(getActivity()).getBoolean(C.IS_ANY_ADDRESS_ADDED)){
-                                             gotoLocationAndStoreList();
-                                         }
-                                         else {
+
+                                        if (SharedPreference.getInstance(getActivity()).getStore(C.SELECTED_STORE) != null &&
+                                                SharedPreference.getInstance(getActivity()).getLocation(C.SELECTED_LOCATION) != null) {
+                                            Intent intent = new Intent(getActivity(), ActivityHome.class);
+                                            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                                            getActivity().startActivity(intent);
+                                        } else if (SharedPreference.getInstance(getActivity()).getBoolean(C.IS_ANY_ADDRESS_ADDED)) {
+                                            gotoLocationAndStoreList();
+                                        } else {
                                              /*Intent intent = new Intent(getActivity(), ActivitySearchLocation.class);
                                              intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                                              intent.putExtra(C.FROM, C.SEARCH);
-                                             startActivity(intent)*/;
+                                             startActivity(intent)*/
+                                            ;
 
-                                             ((MainActivity) getActivity()).fragmnetLoader(C.FRAGMENT_ADDRESS_PICKUP_DELIVERY_SELECTION, null);
+                                            ((MainActivity) getActivity()).fragmnetLoader(C.FRAGMENT_ADDRESS_PICKUP_DELIVERY_SELECTION, null);
 
-                                         }
+                                        }
                                    /* Intent intent = new Intent(getActivity(), ActivityHome.class);
                                     intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                                     getActivity().startActivity(intent);*/
                                     } else {
-                                      // gotoAuthniticationScreen();
+                                        // gotoAuthniticationScreen();
+                                        SharedPreference.getInstance(getActivity()).setStore(C.SELECTED_STORE, null);
+                                        SharedPreference.getInstance(getActivity()).setString(C.LOCATION_SELECTED, null);
+                                        SharedPreference.getInstance(getActivity()).setLocation(C.SELECTED_LOCATION, null);
                                         ((MainActivity) getActivity()).fragmnetLoader(C.FRAGMENT_ADDRESS_PICKUP_DELIVERY_SELECTION, null);
 
                                     }
                                 } catch (Exception e) {
                                     e.printStackTrace();
                                 }
+                            } else {
+                                enableNotification();
                             }
-                            else {
-                                    enableNotification();
-                            }
-                        }else {
+                        } else {
                             RequestPermission();
                         }
                     }
@@ -139,19 +146,19 @@ public class FragmentSplash extends Fragment {
             } else {
                 Toast.makeText(getActivity(), "Please connect to internet", Toast.LENGTH_LONG).show();
             }
-        }
-        catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
 
-    void gotoAuthniticationScreen(){
+    void gotoAuthniticationScreen() {
         Bundle bundle = new Bundle();
         bundle.putBoolean(C.IS_LOGIN_SCREEN, false);
         bundle.putBoolean(C.IS_FROM_HOME, false);
         ((MainActivity) getActivity()).fragmnetLoader(C.FRAGMENT_AUTHNITICATION, bundle);
     }
+
     void gotoLocationAndStoreList() {
         Intent intent = new Intent(getActivity(), ActivityContainer.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
@@ -163,6 +170,7 @@ public class FragmentSplash extends Fragment {
         startActivity(intent);
 
     }
+
     public void startFadeInAnimation() {
 
         ivSplash.setVisibility(View.INVISIBLE);
@@ -173,7 +181,7 @@ public class FragmentSplash extends Fragment {
         ivSplash.startAnimation(animation);
 
         final Animation animation1 = AnimationUtils.loadAnimation(getActivity(), R.anim.fade_out);
-        final   Animation animation2 = AnimationUtils.loadAnimation(getActivity(), R.anim.fade_out);
+        final Animation animation2 = AnimationUtils.loadAnimation(getActivity(), R.anim.fade_out);
 
         animation.setAnimationListener(new Animation.AnimationListener() {
             @Override
@@ -194,7 +202,7 @@ public class FragmentSplash extends Fragment {
         animation1.setAnimationListener(new Animation.AnimationListener() {
             @Override
             public void onAnimationStart(Animation animation) {
-            tvCheers.setVisibility(View.VISIBLE);
+                tvCheers.setVisibility(View.VISIBLE);
             }
 
             @Override
@@ -240,8 +248,7 @@ public class FragmentSplash extends Fragment {
                             ACCESS_COARSE_LOCATION
 
                     }, RequestPermissionCode);
-        }
-        catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
@@ -290,8 +297,7 @@ public class FragmentSplash extends Fragment {
                     && ThirdPermissionResult == PackageManager.PERMISSION_DENIED) {
                 return true;
             }
-        }
-        catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return false;
@@ -307,7 +313,7 @@ public class FragmentSplash extends Fragment {
         final Dialog dialog = new Dialog(getActivity(), R.style.DialogTheme); //this is a reference to the style above
         dialog.setContentView(R.layout.view_notification_access); //I saved the xml file above as yesnomessage.xml
         dialog.setCancelable(false);
-      //  dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        //  dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
 
 //to set the message
         Button btnGiveAccess = (Button) dialog.findViewById(R.id.btnGiveAccess);
@@ -317,9 +323,9 @@ public class FragmentSplash extends Fragment {
         btnGiveAccess.setOnClickListener(new View.OnClickListener() {
 
             public void onClick(View v) {
-                SharedPreference.SaveNoti(getActivity(),C.IS_NOTIFICATION_PERMISSION_ASK,true);
+                SharedPreference.SaveNoti(getActivity(), C.IS_NOTIFICATION_PERMISSION_ASK, true);
 
-                SharedPreference.getInstance(getActivity()).setBoolean(C.IS_NOTIFICATION_ENABLE,true);
+                SharedPreference.getInstance(getActivity()).setBoolean(C.IS_NOTIFICATION_ENABLE, true);
                 dialog.dismiss();
                 onResume();
             }
@@ -330,9 +336,9 @@ public class FragmentSplash extends Fragment {
 
             public void onClick(View v) {
                 // TODO Auto-generated method stub
-                SharedPreference.SaveNoti(getActivity(),C.IS_NOTIFICATION_PERMISSION_ASK,true);
+                SharedPreference.SaveNoti(getActivity(), C.IS_NOTIFICATION_PERMISSION_ASK, true);
 
-                SharedPreference.getInstance(getActivity()).setBoolean(C.IS_NOTIFICATION_ENABLE,false);
+                SharedPreference.getInstance(getActivity()).setBoolean(C.IS_NOTIFICATION_ENABLE, false);
 
                 dialog.dismiss();
                 onResume();

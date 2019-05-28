@@ -175,9 +175,9 @@ public class FragmentSavedAddresses extends Fragment  implements ILocationViewPr
                //     getStoreList();
                     ((ActivityContainer)getActivity()).getStoresList();
                 }
-            } else {
+            } /*else {
                 gotoSearch();
-            }
+            }*/
         }
     }
 

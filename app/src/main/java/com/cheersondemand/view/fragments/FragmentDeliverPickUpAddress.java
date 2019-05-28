@@ -16,11 +16,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.cheersondemand.R;
 import com.cheersondemand.util.C;
+import com.cheersondemand.util.SharedPreference;
 import com.cheersondemand.view.MainActivity;
 
 import java.util.ArrayList;
@@ -46,8 +49,23 @@ public class FragmentDeliverPickUpAddress extends Fragment {
     ViewPager viewPager;
     @BindView(R.id.llLoginSignup)
     LinearLayout llLoginSignup;
+    @BindView(R.id.ivSplash)
+    ImageView ivSplash;
+    @BindView(R.id.tvCheers)
+    TextView tvCheers;
+    @BindView(R.id.tvStarted)
+    TextView tvStarted;
+    @BindView(R.id.fl)
+    RelativeLayout fl;
+    @BindView(R.id.rl_address_view)
+    RelativeLayout rlAddressView;
+    @BindView(R.id.tvLogin)
+    TextView tvLogin;
+    @BindView(R.id.tvSignUp)
+    TextView tvSignUp;
     private int indicatorWidth;
     TabFragmentAdapter adapter;
+
     public FragmentDeliverPickUpAddress() {
         // Required empty public constructor
     }
@@ -65,13 +83,14 @@ public class FragmentDeliverPickUpAddress extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-         adapter = new TabFragmentAdapter(getActivity().getSupportFragmentManager());
+        adapter = new TabFragmentAdapter(getActivity().getSupportFragmentManager());
         adapter.addFragment(new FragmentDelivery().newInstance(0), getString(R.string.delivery));
         adapter.addFragment(new FragmentDelivery().newInstance(1), getString(R.string.pick_up));
         viewPager.setAdapter(adapter);
         tab.setupWithViewPager(viewPager);
-
-        //Determine indicator width at runtime
+        if (SharedPreference.getInstance(getActivity()).getBoolean(C.IS_LOGIN)) {
+            llLoginSignup.setVisibility(View.GONE);
+        }
         tab.post(new Runnable() {
             @Override
             public void run() {
@@ -179,23 +198,24 @@ public class FragmentDeliverPickUpAddress extends Fragment {
         }
     }
 
-    @OnClick(R.id.llLoginSignup)
-    public void onViewClicked() {
-        gotoAuthniticationScreen();
-    }
-    void gotoAuthniticationScreen(){
-        Intent intent=new Intent(getActivity(),MainActivity.class);
 
-        Bundle bundle = new Bundle();
-        bundle.putBoolean(C.IS_LOGIN_SCREEN, false);
-        bundle.putBoolean(C.IS_FROM_HOME, false);
-        intent.putExtra(C.BUNDLE,bundle);
-        intent.putExtra(C.FRAGMENT_ACTION,C.FRAGMENT_AUTHNITICATION);
-        startActivity(intent);
-       // ((MainActivity) getActivity()).fragmnetLoader(C.FRAGMENT_AUTHNITICATION, bundle);
 
+
+
+    @OnClick({R.id.tvLogin, R.id.tvSignUp})
+    public void onViewClicked(View view) {
+        switch (view.getId()) {
+            case R.id.tvLogin:
+                gotoAuthniticationScreen(true);
+                break;
+            case R.id.tvSignUp:
+                gotoAuthniticationScreen(false);
+
+                break;
+        }
     }
-     class TabFragmentAdapter extends FragmentPagerAdapter {
+
+    class TabFragmentAdapter extends FragmentPagerAdapter {
         private final List<Fragment> fragmentList = new ArrayList<>();
         private final List<String> fragmentTitleList = new ArrayList<>();
 
@@ -229,15 +249,24 @@ public class FragmentDeliverPickUpAddress extends Fragment {
         super.onDestroyView();
         unbinder.unbind();
     }
-
+    void gotoAuthniticationScreen(boolean isLogin) {
+        Intent intent = new Intent(getActivity(), MainActivity.class);
+        Bundle bundle = new Bundle();
+        bundle.putBoolean(C.IS_LOGIN_SCREEN, isLogin);
+        bundle.putBoolean(C.IS_FROM_HOME, true);
+        bundle.putInt(C.SOURCE, C.FRAGMENT_PRODUCTS_HOME);
+        intent.putExtra(C.FRAGMENT_ACTION, C.FRAGMENT_AUTHNITICATION);
+        // intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        intent.putExtra(C.BUNDLE, bundle);
+        getActivity().startActivity(intent);
+    }
     @Override
     public void onDetach() {
         super.onDetach();
         try {
-            getActivity().getSupportFragmentManager().beginTransaction().remove(adapter.getItem(0)).commitAllowingStateLoss();
-            getActivity().getSupportFragmentManager().beginTransaction().remove(adapter.getItem(1)).commitAllowingStateLoss();
-        }
-        catch (Exception e){
+           // getActivity().getSupportFragmentManager().beginTransaction().remove(adapter.getItem(0)).commitAllowingStateLoss();
+           // getActivity().getSupportFragmentManager().beginTransaction().remove(adapter.getItem(1)).commitAllowingStateLoss();
+        } catch (Exception e) {
             e.printStackTrace();
         }
 

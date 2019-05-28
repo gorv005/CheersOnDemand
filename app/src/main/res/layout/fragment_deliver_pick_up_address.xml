@@ -120,7 +120,7 @@
                 android:layout_gravity="center_vertical"
                 android:fontFamily="@font/poppins_light"
                 android:text="@string/log_in"
-
+                android:id="@+id/tvLogin"
                 android:textColor="@color/white"
                 android:textSize="16sp" />
 
@@ -138,6 +138,7 @@
                 android:layout_gravity="center_vertical"
                 android:fontFamily="@font/poppins_light"
                 android:text="@string/signup"
+                android:id="@+id/tvSignUp"
                 android:textColor="@color/white"
                 android:textSize="16sp" />
         </LinearLayout>

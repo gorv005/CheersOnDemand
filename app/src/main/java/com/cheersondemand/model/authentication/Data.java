@@ -15,7 +15,15 @@ public class Data {
     @SerializedName("user")
     @Expose
     private UserResponse user;
-
+    @SerializedName("current_location")
+    @Expose
+    private CurrentLocation currentLocation;
+    @SerializedName("is_store_available")
+    @Expose
+    private Boolean isStoreAvailable;
+    @SerializedName("store")
+    @Expose
+    private Store store;
     public Token getToken() {
         return token;
     }
@@ -30,5 +38,29 @@ public class Data {
 
     public void setUser(UserResponse user) {
         this.user = user;
+    }
+
+    public CurrentLocation getCurrentLocation() {
+        return currentLocation;
+    }
+
+    public void setCurrentLocation(CurrentLocation currentLocation) {
+        this.currentLocation = currentLocation;
+    }
+
+    public Boolean getStoreAvailable() {
+        return isStoreAvailable;
+    }
+
+    public void setStoreAvailable(Boolean storeAvailable) {
+        isStoreAvailable = storeAvailable;
+    }
+
+    public Store getStore() {
+        return store;
+    }
+
+    public void setStore(Store store) {
+        this.store = store;
     }
 }
