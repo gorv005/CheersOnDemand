@@ -199,9 +199,6 @@ public class FragmentDeliverPickUpAddress extends Fragment {
     }
 
 
-
-
-
     @OnClick({R.id.tvLogin, R.id.tvSignUp})
     public void onViewClicked(View view) {
         switch (view.getId()) {
@@ -249,6 +246,7 @@ public class FragmentDeliverPickUpAddress extends Fragment {
         super.onDestroyView();
         unbinder.unbind();
     }
+
     void gotoAuthniticationScreen(boolean isLogin) {
         Intent intent = new Intent(getActivity(), MainActivity.class);
         Bundle bundle = new Bundle();
@@ -260,12 +258,13 @@ public class FragmentDeliverPickUpAddress extends Fragment {
         intent.putExtra(C.BUNDLE, bundle);
         getActivity().startActivity(intent);
     }
+
     @Override
     public void onDetach() {
         super.onDetach();
         try {
-           // getActivity().getSupportFragmentManager().beginTransaction().remove(adapter.getItem(0)).commitAllowingStateLoss();
-           // getActivity().getSupportFragmentManager().beginTransaction().remove(adapter.getItem(1)).commitAllowingStateLoss();
+            // getActivity().getSupportFragmentManager().beginTransaction().remove(adapter.getItem(0)).commitAllowingStateLoss();
+            // getActivity().getSupportFragmentManager().beginTransaction().remove(adapter.getItem(1)).commitAllowingStateLoss();
         } catch (Exception e) {
             e.printStackTrace();
         }
